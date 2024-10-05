@@ -1,0 +1,38 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+model FoodType {
+  id          Int          @id @default(autoincrement())
+  name        String
+  ingredients Ingredient[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Ingredient {
+  id         Int      @id @default(autoincrement())
+  name       String
+  foodType   FoodType @relation(fields: [foodTypeId], references: [id])
+  foodTypeId Int
+  season     Season   @relation(fields: [seasonId], references: [id])
+  seasonId   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Season {
+  id          Int          @id @default(autoincrement())
+  name        String
+  start       DateTime
+  end         DateTime
+  ingredients Ingredient[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}

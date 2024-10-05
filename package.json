@@ -1,0 +1,47 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "prisma": {
+    "seed": "tsx prisma/seed/seed.ts"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.8.1",
+    "@pinia/nuxt": "^0.5.5",
+    "@prisma/nuxt": "^0.0.35",
+    "nuxt": "^3.13.0",
+    "pinia": "^2.2.4",
+    "swiper": "^11.1.14",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.3",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@nuxtjs/tailwindcss": "^6.12.1",
+    "@prisma/client": "^5.20.0",
+    "@snaplet/copycat": "^5.0.0",
+    "@snaplet/seed": "0.98.0",
+    "autoprefixer": "^10.4.20",
+    "husky": "^9.1.6",
+    "lefthook": "^1.7.18",
+    "postcss": "^8.4.47",
+    "prisma": "^5.20.0",
+    "sass-embedded": "^1.79.4",
+    "tailwindcss": "^3.4.13",
+    "tsx": "^4.19.1"
+  },
+  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b",
+  "@snaplet/seed": {
+    "config": "prisma/seed/seed.config.ts"
+  }
+}
