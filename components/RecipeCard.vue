@@ -1,14 +1,17 @@
 
+<script setup lang="ts">
+const name: string = defineModel('name');
+const preparationTime: Date = defineModel('preparationTime');
+const description: string = defineModel('description');
+</script>
+
 <template>
     <div class="recipe-card-content">
-        <h1 class="name">Lasagnes</h1>
-        <NuxtImg src="~/assets/lasagne.jpg" />
+        <h1 class="name">{{ name }}</h1>
+        <img src="~/assets/img/lasagnes.jpg" />
         <div class="data">
-            <p>blablablablabla</p>
-            <p>blablablablabla</p>
-            <p>blablablablabla</p>
-            <p>blablablablabla</p>
-            <p>blablablablabla</p>
+            <p>{{ preparationTime }}</p>
+            <p>{{ description }}</p>
         </div>
         <button type="button">X</button>
     </div>

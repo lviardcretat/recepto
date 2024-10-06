@@ -1,8 +1,3 @@
-<script setup lang="ts">
-const { getIngredients } = useIngredients();
-await getIngredients();
-</script>
-
 <template>
   <main class="ingredients-content">
     <RecipeFilter/>
