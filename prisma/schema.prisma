@@ -33,7 +33,7 @@ model Ingredient {
 	updatedAt  				DateTime? 			@updatedAt @map("updated_at")
 }
 
-model RecipeCategory {
+model RecipesCategory {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
 	recipesNumber			Int
@@ -52,8 +52,8 @@ model Recipe {
 	utensils				Ustensil[]
 	sequences				Sequence[]
 	ingredients				RecipeIngredient[]
-	recipeCategory 			RecipeCategory?		@relation(fields: [recipeCategoryId], references: [id])
-	recipeCategoryId		Int?
+	recipesCategory 			RecipesCategory?	@relation(fields: [recipesCategoryId], references: [id])
+	recipesCategoryId		Int?
 	createdBy				User 				@relation(fields: [createdById], references: [id])
 	createdById 			Int
 	createdAt   			DateTime     		@default(now())	@map("created_at")

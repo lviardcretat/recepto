@@ -18,7 +18,7 @@ const main = async () => {
 	await seed.unit((x) => x(10));
 	await seed.ingredient((x) => x(20));
 	await seed.sequence((x) => x(20));
-	await seed.recipeCategory((x) => x(20));
+	await seed.recipesCategory((x) => x(20));
 	await seed.recipeIngredient((x) => x(20));
 	await seed.recipe((x) => x(20));
 	await seed.user((x) => x(5));

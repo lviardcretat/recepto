@@ -415,9 +415,9 @@
           "isId": false
         },
         {
-          "id": "Recipe.recipeCategoryId",
-          "name": "recipeCategoryId",
-          "columnName": "recipeCategoryId",
+          "id": "Recipe.recipesCategoryId",
+          "name": "recipesCategoryId",
+          "columnName": "recipesCategoryId",
           "type": "integer",
           "isRequired": true,
           "kind": "scalar",
@@ -485,13 +485,13 @@
           "hasDefaultValue": false
         },
         {
-          "name": "RecipeCategory",
-          "type": "RecipeCategory",
+          "name": "RecipesCategory",
+          "type": "RecipesCategory",
           "isRequired": true,
           "kind": "object",
-          "relationName": "RecipeToRecipeCategory",
+          "relationName": "RecipeToRecipesCategory",
           "relationFromFields": [
-            "recipeCategoryId"
+            "recipesCategoryId"
           ],
           "relationToFields": [
             "id"
@@ -548,76 +548,6 @@
       "uniqueConstraints": [
         {
           "name": "Recipe_pkey",
-          "fields": [
-            "id"
-          ]
-        }
-      ]
-    },
-    "RecipeCategory": {
-      "id": "RecipeCategory",
-      "tableName": "RecipeCategory",
-      "fields": [
-        {
-          "id": "RecipeCategory.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "integer",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": {
-            "identifier": "RecipeCategory_id_seq",
-            "increment": 1
-          },
-          "hasDefaultValue": false,
-          "isId": true
-        },
-        {
-          "id": "RecipeCategory.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false
-        },
-        {
-          "id": "RecipeCategory.recipesNumber",
-          "name": "recipesNumber",
-          "columnName": "recipesNumber",
-          "type": "integer",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false
-        },
-        {
-          "name": "Recipe",
-          "type": "Recipe",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "RecipeToRecipeCategory",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "RecipeCategory_pkey",
           "fields": [
             "id"
           ]
@@ -754,6 +684,76 @@
       "uniqueConstraints": [
         {
           "name": "RecipeIngredient_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "RecipesCategory": {
+      "id": "RecipesCategory",
+      "tableName": "RecipesCategory",
+      "fields": [
+        {
+          "id": "RecipesCategory.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "RecipesCategory_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "RecipesCategory.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "RecipesCategory.recipesNumber",
+          "name": "recipesNumber",
+          "columnName": "recipesNumber",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "Recipe",
+          "type": "Recipe",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "RecipeToRecipesCategory",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "RecipesCategory_pkey",
           "fields": [
             "id"
           ]
