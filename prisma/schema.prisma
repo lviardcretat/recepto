@@ -1,38 +1,137 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+	provider = "sqlite"
+	url      = "file:./dev.db"
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native"]
+	provider      = "prisma-client-js"
+	binaryTargets = ["native"]
 }
 
 model FoodType {
-  id          Int          @id @default(autoincrement())
-  name        String
-  ingredients Ingredient[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+	id          			Int          		@id @default(autoincrement())
+	name        			String
+	ingredients 			Ingredient[]
+	createdBy				User? 				@relation(fields: [createdById], references: [id])
+	createdById 			Int?
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
 
 model Ingredient {
-  id         Int      @id @default(autoincrement())
-  name       String
-  foodType   FoodType @relation(fields: [foodTypeId], references: [id])
-  foodTypeId Int
-  season     Season   @relation(fields: [seasonId], references: [id])
-  seasonId   Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+	id         				Int      			@id @default(autoincrement())
+	name       				String
+	foodType   				FoodType 			@relation(fields: [foodTypeId], references: [id])
+	foodTypeId 				Int
+	season     				Season   			@relation(fields: [seasonId], references: [id])
+	seasonId   				Int
+	icon					String?
+	recipes					RecipeIngredient[]
+	createdBy				User? 				@relation(fields: [createdById], references: [id])
+	createdById 			Int?
+	createdAt  				DateTime 			@default(now())	@map("created_at")
+	updatedAt  				DateTime? 			@updatedAt @map("updated_at")
+}
+
+model RecipeCategory {
+	id          			Int          		@id @default(autoincrement())
+	name        			String
+	recipesNumber			Int
+	recipes					Recipe[]
+}
+
+model Recipe {
+	id          			Int          		@id @default(autoincrement())
+	name        			String
+	peopleNumber			Int
+	cookingTime				DateTime?
+	preparationTime 		DateTime?
+	restTime				DateTime?
+	description				String?
+	tips					String?
+	utensils				Ustensil[]
+	sequences				Sequence[]
+	ingredients				RecipeIngredient[]
+	recipeCategory 			RecipeCategory?		@relation(fields: [recipeCategoryId], references: [id])
+	recipeCategoryId		Int?
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime     		@updatedAt @map("updated_at")
+}
+
+model RecipeIngredient {
+	id          			Int          		@id @default(autoincrement())
+	ingredient				Ingredient 			@relation(fields: [ingredientId], references: [id])
+	ingredientId 			Int
+	quantity				Int
+	recipe					Recipe 				@relation(fields: [recipeId], references: [id])
+	recipeId 				Int
+	unit					Unit 				@relation(fields: [unitId], references: [id])
+	unitId 					Int
+}
+
+model Sequence {
+	id						Int          		@id @default(autoincrement())
+	title					String
+	description				String
+	recipe   				Recipe 				@relation(fields: [recipeId], references: [id])
+  	recipeId 				Int
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime     		@updatedAt @map("updated_at")
+}
+
+model Ustensil {
+	id						Int          		@id @default(autoincrement())
+	name					String
+	recipe 					Recipe[]
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime     		@updatedAt @map("updated_at")
 }
 
 model Season {
-  id          Int          @id @default(autoincrement())
-  name        String
-  start       DateTime
-  end         DateTime
-  ingredients Ingredient[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+	id          			Int          		@id @default(autoincrement())
+	name        			String
+	start       			DateTime
+	end         			DateTime
+	ingredients 			Ingredient[]
+	createdBy				User? 				@relation(fields: [createdById], references: [id])
+	createdById 			Int?
+	createdAt   			DateTime     		@default(now())
+	updatedAt   			DateTime     		@updatedAt
+}
+
+model User {
+	id          			Int          		@id @default(autoincrement())
+	email					String				@unique
+	password				String
+	firstname				String
+	lastname				String
+	picture					String
+	recipeCreatedNumber 	Int
+	recipes					Recipe[]
+	role					String				@default("User")
+	Season Season[]
+	Sequence Sequence[]
+	Ustensil Ustensil[]
+	Ingredient Ingredient[]
+	FoodType FoodType[]
+	Unit Unit[]
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime     		@updatedAt @map("updated_at")
+}
+
+model Unit {
+	id          			Int          		@id @default(autoincrement())
+	name					String				@unique
+	shortForm				String
+	recipeIngredient 		RecipeIngredient[]
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
+	createdAt   			DateTime     		@default(now())
+	updatedAt   			DateTime     		@updatedAt
 }

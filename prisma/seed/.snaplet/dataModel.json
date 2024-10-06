@@ -34,9 +34,22 @@
           "isId": false
         },
         {
-          "id": "FoodType.createdAt",
-          "name": "createdAt",
-          "columnName": "createdAt",
+          "id": "FoodType.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "FoodType.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
           "type": "datetime",
           "isRequired": true,
           "kind": "scalar",
@@ -47,9 +60,9 @@
           "isId": false
         },
         {
-          "id": "FoodType.updatedAt",
-          "name": "updatedAt",
-          "columnName": "updatedAt",
+          "id": "FoodType.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
           "type": "datetime",
           "isRequired": true,
           "kind": "scalar",
@@ -58,6 +71,24 @@
           "sequence": false,
           "hasDefaultValue": false,
           "isId": false
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "FoodTypeToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         },
         {
           "name": "Ingredient",
@@ -143,9 +174,35 @@
           "isId": false
         },
         {
-          "id": "Ingredient.createdAt",
-          "name": "createdAt",
-          "columnName": "createdAt",
+          "id": "Ingredient.icon",
+          "name": "icon",
+          "columnName": "icon",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Ingredient.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Ingredient.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
           "type": "datetime",
           "isRequired": true,
           "kind": "scalar",
@@ -156,9 +213,9 @@
           "isId": false
         },
         {
-          "id": "Ingredient.updatedAt",
-          "name": "updatedAt",
-          "columnName": "updatedAt",
+          "id": "Ingredient.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
           "type": "datetime",
           "isRequired": true,
           "kind": "scalar",
@@ -167,6 +224,24 @@
           "sequence": false,
           "hasDefaultValue": false,
           "isId": false
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "IngredientToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         },
         {
           "name": "Season",
@@ -203,11 +278,482 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "RecipeIngredient",
+          "type": "RecipeIngredient",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "RecipeIngredientToIngredient",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
         {
           "name": "Ingredient_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "Recipe": {
+      "id": "Recipe",
+      "tableName": "Recipe",
+      "fields": [
+        {
+          "id": "Recipe.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "Recipe_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "Recipe.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.peopleNumber",
+          "name": "peopleNumber",
+          "columnName": "peopleNumber",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.cookingTime",
+          "name": "cookingTime",
+          "columnName": "cookingTime",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.preparationTime",
+          "name": "preparationTime",
+          "columnName": "preparationTime",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.restTime",
+          "name": "restTime",
+          "columnName": "restTime",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.tips",
+          "name": "tips",
+          "columnName": "tips",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.recipeCategoryId",
+          "name": "recipeCategoryId",
+          "columnName": "recipeCategoryId",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Recipe.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false
+        },
+        {
+          "id": "Recipe.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "RecipeToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "RecipeCategory",
+          "type": "RecipeCategory",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "RecipeToRecipeCategory",
+          "relationFromFields": [
+            "recipeCategoryId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "RecipeIngredient",
+          "type": "RecipeIngredient",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "RecipeIngredientToRecipe",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Sequence",
+          "type": "Sequence",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "SequenceToRecipe",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "_RecipeToUstensil",
+          "type": "_RecipeToUstensil",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "_RecipeToUstensilToRecipe",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Recipe_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "RecipeCategory": {
+      "id": "RecipeCategory",
+      "tableName": "RecipeCategory",
+      "fields": [
+        {
+          "id": "RecipeCategory.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "RecipeCategory_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "RecipeCategory.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "RecipeCategory.recipesNumber",
+          "name": "recipesNumber",
+          "columnName": "recipesNumber",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "Recipe",
+          "type": "Recipe",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "RecipeToRecipeCategory",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "RecipeCategory_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "RecipeIngredient": {
+      "id": "RecipeIngredient",
+      "tableName": "RecipeIngredient",
+      "fields": [
+        {
+          "id": "RecipeIngredient.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "RecipeIngredient_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "RecipeIngredient.ingredientId",
+          "name": "ingredientId",
+          "columnName": "ingredientId",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "RecipeIngredient.quantity",
+          "name": "quantity",
+          "columnName": "quantity",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "RecipeIngredient.recipeId",
+          "name": "recipeId",
+          "columnName": "recipeId",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "RecipeIngredient.unitId",
+          "name": "unitId",
+          "columnName": "unitId",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "Unit",
+          "type": "Unit",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "RecipeIngredientToUnit",
+          "relationFromFields": [
+            "unitId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Recipe",
+          "type": "Recipe",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "RecipeIngredientToRecipe",
+          "relationFromFields": [
+            "recipeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Ingredient",
+          "type": "Ingredient",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "RecipeIngredientToIngredient",
+          "relationFromFields": [
+            "ingredientId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "RecipeIngredient_pkey",
           "fields": [
             "id"
           ]
@@ -274,6 +820,19 @@
           "isId": false
         },
         {
+          "id": "Season.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
           "id": "Season.createdAt",
           "name": "createdAt",
           "columnName": "createdAt",
@@ -300,6 +859,24 @@
           "isId": false
         },
         {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "SeasonToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Ingredient",
           "type": "Ingredient",
           "isRequired": false,
@@ -319,6 +896,725 @@
           "name": "Season_pkey",
           "fields": [
             "id"
+          ]
+        }
+      ]
+    },
+    "Sequence": {
+      "id": "Sequence",
+      "tableName": "Sequence",
+      "fields": [
+        {
+          "id": "Sequence.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "Sequence_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "Sequence.title",
+          "name": "title",
+          "columnName": "title",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Sequence.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Sequence.recipeId",
+          "name": "recipeId",
+          "columnName": "recipeId",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Sequence.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Sequence.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false
+        },
+        {
+          "id": "Sequence.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "SequenceToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Recipe",
+          "type": "Recipe",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "SequenceToRecipe",
+          "relationFromFields": [
+            "recipeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Sequence_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "Unit": {
+      "id": "Unit",
+      "tableName": "Unit",
+      "fields": [
+        {
+          "id": "Unit.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "Unit_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "Unit.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Unit.shortForm",
+          "name": "shortForm",
+          "columnName": "shortForm",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Unit.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Unit.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false
+        },
+        {
+          "id": "Unit.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "UnitToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "RecipeIngredient",
+          "type": "RecipeIngredient",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "RecipeIngredientToUnit",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Unit_name_key",
+          "fields": [
+            "name"
+          ]
+        },
+        {
+          "name": "Unit_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "User": {
+      "id": "User",
+      "tableName": "User",
+      "fields": [
+        {
+          "id": "User.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "User_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "User.email",
+          "name": "email",
+          "columnName": "email",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "User.password",
+          "name": "password",
+          "columnName": "password",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "User.firstname",
+          "name": "firstname",
+          "columnName": "firstname",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "User.lastname",
+          "name": "lastname",
+          "columnName": "lastname",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "User.picture",
+          "name": "picture",
+          "columnName": "picture",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "User.recipeCreatedNumber",
+          "name": "recipeCreatedNumber",
+          "columnName": "recipeCreatedNumber",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "User.role",
+          "name": "role",
+          "columnName": "role",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false
+        },
+        {
+          "id": "User.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false
+        },
+        {
+          "id": "User.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "FoodType",
+          "type": "FoodType",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "FoodTypeToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Ingredient",
+          "type": "Ingredient",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "IngredientToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Recipe",
+          "type": "Recipe",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "RecipeToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Season",
+          "type": "Season",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "SeasonToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Sequence",
+          "type": "Sequence",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "SequenceToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Unit",
+          "type": "Unit",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "UnitToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Ustensil",
+          "type": "Ustensil",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "UstensilToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "User_email_key",
+          "fields": [
+            "email"
+          ]
+        },
+        {
+          "name": "User_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "Ustensil": {
+      "id": "Ustensil",
+      "tableName": "Ustensil",
+      "fields": [
+        {
+          "id": "Ustensil.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "Ustensil_id_seq",
+            "increment": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true
+        },
+        {
+          "id": "Ustensil.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Ustensil.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "Ustensil.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false
+        },
+        {
+          "id": "Ustensil.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "datetime",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "UstensilToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "_RecipeToUstensil",
+          "type": "_RecipeToUstensil",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "_RecipeToUstensilToUstensil",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Ustensil_pkey",
+          "fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+    "_RecipeToUstensil": {
+      "id": "_RecipeToUstensil",
+      "tableName": "_RecipeToUstensil",
+      "fields": [
+        {
+          "id": "_RecipeToUstensil.A",
+          "name": "A",
+          "columnName": "A",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "id": "_RecipeToUstensil.B",
+          "name": "B",
+          "columnName": "B",
+          "type": "integer",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false
+        },
+        {
+          "name": "Ustensil",
+          "type": "Ustensil",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "_RecipeToUstensilToUstensil",
+          "relationFromFields": [
+            "B"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Recipe",
+          "type": "Recipe",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "_RecipeToUstensilToRecipe",
+          "relationFromFields": [
+            "A"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "_RecipeToUstensil_A_B_key",
+          "fields": [
+            "A",
+            "B"
           ]
         }
       ]
