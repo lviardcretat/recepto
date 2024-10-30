@@ -1,17 +1,25 @@
 
 <script setup lang="ts">
-const name: string = defineModel('name');
-const preparationTime: Date = defineModel('preparationTime');
-const description: string = defineModel('description');
+import { Prisma } from '@prisma/client';
+
+export type RecipeWithIngredients = Prisma.RecipeGetPayload<{
+	include: { ingredients: true };
+}>;
+
+const props = defineProps<{
+	name: RecipeWithIngredients['name'];
+	preparationTime: RecipeWithIngredients['preparationTime'];
+	description: RecipeWithIngredients['description'];
+}>();
 </script>
 
 <template>
     <div class="recipe-card-content">
-        <h1 class="name">{{ name }}</h1>
+        <h1 class="name">{{ props.name }}</h1>
         <img src="~/assets/img/lasagnes.jpg" />
         <div class="data">
-            <p>{{ preparationTime }}</p>
-            <p>{{ description }}</p>
+            <p>{{ props.preparationTime }}</p>
+            <p>{{ props.description }}</p>
         </div>
         <button type="button">X</button>
     </div>

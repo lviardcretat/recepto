@@ -11,9 +11,9 @@ const { data: recipeCategory } = await useFetch('/api/recipesCategories/1');
         coverflow-effect-slide-shadows="false" mousewheel="true">
             <swiper-slide v-for="recipe in recipeCategory?.recipes">
 				 <RecipeCard
-					v-model:name="recipe.name"
-					v-model:preparationTime="recipe.preparationTime"
-					v-model:description="recipe.description"/>
+					:name="recipe.name"
+					:preparationTime="new Date(recipe.preparationTime ?? '')"
+					:description="recipe.description"/>
 			</swiper-slide>
         </swiper-container>
     </div>

@@ -52,7 +52,7 @@ model Recipe {
 	utensils				Ustensil[]
 	sequences				Sequence[]
 	ingredients				RecipeIngredient[]
-	recipesCategory 			RecipesCategory?	@relation(fields: [recipesCategoryId], references: [id])
+	recipesCategory 		RecipesCategory?	@relation(fields: [recipesCategoryId], references: [id])
 	recipesCategoryId		Int?
 	createdBy				User 				@relation(fields: [createdById], references: [id])
 	createdById 			Int
