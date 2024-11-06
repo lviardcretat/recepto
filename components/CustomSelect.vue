@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-export type Ingredients = {
+export type Item = {
 	id: number;
 	name: string;
 	wanted: boolean;
@@ -7,21 +7,21 @@ export type Ingredients = {
 };
 
 const props = defineProps<{
-	ingredients: Ingredients[];
+	items: Item[];
 }>();
 </script>
 
 <template>
   	<div>
 		<div>
-			<UBadge v-for="ingredient in props.ingredients.filter(ingredient => ingredient.wanted || ingredient.notWanted)"
-				:color="ingredient.wanted ? 'green' : 'red'"
+			<UBadge v-for="item in props.items.filter(item => item.wanted || item.notWanted)"
+				:color="item.wanted ? 'green' : 'red'"
 				variant="solid"
 				size="sm"
-				:ui="{ rounded: 'rounded-full' }">{{ingredient.name}}</UBadge>
+				:ui="{ rounded: 'rounded-full' }">{{item.name}}</UBadge>
 		</div>
 		<USelectMenu
-		:options="props.ingredients"
+		:options="props.items"
 		multiple
 		placeholder="Select people"
 		searchable
@@ -39,20 +39,20 @@ const props = defineProps<{
 			<template #label>
 				<span>Select people</span>
 			</template>
-			<template #option="{ option: ingredient }">
+			<template #option="{ option: item }">
 				<UButton
 					:padded="false"
 					variant="link"
 					icon="material-symbols:circle-outline"
-					:class="props.ingredients[ingredient.id - 1].wanted ? 'opacity-100' : 'opacity-20'"
-					@click="props.ingredients[ingredient.id - 1].wanted = !props.ingredients[ingredient.id - 1].wanted; props.ingredients[ingredient.id - 1].notWanted = false;"/>
+					:class="props.items[item.id - 1].wanted ? 'opacity-100' : 'opacity-20'"
+					@click="props.items[item.id - 1].wanted = !props.items[item.id - 1].wanted; props.items[item.id - 1].notWanted = false;"/>
 				<UButton
 					:padded="false"
 					variant="link"
 					icon="radix-icons:value-none"
-					:class="props.ingredients[ingredient.id - 1].notWanted ? 'opacity-100' : 'opacity-20'"
-					@click="props.ingredients[ingredient.id - 1].notWanted = !props.ingredients[ingredient.id - 1].notWanted; props.ingredients[ingredient.id - 1].wanted = false;"/>
-				<span class="truncate">{{ ingredient.name }}</span>
+					:class="props.items[item.id - 1].notWanted ? 'opacity-100' : 'opacity-20'"
+					@click="props.items[item.id - 1].notWanted = !props.items[item.id - 1].notWanted; props.items[item.id - 1].wanted = false;"/>
+				<span class="truncate">{{ item.name }}</span>
 			</template>
 		</USelectMenu>
   	</div>

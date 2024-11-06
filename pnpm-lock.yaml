@@ -41,9 +41,6 @@ importers:
       vue:
         specifier: latest
         version: 3.5.12(typescript@5.6.2)
-      vue-multiselect:
-        specifier: 3.0.0-beta.3
-        version: 3.0.0-beta.3
       vue-router:
         specifier: latest
         version: 4.4.5(vue@3.5.12(typescript@5.6.2))
@@ -4966,10 +4963,6 @@ packages:
 
   vue-devtools-stub@0.1.0:
     resolution: {integrity: sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==}
-
-  vue-multiselect@3.0.0-beta.3:
-    resolution: {integrity: sha512-P7Fx+ovVF7WMERSZ0lw6N3p4H4bnQ3NcaY3ORjzFPv0r/6lpIqvFWmK9Xnwze9mgAvmNV1foI1VWrBmjnfBTLQ==}
-    engines: {node: '>= 4.0.0', npm: '>= 3.0.0'}
 
   vue-router@4.4.5:
     resolution: {integrity: sha512-4fKZygS8cH1yCyuabAXGUAsyi1b2/o/OKgu/RUb+znIYOxPRxdkytJEx+0wGcpBE1pX6vUgh5jwWOKRGvuA/7Q==}
@@ -10588,8 +10581,6 @@ snapshots:
       vue: 3.5.12(typescript@5.6.2)
 
   vue-devtools-stub@0.1.0: {}
-
-  vue-multiselect@3.0.0-beta.3: {}
 
   vue-router@4.4.5(vue@3.5.12(typescript@5.6.2)):
     dependencies:
