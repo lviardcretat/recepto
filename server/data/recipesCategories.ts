@@ -4,6 +4,9 @@ export async function getRecipesCategories() {
 	const recipesCategories = await prisma.recipesCategory.findMany({
 		include: {
 			recipes: true,
+			_count: {
+				select: { recipes: true },
+			},
 		},
 	});
 	return recipesCategories;
@@ -16,6 +19,9 @@ export async function getRecipesCategory(id: number) {
 		},
 		include: {
 			recipes: true,
+			_count: {
+				select: { recipes: true },
+			},
 		},
 	});
 	return recipesCategory;

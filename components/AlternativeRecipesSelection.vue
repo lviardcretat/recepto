@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { register } from 'swiper/element/bundle';
-register();
-const { data: recipeCategory } = await useFetch('/api/recipesCategories/1');
+const route = useRoute();
+const { data: recipeCategory } = await useFetch(
+	`/api/recipesCategories/${route.params.id}`,
+);
 </script>
 
 <template>
     <div class="alternative-recipes-selection-content">
-        <swiper-container slides-per-view="auto" loop="false" effect="coverflow" grabcursor="true" centered-slides="true"
-        coverflow-effect-rotate="0" coverflow-effect-stretch="0" coverflow-effect-depth="150" coverflow-effect-modifier="2.5"
-        coverflow-effect-slide-shadows="false" mousewheel="true">
+        <swiper-container :slides-per-view="'auto'" :loop="false" :effect="'coverflow'" :grabcursor="true" :centered-slides="true"
+			:coverflow-effect-rotate="0" :coverflow-effect-stretch="0" :coverflow-effect-depth="150" :coverflow-effect-modifier="2.5"
+			:coverflow-effect-slide-shadows="false" :mousewheel="true">
             <swiper-slide v-for="recipe in recipeCategory?.recipes">
 				 <RecipeCard
 					:name="recipe.name"

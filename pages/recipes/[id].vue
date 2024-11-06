@@ -1,8 +1,17 @@
 <template>
-	<main class="recipe-content">
-	  <RecipeFilter/>
-	  <AlternativeRecipesSelection/>
-	</main>
+	<UDashboardPage>
+		<RecipeFilter/>
+		<UDashboardPanel grow>
+			<UDashboardNavbar title="Recettes alternatives">
+				<template #right>
+					<UColorModeToggle />
+				</template>
+			</UDashboardNavbar>
+			<UDashboardPanelContent>
+				<AlternativeRecipesSelection/>
+			</UDashboardPanelContent>
+		</UDashboardPanel>
+	</UDashboardPage>
 </template>
 
 <style lang="scss">

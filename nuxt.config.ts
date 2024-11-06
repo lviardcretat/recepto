@@ -3,11 +3,13 @@ export default defineNuxtConfig({
 	compatibilityDate: '2024-04-03',
 	ssr: true,
 	devtools: { enabled: true },
+	extends: ['@nuxt/ui-pro'],
 	modules: [
-		'@nuxtjs/tailwindcss',
 		'@nuxt/image',
 		'@pinia/nuxt',
 		'@prisma/nuxt',
+		'@nuxt/ui',
+		'nuxt-swiper',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {

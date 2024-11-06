@@ -36,7 +36,6 @@ model Ingredient {
 model RecipesCategory {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
-	recipesNumber			Int
 	recipes					Recipe[]
 }
 
