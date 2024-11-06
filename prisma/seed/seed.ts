@@ -1,33 +1,34 @@
-/**
- * ! Executing this script will delete all data in your database and seed it with 10 season.
- * ! Make sure to adjust the script to your needs.
- * Use any TypeScript runner to run this script, for example: `npx tsx seed.ts`
- * Learn more about the Seed Client by following our guide: https://docs.snaplet.dev/seed/getting-started
- */
-import { createSeedClient } from '@snaplet/seed';
+import { PrismaClient } from '@prisma/client';
+import { seed_foodType } from './models/foodType';
+import { seed_user } from './models/user';
+import { seed_unit } from './models/unit';
+import { seed_season } from './models/season';
+import { seed_recipesCategory } from './models/recipesCategory';
+import { seed_ingredient } from './models/ingredient';
+import { seed_recipeIngredient } from './models/recipeIngredient';
+import { seed_ustensil } from './models/ustensil';
+import { seed_recipe } from './models/recipe';
 
-const main = async () => {
-	const seed = await createSeedClient();
+const prisma = new PrismaClient();
 
-	// Truncate all tables in the database
-	await seed.$resetDatabase();
+async function main() {
+	await seed_user(prisma);
+	await seed_season(prisma);
+	await seed_foodType(prisma);
+	await seed_ustensil(prisma);
+	await seed_recipesCategory(prisma);
+	await seed_ingredient(prisma);
+	await seed_unit(prisma);
+	await seed_recipe(prisma);
+	await seed_recipeIngredient(prisma);
+}
 
-	await seed.season((x) => x(4));
-	await seed.foodType((x) => x(6));
-	await seed.ustensil((x) => x(10));
-	await seed.unit((x) => x(10));
-	await seed.ingredient((x) => x(20));
-	await seed.sequence((x) => x(20));
-	await seed.recipesCategory((x) => x(20));
-	await seed.recipeIngredient((x) => x(20));
-	await seed.recipe((x) => x(20));
-	await seed.user((x) => x(5));
-
-	// Type completion not working? You might want to reload your TypeScript Server to pick up the changes
-
-	console.log('Database seeded successfully!');
-
-	process.exit();
-};
-
-main();
+main()
+	.then(async () => {
+		await prisma.$disconnect();
+	})
+	.catch(async (e) => {
+		console.error(e);
+		await prisma.$disconnect();
+		process.exit(1);
+	});

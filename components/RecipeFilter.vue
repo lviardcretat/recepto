@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const ingredients = await mapObjects('ingredients');
 const ustensils = await mapObjects('ustensils');
-console.log(ustensils);
 
 async function mapObjects(name: string) {
 	const { data: objects } = await useFetch(`/api/${name}/all`, {
