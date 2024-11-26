@@ -52,7 +52,7 @@ model Recipe {
 	restTime				DateTime?
 	description				String?
 	tips					String?
-	utensils				Ustensil[]
+	ustensils				Ustensil[]
 	sequences				Sequence[]
 	ingredients				RecipeIngredient[]
 	recipesCategory 		RecipesCategory?	@relation(fields: [recipesCategoryId], references: [id])

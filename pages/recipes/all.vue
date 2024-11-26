@@ -1,6 +1,24 @@
 <script setup lang="ts">
+import { useFiltersStore } from '@/stores/filters';
+
 const { data: recipeCategories } = await useFetch('/api/recipesCategories/all');
 const test = useTest();
+const store = useFiltersStore();
+const { getustensilsIdWanted } = storeToRefs(store);
+
+// Création d'un computed pour le filtrage
+const filteredRecipeCategories = computed(() => {
+	if (store.isNoFiltering) {
+		return recipeCategories.value;
+	}
+	return recipeCategories.value?.filter((recipeCategory) =>
+		recipeCategory.recipes.some((recipe) =>
+			recipe.ustensils.some((ustensil) =>
+				getustensilsIdWanted.value.includes(ustensil.id),
+			),
+		),
+	);
+});
 </script>
 
 <template>
@@ -19,7 +37,7 @@ const test = useTest();
 				</template>
 			</UDashboardNavbar>
 			<UDashboardPanelContent>
-				<NuxtLink v-for="recipeCategory in recipeCategories" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
+				<NuxtLink v-for="recipeCategory in filteredRecipeCategories" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
 					<UDashboardCard :title="recipeCategory.name">
 					</UDashboardCard>
 				</NuxtLink>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useFiltersStore } from '@/stores/filters';
 export type Item = {
 	id: number;
 	name: string;
@@ -9,6 +10,8 @@ export type Item = {
 const props = defineProps<{
 	items: Item[];
 }>();
+
+const store = useFiltersStore();
 </script>
 
 <template>
@@ -45,13 +48,21 @@ const props = defineProps<{
 					variant="link"
 					icon="material-symbols:circle-outline"
 					:class="props.items[item.id - 1].wanted ? 'opacity-100' : 'opacity-20'"
-					@click="props.items[item.id - 1].wanted = !props.items[item.id - 1].wanted; props.items[item.id - 1].notWanted = false;"/>
+					@click="
+						props.items[item.id - 1].wanted = !props.items[item.id - 1].wanted;
+						props.items[item.id - 1].notWanted = false;
+						store.updateLists(item.id, props.items[item.id- 1].wanted ? true : props.items[item.id- 1].notWanted ? false : null, DataType.Ustensil);
+					"/>
 				<UButton
 					:padded="false"
 					variant="link"
 					icon="radix-icons:value-none"
 					:class="props.items[item.id - 1].notWanted ? 'opacity-100' : 'opacity-20'"
-					@click="props.items[item.id - 1].notWanted = !props.items[item.id - 1].notWanted; props.items[item.id - 1].wanted = false;"/>
+					@click="
+						props.items[item.id - 1].notWanted = !props.items[item.id - 1].notWanted;
+						props.items[item.id - 1].wanted = false;
+						store.updateLists(item.id, props.items[item.id - 1].notWanted ? false : props.items[item.id - 1].wanted ? true : null, DataType.Ustensil);
+					"/>
 				<span class="truncate">{{ item.name }}</span>
 			</template>
 		</USelectMenu>

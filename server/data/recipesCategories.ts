@@ -3,7 +3,11 @@ import prisma from '~/lib/prisma';
 export async function getRecipesCategories() {
 	const recipesCategories = await prisma.recipesCategory.findMany({
 		include: {
-			recipes: true,
+			recipes: {
+				include: {
+					ustensils: true,
+				},
+			},
 			_count: {
 				select: { recipes: true },
 			},
