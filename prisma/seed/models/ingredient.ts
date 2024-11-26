@@ -1,6 +1,32 @@
-import type { Prisma, PrismaClient } from '@prisma/client';
+import type { Ingredient, Prisma, PrismaClient } from '@prisma/client';
 
-export async function seed_ingredient(prismaClient: PrismaClient) {
+async function generateIngredient(
+	id: number,
+	name: string,
+	foodTypeId: number,
+	seasonId: number,
+	icon: string,
+	recipes: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput,
+	createdById: number,
+	prismaClient: PrismaClient,
+): Promise<Ingredient> {
+	return await prismaClient.ingredient.upsert({
+		where: { id: id },
+		update: {},
+		create: {
+			name: name,
+			foodTypeId: foodTypeId,
+			seasonId: seasonId,
+			icon: icon,
+			recipes: recipes,
+			createdById: createdById,
+		},
+	});
+}
+
+export async function seed_ingredient(
+	prismaClient: PrismaClient,
+): Promise<void> {
 	await generateIngredient(1, 'Pomme', 1, 1, 'pomme_icon', {}, 1, prismaClient);
 	await generateIngredient(
 		2,
@@ -75,28 +101,4 @@ export async function seed_ingredient(prismaClient: PrismaClient) {
 		prismaClient,
 	);
 	await generateIngredient(11, 'Kiwi', 1, 1, 'kiwi_icon', {}, 1, prismaClient);
-}
-
-async function generateIngredient(
-	id: number,
-	name: string,
-	foodTypeId: number,
-	seasonId: number,
-	icon: string,
-	recipes: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput,
-	createdById: number,
-	prismaClient: PrismaClient,
-) {
-	return await prismaClient.ingredient.upsert({
-		where: { id: id },
-		update: {},
-		create: {
-			name: name,
-			foodTypeId: foodTypeId,
-			seasonId: seasonId,
-			icon: icon,
-			recipes: recipes,
-			createdById: createdById,
-		},
-	});
 }

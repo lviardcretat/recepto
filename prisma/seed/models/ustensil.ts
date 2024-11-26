@@ -1,11 +1,4 @@
-import type { Prisma, PrismaClient } from '@prisma/client';
-
-export async function seed_ustensil(prismaClient: PrismaClient) {
-	await generateUstensil(1, 'Couteau', {}, 1, prismaClient);
-	await generateUstensil(2, 'Cuillère', {}, 1, prismaClient);
-	await generateUstensil(3, 'Casserole', {}, 1, prismaClient);
-	await generateUstensil(4, 'Mixeur', {}, 1, prismaClient);
-}
+import type { Prisma, PrismaClient, Ustensil } from '@prisma/client';
 
 async function generateUstensil(
 	id: number,
@@ -13,7 +6,7 @@ async function generateUstensil(
 	recipes: Prisma.RecipeCreateNestedManyWithoutCreatedByInput,
 	createdById: number,
 	prismaClient: PrismaClient,
-) {
+): Promise<Ustensil> {
 	return await prismaClient.ustensil.upsert({
 		where: { id: id },
 		update: {},
@@ -23,4 +16,11 @@ async function generateUstensil(
 			createdById: createdById,
 		},
 	});
+}
+
+export async function seed_ustensil(prismaClient: PrismaClient): Promise<void> {
+	await generateUstensil(1, 'Couteau', {}, 1, prismaClient);
+	await generateUstensil(2, 'Cuillère', {}, 1, prismaClient);
+	await generateUstensil(3, 'Casserole', {}, 1, prismaClient);
+	await generateUstensil(4, 'Mixeur', {}, 1, prismaClient);
 }

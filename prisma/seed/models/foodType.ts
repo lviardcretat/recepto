@@ -1,6 +1,22 @@
-import type { PrismaClient } from '@prisma/client';
+import type { FoodType, PrismaClient } from '@prisma/client';
 
-export async function seed_foodType(prismaClient: PrismaClient) {
+async function generateFoodType(
+	id: number,
+	name: string,
+	createdById: number,
+	prismaClient: PrismaClient,
+): Promise<FoodType> {
+	return await prismaClient.foodType.upsert({
+		where: { id: id },
+		update: {},
+		create: {
+			name: name,
+			createdById: createdById,
+		},
+	});
+}
+
+export async function seed_foodType(prismaClient: PrismaClient): Promise<void> {
 	await generateFoodType(1, 'Fruits et légumes', 1, prismaClient);
 	await generateFoodType(2, 'Féculents', 1, prismaClient);
 	await generateFoodType(
@@ -13,20 +29,4 @@ export async function seed_foodType(prismaClient: PrismaClient) {
 	await generateFoodType(5, 'Matières grasses ', 1, prismaClient);
 	await generateFoodType(6, 'Produits sucrés ', 1, prismaClient);
 	await generateFoodType(7, 'Boissons ', 1, prismaClient);
-}
-
-async function generateFoodType(
-	id: number,
-	name: string,
-	createdById: number,
-	prismaClient: PrismaClient,
-) {
-	return await prismaClient.foodType.upsert({
-		where: { id: id },
-		update: {},
-		create: {
-			name: name,
-			createdById: createdById,
-		},
-	});
 }

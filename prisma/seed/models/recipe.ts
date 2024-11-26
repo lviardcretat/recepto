@@ -1,23 +1,4 @@
-import type { Prisma, PrismaClient } from '@prisma/client';
-
-export async function seed_recipe(prismaClient: PrismaClient) {
-	await generateRecipe(
-		1,
-		'Lasagnes',
-		4,
-		new Date('2022-12-02T00:00:00.000Z'),
-		new Date('2022-12-02T00:00:00.000Z'),
-		new Date('2022-12-02T00:00:00.000Z'),
-		'',
-		'',
-		{},
-		{},
-		{},
-		{},
-		1,
-		prismaClient,
-	);
-}
+import type { Prisma, PrismaClient, Recipe } from '@prisma/client';
 
 async function generateRecipe(
 	id: number,
@@ -31,10 +12,10 @@ async function generateRecipe(
 	utensils: Prisma.UstensilUncheckedCreateNestedManyWithoutRecipesInput,
 	sequences: Prisma.SequenceUncheckedCreateNestedManyWithoutRecipeInput,
 	ingredients: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput,
-	recipesCategory: Prisma.RecipesCategoryCreateNestedOneWithoutRecipesInput,
+	recipesCategory: number,
 	createdById: number,
 	prismaClient: PrismaClient,
-) {
+): Promise<Recipe> {
 	return await prismaClient.recipe.upsert({
 		where: { id: id },
 		update: {},
@@ -49,9 +30,75 @@ async function generateRecipe(
 			utensils: utensils,
 			sequences: sequences,
 			ingredients: ingredients,
-			recipesCategory: recipesCategory,
-			// TODO : Add createdById, why this is undefined ???
-			createdById: undefined,
+			recipesCategoryId: recipesCategory,
+			createdById: createdById,
 		},
 	});
+}
+
+export async function seed_recipe(prismaClient: PrismaClient): Promise<void> {
+	await generateRecipe(
+		1,
+		'Lasagnes',
+		4,
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		'',
+		'',
+		{},
+		{},
+		{},
+		1,
+		1,
+		prismaClient,
+	);
+	await generateRecipe(
+		2,
+		'Lasagnes végétariennes',
+		4,
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		'',
+		'',
+		{},
+		{},
+		{},
+		1,
+		1,
+		prismaClient,
+	);
+	await generateRecipe(
+		3,
+		'Lasagnes spéciales de Lolo',
+		4,
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		'',
+		'',
+		{},
+		{},
+		{},
+		1,
+		1,
+		prismaClient,
+	);
+	await generateRecipe(
+		4,
+		'Lasagnes spéciales de Théo',
+		4,
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		new Date('2022-12-02T00:00:00.000Z'),
+		'',
+		'',
+		{},
+		{},
+		{},
+		1,
+		1,
+		prismaClient,
+	);
 }

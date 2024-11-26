@@ -1,6 +1,28 @@
-import type { Prisma, PrismaClient } from '@prisma/client';
+import type { Prisma, PrismaClient, Season } from '@prisma/client';
 
-export async function seed_season(prismaClient: PrismaClient) {
+async function generateSeason(
+	id: number,
+	name: string,
+	start: Date,
+	end: Date,
+	ingredients: Prisma.IngredientCreateNestedManyWithoutCreatedByInput,
+	createdById: number,
+	prismaClient: PrismaClient,
+): Promise<Season> {
+	return await prismaClient.season.upsert({
+		where: { id: id },
+		update: {},
+		create: {
+			name: name,
+			start: start,
+			end: end,
+			ingredients: ingredients,
+			createdById: createdById,
+		},
+	});
+}
+
+export async function seed_season(prismaClient: PrismaClient): Promise<void> {
 	await generateSeason(
 		1,
 		'Printemps',
@@ -37,26 +59,4 @@ export async function seed_season(prismaClient: PrismaClient) {
 		1,
 		prismaClient,
 	);
-}
-
-async function generateSeason(
-	id: number,
-	name: string,
-	start: Date,
-	end: Date,
-	ingredients: Prisma.IngredientCreateNestedManyWithoutCreatedByInput,
-	createdById: number,
-	prismaClient: PrismaClient,
-) {
-	return await prismaClient.season.upsert({
-		where: { id: id },
-		update: {},
-		create: {
-			name: name,
-			start: start,
-			end: end,
-			ingredients: ingredients,
-			createdById: createdById,
-		},
-	});
 }

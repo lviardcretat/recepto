@@ -1,9 +1,4 @@
-import type { PrismaClient } from '@prisma/client';
-
-export async function seed_recipeIngredient(prismaClient: PrismaClient) {
-	await generateRecipeIngredient(1, 1, 1, 1, 1, prismaClient);
-	await generateRecipeIngredient(2, 2, 1, 1, 1, prismaClient);
-}
+import type { PrismaClient, RecipeIngredient } from '@prisma/client';
 
 async function generateRecipeIngredient(
 	id: number,
@@ -12,7 +7,7 @@ async function generateRecipeIngredient(
 	recipeId: number,
 	unitId: number,
 	prismaClient: PrismaClient,
-) {
+): Promise<RecipeIngredient> {
 	return await prismaClient.recipeIngredient.upsert({
 		where: { id: id },
 		update: {},
@@ -23,4 +18,11 @@ async function generateRecipeIngredient(
 			unitId: unitId,
 		},
 	});
+}
+
+export async function seed_recipeIngredient(
+	prismaClient: PrismaClient,
+): Promise<void> {
+	await generateRecipeIngredient(1, 1, 1, 1, 1, prismaClient);
+	await generateRecipeIngredient(2, 2, 1, 1, 1, prismaClient);
 }

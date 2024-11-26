@@ -1,26 +1,4 @@
-import type { Prisma, PrismaClient } from '@prisma/client';
-
-export async function seed_user(prismaClient: PrismaClient) {
-	await generateUser(
-		1,
-		'test@test.com',
-		'1234',
-		'jean',
-		'claude',
-		'photo',
-		10,
-		{},
-		'default',
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		prismaClient,
-	);
-}
+import type { Prisma, PrismaClient, User } from '@prisma/client';
 
 async function generateUser(
 	id: number,
@@ -40,7 +18,7 @@ async function generateUser(
 	unit: Prisma.UnitCreateNestedManyWithoutCreatedByInput,
 	recipesCategory: Prisma.RecipesCategoryCreateNestedManyWithoutCreatedByInput,
 	prismaClient: PrismaClient,
-) {
+): Promise<User> {
 	return await prismaClient.user.upsert({
 		where: { id: id },
 		update: {},
@@ -62,4 +40,26 @@ async function generateUser(
 			recipesCategory: recipesCategory,
 		},
 	});
+}
+
+export async function seed_user(prismaClient: PrismaClient): Promise<void> {
+	await generateUser(
+		1,
+		'test@test.com',
+		'1234',
+		'jean',
+		'claude',
+		'photo',
+		10,
+		{},
+		'default',
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		prismaClient,
+	);
 }
