@@ -22,7 +22,7 @@ const filteredRecipeCategories = computed(() => {
 </script>
 
 <template>
-	<UDashboardPage>
+	<UDashboardPage class="h-full">
 		<MainSlideover></MainSlideover>
 		<RecipeFilter/>
 		<UDashboardPanel grow>
