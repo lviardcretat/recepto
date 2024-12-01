@@ -8,6 +8,13 @@ generator client {
 	binaryTargets = ["native"]
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  theme = "dark"
+  output = "../diagram.svg"
+includeRelationFromFields = true
+}
+
 model FoodType {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
