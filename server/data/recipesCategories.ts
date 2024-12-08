@@ -13,6 +13,34 @@ export async function getRecipesCategories() {
 	return recipesCategories;
 }
 
+export async function getRecipesCategoriesAndRecipesNames(name: string) {
+	const recipesCategories = await prisma.recipesCategory.findMany({
+		where: {
+			OR: [
+				{
+					name: { contains: name },
+				},
+				{
+					recipes: {
+						some: {
+							name: { contains: name },
+						},
+					},
+				},
+			],
+		},
+		select: {
+			name: true,
+			recipes: {
+				select: {
+					name: true,
+				},
+			},
+		},
+	});
+	return recipesCategories;
+}
+
 export async function getRecipesCategory(id: number) {
 	const recipesCategory = await prisma.recipesCategory.findUnique({
 		where: {
