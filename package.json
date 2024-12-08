@@ -15,7 +15,8 @@
 		"prepare": "husky",
 		"preview": "nuxt preview",
 		"reset": "npx prisma db push --force-reset",
-		"seed": "npx prisma db seed"
+		"seed": "npx prisma db seed",
+		"db-schema": "npx prisma generate --generator erd"
 	},
 	"dependencies": {
 		"@nuxt/image": "^1.8.1",
