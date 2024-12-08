@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-const { data: recipeCategory } = await useFetch(
+const recipeCategory = await $fetch(
 	`/api/recipesCategories/${route.params.id}`,
 );
 </script>
