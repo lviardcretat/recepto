@@ -15,7 +15,8 @@
 		"prepare": "husky",
 		"preview": "nuxt preview",
 		"reset": "npx prisma db push --force-reset",
-		"seed": "npx prisma db seed"
+		"seed": "npx prisma db seed",
+		"db-schema": "npx prisma generate --generator erd"
 	},
 	"dependencies": {
 		"@nuxt/image": "^1.8.1",
@@ -37,7 +38,7 @@
 		"@commitlint/cli": "^19.6.0",
 		"@commitlint/config-conventional": "^19.6.0",
 		"@mermaid-js/mermaid-cli": "^11.4.0",
-		"@prisma/client": "^6.0.0",
+		"@prisma/client": "^6.0.1",
 		"@snaplet/copycat": "^5.1.0",
 		"@snaplet/seed": "0.98.0",
 		"@types/node": "^22.10.1",
