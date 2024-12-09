@@ -1,32 +1,118 @@
 <script setup lang="ts">
-const ingredients = await mapObjects('ingredients');
-const ustensils = await mapObjects('ustensils');
+export type SelectItem = {
+	id: number;
+	name: string;
+	wanted: boolean;
+	notWanted: boolean;
+};
 
-async function mapObjects(name: string) {
-	const { data: objects } = await useFetch(`/api/${name}/all`, {
-		transform: (objects) => {
-			return objects.map((object) => ({
-				id: object.id,
-				name: object.name,
+export type IconsGridItem = {
+	id: number;
+	name: string;
+	icon: string;
+	active: boolean;
+};
+
+const ustensils: SelectItem[] = await mapSelectItems('ustensils');
+const ingredients: SelectItem[] = await mapSelectItems('ingredients');
+const seasons: SelectItem[] = await mapSelectItems('seasons');
+const mealTypes: SelectItem[] = await mapSelectItems('mealTypes');
+const allergens: IconsGridItem[] = await mapIconsGridItems('allergens');
+
+async function mapSelectItems(name: string): Promise<SelectItem[]> {
+	const { data: items } = await useFetch(`/api/${name}/all`, {
+		transform: (items) => {
+			return items.map((item) => ({
+				id: item.id,
+				name: item.name,
 				wanted: false,
 				notWanted: false,
 			}));
 		},
 	});
-	return objects;
+	return items.value ?? [];
 }
+
+async function mapIconsGridItems(name: string): Promise<IconsGridItem[]> {
+	const { data: items } = await useFetch(`/api/${name}/all`, {
+		transform: (items) => {
+			return items.map((item) => ({
+				id: item.id,
+				name: item.name,
+				icon: 'vscode-icons:default-file',
+				active: false,
+			}));
+		},
+	});
+	return items.value ?? [];
+}
+
+const items = [
+	{
+		label: 'Ingrédients',
+		icon: 'fa6-solid:carrot',
+		slot: 'select',
+		items: ingredients,
+	},
+	{
+		label: 'Ustensiles',
+		icon: 'solar:ladle-bold',
+		slot: 'select',
+		items: ustensils,
+	},
+	{
+		label: 'Allergènes',
+		icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
+		slot: 'icons',
+		items: allergens,
+	},
+	{
+		label: 'Saisons',
+		icon: 'fa6-solid:snowflake',
+		slot: 'select',
+		items: seasons,
+	},
+	{
+		label: 'Types de repas',
+		icon: 'tabler:sun-moon',
+		slot: 'select',
+		items: mealTypes,
+	},
+];
 </script>
 
 <template>
 	<UDashboardPanel :width="300" :resizable="{ min: 200, max: 400 }">
-		<UDashboardNavbar title="Filtres">
+		<UDashboardNavbar title="Filtres" badge="0">
 			<template #right>
 				<UIcon name="material-symbols:filter-alt" class="w-7 h-7" />
         	</template>
 		</UDashboardNavbar>
 		<UDashboardSidebar>
-			<CustomSelect :items="ingredients ?? []" />
-			<CustomSelect :items="ustensils ?? []" />
+			<UAccordion :items="items" multiple :ui="{ wrapper: 'flex flex-col w-full' }">
+				<template #default="{ item, open }">
+					<UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+						<template #leading>
+							<UIcon :name="item.icon" class="w-4 h-4 text-gray-900 dark:text-white" />
+						</template>
+						<span class="truncate">{{ item.label }}</span>
+						<template #trailing>
+							<UIcon
+								name="i-heroicons-chevron-right-20-solid"
+								class="w-5 h-5 ms-auto transform transition-transform duration-200"
+								:class="[open && 'rotate-90']"
+							/>
+						</template>
+					</UButton>
+				</template>
+				<template #select="{ item }">
+					<CustomSelect :items="item.items" />
+				</template>
+				<template #icons="{ item }">
+					<IconsGrid :items="item.items" />
+				</template>
+			</UAccordion>
+
 		</UDashboardSidebar>
 	</UDashboardPanel>
 </template>

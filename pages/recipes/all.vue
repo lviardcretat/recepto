@@ -14,7 +14,7 @@ store.fetchFilteredRecipes();
 		<UDashboardPanel grow>
 			<UDashboardNavbar title="Recettes">
 				<template #right>
-					<UColorModeToggle />
+					<UColorModeButton />
 					<UButton
 						:padded="false"
 						variant="link"
