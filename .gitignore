@@ -23,5 +23,11 @@ logs
 .env.*
 !.env.example
 
+# BDD
+*.db
+
 # Local files
 package-lock.json
+
+# Crappy direnv nix stuff
+nix-profile*

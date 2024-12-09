@@ -8,11 +8,7 @@
 	},
 	"files": {
 		"include": ["**/*.js", "**/*.ts", "**/*.vue", "**/*.json"],
-		"ignore": [
-			"**/node_modules/*",
-			"**/pnpm-lock.yaml",
-			"**/.nuxt/*"
-		],
+		"ignore": ["**/node_modules/*", "**/pnpm-lock.yaml", "**/.nuxt/*"],
 		"ignoreUnknown": false
 	},
 	"formatter": {
@@ -61,6 +57,12 @@
 						"useImportType": "off"
 					}
 				}
+			}
+		},
+		{
+			"include": ["**/seed/models/*.ts"],
+			"formatter": {
+				"lineWidth": 320
 			}
 		}
 	]
