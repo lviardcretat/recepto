@@ -21,8 +21,8 @@ model FoodType {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
 	ingredients 			Ingredient[]
-	createdBy				User? 				@relation(fields: [createdById], references: [id])
-	createdById 			Int?
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
 	createdAt   			DateTime     		@default(now())	@map("created_at")
 	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
@@ -36,8 +36,8 @@ model Ingredient {
 	seasonId   				Int
 	icon					String?
 	recipes					RecipeIngredient[]
-	createdBy				User? 				@relation(fields: [createdById], references: [id])
-	createdById 			Int?
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
 	createdAt  				DateTime 			@default(now())	@map("created_at")
 	updatedAt  				DateTime? 			@updatedAt @map("updated_at")
 }
@@ -45,9 +45,11 @@ model Ingredient {
 model RecipesCategory {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
+	mealType				MealType?			@relation(fields: [mealTypeId], references: [id])
+	mealTypeId 				Int?
 	recipes					Recipe[]
-	createdBy				User? 				@relation(fields: [createdById], references: [id])
-	createdById 			Int?
+	createdBy				User				@relation(fields: [createdById], references: [id])
+	createdById 			Int
 	createdAt   			DateTime     		@default(now())	@map("created_at")
 	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
@@ -63,13 +65,14 @@ model Recipe {
 	tips					String?
 	ustensils				Ustensil[]
 	sequences				Sequence[]
+	allergens				Allergen[]
 	ingredients				RecipeIngredient[]
-	recipesCategory 		RecipesCategory?	@relation(fields: [recipesCategoryId], references: [id])
-	recipesCategoryId		Int?
-	createdBy				User? 				@relation(fields: [createdById], references: [id])
-	createdById 			Int?
+	recipesCategory 		RecipesCategory		@relation(fields: [recipesCategoryId], references: [id])
+	recipesCategoryId		Int
+	createdBy				User				@relation(fields: [createdById], references: [id])
+	createdById 			Int
 	createdAt   			DateTime     		@default(now())	@map("created_at")
-	updatedAt   			DateTime     		@updatedAt @map("updated_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
 
 model RecipeIngredient {
@@ -92,7 +95,7 @@ model Sequence {
 	createdBy				User 				@relation(fields: [createdById], references: [id])
 	createdById 			Int
 	createdAt   			DateTime     		@default(now())	@map("created_at")
-	updatedAt   			DateTime     		@updatedAt @map("updated_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
 
 model Ustensil {
@@ -102,7 +105,7 @@ model Ustensil {
 	createdBy				User 				@relation(fields: [createdById], references: [id])
 	createdById 			Int
 	createdAt   			DateTime     		@default(now())	@map("created_at")
-	updatedAt   			DateTime     		@updatedAt @map("updated_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
 
 model Season {
@@ -111,10 +114,10 @@ model Season {
 	start       			DateTime
 	end         			DateTime
 	ingredients 			Ingredient[]
-	createdBy				User? 				@relation(fields: [createdById], references: [id])
-	createdById 			Int?
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
 	createdAt   			DateTime     		@default(now())
-	updatedAt   			DateTime     		@updatedAt
+	updatedAt   			DateTime?     		@updatedAt
 }
 
 model User {
@@ -127,24 +130,47 @@ model User {
 	recipeCreatedNumber 	Int
 	recipes					Recipe[]
 	role					String				@default("User")
-	season 					Season[]
-	sequence 				Sequence[]
-	ustensil 				Ustensil[]
-	ingredient 				Ingredient[]
-	foodType 				FoodType[]
-	unit 					Unit[]
-	recipesCategory 		RecipesCategory[]
+	seasons 				Season[]
+	sequences 				Sequence[]
+	ustensils 				Ustensil[]
+	ingredients 			Ingredient[]
+	foodTypes 				FoodType[]
+	allergens 				Allergen[]
+	units 					Unit[]
+	recipesCategories 		RecipesCategory[]
+	mealTypes 				MealType[]
 	createdAt   			DateTime     		@default(now())	@map("created_at")
-	updatedAt   			DateTime     		@updatedAt @map("updated_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
 
 model Unit {
 	id          			Int          		@id @default(autoincrement())
 	name					String				@unique
 	shortForm				String
-	recipeIngredient 		RecipeIngredient[]
+	recipeIngredients 		RecipeIngredient[]
 	createdBy				User 				@relation(fields: [createdById], references: [id])
 	createdById 			Int
 	createdAt   			DateTime     		@default(now())
-	updatedAt   			DateTime     		@updatedAt
+	updatedAt   			DateTime?     		@updatedAt
+}
+
+model MealType {
+	id						Int          		@id @default(autoincrement())
+	name					String
+	recipesCategories 		RecipesCategory[]
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
+}
+
+model Allergen {
+	id						Int          		@id @default(autoincrement())
+	name					String
+	icon					String
+	recipes			 		Recipe[]
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
