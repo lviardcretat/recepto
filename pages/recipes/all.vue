@@ -24,8 +24,7 @@ store.fetchFilteredRecipes();
 			</UDashboardNavbar>
 			<UDashboardPanelContent>
 				<NuxtLink v-for="recipeCategory in store.recipeCategoryList" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
-					<UDashboardCard :title="recipeCategory.name">
-					</UDashboardCard>
+					<UDashboardCard class="mb-4" :title="recipeCategory.name"></UDashboardCard>
 				</NuxtLink>
 			</UDashboardPanelContent>
 		</UDashboardPanel>
