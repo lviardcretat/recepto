@@ -45,8 +45,9 @@ model Ingredient {
 model RecipesCategory {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
-	mealType				MealType?			@relation(fields: [mealTypeId], references: [id])
-	mealTypeId 				Int?
+	mealTypes				MealType[]
+	dishType				DishType			@relation(fields: [dishTypeId], references: [id])
+	dishTypeId 				Int
 	recipes					Recipe[]
 	createdBy				User				@relation(fields: [createdById], references: [id])
 	createdById 			Int
@@ -139,6 +140,7 @@ model User {
 	units 					Unit[]
 	recipesCategories 		RecipesCategory[]
 	mealTypes 				MealType[]
+	DishType 				DishType[]
 	createdAt   			DateTime     		@default(now())	@map("created_at")
 	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
 }
@@ -155,6 +157,16 @@ model Unit {
 }
 
 model MealType {
+	id						Int          		@id @default(autoincrement())
+	name					String
+	recipesCategories 		RecipesCategory[]
+	createdBy				User 				@relation(fields: [createdById], references: [id])
+	createdById 			Int
+	createdAt   			DateTime     		@default(now())	@map("created_at")
+	updatedAt   			DateTime?     		@updatedAt @map("updated_at")
+}
+
+model DishType {
 	id						Int          		@id @default(autoincrement())
 	name					String
 	recipesCategories 		RecipesCategory[]

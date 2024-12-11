@@ -4,6 +4,7 @@ export type SelectItem = {
 	name: string;
 	wanted: boolean;
 	notWanted: boolean;
+	type: DataType;
 };
 
 export type IconsGridItem = {
@@ -13,13 +14,29 @@ export type IconsGridItem = {
 	active: boolean;
 };
 
-const ustensils: SelectItem[] = await mapSelectItems('ustensils');
-const ingredients: SelectItem[] = await mapSelectItems('ingredients');
-const seasons: SelectItem[] = await mapSelectItems('seasons');
-const mealTypes: SelectItem[] = await mapSelectItems('mealTypes');
+const ustensils: SelectItem[] = await mapSelectItems(
+	'ustensils',
+	DataType.Ustensil,
+);
+const ingredients: SelectItem[] = await mapSelectItems(
+	'ingredients',
+	DataType.Ingredient,
+);
+const seasons: SelectItem[] = await mapSelectItems('seasons', DataType.Season);
+const mealTypes: SelectItem[] = await mapSelectItems(
+	'mealTypes',
+	DataType.MealType,
+);
+const dishTypes: SelectItem[] = await mapSelectItems(
+	'dishTypes',
+	DataType.DishType,
+);
 const allergens: IconsGridItem[] = await mapIconsGridItems('allergens');
 
-async function mapSelectItems(name: string): Promise<SelectItem[]> {
+async function mapSelectItems(
+	name: string,
+	dataType: DataType,
+): Promise<SelectItem[]> {
 	const { data: items } = await useFetch(`/api/${name}/all`, {
 		transform: (items) => {
 			return items.map((item) => ({
@@ -27,6 +44,7 @@ async function mapSelectItems(name: string): Promise<SelectItem[]> {
 				name: item.name,
 				wanted: false,
 				notWanted: false,
+				type: dataType,
 			}));
 		},
 	});
@@ -78,6 +96,12 @@ const items = [
 		slot: 'select',
 		items: mealTypes,
 	},
+	{
+		label: 'Types de plat',
+		icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
+		slot: 'select',
+		items: dishTypes,
+	},
 ];
 </script>
 
@@ -106,7 +130,7 @@ const items = [
 					</UButton>
 				</template>
 				<template #select="{ item }">
-					<CustomSelect :items="item.items" />
+					<CustomSelect :items="item.items" :placeholder="item.label" />
 				</template>
 				<template #icons="{ item }">
 					<IconsGrid :items="item.items" />

@@ -27,11 +27,11 @@ CREATE TABLE "Ingredient" (
 CREATE TABLE "RecipesCategory" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "mealTypeId" INTEGER,
+    "dishTypeId" INTEGER NOT NULL,
     "createdById" INTEGER NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME,
-    CONSTRAINT "RecipesCategory_mealTypeId_fkey" FOREIGN KEY ("mealTypeId") REFERENCES "MealType" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "RecipesCategory_dishTypeId_fkey" FOREIGN KEY ("dishTypeId") REFERENCES "DishType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "RecipesCategory_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -136,6 +136,16 @@ CREATE TABLE "MealType" (
 );
 
 -- CreateTable
+CREATE TABLE "DishType" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "createdById" INTEGER NOT NULL,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" DATETIME,
+    CONSTRAINT "DishType_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "Allergen" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
@@ -152,6 +162,14 @@ CREATE TABLE "_RecipeToUstensil" (
     "B" INTEGER NOT NULL,
     CONSTRAINT "_RecipeToUstensil_A_fkey" FOREIGN KEY ("A") REFERENCES "Recipe" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "_RecipeToUstensil_B_fkey" FOREIGN KEY ("B") REFERENCES "Ustensil" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "_MealTypeToRecipesCategory" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
+    CONSTRAINT "_MealTypeToRecipesCategory_A_fkey" FOREIGN KEY ("A") REFERENCES "MealType" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_MealTypeToRecipesCategory_B_fkey" FOREIGN KEY ("B") REFERENCES "RecipesCategory" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -173,6 +191,12 @@ CREATE UNIQUE INDEX "_RecipeToUstensil_AB_unique" ON "_RecipeToUstensil"("A", "B
 
 -- CreateIndex
 CREATE INDEX "_RecipeToUstensil_B_index" ON "_RecipeToUstensil"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_MealTypeToRecipesCategory_AB_unique" ON "_MealTypeToRecipesCategory"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_MealTypeToRecipesCategory_B_index" ON "_MealTypeToRecipesCategory"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_AllergenToRecipe_AB_unique" ON "_AllergenToRecipe"("A", "B");

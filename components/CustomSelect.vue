@@ -2,7 +2,10 @@
 import { useFiltersStore } from '@/stores/filters';
 import type { SelectItem } from './RecipeFilter.vue';
 
-defineProps<{ items: SelectItem[] }>();
+defineProps<{
+	items: SelectItem[];
+	placeholder: string;
+}>();
 const itemsSelected = ref<SelectItem[]>([]);
 const store = useFiltersStore();
 </script>
@@ -20,9 +23,9 @@ const store = useFiltersStore();
 			v-model="itemsSelected"
 			:options="items"
 			multiple
-			placeholder="Select people"
+			:placeholder="`Filtrez par ${placeholder.toLocaleLowerCase()}...`"
 			searchable
-			searchable-placeholder="Search a person..."
+			:searchable-placeholder="`Filtrez par ${placeholder.toLocaleLowerCase()}...`"
 			selected-icon=""
 			:uiMenu="{
 				strategy: 'override',
@@ -34,7 +37,8 @@ const store = useFiltersStore();
 				}
 			}">
 			<template #label>
-				<span>Select people</span>
+				<span v-if="itemsSelected.length">{{ items.filter(item => item.notWanted || item.wanted).length }} sélectionnés</span>
+     			<span v-else>Filtrez par {{ placeholder.toLocaleLowerCase() }}...</span>
 			</template>
 			<template #option="{ option: item }">
 				<UButton
@@ -45,7 +49,7 @@ const store = useFiltersStore();
 					@click="
 						items[item.id - 1].wanted = !items[item.id - 1].wanted;
 						items[item.id - 1].notWanted = false;
-						store.updateLists(item.id, items[item.id- 1].wanted ? true : items[item.id- 1].notWanted ? false : null, DataType.Ustensil);
+						store.updateLists(item.id, items[item.id- 1].wanted ? true : items[item.id- 1].notWanted ? false : null, item.type);
 					"/>
 				<UButton
 					:padded="false"
@@ -55,7 +59,7 @@ const store = useFiltersStore();
 					@click="
 						items[item.id - 1].notWanted = !items[item.id - 1].notWanted;
 						items[item.id - 1].wanted = false;
-						store.updateLists(item.id, items[item.id - 1].notWanted ? false : items[item.id - 1].wanted ? true : null, DataType.Ustensil);
+						store.updateLists(item.id, items[item.id - 1].notWanted ? false : items[item.id - 1].wanted ? true : null, item.type);
 					"/>
 				<span class="truncate">{{ item.name }}</span>
 			</template>

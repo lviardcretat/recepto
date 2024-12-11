@@ -10,12 +10,14 @@ import { seed_ustensil } from './models/ustensil';
 import { seed_recipe } from './models/recipe';
 import { seed_mealType } from './models/mealType';
 import { seed_allergen } from './models/allergen';
+import { seed_dishType } from './models/dishType';
 
 const prisma = new PrismaClient();
 
 async function main() {
 	await seed_user(prisma);
 	await seed_mealType(prisma);
+	await seed_dishType(prisma);
 	await seed_allergen(prisma);
 	await seed_season(prisma);
 	await seed_foodType(prisma);

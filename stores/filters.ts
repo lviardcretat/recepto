@@ -3,10 +3,11 @@ import type { SerializeObject } from 'nitropack';
 import { defineStore } from 'pinia';
 
 interface State {
-	ustensilsIdWanted: number[];
-	ustensilsIdNotWanted: number[];
-	ingredientsIdWanted: number[];
-	ingredientsIdNotWanted: number[];
+	ustensils: FilterItem;
+	ingredients: FilterItem;
+	seasons: FilterItem;
+	mealTypes: FilterItem;
+	dishTypes: FilterItem;
 	recipeCategoryList:
 		| SerializeObject<{
 				id: number;
@@ -22,10 +23,26 @@ export const useFiltersStore = defineStore('filters', {
 	// generate the store for filtering a list of ustensils
 	state: (): State => {
 		return {
-			ustensilsIdWanted: [],
-			ustensilsIdNotWanted: [],
-			ingredientsIdWanted: [],
-			ingredientsIdNotWanted: [],
+			ingredients: {
+				wanted: [],
+				notWanted: [],
+			},
+			ustensils: {
+				wanted: [],
+				notWanted: [],
+			},
+			seasons: {
+				wanted: [],
+				notWanted: [],
+			},
+			mealTypes: {
+				wanted: [],
+				notWanted: [],
+			},
+			dishTypes: {
+				wanted: [],
+				notWanted: [],
+			},
 			recipeCategoryList: [],
 		};
 	},
@@ -34,10 +51,26 @@ export const useFiltersStore = defineStore('filters', {
 			const response = await $fetch('/api/recipesCategories/filtered', {
 				method: 'GET',
 				params: {
-					ustensilsIdWanted: this.ustensilsIdWanted,
-					ustensilsIdNotWanted: this.ustensilsIdNotWanted,
-					ingredientsIdWanted: this.ingredientsIdWanted,
-					ingredientsIdNotWanted: this.ingredientsIdNotWanted,
+					ingredients: {
+						wanted: this.ingredients.wanted,
+						notWanted: this.ingredients.notWanted,
+					},
+					ustensils: {
+						wanted: this.ustensils.wanted,
+						notWanted: this.ustensils.notWanted,
+					},
+					seasons: {
+						wanted: this.seasons.wanted,
+						notWanted: this.seasons.notWanted,
+					},
+					mealTypes: {
+						wanted: this.mealTypes.wanted,
+						notWanted: this.mealTypes.notWanted,
+					},
+					dishTypes: {
+						wanted: this.dishTypes.wanted,
+						notWanted: this.dishTypes.notWanted,
+					},
 				},
 			});
 			this.recipeCategoryList = response;
@@ -46,77 +79,75 @@ export const useFiltersStore = defineStore('filters', {
 		async updateLists(
 			id: number,
 			wanted: boolean | null,
-			dataType: DataType,
+			dataType: string,
 		): Promise<void> {
-			switch (dataType) {
-				case DataType.Ustensil:
-					if (wanted === null) {
-						this.ustensilsIdNotWanted = this.ustensilsIdNotWanted.filter(
-							(ustensilId) => ustensilId !== id,
-						);
-						this.ustensilsIdWanted = this.ustensilsIdWanted.filter(
-							(ustensilId) => ustensilId !== id,
-						);
-					} else if (wanted) {
-						if (!this.ustensilsIdWanted.includes(id)) {
-							this.ustensilsIdWanted.push(id);
-						}
-						this.ustensilsIdNotWanted = this.ustensilsIdNotWanted.filter(
-							(ustensilId) => ustensilId !== id,
-						);
-					} else {
-						if (!this.ustensilsIdNotWanted.includes(id)) {
-							this.ustensilsIdNotWanted.push(id);
-						}
-						this.ustensilsIdWanted = this.ustensilsIdWanted.filter(
-							(ustensilId) => ustensilId !== id,
-						);
-					}
-					break;
-				case DataType.Ingredient:
-					if (wanted === null) {
-						this.ingredientsIdNotWanted = this.ingredientsIdNotWanted.filter(
-							(ingredientId) => ingredientId !== id,
-						);
-						this.ingredientsIdWanted = this.ingredientsIdWanted.filter(
-							(ingredientId) => ingredientId !== id,
-						);
-					} else if (wanted) {
-						if (!this.ingredientsIdWanted.includes(id)) {
-							this.ingredientsIdWanted.push(id);
-						}
-						this.ingredientsIdNotWanted = this.ingredientsIdNotWanted.filter(
-							(ingredientId) => ingredientId !== id,
-						);
-					} else {
-						if (!this.ingredientsIdNotWanted.includes(id)) {
-							this.ingredientsIdNotWanted.push(id);
-						}
-						this.ingredientsIdWanted = this.ingredientsIdWanted.filter(
-							(ingredientId) => ingredientId !== id,
-						);
-					}
-					break;
+			type ObjectKey = keyof typeof this;
+			const dataTypeKey = dataType as ObjectKey;
+			if (this[dataTypeKey] === null) {
+				return;
+			}
+			if (wanted === null) {
+				(this[dataTypeKey] as FilterItem).notWanted = (
+					this[dataTypeKey] as FilterItem
+				).notWanted.filter((itemId: number) => itemId !== id);
+				(this[dataTypeKey] as FilterItem).wanted = (
+					this[dataTypeKey] as FilterItem
+				).wanted.filter((itemId: number) => itemId !== id);
+			} else if (wanted) {
+				if (!(this[dataTypeKey] as FilterItem).wanted.includes(id)) {
+					(this[dataTypeKey] as FilterItem).wanted.push(id);
+				}
+				(this[dataTypeKey] as FilterItem).notWanted = (
+					this[dataTypeKey] as FilterItem
+				).notWanted.filter((itemId: number) => itemId !== id);
+			} else {
+				if (!(this[dataTypeKey] as FilterItem).notWanted.includes(id)) {
+					(this[dataTypeKey] as FilterItem).notWanted.push(id);
+				}
+				(this[dataTypeKey] as FilterItem).wanted = (
+					this[dataTypeKey] as FilterItem
+				).wanted.filter((itemId: number) => itemId !== id);
 			}
 			await this.fetchFilteredRecipes();
 		},
 
 		resetFilters() {
-			this.ustensilsIdWanted = [];
-			this.ustensilsIdNotWanted = [];
-			this.ingredientsIdWanted = [];
-			this.ingredientsIdNotWanted = [];
+			this.ingredients.wanted = [];
+			this.ingredients.notWanted = [];
+			this.ustensils.wanted = [];
+			this.ustensils.notWanted = [];
+			this.seasons.wanted = [];
+			this.seasons.notWanted = [];
+			this.mealTypes.wanted = [];
+			this.mealTypes.notWanted = [];
+			this.dishTypes.wanted = [];
+			this.dishTypes.notWanted = [];
 		},
 	},
 	getters: {
-		getustensilsIdWanted: (state) => state.ustensilsIdWanted,
-		getustensilsIdNotWanted: (state) => state.ustensilsIdNotWanted,
-		getingredientsIdWanted: (state) => state.ingredientsIdWanted,
-		getingredientsIdNotWanted: (state) => state.ingredientsIdNotWanted,
+		getIngredientsIdsWanted: (state) => state.ingredients.wanted,
+		getIngredientsIdsNotWanted: (state) => state.ingredients.notWanted,
+		getUstensilsIdsWanted: (state) => state.ustensils.wanted,
+		getUstensilsIdsNotWanted: (state) => state.ustensils.notWanted,
+		getSeasonsIdsWanted: (state) => state.seasons.wanted,
+		getSeasonsIdsNotWanted: (state) => state.seasons.notWanted,
+		getMealTypesIdsWanted: (state) => state.mealTypes.wanted,
+		getMealTypesIdsNotWanted: (state) => state.mealTypes.notWanted,
+		getDishTypesIdsWanted: (state) => state.dishTypes.wanted,
+		getDishTypesIdsNotWanted: (state) => state.dishTypes.notWanted,
 	},
 });
 
 export enum DataType {
-	Ustensil = 'ustensil',
-	Ingredient = 'ingredient',
+	Ustensil = 'ustensils',
+	Ingredient = 'ingredients',
+	Season = 'seasons',
+	Allergen = 'allergens',
+	MealType = 'mealTypes',
+	DishType = 'dishTypes',
+}
+
+export interface FilterItem {
+	wanted: number[];
+	notWanted: number[];
 }
