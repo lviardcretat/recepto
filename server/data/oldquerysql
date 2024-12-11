@@ -1,0 +1,42 @@
+const recipes = await prisma.$queryRaw(Prisma.sql`
+	SELECT
+		rc.id AS recipe_id,
+		rc.name AS recipe_name,
+		COUNT(r.id) AS total_recipes,
+		SUM(CASE
+			WHEN (s.start <= CURRENT_DATE AND s.end >= CURRENT_DATE)
+			OR (s.start > s.end AND (CURRENT_DATE >= s.start OR CURRENT_DATE <= s.end))
+			THEN 1 ELSE 0 END) AS seasonal_ingredients
+	FROM RecipesCategory rc
+	LEFT JOIN DishType dt ON rc.dishTypeId = dt.id
+	LEFT JOIN Recipe r ON rc.id = r.recipesCategoryId
+	LEFT JOIN RecipeIngredient ri ON r.id = ri.recipeId
+	LEFT JOIN Ingredient i ON ri.ingredientId = i.id
+	LEFT JOIN Season s ON i.seasonId = s.id
+	LEFT JOIN _MealTypeToRecipesCategory mt_rc ON rc.id = mt_rc."B"
+	LEFT JOIN MealType mt ON mt_rc."A" = mt.id
+	LEFT JOIN _RecipeToUstensil r_u ON r.id = r_u."A"
+	LEFT JOIN Ustensil u ON r_u."B" = u.id
+	WHERE (
+		(${mealTypesIds.wanted.length > 0 ? `mt.id IN (${Prisma.join(mealTypesIds.wanted)})` : '1=1'})
+		AND mt.id NOT IN (${mealTypesIds.notWanted.length ? Prisma.join(mealTypesIds.notWanted) : 'NULL'})
+	)
+	AND (
+		(${dishTypesIds.wanted.length > 0 ? `dt.id IN (${Prisma.join(dishTypesIds.wanted)})` : '1=1'})
+		AND dt.id NOT IN (${dishTypesIds.notWanted.length ? Prisma.join(dishTypesIds.notWanted) : 'NULL'})
+	)
+	AND (
+		(${ingredientsIds.wanted.length > 0 ? `ri.ingredientId IN (${Prisma.join(ingredientsIds.wanted)})` : '1=1'})
+		AND ri.ingredientId NOT IN (${ingredientsIds.notWanted.length ? Prisma.join(ingredientsIds.notWanted) : 'NULL'})
+	)
+	AND (
+		(${ustensilsIds.wanted.length > 0 ? `u.id IN (${Prisma.join(ustensilsIds.wanted)})` : '1=1'})
+		AND u.id NOT IN (${ustensilsIds.notWanted.length ? Prisma.join(ustensilsIds.notWanted) : 'NULL'})
+	)
+	GROUP BY rc.id, rc.name
+	HAVING COUNT(DISTINCT mt.id) >= ${mealTypesIds.wanted.length}
+	AND COUNT(DISTINCT dt.id) >= ${dishTypesIds.wanted.length}
+	AND COUNT(DISTINCT ri.ingredientId) >= ${ingredientsIds.wanted.length}
+	AND COUNT(DISTINCT u.id) >= ${ustensilsIds.wanted.length}
+	${seasonalIngredients ? Prisma.sql`HAVING seasonal_ingredients >= total_ingredients / 2` : Prisma.sql``}
+`);

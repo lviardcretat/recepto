@@ -14,6 +14,8 @@ export type IconsGridItem = {
 	active: boolean;
 };
 
+const store = useFiltersStore();
+
 const ustensils: SelectItem[] = await mapSelectItems(
 	'ustensils',
 	DataType.Ustensil,
@@ -22,7 +24,6 @@ const ingredients: SelectItem[] = await mapSelectItems(
 	'ingredients',
 	DataType.Ingredient,
 );
-const seasons: SelectItem[] = await mapSelectItems('seasons', DataType.Season);
 const mealTypes: SelectItem[] = await mapSelectItems(
 	'mealTypes',
 	DataType.MealType,
@@ -85,10 +86,10 @@ const items = [
 		items: allergens,
 	},
 	{
-		label: 'Saisons',
+		label: 'Recettes de saisons',
 		icon: 'fa6-solid:snowflake',
-		slot: 'select',
-		items: seasons,
+		slot: 'toggle',
+		disabled: true,
 	},
 	{
 		label: 'Types de repas',
@@ -103,6 +104,15 @@ const items = [
 		items: dishTypes,
 	},
 ];
+
+const { seasonalIngredients } = storeToRefs(store);
+watch(
+	seasonalIngredients,
+	async () => {
+		await store.fetchFilteredRecipes();
+	},
+	{ deep: true },
+);
 </script>
 
 <template>
@@ -115,7 +125,7 @@ const items = [
 		<UDashboardSidebar>
 			<UAccordion :items="items" multiple :ui="{ wrapper: 'flex flex-col w-full' }">
 				<template #default="{ item, open }">
-					<UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+					<UButton v-if="item.slot != 'toggle'" color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
 						<template #leading>
 							<UIcon :name="item.icon" class="w-4 h-4 text-gray-900 dark:text-white" />
 						</template>
@@ -128,6 +138,16 @@ const items = [
 							/>
 						</template>
 					</UButton>
+					<div v-else class="border-b border-gray-200 dark:border-gray-700 flex justify-between p-3 items-center">
+						<div class="flex items-center gap-x-1.5">
+							<UIcon :name="item.icon" class="w-4 h-4 text-sm font-medium text-gray-900 dark:text-white" />
+							<span class="truncate text-sm font-medium">{{ item.label }}</span>
+						</div>
+						<UToggle
+							on-icon="i-heroicons-check-20-solid"
+							off-icon="i-heroicons-x-mark-20-solid"
+							v-model="store.seasonalIngredients"/>
+					</div>
 				</template>
 				<template #select="{ item }">
 					<CustomSelect :items="item.items" :placeholder="item.label" />
@@ -136,7 +156,6 @@ const items = [
 					<IconsGrid :items="item.items" />
 				</template>
 			</UAccordion>
-
 		</UDashboardSidebar>
 	</UDashboardPanel>
 </template>
