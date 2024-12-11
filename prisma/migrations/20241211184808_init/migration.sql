@@ -13,13 +13,11 @@ CREATE TABLE "Ingredient" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "foodTypeId" INTEGER NOT NULL,
-    "seasonId" INTEGER NOT NULL,
     "icon" TEXT,
     "createdById" INTEGER NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME,
     CONSTRAINT "Ingredient_foodTypeId_fkey" FOREIGN KEY ("foodTypeId") REFERENCES "FoodType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Ingredient_seasonId_fkey" FOREIGN KEY ("seasonId") REFERENCES "Season" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Ingredient_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -45,10 +43,12 @@ CREATE TABLE "Recipe" (
     "restTime" DATETIME,
     "description" TEXT,
     "tips" TEXT,
+    "seasonId" INTEGER NOT NULL,
     "recipesCategoryId" INTEGER NOT NULL,
     "createdById" INTEGER NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME,
+    CONSTRAINT "Recipe_seasonId_fkey" FOREIGN KEY ("seasonId") REFERENCES "Season" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Recipe_recipesCategoryId_fkey" FOREIGN KEY ("recipesCategoryId") REFERENCES "RecipesCategory" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Recipe_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -92,8 +92,8 @@ CREATE TABLE "Ustensil" (
 CREATE TABLE "Season" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "start" DATETIME NOT NULL,
-    "end" DATETIME NOT NULL,
+    "start" INTEGER NOT NULL,
+    "end" INTEGER NOT NULL,
     "createdById" INTEGER NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,

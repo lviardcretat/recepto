@@ -35,19 +35,14 @@ export async function getRecipesCategoriesFiltered(
 
 	const ingredientsIds: FilterItem = JSON.parse(query.ingredients as string);
 	const ustensilsIds: FilterItem = JSON.parse(query.ustensils as string);
-	const seasonsIds: FilterItem = JSON.parse(query.seasons as string);
 	const mealTypesIds: FilterItem = JSON.parse(query.mealTypes as string);
 	const dishTypesIds: FilterItem = JSON.parse(query.dishTypes as string);
+	const seasonalIngredients: boolean = query.seasonalIngredients === 'true';
 
 	// If all the filters lists are empty, return all the recipes without any filter
 	if (
-		areAllEmpty(
-			ingredientsIds,
-			ustensilsIds,
-			seasonsIds,
-			mealTypesIds,
-			dishTypesIds,
-		)
+		areAllEmpty(ingredientsIds, ustensilsIds, mealTypesIds, dishTypesIds) &&
+		!seasonalIngredients
 	) {
 		return await getRecipesCategories();
 	}
@@ -71,6 +66,18 @@ export async function getRecipesCategoriesFiltered(
 			recipes: {
 				some: {
 					AND: [
+						...(seasonalIngredients
+							? [
+									{
+										season: {
+											AND: [
+												{ start: { lte: dateIntoDayNumber() } },
+												{ end: { gte: dateIntoDayNumber() } },
+											],
+										},
+									},
+								]
+							: []),
 						...ingredientsIds.wanted.map((id) => ({
 							ingredients: {
 								some: {
@@ -108,6 +115,23 @@ export async function getRecipesCategoriesFiltered(
 			},
 		},
 	});
+}
+
+/**
+ * Calculate the day of the year from 1 to 366
+ *
+ * @returns the day based on the today's date
+ */
+function dateIntoDayNumber(): number {
+	const date = new Date();
+	return (
+		(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
+			Date.UTC(date.getFullYear(), 0, 0)) /
+		24 /
+		60 /
+		60 /
+		1000
+	);
 }
 
 /**

@@ -5,9 +5,9 @@ import { defineStore } from 'pinia';
 interface State {
 	ustensils: FilterItem;
 	ingredients: FilterItem;
-	seasons: FilterItem;
 	mealTypes: FilterItem;
 	dishTypes: FilterItem;
+	seasonalIngredients: boolean;
 	recipeCategoryList:
 		| SerializeObject<{
 				id: number;
@@ -31,10 +31,6 @@ export const useFiltersStore = defineStore('filters', {
 				wanted: [],
 				notWanted: [],
 			},
-			seasons: {
-				wanted: [],
-				notWanted: [],
-			},
 			mealTypes: {
 				wanted: [],
 				notWanted: [],
@@ -43,6 +39,7 @@ export const useFiltersStore = defineStore('filters', {
 				wanted: [],
 				notWanted: [],
 			},
+			seasonalIngredients: false,
 			recipeCategoryList: [],
 		};
 	},
@@ -59,10 +56,6 @@ export const useFiltersStore = defineStore('filters', {
 						wanted: this.ustensils.wanted,
 						notWanted: this.ustensils.notWanted,
 					},
-					seasons: {
-						wanted: this.seasons.wanted,
-						notWanted: this.seasons.notWanted,
-					},
 					mealTypes: {
 						wanted: this.mealTypes.wanted,
 						notWanted: this.mealTypes.notWanted,
@@ -71,6 +64,7 @@ export const useFiltersStore = defineStore('filters', {
 						wanted: this.dishTypes.wanted,
 						notWanted: this.dishTypes.notWanted,
 					},
+					seasonalIngredients: this.seasonalIngredients,
 				},
 			});
 			this.recipeCategoryList = response;
@@ -116,12 +110,11 @@ export const useFiltersStore = defineStore('filters', {
 			this.ingredients.notWanted = [];
 			this.ustensils.wanted = [];
 			this.ustensils.notWanted = [];
-			this.seasons.wanted = [];
-			this.seasons.notWanted = [];
 			this.mealTypes.wanted = [];
 			this.mealTypes.notWanted = [];
 			this.dishTypes.wanted = [];
 			this.dishTypes.notWanted = [];
+			this.seasonalIngredients = false;
 		},
 	},
 	getters: {
@@ -129,12 +122,11 @@ export const useFiltersStore = defineStore('filters', {
 		getIngredientsIdsNotWanted: (state) => state.ingredients.notWanted,
 		getUstensilsIdsWanted: (state) => state.ustensils.wanted,
 		getUstensilsIdsNotWanted: (state) => state.ustensils.notWanted,
-		getSeasonsIdsWanted: (state) => state.seasons.wanted,
-		getSeasonsIdsNotWanted: (state) => state.seasons.notWanted,
 		getMealTypesIdsWanted: (state) => state.mealTypes.wanted,
 		getMealTypesIdsNotWanted: (state) => state.mealTypes.notWanted,
 		getDishTypesIdsWanted: (state) => state.dishTypes.wanted,
 		getDishTypesIdsNotWanted: (state) => state.dishTypes.notWanted,
+		getSeasonalIngredients: (state) => state.seasonalIngredients,
 	},
 });
 
