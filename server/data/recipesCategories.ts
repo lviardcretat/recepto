@@ -1,6 +1,6 @@
 import type { H3Event, EventHandlerRequest } from 'h3';
 import prisma from '~/lib/prisma';
-import type { FilterItem } from '~/stores/filters';
+import type { FilterSelectItem } from '~/stores/filters';
 
 export async function getRecipesCategories() {
 	const recipesCategories = await prisma.recipesCategory.findMany({
@@ -33,16 +33,20 @@ export async function getRecipesCategoriesFiltered(
 ): Promise<RecipesCategories[]> {
 	const query = getQuery(_event);
 
-	const ingredientsIds: FilterItem = JSON.parse(query.ingredients as string);
-	const ustensilsIds: FilterItem = JSON.parse(query.ustensils as string);
-	const mealTypesIds: FilterItem = JSON.parse(query.mealTypes as string);
-	const dishTypesIds: FilterItem = JSON.parse(query.dishTypes as string);
-	const seasonalIngredients: boolean = query.seasonalIngredients === 'true';
+	const ingredientsIds: FilterSelectItem = JSON.parse(
+		query.ingredients as string,
+	);
+	const ustensilsIds: FilterSelectItem = JSON.parse(query.ustensils as string);
+	const mealTypesIds: FilterSelectItem = JSON.parse(query.mealTypes as string);
+	const dishTypesIds: FilterSelectItem = JSON.parse(query.dishTypes as string);
+	const seasonalRecipes: boolean = query.seasonalRecipes === 'true';
+	const allergensIds: number[] = (query.allergens as number[]) ?? [];
 
 	// If all the filters lists are empty, return all the recipes without any filter
 	if (
 		areAllEmpty(ingredientsIds, ustensilsIds, mealTypesIds, dishTypesIds) &&
-		!seasonalIngredients
+		allergensIds?.length === 0 &&
+		!seasonalRecipes
 	) {
 		return await getRecipesCategories();
 	}
@@ -66,7 +70,7 @@ export async function getRecipesCategoriesFiltered(
 			recipes: {
 				some: {
 					AND: [
-						...(seasonalIngredients
+						...(seasonalRecipes
 							? [
 									{
 										season: {
@@ -110,11 +114,42 @@ export async function getRecipesCategoriesFiltered(
 								},
 							},
 						},
+						...(allergensIds.length > 0
+							? [
+									{
+										NOT: {
+											allergens: {
+												some: {
+													id: {
+														in: QueryToNumber(allergensIds),
+													},
+												},
+											},
+										},
+									},
+								]
+							: []),
 					],
 				},
 			},
 		},
 	});
+}
+
+/**
+ * Transform a query string to an array of numbers
+ *
+ * @param query - The query string | string[] | undefined
+ *
+ * @returns An array of numbers
+ */
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+function QueryToNumber(query: any): number[] {
+	return Array.isArray(query)
+		? query.map(Number)
+		: query
+			? [Number(query)]
+			: [];
 }
 
 /**
@@ -141,7 +176,7 @@ function dateIntoDayNumber(): number {
  *
  * @returns True if all the filters lists are empty
  */
-function areAllEmpty(...filtersListsIds: FilterItem[]): boolean {
+function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
 	return filtersListsIds.every(
 		(list) =>
 			(list.wanted === undefined || list.wanted.length === 0) &&

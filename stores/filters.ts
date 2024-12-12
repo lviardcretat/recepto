@@ -1,13 +1,14 @@
-// stores/recipeFilter.ts
 import type { SerializeObject } from 'nitropack';
 import { defineStore } from 'pinia';
 
 interface State {
-	ustensils: FilterItem;
-	ingredients: FilterItem;
-	mealTypes: FilterItem;
-	dishTypes: FilterItem;
-	seasonalIngredients: boolean;
+	filterNumber: number;
+	ustensils: FilterSelectItem;
+	ingredients: FilterSelectItem;
+	mealTypes: FilterSelectItem;
+	dishTypes: FilterSelectItem;
+	seasonalRecipes: boolean;
+	allergens: number[];
 	recipeCategoryList:
 		| SerializeObject<{
 				id: number;
@@ -23,6 +24,7 @@ export const useFiltersStore = defineStore('filters', {
 	// generate the store for filtering a list of ustensils
 	state: (): State => {
 		return {
+			filterNumber: 0,
 			ingredients: {
 				wanted: [],
 				notWanted: [],
@@ -39,12 +41,14 @@ export const useFiltersStore = defineStore('filters', {
 				wanted: [],
 				notWanted: [],
 			},
-			seasonalIngredients: false,
+			seasonalRecipes: false,
 			recipeCategoryList: [],
+			allergens: [],
 		};
 	},
 	actions: {
-		async fetchFilteredRecipes() {
+		async fetchFilteredRecipes(filterNumberIncrement = 0) {
+			this.filterNumber += filterNumberIncrement ?? 0;
 			const response = await $fetch('/api/recipesCategories/filtered', {
 				method: 'GET',
 				params: {
@@ -64,48 +68,85 @@ export const useFiltersStore = defineStore('filters', {
 						wanted: this.dishTypes.wanted,
 						notWanted: this.dishTypes.notWanted,
 					},
-					seasonalIngredients: this.seasonalIngredients,
+					seasonalRecipes: this.seasonalRecipes,
+					allergens: this.allergens,
 				},
 			});
 			this.recipeCategoryList = response;
 		},
 
-		async updateLists(
+		async updateSelectLists(
 			id: number,
 			wanted: boolean | null,
 			dataType: string,
 		): Promise<void> {
 			type ObjectKey = keyof typeof this;
 			const dataTypeKey = dataType as ObjectKey;
+			let filterNumberIncrement = 0;
 			if (this[dataTypeKey] === null) {
 				return;
 			}
 			if (wanted === null) {
-				(this[dataTypeKey] as FilterItem).notWanted = (
-					this[dataTypeKey] as FilterItem
+				(this[dataTypeKey] as FilterSelectItem).notWanted = (
+					this[dataTypeKey] as FilterSelectItem
 				).notWanted.filter((itemId: number) => itemId !== id);
-				(this[dataTypeKey] as FilterItem).wanted = (
-					this[dataTypeKey] as FilterItem
+				(this[dataTypeKey] as FilterSelectItem).wanted = (
+					this[dataTypeKey] as FilterSelectItem
 				).wanted.filter((itemId: number) => itemId !== id);
+				filterNumberIncrement = -1;
 			} else if (wanted) {
-				if (!(this[dataTypeKey] as FilterItem).wanted.includes(id)) {
-					(this[dataTypeKey] as FilterItem).wanted.push(id);
+				if (!(this[dataTypeKey] as FilterSelectItem).wanted.includes(id)) {
+					(this[dataTypeKey] as FilterSelectItem).wanted.push(id);
 				}
-				(this[dataTypeKey] as FilterItem).notWanted = (
-					this[dataTypeKey] as FilterItem
-				).notWanted.filter((itemId: number) => itemId !== id);
+				if ((this[dataTypeKey] as FilterSelectItem).notWanted.includes(id)) {
+					(this[dataTypeKey] as FilterSelectItem).notWanted = (
+						this[dataTypeKey] as FilterSelectItem
+					).notWanted.filter((itemId: number) => itemId !== id);
+				} else {
+					filterNumberIncrement += 1;
+				}
 			} else {
-				if (!(this[dataTypeKey] as FilterItem).notWanted.includes(id)) {
-					(this[dataTypeKey] as FilterItem).notWanted.push(id);
+				if (!(this[dataTypeKey] as FilterSelectItem).notWanted.includes(id)) {
+					(this[dataTypeKey] as FilterSelectItem).notWanted.push(id);
 				}
-				(this[dataTypeKey] as FilterItem).wanted = (
-					this[dataTypeKey] as FilterItem
-				).wanted.filter((itemId: number) => itemId !== id);
+				if ((this[dataTypeKey] as FilterSelectItem).wanted.includes(id)) {
+					(this[dataTypeKey] as FilterSelectItem).wanted = (
+						this[dataTypeKey] as FilterSelectItem
+					).wanted.filter((itemId: number) => itemId !== id);
+				} else {
+					filterNumberIncrement += 1;
+				}
 			}
-			await this.fetchFilteredRecipes();
+			await this.fetchFilteredRecipes(filterNumberIncrement);
+		},
+
+		async updateGridLists(
+			id: number,
+			active: boolean,
+			dataType: string,
+		): Promise<void> {
+			type ObjectKey = keyof typeof this;
+			const dataTypeKey = dataType as ObjectKey;
+			let filterNumberIncrement = 0;
+			if (this[dataTypeKey] === null) {
+				return;
+			}
+			if (active) {
+				filterNumberIncrement += 1;
+				if (!(this[dataTypeKey] as number[]).includes(id)) {
+					(this[dataTypeKey] as number[]).push(id);
+				}
+			} else {
+				filterNumberIncrement -= 1;
+				(this[dataTypeKey] as number[]) = (
+					this[dataTypeKey] as number[]
+				).filter((itemId: number) => itemId !== id);
+			}
+			await this.fetchFilteredRecipes(filterNumberIncrement);
 		},
 
 		resetFilters() {
+			this.filterNumber = 0;
 			this.ingredients.wanted = [];
 			this.ingredients.notWanted = [];
 			this.ustensils.wanted = [];
@@ -114,10 +155,12 @@ export const useFiltersStore = defineStore('filters', {
 			this.mealTypes.notWanted = [];
 			this.dishTypes.wanted = [];
 			this.dishTypes.notWanted = [];
-			this.seasonalIngredients = false;
+			this.seasonalRecipes = false;
+			this.allergens = [];
 		},
 	},
 	getters: {
+		getFilterNumber: (state) => state.filterNumber,
 		getIngredientsIdsWanted: (state) => state.ingredients.wanted,
 		getIngredientsIdsNotWanted: (state) => state.ingredients.notWanted,
 		getUstensilsIdsWanted: (state) => state.ustensils.wanted,
@@ -126,7 +169,8 @@ export const useFiltersStore = defineStore('filters', {
 		getMealTypesIdsNotWanted: (state) => state.mealTypes.notWanted,
 		getDishTypesIdsWanted: (state) => state.dishTypes.wanted,
 		getDishTypesIdsNotWanted: (state) => state.dishTypes.notWanted,
-		getSeasonalIngredients: (state) => state.seasonalIngredients,
+		getSeasonalIngredients: (state) => state.seasonalRecipes,
+		getAllergens: (state) => state.allergens,
 	},
 });
 
@@ -139,7 +183,7 @@ export enum DataType {
 	DishType = 'dishTypes',
 }
 
-export interface FilterItem {
+export interface FilterSelectItem {
 	wanted: number[];
 	notWanted: number[];
 }

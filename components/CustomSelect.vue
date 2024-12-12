@@ -49,7 +49,7 @@ const store = useFiltersStore();
 					@click="
 						items[item.id - 1].wanted = !items[item.id - 1].wanted;
 						items[item.id - 1].notWanted = false;
-						store.updateLists(item.id, items[item.id- 1].wanted ? true : items[item.id- 1].notWanted ? false : null, item.type);
+						store.updateSelectLists(item.id, items[item.id- 1].wanted ? true : items[item.id- 1].notWanted ? false : null, item.type);
 					"/>
 				<UButton
 					:padded="false"
@@ -59,7 +59,7 @@ const store = useFiltersStore();
 					@click="
 						items[item.id - 1].notWanted = !items[item.id - 1].notWanted;
 						items[item.id - 1].wanted = false;
-						store.updateLists(item.id, items[item.id - 1].notWanted ? false : items[item.id - 1].wanted ? true : null, item.type);
+						store.updateSelectLists(item.id, items[item.id - 1].notWanted ? false : items[item.id - 1].wanted ? true : null, item.type);
 					"/>
 				<span class="truncate">{{ item.name }}</span>
 			</template>
