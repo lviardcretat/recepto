@@ -12,6 +12,7 @@ export type IconsGridItem = {
 	name: string;
 	icon: string;
 	active: boolean;
+	type: DataType;
 };
 
 const store = useFiltersStore();
@@ -32,7 +33,10 @@ const dishTypes: SelectItem[] = await mapSelectItems(
 	'dishTypes',
 	DataType.DishType,
 );
-const allergens: IconsGridItem[] = await mapIconsGridItems('allergens');
+const allergens: IconsGridItem[] = await mapIconsGridItems(
+	'allergens',
+	DataType.Allergen,
+);
 
 async function mapSelectItems(
 	name: string,
@@ -52,7 +56,10 @@ async function mapSelectItems(
 	return items.value ?? [];
 }
 
-async function mapIconsGridItems(name: string): Promise<IconsGridItem[]> {
+async function mapIconsGridItems(
+	name: string,
+	dataType: DataType,
+): Promise<IconsGridItem[]> {
 	const { data: items } = await useFetch(`/api/${name}/all`, {
 		transform: (items) => {
 			return items.map((item) => ({
@@ -60,6 +67,7 @@ async function mapIconsGridItems(name: string): Promise<IconsGridItem[]> {
 				name: item.name,
 				icon: 'vscode-icons:default-file',
 				active: false,
+				type: dataType,
 			}));
 		},
 	});
@@ -105,11 +113,11 @@ const items = [
 	},
 ];
 
-const { seasonalIngredients } = storeToRefs(store);
+const { seasonalRecipes } = storeToRefs(store);
 watch(
-	seasonalIngredients,
+	seasonalRecipes,
 	async () => {
-		await store.fetchFilteredRecipes();
+		await store.fetchFilteredRecipes(seasonalRecipes.value ? 1 : -1);
 	},
 	{ deep: true },
 );
@@ -117,7 +125,7 @@ watch(
 
 <template>
 	<UDashboardPanel :width="300" :resizable="{ min: 200, max: 400 }">
-		<UDashboardNavbar title="Filtres" badge="0">
+		<UDashboardNavbar title="Filtres" :badge="store.filterNumber ?? 0">
 			<template #right>
 				<UIcon name="material-symbols:filter-alt" class="w-7 h-7" />
         	</template>
@@ -146,7 +154,7 @@ watch(
 						<UToggle
 							on-icon="i-heroicons-check-20-solid"
 							off-icon="i-heroicons-x-mark-20-solid"
-							v-model="store.seasonalIngredients"/>
+							v-model="store.seasonalRecipes"/>
 					</div>
 				</template>
 				<template #select="{ item }">

@@ -2,6 +2,7 @@
 import type { IconsGridItem } from './RecipeFilter.vue';
 
 defineProps<{ items: IconsGridItem[] }>();
+const store = useFiltersStore();
 </script>
 
 <template>
@@ -12,7 +13,11 @@ defineProps<{ items: IconsGridItem[] }>();
 				:icon="item.icon"
 				color="white"
 				variant="ghost"
-				class="opacity-40"
+				:class="items[item.id - 1].active ? 'opacity-100' : 'opacity-20'"
+				@click="
+					items[item.id - 1].active = !items[item.id - 1].active;
+					store.updateGridLists(items[item.id - 1].id, items[item.id - 1].active, items[item.id - 1].type);
+				"
 			/>
 		</UTooltip>
 	</div>
