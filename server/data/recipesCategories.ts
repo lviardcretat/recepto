@@ -30,9 +30,11 @@ export async function getRecipesCategoriesAndRecipesNames(name: string) {
 		},
 		select: {
 			name: true,
+			id: true,
 			recipes: {
 				select: {
 					name: true,
+					id: true,
 				},
 			},
 		},
