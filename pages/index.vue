@@ -4,22 +4,37 @@
 
 <template>
 	<UDashboardPage class="homepage h-full w-full">
-		<SearchBar
-		/>
+		<UDashboardPanel grow>
+			<UDashboardNavbar title="Recettes">
+				<template #right>
+					<UColorModeToggle />
+				</template>
+			</UDashboardNavbar>
+			<UDashboardPanelContent class="searchPanelContent">
+				<RecipeSearchBar/>
+			</UDashboardPanelContent>
+		</UDashboardPanel>
 	</UDashboardPage>
 </template>
 
 <style lang="scss">
+	:root {
+	color-scheme: light dark;
+	}
 	.homepage {
 		display: flex;
 		flex-direction: column;
-		padding: 2rem;
 
-		justify-content: center;
-		align-items: center;
+		.searchPanelContent {
+			display: flex;
+			flex-direction: column;
+			padding: 2rem;
 
-		> .searchBar {
-			width: 75%;
+			justify-content: center;
+			align-items: center;
+			> .recipeSearchBar {
+				width: 75%;
+			}
 		}
 	}
 </style>
