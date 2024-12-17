@@ -1,17 +1,11 @@
+<script setup lang="ts">
+definePageMeta({
+	layout: 'filter',
+});
+</script>
+
 <template>
-	<UDashboardPage>
-		<RecipeFilter/>
-		<UDashboardPanel grow>
-			<UDashboardNavbar title="Recettes alternatives">
-				<template #right>
-					<UColorModeToggle />
-				</template>
-			</UDashboardNavbar>
-			<UDashboardPanelContent>
-				<AlternativeRecipesSelection/>
-			</UDashboardPanelContent>
-		</UDashboardPanel>
-	</UDashboardPage>
+	<AlternativeRecipesSelection/>
 </template>
 
 <style lang="scss">
