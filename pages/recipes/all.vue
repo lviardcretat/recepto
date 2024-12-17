@@ -5,30 +5,16 @@ const test = useTest();
 const store = useFiltersStore();
 
 store.fetchFilteredRecipes();
+
+definePageMeta({
+	layout: 'filter',
+});
 </script>
 
 <template>
-	<UDashboardPage class="h-full">
-		<MainSlideover></MainSlideover>
-		<RecipeFilter/>
-		<UDashboardPanel grow>
-			<UDashboardNavbar title="Recettes">
-				<template #right>
-					<UColorModeButton />
-					<UButton
-						:padded="false"
-						variant="link"
-						icon="streamline:interface-setting-menu-1-button-parallel-horizontal-lines-menu-navigation-three-hamburger"
-						@click="test = !test"/>
-				</template>
-			</UDashboardNavbar>
-			<UDashboardPanelContent>
-				<NuxtLink v-for="recipeCategory in store.recipeCategoryList" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
-					<UDashboardCard class="mb-4" :title="recipeCategory.name"></UDashboardCard>
-				</NuxtLink>
-			</UDashboardPanelContent>
-		</UDashboardPanel>
-	</UDashboardPage>
+	<NuxtLink v-for="recipeCategory in store.recipeCategoryList" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
+		<UDashboardCard class="mb-4" :title="recipeCategory.name"></UDashboardCard>
+	</NuxtLink>
 </template>
 
 <style lang="scss">
