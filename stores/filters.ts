@@ -1,5 +1,7 @@
 import type { SerializeObject } from 'nitropack';
 import { defineStore } from 'pinia';
+import type { Recipes } from '~/server/data/recipes';
+import type { RecipesCategories } from '~/server/data/recipesCategories';
 
 interface State {
 	filterNumber: number;
@@ -10,13 +12,8 @@ interface State {
 	seasonalRecipes: boolean;
 	allergens: number[];
 	recipeCategoryList:
-		| SerializeObject<{
-				id: number;
-				name: string;
-				createdById: number | null;
-				createdAt: Date;
-				updatedAt: Date | null;
-		  }>[]
+		| SerializeObject<RecipesCategories>[]
+		| SerializeObject<Recipes>[]
 		| null;
 }
 
@@ -48,30 +45,48 @@ export const useFiltersStore = defineStore('filters', {
 	},
 	actions: {
 		async fetchFilteredRecipes(filterNumberIncrement = 0) {
+			const route = useRoute();
 			this.filterNumber += filterNumberIncrement ?? 0;
-			const response = await $fetch('/api/recipesCategories/filtered', {
-				method: 'GET',
-				params: {
-					ingredients: {
-						wanted: this.ingredients.wanted,
-						notWanted: this.ingredients.notWanted,
+			const needFilterRecipes: boolean = route.params.id !== undefined;
+			const response = await $fetch(
+				`/api/recipesCategories/${needFilterRecipes ? 'recipes/filtered' : 'filtered'}`,
+				{
+					method: 'GET',
+					params: {
+						ingredients: {
+							wanted: this.ingredients.wanted,
+							notWanted: this.ingredients.notWanted,
+						},
+						ustensils: {
+							wanted: this.ustensils.wanted,
+							notWanted: this.ustensils.notWanted,
+						},
+						mealTypes: {
+							...(!needFilterRecipes
+								? [
+										{
+											wanted: this.mealTypes.wanted,
+											notWanted: this.mealTypes.notWanted,
+										},
+									]
+								: []),
+						},
+						dishTypes: {
+							...(!needFilterRecipes
+								? [
+										{
+											wanted: this.dishTypes.wanted,
+											notWanted: this.dishTypes.notWanted,
+										},
+									]
+								: []),
+						},
+						seasonalRecipes: this.seasonalRecipes,
+						allergens: this.allergens,
+						recipeCategoryId: route.params.id as string,
 					},
-					ustensils: {
-						wanted: this.ustensils.wanted,
-						notWanted: this.ustensils.notWanted,
-					},
-					mealTypes: {
-						wanted: this.mealTypes.wanted,
-						notWanted: this.mealTypes.notWanted,
-					},
-					dishTypes: {
-						wanted: this.dishTypes.wanted,
-						notWanted: this.dishTypes.notWanted,
-					},
-					seasonalRecipes: this.seasonalRecipes,
-					allergens: this.allergens,
 				},
-			});
+			);
 			this.recipeCategoryList = response;
 		},
 

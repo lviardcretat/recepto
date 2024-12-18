@@ -23,4 +23,15 @@ export default defineNuxtConfig({
 			isCustomElement: (tag) => tag.includes('swiper-'),
 		},
 	},
+	app: {
+		head: {
+			htmlAttrs: {
+				lang: 'fr',
+			},
+			title: 'Recepto',
+			charset: 'utf-8',
+			meta: [],
+			link: [],
+		},
+	},
 });

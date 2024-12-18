@@ -5,6 +5,7 @@ import type { SelectItem } from './RecipeFilter.vue';
 defineProps<{
 	items: SelectItem[];
 	placeholder: string;
+	disabled: boolean;
 }>();
 const itemsSelected = ref<SelectItem[]>([]);
 const store = useFiltersStore();
@@ -20,6 +21,7 @@ const store = useFiltersStore();
 				:ui="{ rounded: 'rounded-full' }">{{item.name}}</UBadge>
 		</div>
 		<USelectMenu
+			:disabled="disabled"
 			v-model="itemsSelected"
 			:options="items"
 			multiple
