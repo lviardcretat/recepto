@@ -1,8 +1,9 @@
 <script setup lang="ts">
-const route = useRoute();
-const recipeCategory = await $fetch(
-	`/api/recipesCategories/${route.params.id}`,
-);
+import type { Recipes } from '~/server/data/recipes';
+
+const store = useFiltersStore();
+
+await store.fetchFilteredRecipes(0);
 </script>
 
 <template>
@@ -10,7 +11,7 @@ const recipeCategory = await $fetch(
         <swiper-container :slides-per-view="'auto'" :loop="false" :effect="'coverflow'" :grabcursor="true" :centered-slides="true"
 			:coverflow-effect-rotate="0" :coverflow-effect-stretch="0" :coverflow-effect-depth="150" :coverflow-effect-modifier="2.5"
 			:coverflow-effect-slide-shadows="false" :mousewheel="true">
-            <swiper-slide v-for="recipe in recipeCategory?.recipes">
+            <swiper-slide v-for="recipe in (store.recipeCategoryList as unknown as Recipes[])[0]?.recipes">
 				 <RecipeCard
 					:name="recipe.name"
 					:preparationTime="new Date(recipe.preparationTime ?? '')"

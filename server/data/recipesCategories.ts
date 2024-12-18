@@ -37,8 +37,12 @@ export async function getRecipesCategoriesFiltered(
 		query.ingredients as string,
 	);
 	const ustensilsIds: FilterSelectItem = JSON.parse(query.ustensils as string);
-	const mealTypesIds: FilterSelectItem = JSON.parse(query.mealTypes as string);
-	const dishTypesIds: FilterSelectItem = JSON.parse(query.dishTypes as string);
+	const mealTypesIds: FilterSelectItem = JSON.parse(
+		query.mealTypes as string,
+	)[0];
+	const dishTypesIds: FilterSelectItem = JSON.parse(
+		query.dishTypes as string,
+	)[0];
 	const seasonalRecipes: boolean = query.seasonalRecipes === 'true';
 	const allergensIds: number[] = (query.allergens as number[]) ?? [];
 
@@ -184,7 +188,7 @@ function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
 	);
 }
 
-interface RecipesCategories {
+export interface RecipesCategories {
 	id: number;
 	name: string;
 	createdById: number | null;

@@ -74,7 +74,12 @@ async function mapIconsGridItems(
 	return items.value ?? [];
 }
 
-const items = [
+let accordionKey = ref(0);
+const route = useRoute();
+const inRecipesPage = computed(() => {
+	return route.params.id !== undefined;
+});
+const items = ref([
 	{
 		label: 'Ingrédients',
 		icon: 'fa6-solid:carrot',
@@ -104,20 +109,32 @@ const items = [
 		icon: 'tabler:sun-moon',
 		slot: 'select',
 		items: mealTypes,
+		defaultOpen: inRecipesPage,
+		disabled: inRecipesPage,
 	},
 	{
 		label: 'Types de plat',
 		icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
 		slot: 'select',
 		items: dishTypes,
+		defaultOpen: inRecipesPage,
+		disabled: inRecipesPage,
 	},
-];
+]);
 
 const { seasonalRecipes } = storeToRefs(store);
 watch(
 	seasonalRecipes,
 	async () => {
 		await store.fetchFilteredRecipes(seasonalRecipes.value ? 1 : -1);
+	},
+	{ deep: true },
+);
+// See https://github.com/nuxt/ui/issues/934
+watch(
+	inRecipesPage,
+	async () => {
+		accordionKey.value += 1;
 	},
 	{ deep: true },
 );
@@ -131,7 +148,7 @@ watch(
         	</template>
 		</UDashboardNavbar>
 		<UDashboardSidebar>
-			<UAccordion :items="items" multiple :ui="{ wrapper: 'flex flex-col w-full' }">
+			<UAccordion :key="accordionKey" :items="items" multiple :ui="{ wrapper: 'flex flex-col w-full' }">
 				<template #default="{ item, open }">
 					<UButton v-if="item.slot != 'toggle'" color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
 						<template #leading>
@@ -157,8 +174,12 @@ watch(
 							v-model="store.seasonalRecipes"/>
 					</div>
 				</template>
-				<template #select="{ item }">
-					<CustomSelect :items="item.items" :placeholder="item.label" />
+				<template #select="{ item, open }">
+					<CustomSelect @hook:mounted="() => {
+						if (item.disabled) {
+							open()
+						}
+						}" :items="item.items" :placeholder="item.label" :disabled="item.disabled" />
 				</template>
 				<template #icons="{ item }">
 					<IconsGrid :items="item.items" />

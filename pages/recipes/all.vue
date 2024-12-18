@@ -1,19 +1,26 @@
 <script setup lang="ts">
 import { useFiltersStore } from '@/stores/filters';
+import type { RecipesCategories } from '~/server/data/recipesCategories';
 
-const test = useTest();
 const store = useFiltersStore();
-
-store.fetchFilteredRecipes();
+await store.fetchFilteredRecipes();
 
 definePageMeta({
 	layout: 'filter',
 });
+
+function isData() {
+	return (
+		store.recipeCategoryList !== undefined &&
+		store.recipeCategoryList !== null &&
+		store.recipeCategoryList.length > 0
+	);
+}
 </script>
 
 <template>
-	<NuxtLink v-for="recipeCategory in store.recipeCategoryList" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
-		<UDashboardCard class="mb-4" :title="recipeCategory.name"></UDashboardCard>
+	<NuxtLink v-if="isData()" v-for="recipeCategory in store.recipeCategoryList as unknown as RecipesCategories[]" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
+		<UDashboardCard class="mb-4" :title="recipeCategory?.name"></UDashboardCard>
 	</NuxtLink>
 </template>
 
