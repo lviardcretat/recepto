@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Recipes } from '~/server/data/recipes';
+import type { Recipes } from '~/global/types';
 
 const store = useFiltersStore();
 

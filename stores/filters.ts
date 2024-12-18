@@ -1,21 +1,5 @@
-import type { SerializeObject } from 'nitropack';
 import { defineStore } from 'pinia';
-import type { Recipes } from '~/server/data/recipes';
-import type { RecipesCategories } from '~/server/data/recipesCategories';
-
-interface State {
-	filterNumber: number;
-	ustensils: FilterSelectItem;
-	ingredients: FilterSelectItem;
-	mealTypes: FilterSelectItem;
-	dishTypes: FilterSelectItem;
-	seasonalRecipes: boolean;
-	allergens: number[];
-	recipeCategoryList:
-		| SerializeObject<RecipesCategories>[]
-		| SerializeObject<Recipes>[]
-		| null;
-}
+import type { FilterSelectItem, State } from '~/global/types';
 
 export const useFiltersStore = defineStore('filters', {
 	// generate the store for filtering a list of ustensils
@@ -188,17 +172,3 @@ export const useFiltersStore = defineStore('filters', {
 		getAllergens: (state) => state.allergens,
 	},
 });
-
-export enum DataType {
-	Ustensil = 'ustensils',
-	Ingredient = 'ingredients',
-	Season = 'seasons',
-	Allergen = 'allergens',
-	MealType = 'mealTypes',
-	DishType = 'dishTypes',
-}
-
-export interface FilterSelectItem {
-	wanted: number[];
-	notWanted: number[];
-}

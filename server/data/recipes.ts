@@ -1,7 +1,7 @@
 import { RecipesCategory } from '@prisma/client';
 import type { H3Event, EventHandlerRequest } from 'h3';
+import type { FilterSelectItem, Recipes } from '~/global/types';
 import prisma from '~/lib/prisma';
-import type { FilterSelectItem } from '~/stores/filters';
 
 export async function getRecipes() {
 	const recipes = await prisma.recipe.findMany();
@@ -200,19 +200,4 @@ function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
 			(list.wanted === undefined || list.wanted.length === 0) &&
 			(list.notWanted === undefined || list.notWanted.length === 0),
 	);
-}
-
-interface Recipe {
-	id: number;
-	name: string;
-	peopleNumber: number;
-	cookingTime: Date | null;
-	preparationTime: Date | null;
-	restTime: Date | null;
-	description: string | null;
-	seasonId: number;
-}
-
-export interface Recipes {
-	recipes: Recipe[];
 }
