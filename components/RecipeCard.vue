@@ -1,10 +1,6 @@
 
 <script setup lang="ts">
-import { Prisma } from '@prisma/client';
-
-export type RecipeWithIngredients = Prisma.RecipeGetPayload<{
-	include: { ingredients: true };
-}>;
+import type { RecipeWithIngredients } from '~/global/types';
 
 const props = defineProps<{
 	name: RecipeWithIngredients['name'];

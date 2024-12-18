@@ -1,19 +1,5 @@
 <script setup lang="ts">
-export type SelectItem = {
-	id: number;
-	name: string;
-	wanted: boolean;
-	notWanted: boolean;
-	type: DataType;
-};
-
-export type IconsGridItem = {
-	id: number;
-	name: string;
-	icon: string;
-	active: boolean;
-	type: DataType;
-};
+import type { IconsGridItem, SelectItem } from '~/global/types';
 
 const store = useFiltersStore();
 
