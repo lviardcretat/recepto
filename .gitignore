@@ -31,3 +31,4 @@ package-lock.json
 
 # Crappy direnv nix stuff
 nix-profile*
+/.vs
