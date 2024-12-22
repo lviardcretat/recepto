@@ -14,6 +14,11 @@
 		class="categoryRecipes"
 		v-if="recipeCategories?.length > 0"
 	>
+		<div v-if="totalRecipes > 0" class="recipesFound">
+			{{
+				totalRecipes + " recipes found."
+			}}
+		</div>
 		<ULink
 			class="categoryRecipe"
 			v-for="(recipeCategory) in recipeCategories"
@@ -49,8 +54,11 @@ const searchValue = ref<string>('');
 const recipeCategories = ref();
 
 
-
-// Fetch recipe categories and recipes
+/**
+ * Fetch recipe categories and recipes
+ *
+ * @param search The search user make
+ */
 const fetchCategories = async (search: string) => {
 	let { data } = await useFetch('/api/recipesCategories/search', {
 		query: {
@@ -61,13 +69,31 @@ const fetchCategories = async (search: string) => {
 	return data.value || [];
 };
 
-// Watch searchValue's changes
+/**
+ * Watch searchValue's changes
+ */
 watch(searchValue, async (newValue) => {
 	if (newValue.length > 0) {
 		recipeCategories.value = await fetchCategories(newValue);
 	} else {
 		recipeCategories.value = {};
 	}
+});
+
+/**
+ * Return the count of recipes found
+ */
+const totalRecipes = computed(() => {
+	let result = 0;
+
+	if (recipeCategories.value) {
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		result = recipeCategories.value.reduce((total: number, category: any) => {
+			return total + (category?.recipes?.length || 0);
+		}, 0);
+	}
+
+	return result;
 });
 </script>
 
@@ -90,7 +116,7 @@ watch(searchValue, async (newValue) => {
 		> .categoryRecipes {
 			display: flex;
 			flex-direction: column;
-			align-items: start;
+			align-items: center;
 			border: 1px solid rgb(107, 114, 128);
 			border-radius: 6px;
 			width: 100%;

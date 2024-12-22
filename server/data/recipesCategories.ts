@@ -29,14 +29,6 @@ export async function getRecipesCategoriesAndRecipesNames(name: string) {
 				},
 			],
 		},
-		/*orderBy: [
-			{
-				name: "asc",
-				recipes: {
-
-				}
-			},
-		],*/
 		orderBy: {
 			name: "asc",
 		},
@@ -58,30 +50,6 @@ export async function getRecipesCategoriesAndRecipesNames(name: string) {
 		},
 	});
 	return recipesCategories;
-
-	/*const recipes = await prisma.recipe.findMany({
-		where: {
-			OR: [
-				{
-					name: { contains: name },
-				},
-				{
-					recipesCategory: { name: name }
-				},
-			],
-		},
-		select: {
-			name: true,
-			id: true,
-			recipesCategory: {
-			select: {
-				name: true,
-				id: true,
-			},
-			},
-		},
-	});
-	return recipes;*/
 }
 
 export async function getRecipesCategory(id: number) {
