@@ -5,6 +5,7 @@ const links = [
 	{
 		label: 'Recettes',
 		icon: 'material-symbols:fastfood',
+		to: '/recipes/all',
 	},
 	{
 		label: 'Planning',
@@ -14,6 +15,11 @@ const links = [
 	{
 		label: 'Liste de course',
 		icon: 'ic:baseline-featured-play-list',
+	},
+	{
+		label: 'Dashboard',
+		icon: 'material-symbols:space-dashboard-outline',
+		to: '/user/dashboard',
 	},
 	{
 		label: 'Settings',
