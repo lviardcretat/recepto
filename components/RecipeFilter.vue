@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DataType } from '~/global/enums';
 import type { IconsGridItem, SelectItem } from '~/global/types';
 
 const store = useFiltersStore();

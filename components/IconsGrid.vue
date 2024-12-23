@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { IconsGridItem } from './RecipeFilter.vue';
+import type { IconsGridItem } from '~/global/types';
 
 defineProps<{ items: IconsGridItem[] }>();
 const store = useFiltersStore();

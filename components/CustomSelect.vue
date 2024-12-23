@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useFiltersStore } from '@/stores/filters';
-import type { SelectItem } from './RecipeFilter.vue';
+import type { SelectItem } from '~/global/types';
 
 defineProps<{
 	items: SelectItem[];
