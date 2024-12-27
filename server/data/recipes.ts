@@ -1,4 +1,3 @@
-import { RecipesCategory } from '@prisma/client';
 import type { H3Event, EventHandlerRequest } from 'h3';
 import type { FilterSelectItem, Recipes } from '~/global/types';
 import prisma from '~/lib/prisma';

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useFiltersStore } from '@/stores/filters';
-import type { RecipesCategories } from '~/server/data/recipesCategories';
+import type { RecipesCategories } from '~/global/types';
 
 const store = useFiltersStore();
 await store.fetchFilteredRecipes();
