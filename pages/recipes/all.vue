@@ -19,7 +19,7 @@ function isData() {
 </script>
 
 <template>
-	<NuxtLink v-if="isData()" v-for="recipeCategory in store.recipeCategoryList as unknown as RecipesCategories[]" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }}">
+	<NuxtLink v-if="isData()" v-for="recipeCategory in store.recipeCategoryList as unknown as RecipesCategories[]" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }, query: { recipeIndex: 0}}">
 		<UDashboardCard class="mb-4" :title="recipeCategory?.name"></UDashboardCard>
 	</NuxtLink>
 </template>

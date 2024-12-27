@@ -25,7 +25,7 @@
 		"@nuxtjs/tailwindcss": "^6.12.2",
 		"@pinia/nuxt": "^0.5.5",
 		"@prisma/nuxt": "^0.0.35",
-		"nuxt": "^3.14.1592",
+		"nuxt": "3.14.1592",
 		"nuxt-swiper": "2.0.0-1",
 		"pinia": "^2.2.8",
 		"puppeteer": "^23.9.0",

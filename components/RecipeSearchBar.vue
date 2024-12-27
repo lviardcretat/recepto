@@ -4,7 +4,7 @@
 		:trailing="false"
 		icon="material-symbols:search"
 		color="white"
-		placeholder="Search a recipe ..."
+		placeholder="Chercher une recette ..."
 		size="xl"
 		v-model="searchValue"
 		autocomplete="on"
@@ -16,24 +16,31 @@
 	>
 		<div v-if="totalRecipes > 0" class="recipesFound">
 			{{
-				totalRecipes + " recipes found."
+				totalRecipes + " recettes trouvées."
 			}}
 		</div>
 		<ULink
 			class="categoryRecipe"
 			v-for="(recipeCategory) in recipeCategories"
-			:to="{ name: 'recipes-id', params: {id: recipeCategory.id}}"
-		>
+			:to="{
+				name: 'recipes-id',
+				params: {id: recipeCategory.id},
+				query: {recipeIndex: 0}
+			}">
 			{{
 				recipeCategory.name
 			}}
 			<div class="recipes">
-				<div class="recipe" v-for="(recipe) in recipeCategory.recipes">
+				<div class="recipe" v-for="(recipe, index) in recipeCategory.recipes">
 					<UIcon
 						name="material-symbols:subdirectory-arrow-right-rounded"
 						size="xl"
 					/>
-					<ULink :to="{ name: 'recipes-id', params: {id: recipeCategory.id}}">
+					<ULink :to="{
+							name: 'recipes-id',
+							params: {id: recipeCategory.id},
+							query: {recipeIndex: index}
+						}">
 						{{
 							recipe.name
 						}}
@@ -117,6 +124,7 @@ const totalRecipes = computed(() => {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			backdrop-filter: blur(50px);
 			border: 1px solid rgb(107, 114, 128);
 			border-radius: 6px;
 			width: 100%;
