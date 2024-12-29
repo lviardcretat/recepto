@@ -1,5 +1,5 @@
 import type { SerializeObject } from 'nitropack';
-import type { Prisma } from '@prisma/client';
+import type { Prisma, User } from '@prisma/client';
 import type { DataType } from './enums';
 
 /**
@@ -42,11 +42,13 @@ export type Recipe = {
 	id: number;
 	name: string;
 	peopleNumber: number;
-	cookingTime: Date | null;
-	preparationTime: Date | null;
-	restTime: Date | null;
+	cookingTime: number | null;
+	preparationTime: number | null;
+	restTime: number | null;
 	description: string | null;
 	seasonId: number;
+	createdAt: Date | null;
+	createdBy: User | null;
 };
 
 /**

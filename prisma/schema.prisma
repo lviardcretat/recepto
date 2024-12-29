@@ -57,9 +57,9 @@ model Recipe {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
 	peopleNumber			Int
-	cookingTime				DateTime?
-	preparationTime 		DateTime?
-	restTime				DateTime?
+	cookingTime				Float?
+	preparationTime 		Float?
+	restTime				Float?
 	description				String?
 	tips					String?
 	season     				Season   			@relation(fields: [seasonId], references: [id])

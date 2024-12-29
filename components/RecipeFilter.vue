@@ -166,7 +166,7 @@ watch(
 						if (item.disabled) {
 							open()
 						}
-						}" :items="item.items" :placeholder="item.label" :disabled="item.disabled" />
+						}" :items="item.items" :placeholder="item.label" :disabled="item.disabled ?? false" />
 				</template>
 				<template #icons="{ item }">
 					<IconsGrid :items="item.items" />

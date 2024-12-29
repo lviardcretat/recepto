@@ -14,8 +14,13 @@ await store.fetchFilteredRecipes(0);
             <swiper-slide v-for="recipe in (store.recipeCategoryList as unknown as Recipes[])[0]?.recipes">
 				 <RecipeCard
 					:name="recipe.name"
-					:preparationTime="new Date(recipe.preparationTime ?? '')"
-					:description="recipe.description"/>
+					:description="recipe.description"
+					:peopleNumber="recipe.peopleNumber ?? 1"
+					:preparationTime="recipe.preparationTime ?? 0"
+					:cookingTime="recipe.cookingTime ?? 0"
+					:restTime="recipe.restTime ?? 0"
+					:createdAt="new Date(recipe.createdAt ?? '')"
+					:fullName="`${recipe.createdBy?.firstname} ${recipe.createdBy?.lastname}`"/>
 			</swiper-slide>
         </swiper-container>
     </div>
