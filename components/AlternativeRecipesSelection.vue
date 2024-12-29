@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { Recipes } from '~/global/types';
 
+const route = useRoute();
+const recipeIndex = computed(() => {
+    return Number(route.query.recipeIndex);
+});
+
 const store = useFiltersStore();
 
 await store.fetchFilteredRecipes(0);
@@ -10,7 +15,7 @@ await store.fetchFilteredRecipes(0);
     <div class="alternative-recipes-selection-content">
         <swiper-container :slides-per-view="'auto'" :loop="false" :effect="'coverflow'" :grabcursor="true" :centered-slides="true"
 			:coverflow-effect-rotate="0" :coverflow-effect-stretch="0" :coverflow-effect-depth="150" :coverflow-effect-modifier="2.5"
-			:coverflow-effect-slide-shadows="false" :mousewheel="true">
+			:coverflow-effect-slide-shadows="false" :mousewheel="true" :initial-slide="recipeIndex">
             <swiper-slide v-for="recipe in (store.recipeCategoryList as unknown as Recipes[])[0]?.recipes">
 				 <RecipeCard
 					:name="recipe.name"
