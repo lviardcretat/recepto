@@ -27,6 +27,7 @@ const store = useFiltersStore();
 			multiple
 			:placeholder="`Filtrez par ${placeholder.toLocaleLowerCase()}...`"
 			searchable
+			option-attribute="name"
 			:searchable-placeholder="`Filtrez par ${placeholder.toLocaleLowerCase()}...`"
 			selected-icon=""
 			:uiMenu="{
