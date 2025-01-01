@@ -12,6 +12,9 @@
 			</UDashboardNavbar>
 			<UDashboardPanelContent class="searchPanelContent">
 				<RecipeSearchBar/>
+				<span>
+					Recepto
+				</span>
 				<div class="allRecipes">
 					<label>
 						En quête d'inspiration ?
@@ -33,6 +36,9 @@
 	:root {
 	color-scheme: light dark;
 	}
+	* {
+  font-family: 'bnequipt', sans-serif;
+}
 	.homepage {
 		display: flex;
 		flex-direction: column;

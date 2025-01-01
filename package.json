@@ -19,6 +19,7 @@
 		"db-schema": "npx prisma generate --generator erd"
 	},
 	"dependencies": {
+		"@nuxt/fonts": "0.10.3",
 		"@nuxt/image": "^1.8.1",
 		"@nuxt/ui": "^2.19.2",
 		"@nuxt/ui-pro": "^1.5.0",

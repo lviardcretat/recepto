@@ -10,6 +10,7 @@ export default defineNuxtConfig({
 		'@prisma/nuxt',
 		'@nuxt/ui',
 		'nuxt-swiper',
+		'@nuxt/fonts',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
@@ -33,5 +34,15 @@ export default defineNuxtConfig({
 			meta: [],
 			link: [],
 		},
+	},
+	fonts: {
+		families: [
+			// specify specific font data - this will bypass any providers
+			{
+				name: 'bnequipt',
+				src: '~/assets/fonts/BNEquipt.otf',
+				weight: 'bold',
+			},
+		],
 	},
 });
