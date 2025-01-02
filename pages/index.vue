@@ -5,16 +5,11 @@
 <template>
 	<UDashboardPage class="homepage h-full w-full">
 		<UDashboardPanel grow>
-			<UDashboardNavbar title="Recettes">
-				<template #right>
-					<UColorModeToggle />
-				</template>
-			</UDashboardNavbar>
 			<UDashboardPanelContent class="searchPanelContent">
-				<RecipeSearchBar/>
-				<span>
+				<span style="font-size: 18rem; color: #00B2FF;">
 					Recepto
 				</span>
+				<RecipeSearchBar/>
 				<div class="allRecipes">
 					<label>
 						En quête d'inspiration ?
@@ -36,9 +31,6 @@
 	:root {
 	color-scheme: light dark;
 	}
-	* {
-  font-family: 'bnequipt', sans-serif;
-}
 	.homepage {
 		display: flex;
 		flex-direction: column;

@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: "Oxygen";
+    src: local("Oxygen"),
+	url('~/assets/fonts/BNEquipt.otf')
+	format("truetype");
+}
+
 html, body, #__nuxt, #__layout {
 	height: 100% !important;
 	width: 100% !important;
