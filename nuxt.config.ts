@@ -34,4 +34,8 @@ export default defineNuxtConfig({
 			link: [],
 		},
 	},
+	prisma: {
+		installStudio: true,
+		autoSetupPrisma: true,
+	},
 });

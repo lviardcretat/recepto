@@ -12,7 +12,7 @@
 	/>
 	<div
 		class="categoryRecipes"
-		v-if="recipeCategories?.length > 0"
+		v-if="data?.length > 0"
 	>
 		<div v-if="totalRecipes > 0" class="recipesFound">
 			{{
@@ -21,7 +21,7 @@
 		</div>
 		<ULink
 			class="categoryRecipe"
-			v-for="(recipeCategory) in recipeCategories"
+			v-for="(recipeCategory) in data"
 			:to="{
 				name: 'recipes-id',
 				params: {id: recipeCategory.id},
@@ -53,37 +53,23 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
-
 // Search value
 const searchValue = ref<string>('');
-// Store recipe categories and recipes
-const recipeCategories = ref();
+const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
+	method: 'GET',
+	query: {
+		name: searchValue,
+	},
+	immediate: false,
+	default: () => [],
+	watch: false,
+});
 
-
-/**
- * Fetch recipe categories and recipes
- *
- * @param search The search user make
- */
-const fetchCategories = async (search: string) => {
-	let { data } = await useFetch('/api/recipesCategories/search', {
-		query: {
-		name: search,
-		},
-	});
-
-	return data.value || [];
-};
-
-/**
- * Watch searchValue's changes
- */
 watch(searchValue, async (newValue) => {
-	if (newValue.length > 0) {
-		recipeCategories.value = await fetchCategories(newValue);
+	if (newValue.trim().length > 0) {
+		execute();
 	} else {
-		recipeCategories.value = {};
+		clear();
 	}
 });
 
@@ -93,9 +79,9 @@ watch(searchValue, async (newValue) => {
 const totalRecipes = computed(() => {
 	let result = 0;
 
-	if (recipeCategories.value) {
+	if (data.value) {
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		result = recipeCategories.value.reduce((total: number, category: any) => {
+		result = data.value.reduce((total: number, category: any) => {
 			return total + (category?.recipes?.length || 0);
 		}, 0);
 	}
