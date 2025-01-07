@@ -1,15 +1,19 @@
-import type { Ingredient } from '@prisma/client';
-import { getIngredient } from '~~/server/data/ingredients';
+import { getIngredient } from '~/server/data/ingredients';
 
 export default defineEventHandler(async (event) => {
 	const id = Number(event.context.params?.id);
-	const ingredient: Ingredient | null = await getIngredient(id);
-	if (!ingredient) {
-		const notFoundError = createError({
+	if (id) {
+		throw createError({
 			statusCode: 404,
-			statusMessage: 'Ingredient not found ',
+			statusMessage: 'Ingredient Id unvalid',
 		});
-		sendError(event, notFoundError);
+	}
+	const ingredient = await getIngredient(id);
+	if (!ingredient) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Ingredient not found',
+		});
 	}
 	return ingredient;
 });

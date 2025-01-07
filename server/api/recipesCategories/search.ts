@@ -3,8 +3,14 @@ import { getRecipesCategoriesAndRecipesNames } from '~/server/data/recipesCatego
 export default defineEventHandler(async (_event) => {
 	const query = getQuery(_event);
 	const name = query.name ?? '';
-	const recipesCategories = await getRecipesCategoriesAndRecipesNames(
+	const recipesCategoriesSearched = await getRecipesCategoriesAndRecipesNames(
 		name.toString().trim(),
 	);
-	return recipesCategories;
+	if (!recipesCategoriesSearched) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'RecipesCategoriesSearched not found',
+		});
+	}
+	return recipesCategoriesSearched;
 });

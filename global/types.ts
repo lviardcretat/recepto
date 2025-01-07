@@ -93,6 +93,7 @@ export type FilterSelectItem = {
 export type RecipesCategories = {
 	id: number;
 	name: string;
+	dishTypeId: number;
 	createdById: number | null;
 	createdAt: Date;
 	updatedAt: Date | null;

@@ -39,6 +39,12 @@ async function mapSelectItems(
 				type: dataType,
 			}));
 		},
+		onResponseError({ response }) {
+			throw showError({
+				statusCode: response.status,
+				statusMessage: response.statusText,
+			});
+		},
 	});
 	return items.value ?? [];
 }
@@ -56,6 +62,12 @@ async function mapIconsGridItems(
 				active: false,
 				type: dataType,
 			}));
+		},
+		onResponseError({ response }) {
+			throw showError({
+				statusCode: response.status,
+				statusMessage: response.statusText,
+			});
 		},
 	});
 	return items.value ?? [];

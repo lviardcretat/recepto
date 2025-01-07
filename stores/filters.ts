@@ -36,7 +36,10 @@ export const useFiltersStore = defineStore('filters', {
 				`/api/recipesCategories/${needFilterRecipes ? 'recipes/filtered' : 'filtered'}`,
 				{
 					method: 'GET',
-					params: {
+					watch: false,
+					immediate: false,
+					default: () => [],
+					query: {
 						ingredients: {
 							wanted: this.ingredients.wanted,
 							notWanted: this.ingredients.notWanted,
@@ -68,6 +71,12 @@ export const useFiltersStore = defineStore('filters', {
 						seasonalRecipes: this.seasonalRecipes,
 						allergens: this.allergens,
 						recipeCategoryId: route.params.id as string,
+					},
+					onResponseError({ response }) {
+						throw showError({
+							statusCode: response.status,
+							statusMessage: response.statusText,
+						});
 					},
 				},
 			);
