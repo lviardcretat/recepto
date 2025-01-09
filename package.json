@@ -8,15 +8,13 @@
 	"scripts": {
 		"build": "nuxt build",
 		"dev": "nuxt dev",
-		"diagram": "npx prisma generate --generator erd",
 		"generate": "nuxt generate",
 		"migrate": "prisma migrate dev --name init",
 		"postinstall": "nuxt prepare",
 		"prepare": "husky",
 		"preview": "nuxt preview",
 		"reset": "npx prisma db push --force-reset",
-		"seed": "npx prisma db seed",
-		"db-schema": "npx prisma generate --generator erd"
+		"seed": "npx prisma db seed"
 	},
 	"dependencies": {
 		"@nuxt/image": "^1.8.1",
@@ -25,6 +23,7 @@
 		"@nuxtjs/tailwindcss": "^6.12.2",
 		"@pinia/nuxt": "^0.9.0",
 		"@prisma/nuxt": "^0.0.35",
+		"@vueuse/nuxt": "12.3.0",
 		"nuxt": "3.14.1592",
 		"nuxt-swiper": "2.0.0-1",
 		"pinia": "^2.3.0",
@@ -49,7 +48,6 @@
 		"nuxi": "^3.16.0",
 		"postcss": "^8.4.49",
 		"prisma": "5.22.0",
-		"prisma-erd-generator": "^1.11.2",
 		"sass-embedded": "^1.81.0",
 		"ts-node": "^10.9.2",
 		"tsx": "^4.19.2",
