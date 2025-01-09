@@ -30,7 +30,7 @@ export async function getRecipesCategoriesAndRecipesNames(name: string) {
 			],
 		},
 		orderBy: {
-			name: "asc",
+			name: 'asc',
 		},
 		select: {
 			name: true,
@@ -40,7 +40,7 @@ export async function getRecipesCategoriesAndRecipesNames(name: string) {
 					name: { contains: name },
 				},
 				orderBy: {
-					name: "asc",
+					name: 'asc',
 				},
 				select: {
 					name: true,
@@ -84,6 +84,23 @@ export async function getRecipesCategoriesFiltered(
 	)[0];
 	const seasonalRecipes: boolean = query.seasonalRecipes === 'true';
 	const allergensIds: number[] = (query.allergens as number[]) ?? [];
+
+	if (
+		!(
+			ingredientsIds.wanted &&
+			ingredientsIds.notWanted &&
+			ustensilsIds.wanted &&
+			ustensilsIds.notWanted &&
+			allergensIds &&
+			dishTypesIds &&
+			mealTypesIds
+		)
+	) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Specific recipecategories query filter unvalid',
+		});
+	}
 
 	// If all the filters lists are empty, return all the recipes without any filter
 	if (

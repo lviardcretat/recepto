@@ -63,11 +63,17 @@ const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
 	immediate: false,
 	default: () => [],
 	watch: false,
+	onResponseError({ response }) {
+		throw showError({
+			statusCode: response.status,
+			statusMessage: response.statusText,
+		});
+	},
 });
 
 watch(searchValue, async (newValue) => {
 	if (newValue.trim().length > 0) {
-		execute();
+		await execute();
 	} else {
 		clear();
 	}

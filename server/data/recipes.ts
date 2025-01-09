@@ -47,6 +47,9 @@ export async function getRecipesFiltered(
 	_event: H3Event<EventHandlerRequest>,
 ): Promise<Recipes[]> {
 	const query = getQuery(_event);
+	if (query === null || query === undefined) {
+		return [];
+	}
 
 	const ingredientsIds: FilterSelectItem = JSON.parse(
 		query.ingredients as string,
@@ -56,12 +59,28 @@ export async function getRecipesFiltered(
 	const allergensIds: number[] = (query.allergens as number[]) ?? [];
 	const recipeCategoryId: number = Number(query.recipeCategoryId);
 
-	// If all the filters lists are empty, return all the recipes without any filter
+	if (
+		!(
+			ingredientsIds.wanted &&
+			ingredientsIds.notWanted &&
+			ustensilsIds.wanted &&
+			ustensilsIds.notWanted &&
+			allergensIds &&
+			recipeCategoryId
+		)
+	) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Specific recipe query filter unvalid',
+		});
+	}
+
 	if (
 		areAllEmpty(ingredientsIds, ustensilsIds) &&
 		allergensIds?.length === 0 &&
 		!seasonalRecipes
 	) {
+		// If all the filters lists are empty, return all the recipes without any filter
 		return [
 			{
 				...(await getRecipesWithLessData(recipeCategoryId)),
