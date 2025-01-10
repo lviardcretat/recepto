@@ -5,11 +5,13 @@ const links = [
 	{
 		label: 'Recettes',
 		icon: 'material-symbols:fastfood',
+		to: '../recipes/all',
 	},
 	{
 		label: 'Planning',
 		icon: 'material-symbols:calendar-today',
 		badge: '4',
+		to: '../planner/recipePlanner',
 	},
 	{
 		label: 'Liste de course',
