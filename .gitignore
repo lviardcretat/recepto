@@ -28,7 +28,11 @@ logs
 
 # Local files
 package-lock.json
+pnpm-lock.yaml
+
 
 # Crappy direnv nix stuff
 nix-profile*
 /.vs
+.direnv
+flake.lock
