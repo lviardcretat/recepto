@@ -10,6 +10,7 @@ export default defineNuxtConfig({
 		'@prisma/nuxt',
 		'@nuxt/ui',
 		'nuxt-swiper',
+		'@nuxtjs/i18n',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
@@ -37,5 +38,8 @@ export default defineNuxtConfig({
 	prisma: {
 		installStudio: true,
 		autoSetupPrisma: true,
+	},
+	i18n: {
+		vueI18n: './i18n/i18n.config.ts',
 	},
 });

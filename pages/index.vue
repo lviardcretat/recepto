@@ -13,7 +13,7 @@
 				<RecipeSearchBar/>
 				<div class="allRecipes">
 					<label>
-						En quête d'inspiration ?
+						{{ $t('welcome') }}
 					</label>
 					<ULink class="moreRecipes"
 						:to="{
