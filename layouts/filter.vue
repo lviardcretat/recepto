@@ -7,8 +7,9 @@ const test = useTest();
 		<MainSlideover></MainSlideover>
 		<RecipeFilter/>
 		<UDashboardPanel grow>
-			<UDashboardNavbar title="Recettes">
+			<UDashboardNavbar :title="$t('recipes')">
 				<template #right>
+					<TranslationSelect></TranslationSelect>
 					<UColorModeButton />
 					<UButton
 						:padded="false"

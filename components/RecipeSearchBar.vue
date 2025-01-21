@@ -4,7 +4,7 @@
 		:trailing="false"
 		icon="material-symbols:search"
 		color="white"
-		placeholder="Chercher une recette ..."
+		:placeholder="$t('findRecipe')"
 		size="xl"
 		v-model="searchValue"
 		autocomplete="on"
@@ -15,9 +15,7 @@
 		v-if="data?.length > 0"
 	>
 		<div v-if="totalRecipes > 0" class="recipesFound">
-			{{
-				totalRecipes + " recettes trouvées."
-			}}
+			{{ $t('recipesFound', totalRecipes, { count: totalRecipes }) }}
 		</div>
 		<ULink
 			class="categoryRecipe"

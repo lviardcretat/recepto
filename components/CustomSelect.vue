@@ -25,10 +25,10 @@ const store = useFiltersStore();
 			v-model="itemsSelected"
 			:options="items"
 			multiple
-			:placeholder="`Filtrez par ${placeholder.toLocaleLowerCase()}...`"
+			:placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
 			searchable
 			option-attribute="name"
-			:searchable-placeholder="`Filtrez par ${placeholder.toLocaleLowerCase()}...`"
+			:searchable-placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
 			selected-icon=""
 			:uiMenu="{
 				strategy: 'override',
@@ -40,8 +40,10 @@ const store = useFiltersStore();
 				}
 			}">
 			<template #label>
-				<span v-if="itemsSelected.length">{{ items.filter(item => item.notWanted || item.wanted).length }} sélectionnés</span>
-     			<span v-else>Filtrez par {{ placeholder.toLocaleLowerCase() }}...</span>
+				<span v-if="itemsSelected.length">{{
+					$t('selected', items.filter(item => item.notWanted || item.wanted).length, { count: items.filter(item => item.notWanted || item.wanted).length })
+				}}</span>
+     			<span v-else>{{$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })}}</span>
 			</template>
 			<template #option="{ option: item }">
 				<UButton

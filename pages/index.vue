@@ -4,8 +4,9 @@
 <template>
 	<UDashboardPage class="homepage h-full w-full">
 		<UDashboardPanel grow>
-			<UDashboardNavbar title="Recettes">
+			<UDashboardNavbar :title="$t('recipes')">
 				<template #right>
+					<TranslationSelect></TranslationSelect>
 					<UColorModeToggle />
 				</template>
 			</UDashboardNavbar>
@@ -13,14 +14,14 @@
 				<RecipeSearchBar/>
 				<div class="allRecipes">
 					<label>
-						{{ $t('welcome') }}
+						{{ $t('inspiration') }}
 					</label>
 					<ULink class="moreRecipes"
 						:to="{
 						   name: 'recipes-all'
 						}"
 					>
-						C'est par ici !
+						{{ $t('here') }}
 					</ULink>
 				</div>
 			</UDashboardPanelContent>

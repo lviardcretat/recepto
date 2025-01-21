@@ -40,6 +40,14 @@ export default defineNuxtConfig({
 		autoSetupPrisma: true,
 	},
 	i18n: {
+		langDir: 'locales',
+		defaultLocale: 'fr',
+		locales: [
+			{ code: 'fr', file: 'fr.ts' },
+			{ code: 'en', file: 'en.ts' },
+		],
+		lazy: true,
+		strategy: 'no_prefix',
 		vueI18n: './i18n/i18n.config.ts',
 	},
 });

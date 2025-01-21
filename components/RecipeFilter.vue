@@ -80,31 +80,31 @@ const inRecipesPage = computed(() => {
 });
 const items = ref([
 	{
-		label: 'Ingrédients',
+		label: 'ingredients',
 		icon: 'fa6-solid:carrot',
 		slot: 'select',
 		items: ingredients,
 	},
 	{
-		label: 'Ustensiles',
+		label: 'ustensils',
 		icon: 'solar:ladle-bold',
 		slot: 'select',
 		items: ustensils,
 	},
 	{
-		label: 'Allergènes',
+		label: 'allergens',
 		icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
 		slot: 'icons',
 		items: allergens,
 	},
 	{
-		label: 'Recettes de saisons',
+		label: 'seasonalRecipes',
 		icon: 'fa6-solid:snowflake',
 		slot: 'toggle',
 		disabled: true,
 	},
 	{
-		label: 'Types de repas',
+		label: 'mealTypes',
 		icon: 'tabler:sun-moon',
 		slot: 'select',
 		items: mealTypes,
@@ -112,7 +112,7 @@ const items = ref([
 		disabled: inRecipesPage,
 	},
 	{
-		label: 'Types de plat',
+		label: 'dishTypes',
 		icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
 		slot: 'select',
 		items: dishTypes,
@@ -141,7 +141,7 @@ watch(
 
 <template>
 	<UDashboardPanel :width="300" :resizable="{ min: 200, max: 400 }">
-		<UDashboardNavbar title="Filtres" :badge="store.filterNumber ?? 0">
+		<UDashboardNavbar :title="$t('filter')" :badge="store.filterNumber ?? 0">
 			<template #right>
 				<UIcon name="material-symbols:filter-alt" class="w-7 h-7" />
         	</template>
@@ -153,7 +153,7 @@ watch(
 						<template #leading>
 							<UIcon :name="item.icon" class="w-4 h-4 text-gray-900 dark:text-white" />
 						</template>
-						<span class="truncate">{{ item.label }}</span>
+						<span class="truncate">{{ $t(item.label) }}</span>
 						<template #trailing>
 							<UIcon
 								name="i-heroicons-chevron-right-20-solid"
@@ -165,7 +165,7 @@ watch(
 					<div v-else class="border-b border-gray-200 dark:border-gray-700 flex justify-between p-3 items-center">
 						<div class="flex items-center gap-x-1.5">
 							<UIcon :name="item.icon" class="w-4 h-4 text-sm font-medium text-gray-900 dark:text-white" />
-							<span class="truncate text-sm font-medium">{{ item.label }}</span>
+							<span class="truncate text-sm font-medium">{{ $t(item.label) }}</span>
 						</div>
 						<UToggle
 							on-icon="i-heroicons-check-20-solid"
@@ -178,7 +178,7 @@ watch(
 						if (item.disabled) {
 							open()
 						}
-						}" :items="item.items" :placeholder="item.label" :disabled="item.disabled ?? false" />
+						}" :items="item.items" :placeholder="$t(item.label)" :disabled="item.disabled ?? false" />
 				</template>
 				<template #icons="{ item }">
 					<IconsGrid :items="item.items" />

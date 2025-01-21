@@ -56,7 +56,7 @@ function formatDuration(duration: number | null): string {
 
 		<template #footer>
 			<div class="footer flex justify-between items-center">
-				<p>{{ `Créé par ${props.fullName}` }}</p>
+				<p>{{ $t('createdBy', { username: props.fullName })}}</p>
 				<p>{{ props.createdAt.toLocaleDateString('fr') }}</p>
 			</div>
 		</template>
