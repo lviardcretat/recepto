@@ -1,0 +1,139 @@
+<script lang="ts" setup>
+import type { Recipe } from '~/global/types';
+import { formatDuration } from '~/global/utils';
+
+const props = defineProps<{
+	recipeId: number;
+}>();
+
+const { data: recipeFetch } = await useFetch(
+	`/api/recipesCategories/recipes/${props.recipeId}`,
+	{
+		method: 'GET',
+		watch: false,
+		default: () => null,
+		onResponseError({ response }) {
+			throw showError({
+				statusCode: response.status,
+				statusMessage: response.statusText,
+			});
+		},
+	},
+);
+const recipe: Recipe = recipeFetch.value as unknown as Recipe;
+const ingredients = ref(
+	recipe.ingredients.map((ingredient) => ({
+		name: ingredient.ingredient.name,
+		quantity: ingredient.quantity,
+		unit: ingredient.unit.shortForm,
+		singlePortion: ingredient.quantity / recipe.peopleNumber,
+	})),
+);
+const sequences = recipe.sequences.map((sequence) => ({
+	label: sequence.title,
+	content: sequence.description,
+}));
+const peopleNumberModified = ref(recipe.peopleNumber);
+
+function renderIngredient(): void {
+	for (const [index] of ingredients.value.entries()) {
+		ingredients.value[index].quantity =
+			ingredients.value[index].singlePortion * peopleNumberModified.value;
+	}
+}
+</script>
+
+<template>
+	<UCard class="w-full" :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+		<template #header>
+			<div class="layer"></div>
+			<div class="text-center text-4xl m-4 font-bold text-green-500">{{ recipe.name }}</div>
+			<div class="icons flex justify-center items-center gap-4">
+				<div class="peopleNumber flex justify-around items-center gap-1">
+					<UIcon name="ic:baseline-people-alt"/>
+					<UInput type="number" min="1" max="50" size="sm" v-model="peopleNumberModified" variant="none"
+						class="w-11" @update:model-value="renderIngredient()" :ui="{ padding: { sm: 'px-0' }}"/>
+				</div>
+				<div class="preparationTime flex justify-around items-center gap-1">
+					<UIcon name="mdi:knife"/>
+					<span class="value">{{ formatDuration(recipe.preparationTime)}}</span>
+				</div>
+				<div class="cookingTime flex justify-around items-center gap-1">
+					<UIcon name="material-symbols:oven-outline-rounded"/>
+					<span class="value">{{ formatDuration(recipe.cookingTime) }}</span>
+				</div>
+				<div class="restTime flex justify-around items-center gap-1">
+					<UIcon name="mdi:sleep"/>
+					<span class="value">{{ formatDuration(recipe.restTime) }}</span>
+				</div>
+			</div>
+			<div class="text-center mt-2">
+				<UTooltip v-if="recipe.allergens?.length > 0" :text="allergen.name" v-for="allergen in recipe.allergens">
+					<UIcon name="vscode-icons:default-file" />
+				</UTooltip>
+				<div v-else>{{ $t('allergenFree') }}</div>
+			</div>
+		</template>
+
+		<UContainer class="info mb-6">
+			<div>{{ recipe.description }}</div>
+			<div class="mt-4 italic text-center">{{ `❝ ${recipe.tips} ❞` }}</div>
+		</UContainer>
+		<UDivider/>
+		<UContainer class="base flex pb-6 pt-6">
+			<div class="ingredientsUstensils w-1/4">
+				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ingredients') }}</h1>
+				<div class="flex flex-col">
+					<div v-for="ingredient in ingredients">
+						<span class="font-bold">{{ `${ingredient.quantity}${ingredient.unit} ` }}</span>
+						<span>{{ ingredient.name }}</span>
+					</div>
+				</div>
+				<UDivider class="pb-6 pt-6"/>
+				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ustensils') }}</h1>
+				<div class="flex flex-col">
+					<div v-for="ustensil in recipe.ustensils">{{ ustensil.name }}</div>
+				</div>
+			</div>
+			<UDivider class="mr-6 ml-6" orientation="vertical" />
+			<div class="sequences w-3/4 flex flex-col">
+				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('preparationSteps') }}</h1>
+				<UAccordion multiple default-open :items="sequences" :ui="{ wrapper: 'flex flex-col w-full' }">
+					<template #default="{ item, index, open }">
+						<UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+							<span class="truncate">{{ index + 1 }}. {{ item.label }}</span>
+							<template #trailing>
+								<UIcon
+									name="i-heroicons-chevron-right-20-solid"
+									class="w-5 h-5 ms-auto transform transition-transform duration-200"
+									:class="[open && 'rotate-90']"/>
+							</template>
+						</UButton>
+					</template>
+				</UAccordion>
+			</div>
+		</UContainer>
+
+
+
+		<template #footer>
+			<div class="footer flex justify-between items-center">
+				<p>{{ $t('createdBy', { username: `${recipe.createdBy?.firstname} ${recipe.createdBy?.lastname}` })}}</p>
+				<p>{{ $d(recipe.createdAt, 'short') }}</p>
+			</div>
+		</template>
+	</UCard>
+</template>
+
+<style lang="scss" scoped>
+	.layer {
+		aspect-ratio: 3 / 1;
+		background:
+			linear-gradient(180deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
+			linear-gradient(90deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
+			url('../assets/img/lasagnes.jpg');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+</style>

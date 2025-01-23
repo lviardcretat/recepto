@@ -3,17 +3,17 @@ const test = useTest();
 
 const links = [
 	{
-		label: 'Recettes',
+		label: 'recipes',
 		icon: 'material-symbols:fastfood',
 		to: '/recipes/all',
 	},
 	{
-		label: 'Planning',
+		label: 'schedule',
 		icon: 'material-symbols:calendar-today',
 		badge: '4',
 	},
 	{
-		label: 'Liste de course',
+		label: 'shoppingList',
 		icon: 'ic:baseline-featured-play-list',
 	},
 	{
@@ -40,11 +40,15 @@ const links = [
 </script>
 
 <template>
-	<UDashboardSlideover v-model="test" title="Menu" side="right">
+	<UDashboardSlideover v-model="test" :title="$t('menu')" side="right">
 		<UDashboardPanel>
-			<UDashboardSearchButton label="Search..." />
+			<UDashboardSearchButton :label="$t('search')" />
 			<UDashboardSidebar>
-				<UDashboardSidebarLinks :links="links" />
+				<UDashboardSidebarLinks :links="links">
+					<template #default="{ link }">
+						<div>{{ $t(link.label) }}</div>
+					</template>
+				</UDashboardSidebarLinks>
 			</UDashboardSidebar>
 		</UDashboardPanel>
 	</UDashboardSlideover>

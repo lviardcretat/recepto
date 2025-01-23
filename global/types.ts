@@ -1,5 +1,5 @@
 import type { SerializeObject } from 'nitropack';
-import type { Prisma } from '@prisma/client';
+import type { Prisma, User } from '@prisma/client';
 import type { DataType } from './enums';
 
 /**
@@ -35,26 +35,65 @@ export type RecipeWithIngredients = Prisma.RecipeGetPayload<{
 }>;
 
 /**
- * @description Recipe custom model
- * @type Recipe
+ * @description Recipe model including ingredients
+ * @type RecipeWithIngredients
  */
-export type Recipe = {
+export type Recipe = Prisma.RecipeGetPayload<{
+	include: {
+		ingredients: {
+			select: {
+				ingredient: {
+					select: {
+						name: true;
+					};
+				};
+				unit: {
+					select: {
+						shortForm: true;
+					};
+				};
+				quantity: true;
+			};
+		};
+		allergens: true;
+		ustensils: true;
+		season: true;
+		sequences: true;
+		createdBy: {
+			select: {
+				firstname: true;
+				lastname: true;
+			};
+		};
+	};
+}>;
+
+/**
+ * @description Recipe custom model
+ * @type RecipeWithLessData
+ */
+export type RecipeWithLessData = {
 	id: number;
 	name: string;
 	peopleNumber: number;
-	cookingTime: Date | null;
-	preparationTime: Date | null;
-	restTime: Date | null;
+	cookingTime: number | null;
+	preparationTime: number | null;
+	restTime: number | null;
 	description: string | null;
 	seasonId: number;
+	createdAt: Date | null;
+	createdBy: {
+		firstname: string;
+		lastname: string;
+	};
 };
 
 /**
- * @description Table of recipes custom model, used to display the list of recipes
+ * @description Table of recipes custom model with less data, used to display the list of recipes
  * @type Recipes
  */
-export type Recipes = {
-	recipes: Recipe[];
+export type RecipesWithLessData = {
+	recipes: RecipeWithLessData[];
 };
 
 /**
@@ -71,7 +110,7 @@ export type State = {
 	allergens: number[];
 	recipeCategoryList:
 		| SerializeObject<RecipesCategories>[]
-		| SerializeObject<Recipes>[]
+		| SerializeObject<RecipesWithLessData>[]
 		| null;
 };
 
@@ -91,6 +130,7 @@ export type FilterSelectItem = {
 export type RecipesCategories = {
 	id: number;
 	name: string;
+	dishTypeId: number;
 	createdById: number | null;
 	createdAt: Date;
 	updatedAt: Date | null;

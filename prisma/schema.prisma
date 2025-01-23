@@ -1,20 +1,11 @@
-datasource db {
-	provider = "sqlite"
-	url      = "file:./dev.db"
-}
-
 generator client {
-	provider      = "prisma-client-js"
-	binaryTargets = ["native"]
+	provider        = "prisma-client-js"
+	previewFeatures = ["driverAdapters"] //, "fullTextSearchPostgres"
 }
 
-generator erd {
-	provider = "prisma-erd-generator"
-	theme = "dark"
-	output = "./diagram.svg"
-	includeRelationFromFields = true
-	disabled = true
-	//erdDebug = true
+datasource db {
+	provider = "postgresql"
+	url      = env("DATABASE_URL")
 }
 
 model FoodType {
@@ -57,9 +48,9 @@ model Recipe {
 	id          			Int          		@id @default(autoincrement())
 	name        			String
 	peopleNumber			Int
-	cookingTime				DateTime?
-	preparationTime 		DateTime?
-	restTime				DateTime?
+	cookingTime				Float?
+	preparationTime 		Float?
+	restTime				Float?
 	description				String?
 	tips					String?
 	season     				Season   			@relation(fields: [seasonId], references: [id])

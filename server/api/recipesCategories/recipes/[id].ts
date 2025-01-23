@@ -1,14 +1,20 @@
-import { getRecipe } from '~~/server/data/recipes';
+import type { Recipe } from '~/global/types';
+import { getRecipe } from '~/server/data/recipes';
 
 export default defineEventHandler(async (event) => {
 	const id = Number(event.context.params?.id);
-	const recipe = await getRecipe(id);
-	if (!recipe) {
-		const notFoundError = createError({
+	if (!id) {
+		throw createError({
 			statusCode: 404,
-			statusMessage: 'Recipe not found ',
+			statusMessage: 'Recipe Id unvalid',
 		});
-		sendError(event, notFoundError);
+	}
+	const recipe: Recipe | null = await getRecipe(id);
+	if (!recipe) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Recipe not found',
+		});
 	}
 	return recipe;
 });

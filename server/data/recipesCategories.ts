@@ -13,6 +13,45 @@ export async function getRecipesCategories() {
 	return recipesCategories;
 }
 
+export async function getRecipesCategoriesAndRecipesNames(name: string) {
+	const recipesCategories = await prisma.recipesCategory.findMany({
+		where: {
+			OR: [
+				{
+					name: { contains: name },
+				},
+				{
+					recipes: {
+						some: {
+							name: { contains: name },
+						},
+					},
+				},
+			],
+		},
+		orderBy: {
+			name: 'asc',
+		},
+		select: {
+			name: true,
+			id: true,
+			recipes: {
+				where: {
+					name: { contains: name },
+				},
+				orderBy: {
+					name: 'asc',
+				},
+				select: {
+					name: true,
+					id: true,
+				},
+			},
+		},
+	});
+	return recipesCategories;
+}
+
 export async function getRecipesCategory(id: number) {
 	const recipesCategory = await prisma.recipesCategory.findUnique({
 		where: {
@@ -45,6 +84,23 @@ export async function getRecipesCategoriesFiltered(
 	)[0];
 	const seasonalRecipes: boolean = query.seasonalRecipes === 'true';
 	const allergensIds: number[] = (query.allergens as number[]) ?? [];
+
+	if (
+		!(
+			ingredientsIds.wanted &&
+			ingredientsIds.notWanted &&
+			ustensilsIds.wanted &&
+			ustensilsIds.notWanted &&
+			allergensIds &&
+			dishTypesIds &&
+			mealTypesIds
+		)
+	) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Specific recipecategories query filter unvalid',
+		});
+	}
 
 	// If all the filters lists are empty, return all the recipes without any filter
 	if (
