@@ -1,5 +1,6 @@
 <h1 align='center'> recepto </h1>
 
+
 <p align='center'>
 A solution for storing a large number of recipes and ingredients for daily use (recipe book, weekly recipe management, shopping list).
 </p>
@@ -13,7 +14,7 @@ A solution for storing a large number of recipes and ingredients for daily use (
 	<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" /> 
 	<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /> 
 	<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" /> 
-	<img src="https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" /> 
+	<img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" /> 
 </p>
 <p align='center'>
 	<img src="https://img.shields.io/badge/pnpm-yellow?style=for-the-badge&logo=pnpm&logoColor=white" /> 
