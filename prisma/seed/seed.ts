@@ -11,6 +11,7 @@ import { seed_recipe } from './models/recipe';
 import { seed_mealType } from './models/mealType';
 import { seed_allergen } from './models/allergen';
 import { seed_dishType } from './models/dishType';
+import { seed_sequence } from './models/sequence';
 
 const prisma = new PrismaClient();
 
@@ -25,6 +26,7 @@ async function main() {
 	await seed_recipesCategory(prisma);
 	await seed_ingredient(prisma);
 	await seed_unit(prisma);
+	await seed_sequence(prisma);
 	await seed_recipe(prisma);
 	await seed_recipeIngredient(prisma);
 }

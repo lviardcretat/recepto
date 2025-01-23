@@ -1,5 +1,9 @@
 import type { H3Event, EventHandlerRequest } from 'h3';
-import type { FilterSelectItem, Recipes } from '~/global/types';
+import type {
+	FilterSelectItem,
+	Recipe,
+	RecipesWithLessData,
+} from '~/global/types';
 import prisma from '~/lib/prisma';
 
 export async function getRecipes() {
@@ -7,9 +11,45 @@ export async function getRecipes() {
 	return recipes;
 }
 
-export async function getRecipesWithLessData(
+export async function getRecipe(id: number): Promise<Recipe | null> {
+	const recipe = await prisma.recipe.findUnique({
+		where: {
+			id: id,
+		},
+		include: {
+			ingredients: {
+				select: {
+					ingredient: {
+						select: {
+							name: true,
+						},
+					},
+					unit: {
+						select: {
+							shortForm: true,
+						},
+					},
+					quantity: true,
+				},
+			},
+			allergens: true,
+			ustensils: true,
+			season: true,
+			sequences: true,
+			createdBy: {
+				select: {
+					firstname: true,
+					lastname: true,
+				},
+			},
+		},
+	});
+	return recipe ?? null;
+}
+
+export async function getRecipesWithoutFilter(
 	recipeCategoryId: number,
-): Promise<Recipes> {
+): Promise<RecipesWithLessData> {
 	const recipes = await prisma.recipesCategory.findUnique({
 		where: {
 			id: recipeCategoryId,
@@ -25,7 +65,12 @@ export async function getRecipesWithLessData(
 					preparationTime: true,
 					peopleNumber: true,
 					seasonId: true,
-					createdBy: true,
+					createdBy: {
+						select: {
+							firstname: true,
+							lastname: true,
+						},
+					},
 					createdAt: true,
 				},
 			},
@@ -34,18 +79,9 @@ export async function getRecipesWithLessData(
 	return recipes ?? { recipes: [] };
 }
 
-export async function getRecipe(id: number) {
-	const recipe = await prisma.recipe.findUnique({
-		where: {
-			id: id,
-		},
-	});
-	return recipe;
-}
-
 export async function getRecipesFiltered(
 	_event: H3Event<EventHandlerRequest>,
-): Promise<Recipes[]> {
+): Promise<RecipesWithLessData[]> {
 	const query = getQuery(_event);
 	if (query === null || query === undefined) {
 		return [];
@@ -83,7 +119,7 @@ export async function getRecipesFiltered(
 		// If all the filters lists are empty, return all the recipes without any filter
 		return [
 			{
-				...(await getRecipesWithLessData(recipeCategoryId)),
+				...(await getRecipesWithoutFilter(recipeCategoryId)),
 			},
 		];
 	}
@@ -169,7 +205,12 @@ export async function getRecipesFiltered(
 					peopleNumber: true,
 					seasonId: true,
 					createdAt: true,
-					createdBy: true,
+					createdBy: {
+						select: {
+							firstname: true,
+							lastname: true,
+						},
+					},
 				},
 			},
 		},

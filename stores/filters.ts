@@ -28,7 +28,7 @@ export const useFiltersStore = defineStore('filters', {
 		};
 	},
 	actions: {
-		async fetchFilteredRecipes(filterNumberIncrement = 0) {
+		async fetchFilteredRecipes(filterNumberIncrement = 0): Promise<void> {
 			const route = useRoute();
 			this.filterNumber += filterNumberIncrement ?? 0;
 			const needFilterRecipes: boolean = route.params.id !== undefined;

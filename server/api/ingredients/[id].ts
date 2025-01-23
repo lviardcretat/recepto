@@ -2,7 +2,7 @@ import { getIngredient } from '~/server/data/ingredients';
 
 export default defineEventHandler(async (event) => {
 	const id = Number(event.context.params?.id);
-	if (id) {
+	if (!id) {
 		throw createError({
 			statusCode: 404,
 			statusMessage: 'Ingredient Id unvalid',

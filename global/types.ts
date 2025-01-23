@@ -35,10 +35,44 @@ export type RecipeWithIngredients = Prisma.RecipeGetPayload<{
 }>;
 
 /**
- * @description Recipe custom model
- * @type Recipe
+ * @description Recipe model including ingredients
+ * @type RecipeWithIngredients
  */
-export type Recipe = {
+export type Recipe = Prisma.RecipeGetPayload<{
+	include: {
+		ingredients: {
+			select: {
+				ingredient: {
+					select: {
+						name: true;
+					};
+				};
+				unit: {
+					select: {
+						shortForm: true;
+					};
+				};
+				quantity: true;
+			};
+		};
+		allergens: true;
+		ustensils: true;
+		season: true;
+		sequences: true;
+		createdBy: {
+			select: {
+				firstname: true;
+				lastname: true;
+			};
+		};
+	};
+}>;
+
+/**
+ * @description Recipe custom model
+ * @type RecipeWithLessData
+ */
+export type RecipeWithLessData = {
 	id: number;
 	name: string;
 	peopleNumber: number;
@@ -48,15 +82,18 @@ export type Recipe = {
 	description: string | null;
 	seasonId: number;
 	createdAt: Date | null;
-	createdBy: User | null;
+	createdBy: {
+		firstname: string;
+		lastname: string;
+	};
 };
 
 /**
- * @description Table of recipes custom model, used to display the list of recipes
+ * @description Table of recipes custom model with less data, used to display the list of recipes
  * @type Recipes
  */
-export type Recipes = {
-	recipes: Recipe[];
+export type RecipesWithLessData = {
+	recipes: RecipeWithLessData[];
 };
 
 /**
@@ -73,7 +110,7 @@ export type State = {
 	allergens: number[];
 	recipeCategoryList:
 		| SerializeObject<RecipesCategories>[]
-		| SerializeObject<Recipes>[]
+		| SerializeObject<RecipesWithLessData>[]
 		| null;
 };
 

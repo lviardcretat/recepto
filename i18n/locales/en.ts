@@ -1,5 +1,6 @@
 export default defineI18nLocale(async (locale) => {
 	return {
+		allergenFree: 'Allergen-free',
 		allergens: 'Allergens',
 		createdBy: 'Created by {username}',
 		dishTypes: 'Types of dish',
@@ -11,6 +12,7 @@ export default defineI18nLocale(async (locale) => {
 		inspiration: 'Looking for inspiration?',
 		mealTypes: 'Types of meal',
 		menu: 'Menu',
+		preparationSteps: 'Preparation steps',
 		schedule: 'Planning',
 		recipes: 'Recipes',
 		recipesFound: 'no recipe found | 1 recipe found | {count} recipes found',

@@ -1,6 +1,7 @@
 
 <script setup lang="ts">
 import type { RecipeWithIngredients } from '~/global/types';
+import { formatDuration } from '~/global/utils';
 
 const props = defineProps<{
 	name: RecipeWithIngredients['name'];
@@ -12,16 +13,6 @@ const props = defineProps<{
 	createdAt: RecipeWithIngredients['createdAt'];
 	fullName: string;
 }>();
-
-function formatDuration(duration: number | null): string {
-	if (duration === null) {
-		return '0m';
-	}
-	if (duration % 1 === 0) {
-		return `${duration}h`;
-	}
-	return `${duration * 100}m`;
-}
 </script>
 
 <template>
@@ -57,7 +48,7 @@ function formatDuration(duration: number | null): string {
 		<template #footer>
 			<div class="footer flex justify-between items-center">
 				<p>{{ $t('createdBy', { username: props.fullName })}}</p>
-				<p>{{ props.createdAt.toLocaleDateString('fr') }}</p>
+				<p>{{ $d(props.createdAt, 'short') }}</p>
 			</div>
 		</template>
 	</UCard>
