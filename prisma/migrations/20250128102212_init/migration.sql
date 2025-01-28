@@ -15,6 +15,7 @@ CREATE TABLE "Ingredient" (
     "name" TEXT NOT NULL,
     "foodTypeId" INTEGER NOT NULL,
     "icon" TEXT,
+    "seasonalMonths" JSONB NOT NULL,
     "createdById" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
@@ -166,25 +167,19 @@ CREATE TABLE "Allergen" (
 -- CreateTable
 CREATE TABLE "_RecipeToUstensil" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL,
-
-    CONSTRAINT "_RecipeToUstensil_AB_pkey" PRIMARY KEY ("A","B")
+    "B" INTEGER NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_MealTypeToRecipesCategory" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL,
-
-    CONSTRAINT "_MealTypeToRecipesCategory_AB_pkey" PRIMARY KEY ("A","B")
+    "B" INTEGER NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_AllergenToRecipe" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL,
-
-    CONSTRAINT "_AllergenToRecipe_AB_pkey" PRIMARY KEY ("A","B")
+    "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
@@ -194,10 +189,19 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "Unit_name_key" ON "Unit"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_RecipeToUstensil_AB_unique" ON "_RecipeToUstensil"("A", "B");
+
+-- CreateIndex
 CREATE INDEX "_RecipeToUstensil_B_index" ON "_RecipeToUstensil"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_MealTypeToRecipesCategory_AB_unique" ON "_MealTypeToRecipesCategory"("A", "B");
+
+-- CreateIndex
 CREATE INDEX "_MealTypeToRecipesCategory_B_index" ON "_MealTypeToRecipesCategory"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_AllergenToRecipe_AB_unique" ON "_AllergenToRecipe"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_AllergenToRecipe_B_index" ON "_AllergenToRecipe"("B");

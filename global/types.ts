@@ -27,6 +27,18 @@ export type IconsGridItem = {
 };
 
 /**
+ * @description Ingredient model including seasonal months and foodType
+ * @type IngredientsSeasonal
+ */
+export type IngredientsSeasonal = Prisma.IngredientGetPayload<{
+	select: {
+		name: true;
+		seasonalMonths: true;
+		foodType: { select: { name: true } };
+	};
+}>;
+
+/**
  * @description Recipe model including ingredients
  * @type RecipeWithIngredients
  */

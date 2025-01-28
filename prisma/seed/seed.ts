@@ -26,8 +26,8 @@ async function main() {
 	await seed_recipesCategory(prisma);
 	await seed_ingredient(prisma);
 	await seed_unit(prisma);
-	await seed_sequence(prisma);
 	await seed_recipe(prisma);
+	await seed_sequence(prisma);
 	await seed_recipeIngredient(prisma);
 }
 

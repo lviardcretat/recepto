@@ -17,22 +17,22 @@ const links = [
 		icon: 'ic:baseline-featured-play-list',
 	},
 	{
-		label: 'Dashboard',
+		label: 'dashboard',
 		icon: 'material-symbols:space-dashboard-outline',
 		to: '/user/dashboard',
 	},
 	{
-		label: 'Settings',
+		label: 'ingredients',
 		icon: 'i-heroicons-cog-8-tooth',
 		children: [
 			{
-				label: 'General',
+				label: 'ingredients',
 			},
 			{
-				label: 'Members',
+				label: 'ingredients',
 			},
 			{
-				label: 'Notifications',
+				label: 'ingredients',
 			},
 		],
 	},
@@ -46,7 +46,8 @@ const links = [
 			<UDashboardSidebar>
 				<UDashboardSidebarLinks :links="links">
 					<template #default="{ link }">
-						<div>{{ $t(link.label) }}</div>
+						<!-- Don't know why but this is needed for the dashboard text to be visible -->
+						<div class="z-10">{{ $t(link.label) }}</div>
 					</template>
 				</UDashboardSidebarLinks>
 			</UDashboardSidebar>

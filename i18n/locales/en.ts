@@ -3,6 +3,7 @@ export default defineI18nLocale(async (locale) => {
 		allergenFree: 'Allergen-free',
 		allergens: 'Allergens',
 		createdBy: 'Created by {username}',
+		dashboard: 'Dashboard',
 		dishTypes: 'Types of dish',
 		filter: 'Filter',
 		filterBy: 'Filter by {filterName}...',
