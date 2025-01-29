@@ -25,6 +25,7 @@ Chart.register(
 	ChartDataLabels,
 );
 
+const { t } = useI18n();
 const isModalOpen = ref<boolean>(false);
 defineShortcuts({
 	shift_s: {
@@ -65,7 +66,7 @@ const chartOptions: ChartOptions<'bar'> = {
 					if (startMonth === endMonth) {
 						return startMonth;
 					}
-					return `De ${startMonth} à ${endMonth}`;
+					return t('fromTo', { from: t(startMonth), to: t(endMonth) });
 				},
 			},
 		},
@@ -89,7 +90,10 @@ const chartOptions: ChartOptions<'bar'> = {
 			position: 'top',
 			stacked: true,
 			ticks: {
-				callback: (index) => Object.values(Months)[Number(index)],
+				callback: (index) =>
+					Object.values(Months)[Number(index)]
+						? t(Object.values(Months)[Number(index)])
+						: '',
 				stepSize: 1,
 				autoSkip: false,
 			},
@@ -103,7 +107,7 @@ const data: ChartData<'bar'> = {
 </script>
 
 <template>
-	<UModal v-model="isModalOpen" :ui="{ width: 'sm:max-w-4xl', height: 'h-[80vh]' }">
+	<UModal v-model="isModalOpen" class="z-10" :ui="{ width: 'sm:max-w-4xl', height: 'h-[80vh]' }">
 		<UCard>
 			<template #header>
 				<h1 class="h-8">Calendrier de saison</h1>
