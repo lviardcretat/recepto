@@ -8,10 +8,12 @@ import {
 	BarElement,
 	CategoryScale,
 	LinearScale,
+	type ChartData,
+	type ChartDataset,
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import type { IngredientsSeasonal } from '~/global/types';
+import { Months } from '~/global/enums';
 
 Chart.register(
 	Title,
@@ -23,9 +25,7 @@ Chart.register(
 	ChartDataLabels,
 );
 
-const foodTypeIdRef = ref<number>(1);
 const isModalOpen = ref<boolean>(false);
-const foodTypesValid: number[] = [1, 2];
 defineShortcuts({
 	shift_s: {
 		usingInput: true,
@@ -34,22 +34,10 @@ defineShortcuts({
 		},
 	},
 });
-const { data, execute, clear } = await useFetch('/api/ingredients/seasonals', {
+const { data: datasetsFetch } = await useFetch<
+	ChartDataset<'bar', { name: string; months: number[]; type: string }[]>[]
+>('/api/ingredients/seasonals', {
 	method: 'GET',
-	default: () => [],
-	query: {
-		foodTypeId: foodTypeIdRef,
-	},
-	immediate: false,
-	watch: false,
-	server: false,
-	transform: (items: IngredientsSeasonal[]) => {
-		return items.map((ingredient: IngredientsSeasonal) => ({
-			y: ingredient.name,
-			x: ingredient.seasonalMonths as number[][],
-			type: ingredient.foodType.name,
-		}));
-	},
 	onResponseError({ response }) {
 		throw showError({
 			statusCode: response.status,
@@ -57,81 +45,6 @@ const { data, execute, clear } = await useFetch('/api/ingredients/seasonals', {
 		});
 	},
 });
-
-const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
-	method: 'GET',
-	watch: false,
-	default: () => null,
-	onResponseError({ response }) {
-		throw showError({
-			statusCode: response.status,
-			statusMessage: response.statusText,
-		});
-	},
-});
-
-async function getIngredientsSeasonals(foodTypeId: number) {
-	clear();
-	foodTypeIdRef.value = foodTypeId;
-	await execute();
-}
-
-async function generateDatasets() {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	let datasets: any[] = [];
-	let index = 0;
-	let colors: string[] = ['#f87979', '#f56109'];
-	if (!foodTypes.value) {
-		return datasets;
-	}
-	for (let foodType of foodTypes.value) {
-		if (foodTypesValid.includes(foodType.id)) {
-			await getIngredientsSeasonals(foodType.id);
-			datasets.push({
-				label: foodType.name,
-				backgroundColor: colors[index],
-				datalabels: {
-					display: false,
-				},
-				data: data.value.flatMap((item) =>
-					item.x.length > 0
-						? item.x.map((subArray) => ({
-								y: item.y,
-								x: subArray,
-								type: item.type,
-							}))
-						: [
-								{
-									y: item.y,
-									x: [],
-									type: item.type,
-								},
-							],
-				),
-			});
-			index += 1;
-		}
-	}
-	return datasets;
-}
-
-const chartData = ref({
-	datasets: await generateDatasets(),
-});
-const months: string[] = [
-	'Janvier',
-	'Février',
-	'Mars',
-	'Avril',
-	'Mai',
-	'Juin',
-	'Juillet',
-	'Aout',
-	'Septembre',
-	'Octobre',
-	'Novembre',
-	'Decembre',
-];
 
 const chartOptions: ChartOptions<'bar'> = {
 	maintainAspectRatio: false,
@@ -144,9 +57,11 @@ const chartOptions: ChartOptions<'bar'> = {
 			callbacks: {
 				title: () => '',
 				label: (context) => {
-					const range: number[] = (context.raw as { y: string; x: number[] }).x;
-					const startMonth: string = months[range[0]];
-					const endMonth: string = months[range[1] - 1];
+					const range: number[] = (
+						context.raw as { name: string; months: number[]; type: string }
+					).months;
+					const startMonth: string = Object.values(Months)[range[0]];
+					const endMonth: string = Object.values(Months)[range[1] - 1];
 					if (startMonth === endMonth) {
 						return startMonth;
 					}
@@ -174,12 +89,16 @@ const chartOptions: ChartOptions<'bar'> = {
 			position: 'top',
 			stacked: true,
 			ticks: {
-				callback: (index) => months[Number(index)],
+				callback: (index) => Object.values(Months)[Number(index)],
 				stepSize: 1,
 				autoSkip: false,
 			},
 		},
 	},
+};
+
+const data: ChartData<'bar'> = {
+	datasets: datasetsFetch.value,
 };
 </script>
 
@@ -192,7 +111,7 @@ const chartOptions: ChartOptions<'bar'> = {
 
 			<div class="relative flex-1 overflow-y-auto h-[70vh] p-4" id="container">
 				<div id="chartContainer">
-					<Bar :data="chartData" :options="chartOptions"/>
+					<Bar :data="data" :options="chartOptions"/>
 				</div>
 			</div>
 		</UCard>

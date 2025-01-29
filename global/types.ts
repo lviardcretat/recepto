@@ -67,10 +67,26 @@ export type Recipe = Prisma.RecipeGetPayload<{
 				quantity: true;
 			};
 		};
-		allergens: true;
-		ustensils: true;
-		season: true;
-		sequences: true;
+		allergens: {
+			select: {
+				id: true;
+				name: true;
+				icon: true;
+			};
+		};
+		ustensils: {
+			select: {
+				id: true;
+				name: true;
+			};
+		};
+		sequences: {
+			select: {
+				id: true;
+				title: true;
+				description: true;
+			};
+		};
 		createdBy: {
 			select: {
 				firstname: true;

@@ -5,6 +5,15 @@ export async function getFoodTypes() {
 	return foodType;
 }
 
+export async function getSpecificsFoodTypes(ids: number[]) {
+	const foodTypes = await prisma.foodType.findMany({
+		where: {
+			id: { in: ids },
+		},
+	});
+	return foodTypes;
+}
+
 export async function getFoodType(id: number) {
 	const foodType = await prisma.foodType.findUnique({
 		where: {

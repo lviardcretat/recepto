@@ -16,5 +16,6 @@ export default defineEventHandler(async (event) => {
 			statusMessage: 'Recipe not found',
 		});
 	}
+
 	return recipe;
 });
