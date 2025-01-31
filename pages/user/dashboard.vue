@@ -1,5 +1,67 @@
 <script setup lang="ts">
 const test = useTest();
+const counts: Ref<number[][]> = ref([
+	[0, 15],
+	[0, 67],
+	[0, 100],
+	[0, 19],
+	[0, 21],
+]);
+const duration = 1000;
+
+const animateCounter = () => {
+	const startTime = performance.now();
+
+	const updateCounter = (currentTime: number) => {
+		const elapsedTime = currentTime - startTime;
+		const progress = Math.min(elapsedTime / duration, 1);
+
+		for (let count of counts.value) {
+			count[0] = Math.floor(progress * count[1]);
+		}
+
+		if (progress < 1) {
+			requestAnimationFrame(updateCounter);
+		}
+	};
+
+	requestAnimationFrame(updateCounter);
+};
+
+onMounted(animateCounter);
+
+const cards = [
+	{
+		name: 'recipesCreated',
+		icon: 'fluent:food-48-filled',
+		value: counts.value[0],
+		finalValue: 67,
+	},
+	{
+		name: 'categoriesCreated',
+		icon: 'tabler:category-filled',
+		value: counts.value[1],
+		finalValue: 15,
+	},
+	{
+		name: 'strokesPerformed',
+		icon: 'material-symbols:shopping-cart-rounded',
+		value: counts.value[2],
+		finalValue: 19,
+	},
+	{
+		name: 'plannedMeals',
+		icon: 'material-symbols:calendar-clock-outline-sharp',
+		value: counts.value[3],
+		finalValue: 21,
+	},
+	{
+		name: 'registeredMembersThanks',
+		icon: 'ri:hand-heart-fill',
+		value: counts.value[4],
+		finalValue: 100,
+	},
+];
 </script>
 
 <template>
@@ -17,32 +79,20 @@ const test = useTest();
 						@click="test = !test"/>
 				</template>
 			</UDashboardNavbar>
-			<UDashboardPanelContent class="flex flex-col justify-center">
-				<SeasonalChart/>
-				<UContainer class="w-full flex flex-col items-center">
-					<h1 class="text-4xl font-bold">Vous avez été très performant !</h1>
-					<div class="grid grid-cols-12 grid-rows-2 gap-4 w-full">
-						<UCard class="col-span-4 row-span-2">
-							<div class="flex justify-between">
-								<h1 class="text-7xl">50</h1>
-								<div>repas prévus !</div>
+			<UDashboardPanelContent>
+				<UContainer class="w-full h-full flex flex-col items-center justify-center">
+					<h1 class="text-4xl font-bold self-stretch flex items-center justify-center h-1/4">Vous avez été très performant !</h1>
+					<div class="gap-10 w-full flex justify-evenly flex-wrap h-3/4">
+						<UCard v-for="card in cards" class="w-1/4 h-1/3" :ui="{ body: {base: 'h-1/3'} }">
+							<template #header>
+								<div class="flex justify-between flex-col items-center gap-4 h-3/5">
+									<UIcon class="text-4xl" :name="card.icon" />
+									<div class="text-center">{{ $t(card.name) }}</div>
+								</div>
+							</template>
+							<div class="flex justify-between flex-col items-center h-full">
+								<h1 class="h-full text-4xl">{{ card.value[0] }}</h1>
 							</div>
-						</UCard>
-						<UCard class="col-span-4 row-span-1">
-							<h1>35</h1>
-							<div>recettes créés !</div>
-						</UCard>
-						<UCard class="col-span-4 row-span-1">
-							<h1>16</h1>
-							<div>catégories créés !</div>
-						</UCard>
-						<UCard class="col-span-8 row-span-1">
-							<h1>2</h1>
-							<div>courses effectués !</div>
-						</UCard>
-						<UCard class="col-span-12 row-span-1">
-							<h1>106</h1>
-							<div>membres inscrits grâce à vous !</div>
 						</UCard>
 					</div>
 				</UContainer>
@@ -52,5 +102,7 @@ const test = useTest();
 </template>
 
 <style lang="scss" scoped>
-
+span {
+  transition: transform 0.2s ease-in-out;
+}
 </style>
