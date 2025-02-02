@@ -1,55 +1,3 @@
-<template>
-  <div class="recipeSearchBar">
-	<UInput
-		:trailing="false"
-		icon="material-symbols:search"
-		color="white"
-		:placeholder="$t('findRecipe')"
-		size="xl"
-		v-model="searchValue"
-		autocomplete="on"
-		class="search"
-	/>
-	<div
-		class="categoryRecipes"
-		v-if="data?.length > 0"
-	>
-		<div v-if="totalRecipes > 0" class="recipesFound">
-			{{ $t('recipesFound', totalRecipes, { count: totalRecipes }) }}
-		</div>
-		<ULink
-			class="categoryRecipe"
-			v-for="(recipeCategory) in data"
-			:to="{
-				name: 'recipes-id',
-				params: {id: recipeCategory.id},
-				query: {recipeIndex: 0}
-			}">
-			{{
-				recipeCategory.name
-			}}
-			<div class="recipes">
-				<div class="recipe" v-for="(recipe, index) in recipeCategory.recipes">
-					<UIcon
-						name="material-symbols:subdirectory-arrow-right-rounded"
-						size="xl"
-					/>
-					<ULink :to="{
-							name: 'recipes-id',
-							params: {id: recipeCategory.id},
-							query: {recipeIndex: index}
-						}">
-						{{
-							recipe.name
-						}}
-					</ULink>
-				</div>
-			</div>
-		</ULink>
-	</div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 // Search value
 const searchValue = ref<string>('');
@@ -93,6 +41,58 @@ const totalRecipes = computed(() => {
 	return result;
 });
 </script>
+
+<template>
+  <div class="recipeSearchBar">
+	<UInput
+		:trailing="false"
+		icon="material-symbols:search"
+		color="white"
+		:placeholder="$t('findRecipe')"
+		size="xl"
+		v-model="searchValue"
+		autocomplete="on"
+		class="search"
+	/>
+	<div
+		class="categoryRecipes"
+		v-if="data && data.length > 0"
+	>
+		<div v-if="totalRecipes > 0" class="recipesFound">
+			{{ $t('recipesFound', totalRecipes, { count: totalRecipes }) }}
+		</div>
+		<ULink
+			class="categoryRecipe"
+			v-for="(recipeCategory) in data"
+			:to="{
+				name: 'recipes-id',
+				params: {id: recipeCategory.id},
+				query: {recipeIndex: 0}
+			}">
+			{{
+				recipeCategory.name
+			}}
+			<div class="recipes">
+				<div class="recipe" v-for="(recipe, index) in recipeCategory.recipes">
+					<UIcon
+						name="material-symbols:subdirectory-arrow-right-rounded"
+						size="xl"
+					/>
+					<ULink :to="{
+							name: 'recipes-id',
+							params: {id: recipeCategory.id},
+							query: {recipeIndex: index}
+						}">
+						{{
+							recipe.name
+						}}
+					</ULink>
+				</div>
+			</div>
+		</ULink>
+	</div>
+  </div>
+</template>
 
 <style lang="scss">
 	.recipeSearchBar {

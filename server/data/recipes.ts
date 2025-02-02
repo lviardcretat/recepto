@@ -1,9 +1,8 @@
-import type { H3Event, EventHandlerRequest } from 'h3';
+import type { Recipe, RecipesWithLessData } from '~/global/types';
 import type {
 	FilterSelectItem,
-	Recipe,
-	RecipesWithLessData,
-} from '~/global/types';
+	RecipesFilter,
+} from '~/global/validationSchemas';
 import prisma from '~/lib/prisma';
 
 export async function getRecipes() {
@@ -96,20 +95,13 @@ export async function getRecipesWithoutFilter(
 }
 
 export async function getRecipesFiltered(
-	_event: H3Event<EventHandlerRequest>,
+	query: RecipesFilter,
 ): Promise<RecipesWithLessData[]> {
-	const query = getQuery(_event);
-	if (query === null || query === undefined) {
-		return [];
-	}
-
-	const ingredientsIds: FilterSelectItem = JSON.parse(
-		query.ingredients as string,
-	);
-	const ustensilsIds: FilterSelectItem = JSON.parse(query.ustensils as string);
-	const seasonalRecipes: boolean = query.seasonalRecipes === 'true';
-	const allergensIds: number[] = (query.allergens as number[]) ?? [];
-	const recipeCategoryId: number = Number(query.recipeCategoryId);
+	const ingredientsIds = query.ingredients;
+	const ustensilsIds = query.ustensils;
+	const seasonalRecipes = query.seasonalRecipes === true;
+	const allergensIds = query.allergens;
+	const recipeCategoryId = query.recipeCategoryId;
 
 	if (
 		!(

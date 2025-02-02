@@ -1,5 +1,8 @@
-import type { H3Event, EventHandlerRequest } from 'h3';
-import type { FilterSelectItem, RecipesCategories } from '~/global/types';
+import type { RecipesCategories } from '~/global/types';
+import type {
+	FilterSelectItem,
+	RecipesCategoriesFilter,
+} from '~/global/validationSchemas';
 import prisma from '~/lib/prisma';
 
 export async function getRecipesCategories() {
@@ -52,6 +55,18 @@ export async function getRecipesCategoriesAndRecipesNames(name: string) {
 	return recipesCategories;
 }
 
+export async function getRecipesCategoryName(id: number) {
+	const recipesCategoryName = await prisma.recipesCategory.findUnique({
+		where: {
+			id: id,
+		},
+		select: {
+			name: true,
+		},
+	});
+	return recipesCategoryName;
+}
+
 export async function getRecipesCategory(id: number) {
 	const recipesCategory = await prisma.recipesCategory.findUnique({
 		where: {
@@ -68,39 +83,14 @@ export async function getRecipesCategory(id: number) {
 }
 
 export async function getRecipesCategoriesFiltered(
-	_event: H3Event<EventHandlerRequest>,
+	query: RecipesCategoriesFilter,
 ): Promise<RecipesCategories[]> {
-	const query = getQuery(_event);
-
-	const ingredientsIds: FilterSelectItem = JSON.parse(
-		query.ingredients as string,
-	);
-	const ustensilsIds: FilterSelectItem = JSON.parse(query.ustensils as string);
-	const mealTypesIds: FilterSelectItem = JSON.parse(
-		query.mealTypes as string,
-	)[0];
-	const dishTypesIds: FilterSelectItem = JSON.parse(
-		query.dishTypes as string,
-	)[0];
-	const seasonalRecipes: boolean = query.seasonalRecipes === 'true';
-	const allergensIds: number[] = (query.allergens as number[]) ?? [];
-
-	if (
-		!(
-			ingredientsIds.wanted &&
-			ingredientsIds.notWanted &&
-			ustensilsIds.wanted &&
-			ustensilsIds.notWanted &&
-			allergensIds &&
-			dishTypesIds &&
-			mealTypesIds
-		)
-	) {
-		throw createError({
-			statusCode: 404,
-			statusMessage: 'Specific recipecategories query filter unvalid',
-		});
-	}
+	const ingredientsIds = query.ingredients;
+	const ustensilsIds = query.ustensils;
+	const mealTypesIds = query.mealTypes ?? { wanted: [], notWanted: [] };
+	const dishTypesIds = query.dishTypes ?? { wanted: [], notWanted: [] };
+	const seasonalRecipes: boolean = query.seasonalRecipes === true;
+	const allergensIds: number[] = query.allergens;
 
 	// If all the filters lists are empty, return all the recipes without any filter
 	if (

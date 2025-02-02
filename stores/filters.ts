@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import type { FilterSelectItem, State } from '~/global/types';
+import type { State } from '~/global/types';
+import type { FilterSelectItem } from '~/global/validationSchemas';
 
 export const useFiltersStore = defineStore('filters', {
-	// generate the store for filtering a list of ustensils
 	state: (): State => {
 		return {
 			filterNumber: 0,
@@ -48,34 +48,26 @@ export const useFiltersStore = defineStore('filters', {
 							wanted: this.ustensils.wanted,
 							notWanted: this.ustensils.notWanted,
 						},
-						mealTypes: {
-							...(!needFilterRecipes
-								? [
-										{
-											wanted: this.mealTypes.wanted,
-											notWanted: this.mealTypes.notWanted,
-										},
-									]
-								: []),
-						},
-						dishTypes: {
-							...(!needFilterRecipes
-								? [
-										{
-											wanted: this.dishTypes.wanted,
-											notWanted: this.dishTypes.notWanted,
-										},
-									]
-								: []),
-						},
+						mealTypes: !needFilterRecipes
+							? {
+									wanted: this.mealTypes.wanted,
+									notWanted: this.mealTypes.notWanted,
+								}
+							: null,
+						dishTypes: !needFilterRecipes
+							? {
+									wanted: this.dishTypes.wanted,
+									notWanted: this.dishTypes.notWanted,
+								}
+							: null,
 						seasonalRecipes: this.seasonalRecipes,
 						allergens: this.allergens,
-						recipeCategoryId: route.params.id as string,
+						recipeCategoryId: route.params.id,
 					},
 					onResponseError({ response }) {
 						throw showError({
 							statusCode: response.status,
-							statusMessage: response.statusText,
+							statusMessage: response._data.message,
 						});
 					},
 				},

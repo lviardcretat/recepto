@@ -1,7 +1,15 @@
 import { getRecipesCategoriesFiltered } from '~/server/data/recipesCategories';
+import {
+	recipesCategoriesFilterSchema,
+	type RecipesCategoriesFilter,
+} from '~/global/validationSchemas';
 
-export default defineEventHandler(async (_event) => {
-	const recipesCategoriesFiltered = await getRecipesCategoriesFiltered(_event);
+export default defineEventHandler(async (event) => {
+	const query: RecipesCategoriesFilter = await getValidatedQuery(
+		event,
+		recipesCategoriesFilterSchema.parse,
+	);
+	const recipesCategoriesFiltered = await getRecipesCategoriesFiltered(query);
 	if (!recipesCategoriesFiltered) {
 		throw createError({
 			statusCode: 404,

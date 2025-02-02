@@ -1,6 +1,7 @@
 import type { SerializeObject } from 'nitropack';
 import type { Prisma, User } from '@prisma/client';
 import type { DataType } from './enums';
+import type { FilterSelectItem } from './validationSchemas';
 
 /**
  * @description Item in the custom select component
@@ -140,15 +141,6 @@ export type State = {
 		| SerializeObject<RecipesCategories>[]
 		| SerializeObject<RecipesWithLessData>[]
 		| null;
-};
-
-/**
- * @description Number of selected filters, wanted or not wanted
- * @type FilterSelectItem
- */
-export type FilterSelectItem = {
-	wanted: number[];
-	notWanted: number[];
 };
 
 /**

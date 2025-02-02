@@ -1,10 +1,13 @@
 import { getRecipesCategoriesAndRecipesNames } from '~/server/data/recipesCategories';
+import { namesSearchBarSchema } from '~/global/validationSchemas';
 
-export default defineEventHandler(async (_event) => {
-	const query = getQuery(_event);
-	const name = query.name ?? '';
+export default defineEventHandler(async (event) => {
+	const result = await getValidatedQuery(event, namesSearchBarSchema.safeParse);
+	if (!result.success) {
+		return null;
+	}
 	const recipesCategoriesSearched = await getRecipesCategoriesAndRecipesNames(
-		name.toString().trim(),
+		result.data.name,
 	);
 	if (!recipesCategoriesSearched) {
 		throw createError({

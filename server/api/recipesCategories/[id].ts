@@ -1,14 +1,15 @@
-import { getRecipesCategory } from '~/server/data/recipesCategories';
+import {
+	getRecipesCategory,
+	getRecipesCategoryName,
+} from '~/server/data/recipesCategories';
+import { idSchema } from '~/global/validationSchemas';
 
 export default defineEventHandler(async (event) => {
-	const id = Number(event.context.params?.id);
-	if (!id) {
-		throw createError({
-			statusCode: 404,
-			statusMessage: 'RecipesCategory Id unvalid',
-		});
-	}
-	const recipesCategory = await getRecipesCategory(id);
+	const { id } = await getValidatedRouterParams(event, idSchema.parse);
+	const onlyName = Boolean(event.context.params?.onlyName ?? false);
+	const recipesCategory = onlyName
+		? await getRecipesCategoryName(id)
+		: await getRecipesCategory(id);
 	if (!recipesCategory) {
 		throw createError({
 			statusCode: 404,

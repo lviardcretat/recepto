@@ -1,6 +1,6 @@
 import { getMealTypes } from '~/server/data/mealTypes';
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async () => {
 	const mealTypes = await getMealTypes();
 	if (!mealTypes) {
 		throw createError({

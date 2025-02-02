@@ -1,6 +1,6 @@
 import { getDishTypes } from '~/server/data/dishTypes';
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async () => {
 	const dishTypes = await getDishTypes();
 	if (!dishTypes) {
 		throw createError({

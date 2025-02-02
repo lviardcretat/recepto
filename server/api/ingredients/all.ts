@@ -1,6 +1,6 @@
 import { getIngredients } from '~/server/data/ingredients';
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async () => {
 	const ingredients = await getIngredients();
 	if (!ingredients) {
 		throw createError({

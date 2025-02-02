@@ -1,6 +1,6 @@
 import { getSeasons } from '~/server/data/seasons';
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async () => {
 	const seasons = await getSeasons();
 	if (!seasons) {
 		throw createError({
