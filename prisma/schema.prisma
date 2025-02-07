@@ -23,7 +23,6 @@ model Ingredient {
 	name       				String
 	foodType   				FoodType 			@relation(fields: [foodTypeId], references: [id])
 	foodTypeId 				Int
-	icon					String?
 	seasonalMonths			Json
 	recipes					RecipeIngredient[]
 	createdBy				User 				@relation(fields: [createdById], references: [id])

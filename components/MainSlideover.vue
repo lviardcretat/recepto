@@ -3,7 +3,8 @@ const test = useTest();
 
 const links = [
 	{
-		label: 'recipes',
+		label: 'recipe',
+		pluralTranslation: true,
 		icon: 'material-symbols:fastfood',
 		to: '/recipes/all',
 	},
@@ -22,17 +23,17 @@ const links = [
 		to: '/user/dashboard',
 	},
 	{
-		label: 'ingredients',
+		label: 'recipe',
 		icon: 'i-heroicons-cog-8-tooth',
 		children: [
 			{
-				label: 'ingredients',
+				label: 'recipe',
 			},
 			{
-				label: 'ingredients',
+				label: 'recipe',
 			},
 			{
-				label: 'ingredients',
+				label: 'recipe',
 			},
 		],
 	},
@@ -47,7 +48,7 @@ const links = [
 				<UDashboardSidebarLinks :links="links">
 					<template #default="{ link }">
 						<!-- Don't know why but this is needed for the dashboard text to be visible -->
-						<div class="z-10">{{ $t(link.label) }}</div>
+						<div class="z-10">{{ $t(link.label, link.pluralTranslation ? 2 : 1) }}</div>
 					</template>
 				</UDashboardSidebarLinks>
 			</UDashboardSidebar>

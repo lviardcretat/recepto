@@ -6,11 +6,12 @@ export default defineNuxtConfig({
 	extends: ['@nuxt/ui-pro'],
 	modules: [
 		'@nuxt/image',
+		'@nuxt/ui',
+		'nuxt-zod-i18n',
+		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@prisma/nuxt',
-		'@nuxt/ui',
 		'nuxt-swiper',
-		'@nuxtjs/i18n',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
@@ -49,5 +50,11 @@ export default defineNuxtConfig({
 		lazy: true,
 		strategy: 'no_prefix',
 		vueI18n: './i18n/i18n.config.ts',
+	},
+	zodI18n: {
+		localeCodesMapping: {
+			'en-GB': 'en',
+			'fr-FR': 'fr',
+		},
 	},
 });

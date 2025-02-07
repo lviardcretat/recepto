@@ -1,9 +1,55 @@
+import type { Prisma } from '@prisma/client';
 import type { Recipe, RecipesWithLessData } from '~/global/types';
 import type {
 	FilterSelectItem,
 	RecipesFilter,
 } from '~/global/validationSchemas';
 import prisma from '~/lib/prisma';
+
+export async function postRecipe(
+	name: string,
+	description: string,
+	tips: string,
+	peopleNumber: number,
+	preparationTime: number,
+	cookingTime: number,
+	restTime: number,
+	seasonId: number,
+	recipesCategoryId: number,
+	allergensIds: number[],
+	ustensilIds: number[],
+	createdById: number,
+) {
+	const allergens: Array<Prisma.AllergenWhereUniqueInput> = Array.from(
+		allergensIds,
+		(allergen) => ({ id: allergen }),
+	);
+	const ustensils: Array<Prisma.UstensilWhereUniqueInput> = Array.from(
+		ustensilIds,
+		(ustensil) => ({ id: ustensil }),
+	);
+	const recipe = await prisma.recipe.create({
+		data: {
+			name: name,
+			description: description,
+			tips: tips,
+			peopleNumber: peopleNumber,
+			preparationTime: preparationTime,
+			cookingTime: cookingTime,
+			restTime: restTime,
+			seasonId: seasonId,
+			recipesCategoryId: recipesCategoryId,
+			allergens: {
+				connect: allergens,
+			},
+			ustensils: {
+				connect: ustensils,
+			},
+			createdById: createdById,
+		},
+	});
+	return recipe;
+}
 
 export async function getRecipes() {
 	const recipes = await prisma.recipe.findMany();

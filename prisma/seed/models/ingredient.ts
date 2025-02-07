@@ -10,7 +10,6 @@ async function generateIngredient(name: string, foodTypeId: number, icon: string
 			name: name,
 			foodTypeId: foodTypeId,
 			seasonalMonths: seasonalMonths,
-			icon: icon,
 			createdById: createdById,
 		},
 	});

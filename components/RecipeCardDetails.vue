@@ -37,8 +37,11 @@ const peopleNumberModified = ref(recipe.peopleNumber);
 
 function renderIngredient(): void {
 	for (const [index] of ingredients.value.entries()) {
-		ingredients.value[index].quantity =
-			ingredients.value[index].singlePortion * peopleNumberModified.value;
+		ingredients.value[index].quantity = Number(
+			(
+				ingredients.value[index].singlePortion * peopleNumberModified.value
+			).toFixed(2),
+		);
 	}
 }
 </script>
@@ -74,7 +77,6 @@ function renderIngredient(): void {
 				<div v-else>{{ $t('allergenFree') }}</div>
 			</div>
 		</template>
-
 		<UContainer class="info mb-6">
 			<div>{{ recipe.description }}</div>
 			<div class="mt-4 italic text-center">{{ `❝ ${recipe.tips} ❞` }}</div>
@@ -82,7 +84,7 @@ function renderIngredient(): void {
 		<UDivider/>
 		<UContainer class="base flex pb-6 pt-6">
 			<div class="ingredientsUstensils w-1/4">
-				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ingredients') }}</h1>
+				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ingredient', 2) }}</h1>
 				<div class="flex flex-col">
 					<div v-for="ingredient in ingredients">
 						<span class="font-bold">{{ `${ingredient.quantity}${ingredient.unit} ` }}</span>
@@ -90,7 +92,7 @@ function renderIngredient(): void {
 					</div>
 				</div>
 				<UDivider class="pb-6 pt-6"/>
-				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ustensils') }}</h1>
+				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ustensil', 2) }}</h1>
 				<div class="flex flex-col">
 					<div v-for="ustensil in recipe.ustensils">{{ ustensil.name }}</div>
 				</div>
@@ -113,9 +115,6 @@ function renderIngredient(): void {
 				</UAccordion>
 			</div>
 		</UContainer>
-
-
-
 		<template #footer>
 			<div class="footer flex justify-between items-center">
 				<p>{{ $t('createdBy', { username: `${recipe.createdBy?.firstname} ${recipe.createdBy?.lastname}` })}}</p>

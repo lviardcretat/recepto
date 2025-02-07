@@ -5,6 +5,21 @@ import type {
 } from '~/global/validationSchemas';
 import prisma from '~/lib/prisma';
 
+export async function postRecipesCategory(
+	name: string,
+	dishTypeId: number,
+	createdById: number,
+) {
+	const recipesCategory = await prisma.recipesCategory.create({
+		data: {
+			name: name,
+			dishTypeId: dishTypeId,
+			createdById: createdById,
+		},
+	});
+	return recipesCategory;
+}
+
 export async function getRecipesCategories() {
 	const recipesCategories = await prisma.recipesCategory.findMany({
 		include: {

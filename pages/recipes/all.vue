@@ -16,6 +16,10 @@ function isData() {
 		store.recipeCategoryList.length > 0
 	);
 }
+
+useListen('recipesCategory:created', async () => {
+	await store.fetchFilteredRecipes();
+});
 </script>
 
 <template>

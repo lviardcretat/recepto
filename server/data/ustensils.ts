@@ -5,6 +5,16 @@ export async function getUstensils() {
 	return ustensils;
 }
 
+export async function postUstensil(name: string, createdById: number) {
+	const ustensil = await prisma.ustensil.create({
+		data: {
+			name: name,
+			createdById: createdById,
+		},
+	});
+	return ustensil;
+}
+
 export async function getUstensil(id: number) {
 	const ustensil = await prisma.ustensil.findUnique({
 		where: {

@@ -5,6 +5,23 @@ export async function getIngredients() {
 	return ingredients;
 }
 
+export async function postIngredient(
+	name: string,
+	foodTypeId: number,
+	seasonalMonths: number[][],
+	createdById: number,
+) {
+	const ingredient = await prisma.ingredient.create({
+		data: {
+			name: name,
+			foodTypeId: foodTypeId,
+			seasonalMonths: seasonalMonths,
+			createdById: createdById,
+		},
+	});
+	return ingredient;
+}
+
 export async function getIngredientsSeasonalMonths(foodTypeId: number) {
 	const ingredients = await prisma.ingredient.findMany({
 		where: {

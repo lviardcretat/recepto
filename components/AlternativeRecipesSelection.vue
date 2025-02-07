@@ -5,12 +5,15 @@ const route = useRoute();
 const recipeIndex = computed(() => {
 	return Number(route.query.recipeIndex);
 });
-
 const store = useFiltersStore();
 const isModalOpen: Ref<boolean> = ref(false);
 const recipeActive: Ref<RecipeWithLessData | undefined> = ref();
 
 await store.fetchFilteredRecipes(0);
+
+useListen('recipe:created', async () => {
+	await store.fetchFilteredRecipes();
+});
 </script>
 
 <template>

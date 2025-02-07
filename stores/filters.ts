@@ -7,20 +7,20 @@ export const useFiltersStore = defineStore('filters', {
 		return {
 			filterNumber: 0,
 			ingredients: {
-				wanted: [],
 				notWanted: [],
+				wanted: [],
 			},
 			ustensils: {
-				wanted: [],
 				notWanted: [],
+				wanted: [],
 			},
 			mealTypes: {
-				wanted: [],
 				notWanted: [],
+				wanted: [],
 			},
 			dishTypes: {
-				wanted: [],
 				notWanted: [],
+				wanted: [],
 			},
 			seasonalRecipes: false,
 			recipeCategoryList: [],

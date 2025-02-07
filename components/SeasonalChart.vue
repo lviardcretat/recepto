@@ -35,10 +35,21 @@ defineShortcuts({
 		},
 	},
 });
-const { data: datasetsFetch } = await useFetch<
+
+useListen('ingredient:created', async () => {
+	await refresh();
+	data = { datasets: datasetsFetch.value };
+});
+
+const {
+	data: datasetsFetch,
+	refresh,
+	execute,
+} = await useFetch<
 	ChartDataset<'bar', { name: string; months: number[]; type: string }[]>[]
 >('/api/ingredients/seasonals', {
 	method: 'GET',
+	immediate: false,
 	onResponseError({ response }) {
 		throw showError({
 			statusCode: response.status,
@@ -46,6 +57,8 @@ const { data: datasetsFetch } = await useFetch<
 		});
 	},
 });
+
+await execute();
 
 const chartOptions: ChartOptions<'bar'> = {
 	maintainAspectRatio: false,
@@ -101,7 +114,7 @@ const chartOptions: ChartOptions<'bar'> = {
 	},
 };
 
-const data: ChartData<'bar'> = {
+let data: ChartData<'bar'> = {
 	datasets: datasetsFetch.value,
 };
 </script>

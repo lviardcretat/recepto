@@ -4,73 +4,109 @@ import type { IconsGridItem, SelectItem } from '~/global/types';
 
 const store = useFiltersStore();
 
-const ustensils: SelectItem[] = await mapSelectItems(
-	'ustensils',
-	DataType.Ustensil,
-);
-const ingredients: SelectItem[] = await mapSelectItems(
-	'ingredients',
-	DataType.Ingredient,
-);
-const mealTypes: SelectItem[] = await mapSelectItems(
-	'mealTypes',
-	DataType.MealType,
-);
-const dishTypes: SelectItem[] = await mapSelectItems(
-	'dishTypes',
-	DataType.DishType,
-);
-const allergens: IconsGridItem[] = await mapIconsGridItems(
-	'allergens',
-	DataType.Allergen,
-);
+const ustensils = ref<SelectItem[]>([]);
+const ingredients = ref<SelectItem[]>([]);
+const mealTypes = ref<SelectItem[]>([]);
+const dishTypes = ref<SelectItem[]>([]);
+const allergens = ref<IconsGridItem[]>([]);
 
-async function mapSelectItems(
-	name: string,
+const fetchUstensils = useFetch('/api/ustensils/all', {
+	method: 'GET',
+	watch: false,
+});
+const fetchIngredients = useFetch('/api/ingredients/all', {
+	method: 'GET',
+	watch: false,
+});
+const fetchMealTypes = useFetch('/api/mealTypes/all', {
+	method: 'GET',
+	watch: false,
+});
+const fetchDishTypes = useFetch('/api/dishTypes/all', {
+	method: 'GET',
+	watch: false,
+});
+const fetchAllergens = useFetch('/api/allergens/all', {
+	method: 'GET',
+	watch: false,
+});
+
+watchEffect(() => {
+	ingredients.value = mapSelectItems(
+		fetchIngredients.data.value,
+		DataType.Ustensil,
+		ustensils.value,
+	);
+	ustensils.value = mapSelectItems(
+		fetchUstensils.data.value,
+		DataType.Ustensil,
+		ustensils.value,
+	);
+	mealTypes.value = mapSelectItems(
+		fetchMealTypes.data.value,
+		DataType.MealType,
+		mealTypes.value,
+	);
+	dishTypes.value = mapSelectItems(
+		fetchDishTypes.data.value,
+		DataType.DishType,
+		dishTypes.value,
+	);
+	allergens.value = mapIconsGridItems(
+		fetchAllergens.data.value,
+		DataType.Allergen,
+		allergens.value,
+	);
+});
+
+useListen('ustensil:created', async () => {
+	await fetchUstensils.refresh();
+});
+
+useListen('ingredient:created', async () => {
+	await fetchIngredients.refresh();
+});
+
+function mapSelectItems(
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	items: any,
 	dataType: DataType,
-): Promise<SelectItem[]> {
-	const { data: items } = await useFetch(`/api/${name}/all`, {
-		transform: (items) => {
-			return items.map((item) => ({
+	oldItems: SelectItem[],
+): SelectItem[] {
+	return (
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		items?.map((item: any) => {
+			const existingItem = oldItems.find((oldItem) => oldItem.id === item.id);
+			return {
 				id: item.id,
 				name: item.name,
-				wanted: false,
-				notWanted: false,
+				wanted: existingItem ? existingItem.wanted : false,
+				notWanted: existingItem ? existingItem.notWanted : false,
 				type: dataType,
-			}));
-		},
-		onResponseError({ response }) {
-			throw showError({
-				statusCode: response.status,
-				statusMessage: response.statusText,
-			});
-		},
-	});
-	return items.value ?? [];
+			};
+		}) ?? []
+	);
 }
 
-async function mapIconsGridItems(
-	name: string,
+function mapIconsGridItems(
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	items: any,
 	dataType: DataType,
-): Promise<IconsGridItem[]> {
-	const { data: items } = await useFetch(`/api/${name}/all`, {
-		transform: (items) => {
-			return items.map((item) => ({
+	oldItems: IconsGridItem[],
+): IconsGridItem[] {
+	return (
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		items?.map((item: any) => {
+			const existingItem = oldItems.find((oldItem) => oldItem.id === item.id);
+			return {
 				id: item.id,
 				name: item.name,
 				icon: 'vscode-icons:default-file',
-				active: false,
+				active: existingItem ? existingItem.active : false,
 				type: dataType,
-			}));
-		},
-		onResponseError({ response }) {
-			throw showError({
-				statusCode: response.status,
-				statusMessage: response.statusText,
-			});
-		},
-	});
-	return items.value ?? [];
+			};
+		}) ?? []
+	);
 }
 
 let accordionKey = ref(0);
@@ -80,13 +116,15 @@ const inRecipesPage = computed(() => {
 });
 const items = ref([
 	{
-		label: 'ingredients',
+		label: 'ingredient',
+		pluralTranslation: true,
 		icon: 'fa6-solid:carrot',
 		slot: 'select',
 		items: ingredients,
 	},
 	{
-		label: 'ustensils',
+		label: 'ustensil',
+		pluralTranslation: true,
 		icon: 'solar:ladle-bold',
 		slot: 'select',
 		items: ustensils,
@@ -153,7 +191,7 @@ watch(
 						<template #leading>
 							<UIcon :name="item.icon" class="w-4 h-4 text-gray-900 dark:text-white" />
 						</template>
-						<span class="truncate">{{ $t(item.label) }}</span>
+						<span class="truncate">{{ $t(item.label, item.pluralTranslation ? 2 : 1) }}</span>
 						<template #trailing>
 							<UIcon
 								name="i-heroicons-chevron-right-20-solid"

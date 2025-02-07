@@ -68,7 +68,7 @@ const cards = [
 	<UDashboardPage class="h-full">
 		<MainSlideover></MainSlideover>
 		<UDashboardPanel grow>
-			<UDashboardNavbar :title="$t('recipes')">
+			<UDashboardNavbar :title="$t('recipe', 2)">
 				<template #right>
 					<TranslationSelect></TranslationSelect>
 					<UColorModeButton />

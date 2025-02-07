@@ -21,8 +21,6 @@ const props = defineProps<{
 			<h1 class="name text-3xl text-center mb-6 mt-6">{{ props.name }}</h1>
 			<img src="~/assets/img/lasagnes.jpg" />
 		</template>
-
-
         <div class="data">
 			<div class="icons flex justify-around items-center">
 				<div class="peopleNumber flex justify-around items-center gap-1">
@@ -44,7 +42,6 @@ const props = defineProps<{
 			</div>
             <p class="mt-3 ellipsis h-20">{{ props.description }}</p>
         </div>
-
 		<template #footer>
 			<div class="footer flex justify-between items-center">
 				<p>{{ $t('createdBy', { username: props.fullName })}}</p>

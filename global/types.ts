@@ -1,5 +1,5 @@
 import type { SerializeObject } from 'nitropack';
-import type { Prisma, User } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import type { DataType } from './enums';
 import type { FilterSelectItem } from './validationSchemas';
 

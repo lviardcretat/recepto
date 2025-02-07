@@ -1,10 +1,11 @@
-export default defineI18nLocale(async (locale) => {
+export default defineI18nLocale(async () => {
 	return {
 		allergenFree: 'Allergen-free',
 		allergens: 'Allergens',
 		april: 'April',
 		august: 'August',
 		categoriesCreated: 'Categories created',
+		category: 'Category | Categories',
 		createdBy: 'Created by {username}',
 		dashboard: 'Dashboard',
 		december: 'December',
@@ -15,7 +16,7 @@ export default defineI18nLocale(async (locale) => {
 		findRecipe: 'Search for a recipe...',
 		fromTo: '{from} to {to}',
 		here: "It's over here!",
-		ingredients: 'Ingredients',
+		ingredient: 'Ingredient | Ingredients',
 		inspiration: 'Looking for inspiration?',
 		january: 'January',
 		july: 'July',
@@ -29,7 +30,7 @@ export default defineI18nLocale(async (locale) => {
 		plannedMeals: 'Recipes planned',
 		preparationSteps: 'Preparation steps',
 		schedule: 'Planning',
-		recipes: 'Recipes',
+		recipe: 'Recipe | Recipes',
 		recipesCreated: 'Recipes created',
 		recipesFound: 'no recipe found | 1 recipe found | {count} recipes found',
 		registeredMembersThanks: 'Registered members thanks to you',
@@ -40,6 +41,10 @@ export default defineI18nLocale(async (locale) => {
 		settings: 'Settings',
 		shoppingList: 'Shopping list',
 		strokesPerformed: 'Strokes performed',
-		ustensils: 'Utensils',
+		ustensil: 'Ustensil | Ustensils',
+		zodErrors: {
+			duplicateIngredients: 'The same ingredient cannot be duplicated.',
+			iPositiveInteger: 'The id must be a positive integer.',
+		},
 	};
 });
