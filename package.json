@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"prisma": {
-		"seed": "npx prisma db seed"
+		"seed": "tsx prisma/seed/seed.ts"
 	},
 	"scripts": {
 		"build": "npx prisma generate && nuxt build",
@@ -45,8 +45,8 @@
 		"@commitlint/cli": "^19.7.1",
 		"@commitlint/config-conventional": "^19.7.1",
 		"@mermaid-js/mermaid-cli": "^11.4.2",
-		"@prisma/client": "5.22.0",
 		"@prisma/nuxt": "^0.0.35",
+		"@prisma/client": "5.22.0",
 		"@types/node": "^22.13.1",
 		"autoprefixer": "^10.4.20",
 		"conventional-changelog-atom": "^5.0.0",

@@ -14,7 +14,6 @@ CREATE TABLE "Ingredient" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "foodTypeId" INTEGER NOT NULL,
-    "icon" TEXT,
     "seasonalMonths" JSONB NOT NULL,
     "createdById" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
