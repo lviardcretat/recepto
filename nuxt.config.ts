@@ -6,7 +6,8 @@ export default defineNuxtConfig({
 				extends: ['@nuxt/ui-pro'],
 				nitro: {
 					experimental: {
-					  wasm: true
+					  wasm: true,
+					  openAPI: true
 					}
 				  },
 				vite: {
