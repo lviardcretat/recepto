@@ -11,6 +11,7 @@ export default defineNuxtConfig({
 		'@nuxt/ui',
 		'nuxt-swiper',
 		'@nuxtjs/i18n',
+		'@nuxthub/core',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
