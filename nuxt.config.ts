@@ -7,12 +7,12 @@ export default defineNuxtConfig({
 	modules: [
 		'@nuxt/image',
 		'@nuxt/ui',
-		'nuxt-zod-i18n',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@prisma/nuxt',
 		'nuxt-swiper',
 		'@nuxthub/core',
+		'nuxt-zod-i18n',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
