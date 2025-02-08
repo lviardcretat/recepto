@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { Recipe } from '~/global/types';
 import { formatDuration } from '~/global/utils';
 
 const props = defineProps<{
@@ -20,7 +19,7 @@ const { data: recipeFetch } = await useFetch(
 		},
 	},
 );
-const recipe: Recipe = recipeFetch.value as unknown as Recipe;
+const recipe = recipeFetch.value as unknown as any;
 const ingredients = ref(
 	recipe.ingredients.map((ingredient) => ({
 		name: ingredient.ingredient.name,

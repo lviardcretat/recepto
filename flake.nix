@@ -5,11 +5,14 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: let
     	pkgs = nixpkgs.legacyPackages.${system};
+		prismaFixed = pkgs.prisma.overrideAttrs (oldAttrs: {
+			dontCheckForBrokenSymlinks = true;
+		});
     in {
       	devShell = pkgs.mkShell {
 			nativeBuildInputs = [ pkgs.bashInteractive ];
 			buildInputs = with pkgs; [
-				prisma
+				prismaFixed
 				biome
 				lefthook
 				nodejs
@@ -18,7 +21,7 @@
 				prisma-engines
 			];
 			shellHook = with pkgs; ''
-				export PRISMA_MIGRATION_ENGINE_BINARY="${prisma-engines}/bin/migration-engine"
+				export PRISMA_SCHEMA_ENGINE_BINARY="${prisma-engines}/bin/schema-engine"
 				export PRISMA_QUERY_ENGINE_BINARY="${prisma-engines}/bin/query-engine"
 				export PRISMA_QUERY_ENGINE_LIBRARY="${prisma-engines}/lib/libquery_engine.node"
 				export PRISMA_INTROSPECTION_ENGINE_BINARY="${prisma-engines}/bin/introspection-engine"

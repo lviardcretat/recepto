@@ -1,16 +1,15 @@
 
 <script setup lang="ts">
-import type { RecipeWithIngredients } from '~/global/types';
 import { formatDuration } from '~/global/utils';
 
 const props = defineProps<{
-	name: RecipeWithIngredients['name'];
-	description: RecipeWithIngredients['description'];
-	peopleNumber: RecipeWithIngredients['peopleNumber'];
-	preparationTime: RecipeWithIngredients['preparationTime'];
-	cookingTime: RecipeWithIngredients['cookingTime'];
-	restTime: RecipeWithIngredients['restTime'];
-	createdAt: RecipeWithIngredients['createdAt'];
+	name: any['name'];
+	description: any['description'];
+	peopleNumber: any['peopleNumber'];
+	preparationTime: any['preparationTime'];
+	cookingTime: any['cookingTime'];
+	restTime: any['restTime'];
+	createdAt: any['createdAt'];
 	fullName: string;
 }>();
 </script>

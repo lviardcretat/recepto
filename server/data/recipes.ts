@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import type { Recipe, RecipesWithLessData } from '~/global/types';
+import type { RecipesWithLessData } from '~/global/types';
 import type {
 	FilterSelectItem,
 	RecipesFilter,
@@ -56,7 +56,7 @@ export async function getRecipes() {
 	return recipes;
 }
 
-export async function getRecipe(id: number): Promise<Recipe | null> {
+export async function getRecipe(id: number) {
 	const recipe = await prisma.recipe.findUnique({
 		where: {
 			id: id,

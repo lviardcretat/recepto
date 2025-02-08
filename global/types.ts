@@ -1,5 +1,4 @@
 import type { SerializeObject } from 'nitropack';
-import type { Prisma } from '@prisma/client';
 import type { DataType } from './enums';
 import type { FilterSelectItem } from './validationSchemas';
 
@@ -26,76 +25,6 @@ export type IconsGridItem = {
 	active: boolean;
 	type: DataType;
 };
-
-/**
- * @description Ingredient model including seasonal months and foodType
- * @type IngredientsSeasonal
- */
-export type IngredientsSeasonal = Prisma.IngredientGetPayload<{
-	select: {
-		name: true;
-		seasonalMonths: true;
-		foodType: { select: { name: true } };
-	};
-}>;
-
-/**
- * @description Recipe model including ingredients
- * @type RecipeWithIngredients
- */
-export type RecipeWithIngredients = Prisma.RecipeGetPayload<{
-	include: { ingredients: true };
-}>;
-
-/**
- * @description Recipe model including ingredients
- * @type RecipeWithIngredients
- */
-export type Recipe = Prisma.RecipeGetPayload<{
-	include: {
-		ingredients: {
-			select: {
-				ingredient: {
-					select: {
-						name: true;
-					};
-				};
-				unit: {
-					select: {
-						shortForm: true;
-					};
-				};
-				quantity: true;
-			};
-		};
-		allergens: {
-			select: {
-				id: true;
-				name: true;
-				icon: true;
-			};
-		};
-		ustensils: {
-			select: {
-				id: true;
-				name: true;
-			};
-		};
-		sequences: {
-			select: {
-				id: true;
-				title: true;
-				description: true;
-			};
-		};
-		createdBy: {
-			select: {
-				firstname: true;
-				lastname: true;
-			};
-		};
-	};
-}>;
 
 /**
  * @description Recipe custom model
