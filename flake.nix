@@ -1,6 +1,6 @@
 {
-  description = "A prisma recepto project";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+  description = "A prisma test project";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/master";
   inputs.flake-utils.url = "github:numtide/flake-utils";
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -18,7 +18,7 @@
 				prisma-engines
 			];
 			shellHook = with pkgs; ''
-				export PRISMA_SCHEMA_ENGINE_BINARY="${prisma-engines}/bin/schema-engine"
+				export PRISMA_MIGRATION_ENGINE_BINARY="${prisma-engines}/bin/migration-engine"
 				export PRISMA_QUERY_ENGINE_BINARY="${prisma-engines}/bin/query-engine"
 				export PRISMA_QUERY_ENGINE_LIBRARY="${prisma-engines}/lib/libquery_engine.node"
 				export PRISMA_INTROSPECTION_ENGINE_BINARY="${prisma-engines}/bin/introspection-engine"
