@@ -25,7 +25,7 @@ A solution for storing a large number of recipes and ingredients for daily use (
 ## Project progress
 
 <p>
-To see the progress of the project, click <a href="https://huly.app/workbench/main-6710c480-2080474b70-2526f7/tracker/6710c5c03cedb5f95b730b02/issues">here</a>
+To see the progress of the project, click <a href="https://volta.net/embed/eyJ2aWV3IjoiYm9hcmQiLCJib2FyZFN0YXR1c2VzIjpbInRvZG8iLCJpbl9wcm9ncmVzcyIsImRvbmUiXSwiYm9hcmRMaW5rZWRQcnMiOnRydWUsImxpc3RHcm91cCI6InN0YXR1cyIsImxpc3RPcmRlciI6ImNyZWF0ZWRfYXQiLCJ0aW1lbGluZVpvb20iOiJtb250aCIsInRpbWVsaW5lT3JkZXIiOiJzdGF0ZSIsInRpbWVsaW5lRGlzcGxheSI6ImFsbF9taWxlc3RvbmVzIiwiZmlsdGVycyI6e30sIm93bmVyIjoibHZpYXJkY3JldGF0IiwibmFtZSI6InJlY2VwdG8ifQ==">here</a>
 </p>
 
 ## Features

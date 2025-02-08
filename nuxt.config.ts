@@ -12,6 +12,7 @@ export default defineNuxtConfig({
 		'@pinia/nuxt',
 		'@prisma/nuxt',
 		'nuxt-swiper',
+		'@nuxthub/core',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
