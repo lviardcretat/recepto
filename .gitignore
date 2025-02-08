@@ -35,3 +35,5 @@ nix-profile*
 /.vs
 .direnv
 flake.lock
+
+.wrangler
