@@ -12,7 +12,6 @@ export const recipesCategory = sqliteTable('recipesCategory', {
 	dishTypeId: integer('dishTypeId')
 		.notNull()
 		.references(() => dishType.id, { onDelete: 'cascade' }),
-
 	createdById: integer('createdById')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),

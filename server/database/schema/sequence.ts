@@ -11,7 +11,6 @@ export const sequence = sqliteTable('sequence', {
 	recipeId: integer('recipeId')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
-
 	createdById: integer('createdById')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),

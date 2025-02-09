@@ -9,7 +9,6 @@ export const season = sqliteTable('season', {
 	name: text('name').notNull(),
 	start: integer('start').notNull(),
 	end: integer('end').notNull(),
-
 	createdById: integer('createdById')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),

@@ -6,12 +6,15 @@
 		"build": "nuxt build",
 		"dev": "nuxt dev",
 		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit generate",
+		"db:push": "drizzle-kit push",
 		"generate": "nuxt generate",
 		"postinstall": "nuxt prepare",
 		"prepare": "husky",
 		"preview": "nuxt preview"
 	},
 	"dependencies": {
+		"@libsql/client": "^0.14.0",
 		"@nuxt/image": "^1.9.0",
 		"@nuxt/ui": "^2.21.0",
 		"@nuxt/ui-pro": "^1.7.0",
@@ -23,6 +26,7 @@
 		"chart.js": "^4.4.7",
 		"chartjs-plugin-datalabels": "^2.2.0",
 		"date-fns": "^4.1.0",
+		"dotenv": "^16.4.7",
 		"drizzle-orm": "^0.39.2",
 		"drizzle-zod": "^0.7.0",
 		"mitt": "^3.0.1",

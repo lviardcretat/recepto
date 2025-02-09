@@ -8,7 +8,6 @@ export const unit = sqliteTable('unit', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	name: text('name').notNull(),
 	shortForm: text('shortForm').notNull(),
-
 	createdById: integer('createdById')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),

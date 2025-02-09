@@ -7,7 +7,6 @@ import { user } from './user';
 export const mealType = sqliteTable('mealType', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	name: text('name').notNull(),
-
 	createdById: integer('createdById')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),

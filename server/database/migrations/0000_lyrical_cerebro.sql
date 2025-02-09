@@ -3,8 +3,8 @@ CREATE TABLE `allergen` (
 	`name` text NOT NULL,
 	`icon` text,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -20,8 +20,8 @@ CREATE TABLE `dishType` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -29,8 +29,8 @@ CREATE TABLE `foodType` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -40,8 +40,8 @@ CREATE TABLE `ingredient` (
 	`foodTypeId` integer NOT NULL,
 	`seasonalMonths` text NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`foodTypeId`) REFERENCES `foodType`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -50,8 +50,8 @@ CREATE TABLE `mealType` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -75,8 +75,8 @@ CREATE TABLE `recipe` (
 	`seasonId` integer NOT NULL,
 	`recipesCategoryId` integer NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`seasonId`) REFERENCES `season`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`recipesCategoryId`) REFERENCES `recipesCategory`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
@@ -106,8 +106,8 @@ CREATE TABLE `recipesCategory` (
 	`name` text NOT NULL,
 	`dishTypeId` integer NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`dishTypeId`) REFERENCES `dishType`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -118,8 +118,8 @@ CREATE TABLE `season` (
 	`start` integer NOT NULL,
 	`end` integer NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -129,8 +129,8 @@ CREATE TABLE `sequence` (
 	`description` text NOT NULL,
 	`recipeId` integer NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`recipeId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -140,8 +140,8 @@ CREATE TABLE `unit` (
 	`name` text NOT NULL,
 	`shortForm` text NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -153,8 +153,8 @@ CREATE TABLE `user` (
 	`lastname` text NOT NULL,
 	`role` text NOT NULL,
 	`avatar` text NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint
@@ -162,7 +162,7 @@ CREATE TABLE `ustensil` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
-	`createdAt` integer DEFAULT (currentTimestamp) NOT NULL,
-	`updatedAt` integer DEFAULT (currentTimestamp) NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
