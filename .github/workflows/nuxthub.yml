@@ -28,10 +28,12 @@ jobs:
         run: pnpm install
 
       - name: Build application
-        run: pnpm build
+        env:
+          NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
+        run: pnpm run build
 
       - name: Deploy to NuxtHub
         uses: nuxt-hub/action@v1
         id: deploy
         with:
-          project-key: recepto-y9ep
+          project-key: recepto-gic5
