@@ -1,15 +1,21 @@
-import type { Prisma } from '@prisma/client';
-import type { RecipesWithLessData } from '~/global/types';
 import type {
 	FilterSelectItem,
 	RecipesFilter,
 } from '~/global/validationSchemas';
-import prisma from '~/lib/prisma';
+import type {
+	AllergenToRecipe,
+	Recipe,
+	RecipeInsert,
+	RecipeToUstensil,
+} from '../utils/drizzle';
+import { dateIntoDayNumber, QueryToNumber } from '../utils/number';
+import { exists, gte, inArray, lte, not } from 'drizzle-orm';
+import { areAllEmpty } from '../utils/filter';
 
 export async function postRecipe(
 	name: string,
 	description: string,
-	tips: string,
+	tips: string | undefined,
 	peopleNumber: number,
 	preparationTime: number,
 	cookingTime: number,
@@ -19,130 +25,130 @@ export async function postRecipe(
 	allergensIds: number[],
 	ustensilIds: number[],
 	createdById: number,
-) {
-	const allergens: Array<Prisma.AllergenWhereUniqueInput> = Array.from(
-		allergensIds,
-		(allergen) => ({ id: allergen }),
-	);
-	const ustensils: Array<Prisma.UstensilWhereUniqueInput> = Array.from(
-		ustensilIds,
-		(ustensil) => ({ id: ustensil }),
-	);
-	const recipe = await prisma.recipe.create({
-		data: {
-			name: name,
-			description: description,
-			tips: tips,
-			peopleNumber: peopleNumber,
-			preparationTime: preparationTime,
-			cookingTime: cookingTime,
-			restTime: restTime,
-			seasonId: seasonId,
-			recipesCategoryId: recipesCategoryId,
-			allergens: {
-				connect: allergens,
-			},
-			ustensils: {
-				connect: ustensils,
-			},
-			createdById: createdById,
-		},
-	});
+): Promise<Recipe> {
+	const recipeInsert: RecipeInsert = {
+		name: name,
+		description: description,
+		tips: tips,
+		peopleNumber: peopleNumber,
+		preparationTime: preparationTime,
+		cookingTime: cookingTime,
+		restTime: restTime,
+		seasonId: seasonId,
+		recipesCategoryId: recipesCategoryId,
+		createdById: createdById,
+	};
+	const recipe: Recipe = await useDrizzle()
+		.insert(tables.recipe)
+		.values(recipeInsert)
+		.returning()
+		.get();
+
+	for (const ustensilId of ustensilIds) {
+		const recipeToUstensil: RecipeToUstensil = {
+			recipeId: recipe.id,
+			ustensilId: ustensilIds[ustensilId],
+		};
+		await useDrizzle()
+			.insert(tables.recipeToUstensil)
+			.values(recipeToUstensil)
+			.returning()
+			.get();
+	}
+	for (const allergensId of allergensIds) {
+		const allergenToRecipe: AllergenToRecipe = {
+			recipeId: recipe.id,
+			allergenId: allergensIds[allergensId],
+		};
+		await useDrizzle()
+			.insert(tables.allergenToRecipe)
+			.values(allergenToRecipe)
+			.returning()
+			.get();
+	}
 	return recipe;
 }
 
-export async function getRecipes() {
-	const recipes = await prisma.recipe.findMany();
+export async function getRecipes(): Promise<Recipe[]> {
+	const recipes: Recipe[] = await useDrizzle()
+		.select()
+		.from(tables.recipe)
+		.all();
 	return recipes;
 }
 
+// TODO à voir
 export async function getRecipe(id: number) {
-	const recipe = await prisma.recipe.findUnique({
-		where: {
-			id: id,
-		},
-		include: {
-			ingredients: {
-				select: {
-					ingredient: {
-						select: {
-							name: true,
-						},
-					},
-					unit: {
-						select: {
-							shortForm: true,
-						},
-					},
-					quantity: true,
-				},
-			},
-			allergens: {
-				select: {
-					id: true,
-					name: true,
-					icon: true,
-				},
-			},
-			ustensils: {
-				select: {
-					id: true,
-					name: true,
-				},
-			},
-			sequences: {
-				select: {
-					id: true,
-					title: true,
-					description: true,
-				},
-			},
-			createdBy: {
-				select: {
-					firstname: true,
-					lastname: true,
-				},
-			},
-		},
-	});
-	return recipe ?? null;
+	const recipes = await useDrizzle()
+		.select({
+			id: tables.recipe.id,
+			name: tables.recipe.name,
+			// Ingredients
+			ingredientId: tables.recipeIngredient.id,
+			ingredientName: tables.ingredient.name,
+			unitShortForm: tables.unit.shortForm,
+			quantity: tables.recipeIngredient.quantity,
+			// Allergens
+			allergenId: tables.allergen.id,
+			allergenName: tables.allergen.name,
+			allergenIcon: tables.allergen.icon,
+			// Ustensils
+			ustensilId: tables.ustensil.id,
+			ustensilName: tables.ustensil.name,
+			// Sequences
+			sequenceId: tables.sequence.id,
+			sequenceTitle: tables.sequence.title,
+			sequenceDescription: tables.sequence.description,
+			// CreatedBy
+			createdByFirstname: tables.user.firstname,
+			createdByLastname: tables.user.lastname,
+		})
+		.from(tables.recipe)
+		.leftJoin(
+			tables.recipeIngredient,
+			eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+		)
+		.leftJoin(
+			tables.ingredient,
+			eq(tables.ingredient.id, tables.recipeIngredient.ingredientId),
+		)
+		.leftJoin(
+			tables.allergenToRecipe,
+			eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
+		)
+		.leftJoin(
+			tables.allergen,
+			eq(tables.allergen.id, tables.allergenToRecipe.allergenId),
+		)
+		.leftJoin(
+			tables.recipeToUstensil,
+			eq(tables.recipe.id, tables.recipeToUstensil.recipeId),
+		)
+		.leftJoin(
+			tables.ustensil,
+			eq(tables.ustensil.id, tables.recipeToUstensil.ustensilId),
+		)
+		.leftJoin(tables.sequence, eq(tables.sequence.recipeId, tables.recipe.id))
+		.leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
+		.where(eq(tables.recipe.id, id))
+		.all();
+	return recipes;
 }
 
-export async function getRecipesWithoutFilter(
-	recipeCategoryId: number,
-): Promise<RecipesWithLessData> {
-	const recipes = await prisma.recipesCategory.findUnique({
-		where: {
-			id: recipeCategoryId,
-		},
-		select: {
-			recipes: {
-				select: {
-					id: true,
-					name: true,
-					description: true,
-					cookingTime: true,
-					restTime: true,
-					preparationTime: true,
-					peopleNumber: true,
-					seasonId: true,
-					createdBy: {
-						select: {
-							firstname: true,
-							lastname: true,
-						},
-					},
-					createdAt: true,
-				},
-			},
-		},
-	});
-	return recipes ?? { recipes: [] };
+export async function getRecipesWithoutFilter(recipeCategoryId: number) {
+	const recipes = await useDrizzle()
+		.select()
+		.from(tables.recipe)
+		.leftJoin(
+			tables.recipesCategory,
+			eq(tables.recipesCategory.id, tables.recipe.recipesCategoryId),
+		)
+		.where(eq(tables.recipesCategory.id, recipeCategoryId))
+		.all();
+	return recipes;
 }
 
-export async function getRecipesFiltered(
-	query: RecipesFilter,
-): Promise<RecipesWithLessData[]> {
+export async function getRecipesFiltered(query: RecipesFilter) {
 	const ingredientsIds = query.ingredients;
 	const ustensilsIds = query.ustensils;
 	const seasonalRecipes = query.seasonalRecipes === true;
@@ -178,143 +184,148 @@ export async function getRecipesFiltered(
 		];
 	}
 
-	return await prisma.recipesCategory.findMany({
-		where: {
-			id: recipeCategoryId,
-			recipes: {
-				some: {
-					AND: [
-						...(seasonalRecipes
-							? [
-									{
-										season: {
-											AND: [
-												{ start: { lte: dateIntoDayNumber() } },
-												{ end: { gte: dateIntoDayNumber() } },
-											],
-										},
-									},
-								]
-							: []),
-						...ingredientsIds.wanted.map((id) => ({
-							ingredients: {
-								some: {
-									ingredientId: id,
-								},
-							},
-						})),
-						{
-							ingredients: {
-								none: {
-									ingredientId: {
-										in: ingredientsIds.notWanted,
-									},
-								},
-							},
-						},
-						...ustensilsIds.wanted.map((id) => ({
-							ustensils: {
-								some: {
-									id: id,
-								},
-							},
-						})),
-						{
-							ustensils: {
-								none: {
-									id: {
-										in: ustensilsIds.notWanted,
-									},
-								},
-							},
-						},
-						...(allergensIds.length > 0
-							? [
-									{
-										NOT: {
-											allergens: {
-												some: {
-													id: {
-														in: QueryToNumber(allergensIds),
-													},
-												},
-											},
-										},
-									},
-								]
-							: []),
-					],
-				},
-			},
-		},
-		select: {
-			recipes: {
-				select: {
-					id: true,
-					name: true,
-					description: true,
-					cookingTime: true,
-					restTime: true,
-					preparationTime: true,
-					peopleNumber: true,
-					seasonId: true,
-					createdAt: true,
-					createdBy: {
-						select: {
-							firstname: true,
-							lastname: true,
-						},
-					},
-				},
-			},
-		},
-	});
-}
+	const conditions = [
+		eq(tables.recipesCategory.id, recipeCategoryId),
+		...(seasonalRecipes
+			? [
+					exists(
+						useDrizzle()
+							.select()
+							.from(tables.season)
+							.where(
+								and(
+									eq(tables.season.id, tables.recipe.seasonId),
+									lte(tables.season.start, dateIntoDayNumber()),
+									gte(tables.season.end, dateIntoDayNumber()),
+								),
+							),
+					),
+				]
+			: []),
+		...(ingredientsIds.wanted.length > 0
+			? [
+					exists(
+						useDrizzle()
+							.select()
+							.from(tables.recipeIngredient)
+							.where(
+								and(
+									eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+									inArray(
+										tables.recipeIngredient.ingredientId,
+										ingredientsIds.wanted,
+									),
+								),
+							),
+					),
+				]
+			: []),
+		not(
+			exists(
+				useDrizzle()
+					.select()
+					.from(tables.recipeIngredient)
+					.where(
+						and(
+							eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+							inArray(
+								tables.recipeIngredient.ingredientId,
+								ingredientsIds.notWanted,
+							),
+						),
+					),
+			),
+		),
+		...(ustensilsIds.wanted.length > 0
+			? [
+					exists(
+						useDrizzle()
+							.select()
+							.from(tables.recipeToUstensil)
+							.where(
+								and(
+									eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
+									inArray(
+										tables.recipeToUstensil.ustensilId,
+										ustensilsIds.wanted,
+									),
+								),
+							),
+					),
+				]
+			: []),
+		not(
+			exists(
+				useDrizzle()
+					.select()
+					.from(tables.recipeToUstensil)
+					.where(
+						and(
+							eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
+							inArray(
+								tables.recipeToUstensil.ustensilId,
+								ustensilsIds.notWanted,
+							),
+						),
+					),
+			),
+		),
+		...(allergensIds.length > 0
+			? [
+					not(
+						exists(
+							useDrizzle()
+								.select()
+								.from(tables.allergenToRecipe)
+								.where(
+									and(
+										eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
+										inArray(
+											tables.allergenToRecipe.allergenId,
+											QueryToNumber(allergensIds),
+										),
+									),
+								),
+						),
+					),
+				]
+			: []),
+	];
 
-/**
- * Transform a query string to an array of numbers
- *
- * @param query - The query string | string[] | undefined
- *
- * @returns An array of numbers
- */
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-function QueryToNumber(query: any): number[] {
-	return Array.isArray(query)
-		? query.map(Number)
-		: query
-			? [Number(query)]
-			: [];
-}
-
-/**
- * Calculate the day of the year from 1 to 366
- *
- * @returns the day based on the today's date
- */
-function dateIntoDayNumber(): number {
-	const date = new Date();
-	return (
-		(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
-			Date.UTC(date.getFullYear(), 0, 0)) /
-		24 /
-		60 /
-		60 /
-		1000
-	);
-}
-
-/**
- * Checks if all the filters lists are empty or undefined
- *
- * @param filtersListsIds - All the filters lists
- *
- * @returns True if all the filters lists are empty
- */
-function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
-	return filtersListsIds.every(
-		(list) =>
-			(list.wanted === undefined || list.wanted.length === 0) &&
-			(list.notWanted === undefined || list.notWanted.length === 0),
-	);
+	const recipes = await useDrizzle()
+		.select()
+		.from(tables.recipe)
+		.leftJoin(
+			tables.recipesCategory,
+			eq(tables.recipesCategory.id, tables.recipe.recipesCategoryId),
+		)
+		.leftJoin(
+			tables.recipeIngredient,
+			eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+		)
+		.leftJoin(
+			tables.ingredient,
+			eq(tables.ingredient.id, tables.recipeIngredient.ingredientId),
+		)
+		.leftJoin(
+			tables.allergenToRecipe,
+			eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
+		)
+		.leftJoin(
+			tables.allergen,
+			eq(tables.allergen.id, tables.allergenToRecipe.allergenId),
+		)
+		.leftJoin(
+			tables.recipeToUstensil,
+			eq(tables.recipe.id, tables.recipeToUstensil.recipeId),
+		)
+		.leftJoin(
+			tables.ustensil,
+			eq(tables.ustensil.id, tables.recipeToUstensil.ustensilId),
+		)
+		.leftJoin(tables.sequence, eq(tables.sequence.recipeId, tables.recipe.id))
+		.leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
+		.where(and(...conditions))
+		.all();
+	return recipes;
 }

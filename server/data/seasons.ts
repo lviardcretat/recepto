@@ -1,15 +1,18 @@
-import prisma from '~/lib/prisma';
+import type { Season } from '../utils/drizzle';
 
-export async function getSeasons() {
-	const seasons = await prisma.season.findMany();
+export async function getSeasons(): Promise<Season[]> {
+	const seasons: Season[] = await useDrizzle()
+		.select()
+		.from(tables.season)
+		.all();
 	return seasons;
 }
 
-export async function getSeason(id: number) {
-	const season = await prisma.season.findUnique({
-		where: {
-			id: id,
-		},
-	});
+export async function getSeason(id: number): Promise<Season | undefined> {
+	const season: Season | undefined = await useDrizzle()
+		.select()
+		.from(tables.season)
+		.where(eq(tables.season.id, id))
+		.get();
 	return season;
 }

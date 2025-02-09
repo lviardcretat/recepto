@@ -1,4 +1,4 @@
-import { getRecipesCategoriesFiltered } from '~/server/data/recipesCategories';
+//import { getRecipesCategoriesFiltered } from '~/server/data/recipesCategories';
 import {
 	recipesCategoriesFilterSchema,
 	type RecipesCategoriesFilter,
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 		event,
 		recipesCategoriesFilterSchema.parse,
 	);
-	const recipesCategoriesFiltered = await getRecipesCategoriesFiltered(query);
+	const recipesCategoriesFiltered = null; //await getRecipesCategoriesFiltered(query);
 	if (!recipesCategoriesFiltered) {
 		throw createError({
 			statusCode: 404,

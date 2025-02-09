@@ -2,19 +2,14 @@
 	"name": "nuxt-app",
 	"private": true,
 	"type": "module",
-	"prisma": {
-		"seed": "tsx prisma/seed/seed.ts"
-	},
 	"scripts": {
 		"build": "nuxt build",
 		"dev": "nuxt dev",
+		"db:generate": "drizzle-kit generate",
 		"generate": "nuxt generate",
-		"migrate": "prisma migrate dev --name init",
 		"postinstall": "nuxt prepare",
 		"prepare": "husky",
-		"preview": "nuxt preview",
-		"reset": "npx prisma db push --force-reset",
-		"seed": "npx prisma db seed"
+		"preview": "nuxt preview"
 	},
 	"dependencies": {
 		"@nuxt/image": "^1.9.0",
@@ -25,16 +20,16 @@
 		"@nuxtjs/tailwindcss": "^6.13.1",
 		"@pinia/nuxt": "^0.9.0",
 		"@popperjs/core": "2.11.8",
-		"@prisma/client": "6.3.0",
 		"chart.js": "^4.4.7",
 		"chartjs-plugin-datalabels": "^2.2.0",
 		"date-fns": "^4.1.0",
+		"drizzle-orm": "^0.39.2",
+		"drizzle-zod": "^0.7.0",
 		"mitt": "^3.0.1",
 		"nuxt": "3.15.4",
 		"nuxt-swiper": "2.0.0-1",
 		"nuxt-zod-i18n": "1.11.5",
 		"pinia": "^2.3.1",
-		"prisma": "6.3.0",
 		"rollup": "4.34.6",
 		"tailwindcss": "^3.4.17",
 		"vite": "6.1.0",
@@ -48,10 +43,10 @@
 		"@commitlint/cli": "^19.7.1",
 		"@commitlint/config-conventional": "^19.7.1",
 		"@mermaid-js/mermaid-cli": "^11.4.2",
-		"@prisma/nuxt": "^0.3.0",
 		"@types/node": "^22.13.1",
 		"autoprefixer": "^10.4.20",
 		"conventional-changelog-atom": "^5.0.0",
+		"drizzle-kit": "^0.30.4",
 		"eslint": "9.20.0",
 		"husky": "^9.1.7",
 		"lefthook": "^1.10.10",
@@ -65,8 +60,5 @@
 		"v-calendar": "^3.1.2",
 		"wrangler": "^3.107.3"
 	},
-	"packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b",
-	"@snaplet/seed": {
-		"config": "prisma/seed/seed.config.ts"
-	}
+	"packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
 }

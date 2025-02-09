@@ -1,7 +1,13 @@
-import prisma from '~/lib/prisma';
+import type {
+	RecipeIngredient,
+	RecipeIngredientInsert,
+} from '../utils/drizzle';
 
-export async function getRecipeIngredients() {
-	const recipeIngredients = await prisma.recipeIngredient.findMany();
+export async function getRecipeIngredients(): Promise<RecipeIngredient[]> {
+	const recipeIngredients: RecipeIngredient[] = await useDrizzle()
+		.select()
+		.from(tables.recipeIngredient)
+		.all();
 	return recipeIngredients;
 }
 
@@ -10,23 +16,28 @@ export async function postRecipeIngredient(
 	quantity: number,
 	unitId: number,
 	recipeId: number,
-) {
-	const recipeIngredient = await prisma.recipeIngredient.create({
-		data: {
-			ingredientId: ingredientId,
-			quantity: quantity,
-			unitId: unitId,
-			recipeId: recipeId,
-		},
-	});
+): Promise<RecipeIngredient> {
+	const recipeIngredientInsert: RecipeIngredientInsert = {
+		ingredientId: ingredientId,
+		quantity: quantity,
+		unitId: unitId,
+		recipeId: recipeId,
+	};
+	const recipeIngredient: RecipeIngredient = await useDrizzle()
+		.insert(tables.recipeIngredient)
+		.values(recipeIngredientInsert)
+		.returning()
+		.get();
 	return recipeIngredient;
 }
 
-export async function getRecipeIngredient(id: number) {
-	const recipeIngredient = await prisma.recipeIngredient.findUnique({
-		where: {
-			id: id,
-		},
-	});
+export async function getRecipeIngredient(
+	id: number,
+): Promise<RecipeIngredient | undefined> {
+	const recipeIngredient: RecipeIngredient | undefined = await useDrizzle()
+		.select()
+		.from(tables.recipeIngredient)
+		.where(eq(tables.recipeIngredient.id, id))
+		.get();
 	return recipeIngredient;
 }

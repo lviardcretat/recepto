@@ -1,102 +1,93 @@
 import type { RecipesCategories } from '~/global/types';
-import type {
-	FilterSelectItem,
-	RecipesCategoriesFilter,
-} from '~/global/validationSchemas';
-import prisma from '~/lib/prisma';
+import type { RecipesCategoriesFilter } from '~/global/validationSchemas';
+import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzle';
+import { exists, like } from 'drizzle-orm';
 
 export async function postRecipesCategory(
 	name: string,
 	dishTypeId: number,
 	createdById: number,
 ) {
-	const recipesCategory = await prisma.recipesCategory.create({
-		data: {
-			name: name,
-			dishTypeId: dishTypeId,
-			createdById: createdById,
-		},
-	});
+	const recipesCategoryInsert: RecipesCategoryInsert = {
+		name: name,
+		dishTypeId: dishTypeId,
+		createdById: createdById,
+	};
+	const recipesCategory: RecipesCategory = await useDrizzle()
+		.insert(tables.recipesCategory)
+		.values(recipesCategoryInsert)
+		.returning()
+		.get();
 	return recipesCategory;
 }
 
-export async function getRecipesCategories() {
-	const recipesCategories = await prisma.recipesCategory.findMany({
-		include: {
-			_count: {
-				select: { recipes: true },
-			},
-		},
-	});
+export async function getRecipesCategories(): Promise<RecipesCategories[]> {
+	const recipesCategories: RecipesCategories[] = await useDrizzle()
+		.select()
+		.from(tables.recipesCategory)
+		.all();
 	return recipesCategories;
 }
 
 export async function getRecipesCategoriesAndRecipesNames(name: string) {
-	const recipesCategories = await prisma.recipesCategory.findMany({
-		where: {
-			OR: [
-				{
-					name: { contains: name },
-				},
-				{
-					recipes: {
-						some: {
-							name: { contains: name },
-						},
-					},
-				},
-			],
-		},
-		orderBy: {
-			name: 'asc',
-		},
-		select: {
-			name: true,
-			id: true,
+	const recipesCategories = await useDrizzle()
+		.select({
+			id: tables.recipesCategory.id,
+			name: tables.recipesCategory.name,
 			recipes: {
-				where: {
-					name: { contains: name },
-				},
-				orderBy: {
-					name: 'asc',
-				},
-				select: {
-					name: true,
-					id: true,
-				},
+				id: tables.recipe.id,
+				name: tables.recipe.name,
 			},
-		},
-	});
+		})
+		.from(tables.recipesCategory)
+		.leftJoin(
+			tables.recipe,
+			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+		)
+		.where(
+			or(
+				like(tables.recipesCategory.name, `%${name}%`),
+				exists(
+					useDrizzle()
+						.select()
+						.from(tables.recipe)
+						.where(
+							and(
+								eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+								like(tables.recipe.name, `%${name}%`),
+							),
+						),
+				),
+			),
+		)
+		.all();
 	return recipesCategories;
 }
 
-export async function getRecipesCategoryName(id: number) {
-	const recipesCategoryName = await prisma.recipesCategory.findUnique({
-		where: {
-			id: id,
-		},
-		select: {
-			name: true,
-		},
-	});
-	return recipesCategoryName;
-}
-
-export async function getRecipesCategory(id: number) {
-	const recipesCategory = await prisma.recipesCategory.findUnique({
-		where: {
-			id: id,
-		},
-		include: {
-			recipes: true,
-			_count: {
-				select: { recipes: true },
-			},
-		},
-	});
+export async function getRecipesCategoryName(
+	id: number,
+): Promise<{ name: string } | undefined> {
+	const recipesCategory: { name: string } | undefined = await useDrizzle()
+		.select({
+			name: tables.recipesCategory.name,
+		})
+		.from(tables.recipesCategory)
+		.where(eq(tables.ingredient.id, id))
+		.get();
 	return recipesCategory;
 }
 
+export async function getRecipesCategory(
+	id: number,
+): Promise<RecipesCategory | undefined> {
+	const recipesCategory: RecipesCategory | undefined = await useDrizzle()
+		.select()
+		.from(tables.recipesCategory)
+		.where(eq(tables.ingredient.id, id))
+		.get();
+	return recipesCategory;
+}
+/*
 export async function getRecipesCategoriesFiltered(
 	query: RecipesCategoriesFilter,
 ): Promise<RecipesCategories[]> {
@@ -200,51 +191,4 @@ export async function getRecipesCategoriesFiltered(
 		},
 	});
 }
-
-/**
- * Transform a query string to an array of numbers
- *
- * @param query - The query string | string[] | undefined
- *
- * @returns An array of numbers
- */
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-function QueryToNumber(query: any): number[] {
-	return Array.isArray(query)
-		? query.map(Number)
-		: query
-			? [Number(query)]
-			: [];
-}
-
-/**
- * Calculate the day of the year from 1 to 366
- *
- * @returns the day based on the today's date
- */
-function dateIntoDayNumber(): number {
-	const date = new Date();
-	return (
-		(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
-			Date.UTC(date.getFullYear(), 0, 0)) /
-		24 /
-		60 /
-		60 /
-		1000
-	);
-}
-
-/**
- * Checks if all the filters lists are empty or undefined
- *
- * @param filtersListsIds - All the filters lists
- *
- * @returns True if all the filters lists are empty
- */
-function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
-	return filtersListsIds.every(
-		(list) =>
-			(list.wanted === undefined || list.wanted.length === 0) &&
-			(list.notWanted === undefined || list.notWanted.length === 0),
-	);
-}
+*/

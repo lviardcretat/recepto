@@ -1,0 +1,72 @@
+import { drizzle } from 'drizzle-orm/d1';
+export { sql, eq, and, or } from 'drizzle-orm';
+import * as userSchema from '../database/schema/user';
+import * as foodTypeSchema from '../database/schema/foodType';
+import * as ingredientSchema from '../database/schema/ingredient';
+import * as recipesCategorySchema from '../database/schema/recipesCategory';
+import * as recipeSchema from '../database/schema/recipe';
+import * as recipeIngredientSchema from '../database/schema/recipeIngredient';
+import * as sequenceSchema from '../database/schema/sequence';
+import * as ustensilSchema from '../database/schema/ustensil';
+import * as seasonSchema from '../database/schema/season';
+import * as unitSchema from '../database/schema/unit';
+import * as mealTypeSchema from '../database/schema/mealType';
+import * as dishTypeSchema from '../database/schema/dishType';
+import * as allergenSchema from '../database/schema/allergen';
+import * as allergenToRecipeSchema from '../database/schema/allergenToRecipe';
+import * as mealTypeToRecipeCategorySchema from '../database/schema/mealTypeToRecipeCategory';
+import * as recipeToUstensilSchema from '../database/schema/recipeToUstensil';
+
+export const schema = {
+	...userSchema,
+	...foodTypeSchema,
+	...ingredientSchema,
+	...recipesCategorySchema,
+	...recipeSchema,
+	...recipeIngredientSchema,
+	...sequenceSchema,
+	...ustensilSchema,
+	...seasonSchema,
+	...unitSchema,
+	...mealTypeSchema,
+	...dishTypeSchema,
+	...allergenSchema,
+	...allergenToRecipeSchema,
+	...mealTypeToRecipeCategorySchema,
+	...recipeToUstensilSchema,
+};
+
+export const tables = schema;
+
+export function useDrizzle() {
+	return drizzle(hubDatabase(), { schema, casing: 'snake_case' });
+}
+
+export type User = typeof schema.user.$inferSelect;
+export type FoodType = typeof schema.foodType.$inferSelect;
+export type Ingredient = typeof schema.ingredient.$inferSelect;
+export type IngredientInsert = typeof schema.ingredient.$inferInsert;
+export type RecipesCategory = typeof schema.recipesCategory.$inferSelect;
+export type RecipesCategoryInsert = typeof schema.recipesCategory.$inferInsert;
+export type Recipe = typeof schema.recipe.$inferSelect;
+export type RecipeInsert = typeof schema.recipe.$inferInsert;
+export type RecipeIngredient = typeof schema.recipeIngredient.$inferSelect;
+export type RecipeIngredientInsert =
+	typeof schema.recipeIngredient.$inferInsert;
+export type Sequence = typeof schema.sequence.$inferSelect;
+export type SequenceInsert = typeof schema.sequence.$inferInsert;
+export type Ustensil = typeof schema.ustensil.$inferSelect;
+export type UstensilInsert = typeof schema.ustensil.$inferInsert;
+export type Season = typeof schema.season.$inferSelect;
+export type Unit = typeof schema.unit.$inferSelect;
+export type MealType = typeof schema.mealType.$inferSelect;
+export type DishType = typeof schema.dishType.$inferSelect;
+export type Allergen = typeof schema.allergen.$inferSelect;
+export type AllergenToRecipe = typeof schema.allergenToRecipe.$inferSelect;
+export type AllergenToRecipeInsert =
+	typeof schema.allergenToRecipe.$inferInsert;
+export type MealTypeToRecipeCategory =
+	typeof schema.mealTypeToRecipeCategory.$inferSelect;
+export type RecipeToUstensil = typeof schema.recipeToUstensil.$inferSelect;
+export type RecipeToUstensilInsert =
+	typeof schema.recipeToUstensil.$inferInsert;

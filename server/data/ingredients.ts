@@ -1,7 +1,10 @@
-import prisma from '~/lib/prisma';
+import type { Ingredient, IngredientInsert } from '../utils/drizzle';
 
-export async function getIngredients() {
-	const ingredients = await prisma.ingredient.findMany();
+export async function getIngredients(): Promise<Ingredient[]> {
+	const ingredients: Ingredient[] = await useDrizzle()
+		.select()
+		.from(tables.ingredient)
+		.all();
 	return ingredients;
 }
 
@@ -10,41 +13,45 @@ export async function postIngredient(
 	foodTypeId: number,
 	seasonalMonths: number[][],
 	createdById: number,
-) {
-	const ingredient = await prisma.ingredient.create({
-		data: {
-			name: name,
-			foodTypeId: foodTypeId,
-			seasonalMonths: seasonalMonths,
-			createdById: createdById,
-		},
-	});
+): Promise<Ingredient> {
+	const ingredientInsert: IngredientInsert = {
+		name: name,
+		foodTypeId: foodTypeId,
+		seasonalMonths: seasonalMonths,
+		createdById: createdById,
+	};
+	const ingredient: Ingredient = await useDrizzle()
+		.insert(tables.ingredient)
+		.values(ingredientInsert)
+		.returning()
+		.get();
 	return ingredient;
 }
 
 export async function getIngredientsSeasonalMonths(foodTypeId: number) {
-	const ingredients = await prisma.ingredient.findMany({
-		where: {
-			foodTypeId: foodTypeId,
-		},
-		select: {
-			name: true,
-			seasonalMonths: true,
-			foodType: {
-				select: {
-					name: true,
-				},
-			},
-		},
-	});
+	const ingredients = await useDrizzle()
+		.select({
+			name: tables.ingredient.name,
+			seasonalMonths: tables.ingredient.seasonalMonths,
+			foodType: tables.foodType.name,
+		})
+		.from(tables.ingredient)
+		.leftJoin(
+			tables.foodType,
+			eq(tables.ingredient.foodTypeId, tables.foodType.id),
+		)
+		.where(eq(tables.ingredient.foodTypeId, foodTypeId))
+		.all();
 	return ingredients;
 }
 
-export async function getIngredient(id: number) {
-	const ingredient = await prisma.ingredient.findUnique({
-		where: {
-			id: id,
-		},
-	});
+export async function getIngredient(
+	id: number,
+): Promise<Ingredient | undefined> {
+	const ingredient: Ingredient | undefined = await useDrizzle()
+		.select()
+		.from(tables.ingredient)
+		.where(eq(tables.ingredient.id, id))
+		.get();
 	return ingredient;
 }

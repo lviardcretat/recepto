@@ -1,15 +1,15 @@
-import prisma from '~/lib/prisma';
+import type { Unit } from '../utils/drizzle';
 
-export async function getUnits() {
-	const units = await prisma.unit.findMany();
+export async function getUnits(): Promise<Unit[]> {
+	const units: Unit[] = await useDrizzle().select().from(tables.unit).all();
 	return units;
 }
 
-export async function getUnit(id: number) {
-	const unit = await prisma.unit.findUnique({
-		where: {
-			id: id,
-		},
-	});
+export async function getUnit(id: number): Promise<Unit | undefined> {
+	const unit: Unit | undefined = await useDrizzle()
+		.select()
+		.from(tables.unit)
+		.where(eq(tables.unit.id, id))
+		.get();
 	return unit;
 }

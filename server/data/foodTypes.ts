@@ -1,24 +1,30 @@
-import prisma from '~/lib/prisma';
+import { inArray } from 'drizzle-orm';
+import type { FoodType } from '../utils/drizzle';
 
-export async function getFoodTypes() {
-	const foodType = await prisma.foodType.findMany();
-	return foodType;
-}
-
-export async function getSpecificsFoodTypes(ids: number[]) {
-	const foodTypes = await prisma.foodType.findMany({
-		where: {
-			id: { in: ids },
-		},
-	});
+export async function getFoodTypes(): Promise<FoodType[]> {
+	const foodTypes: FoodType[] = await useDrizzle()
+		.select()
+		.from(tables.foodType)
+		.all();
 	return foodTypes;
 }
 
-export async function getFoodType(id: number) {
-	const foodType = await prisma.foodType.findUnique({
-		where: {
-			id: id,
-		},
-	});
+export async function getSpecificsFoodTypes(
+	ids: number[],
+): Promise<FoodType[]> {
+	const foodTypes: FoodType[] = await useDrizzle()
+		.select()
+		.from(tables.foodType)
+		.where(inArray(tables.foodType.id, ids))
+		.all();
+	return foodTypes;
+}
+
+export async function getFoodType(id: number): Promise<FoodType | undefined> {
+	const foodType: FoodType | undefined = await useDrizzle()
+		.select()
+		.from(tables.foodType)
+		.where(eq(tables.foodType.id, id))
+		.get();
 	return foodType;
 }

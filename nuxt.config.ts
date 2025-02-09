@@ -3,16 +3,12 @@ export default defineNuxtConfig({
 	compatibilityDate: '2024-04-03',
 	ssr: true,
 	devtools: { enabled: true },
-	build: {
-		transpile: ['@prisma/client'],
-	},
 	extends: ['@nuxt/ui-pro'],
 	modules: [
 		'@nuxt/image',
 		'@nuxt/ui',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
-		'@prisma/nuxt',
 		'nuxt-swiper',
 		'@nuxthub/core',
 		'nuxt-zod-i18n',
@@ -40,10 +36,6 @@ export default defineNuxtConfig({
 			link: [],
 		},
 	},
-	prisma: {
-		installStudio: true,
-		autoSetupPrisma: true,
-	},
 	i18n: {
 		langDir: 'locales',
 		defaultLocale: 'fr',
@@ -59,6 +51,15 @@ export default defineNuxtConfig({
 		localeCodesMapping: {
 			'en-GB': 'en',
 			'fr-FR': 'fr',
+		},
+	},
+	hub: {
+		database: true,
+		blob: true,
+	},
+	nitro: {
+		experimental: {
+			tasks: true,
 		},
 	},
 });
