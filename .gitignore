@@ -26,12 +26,10 @@ logs
 # BDD
 *.db
 
-# Local files
-package-lock.json
-
-
 # Crappy direnv nix stuff
 nix-profile*
 /.vs
 .direnv
 flake.lock
+
+.wrangler
