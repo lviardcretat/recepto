@@ -1,7 +1,6 @@
-import type { RecipesCategories } from '~/global/types';
 import type { RecipesCategoriesFilter } from '~/global/validationSchemas';
 import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzle';
-import { exists, like } from 'drizzle-orm';
+import { exists, gte, inArray, like, lte, not } from 'drizzle-orm';
 
 export async function postRecipesCategory(
 	name: string,
@@ -21,8 +20,8 @@ export async function postRecipesCategory(
 	return recipesCategory;
 }
 
-export async function getRecipesCategories(): Promise<RecipesCategories[]> {
-	const recipesCategories: RecipesCategories[] = await useDrizzle()
+export async function getRecipesCategories(): Promise<RecipesCategory[]> {
+	const recipesCategories: RecipesCategory[] = await useDrizzle()
 		.select()
 		.from(tables.recipesCategory)
 		.all();
@@ -87,10 +86,10 @@ export async function getRecipesCategory(
 		.get();
 	return recipesCategory;
 }
-/*
+
 export async function getRecipesCategoriesFiltered(
 	query: RecipesCategoriesFilter,
-): Promise<RecipesCategories[]> {
+) {
 	const ingredientsIds = query.ingredients;
 	const ustensilsIds = query.ustensils;
 	const mealTypesIds = query.mealTypes ?? { wanted: [], notWanted: [] };
@@ -107,88 +106,172 @@ export async function getRecipesCategoriesFiltered(
 		return await getRecipesCategories();
 	}
 
-	return await prisma.recipesCategory.findMany({
-		where: {
-			mealTypes: {
-				some: {
-					id: {
-						...(mealTypesIds.wanted.length > 0
-							? { in: mealTypesIds.wanted }
-							: {}),
-						notIn: mealTypesIds.notWanted,
-					},
-				},
-			},
-			dishTypeId: {
-				...(dishTypesIds.wanted.length > 0 ? { in: dishTypesIds.wanted } : {}),
-				notIn: dishTypesIds.notWanted,
-			},
-			recipes: {
-				some: {
-					AND: [
-						...(seasonalRecipes
-							? [
-									{
-										season: {
-											AND: [
-												{ start: { lte: dateIntoDayNumber() } },
-												{ end: { gte: dateIntoDayNumber() } },
-											],
-										},
-									},
-								]
-							: []),
-						...ingredientsIds.wanted.map((id) => ({
-							ingredients: {
-								some: {
-									ingredientId: id,
-								},
-							},
-						})),
-						{
-							ingredients: {
-								none: {
-									ingredientId: {
-										in: ingredientsIds.notWanted,
-									},
-								},
-							},
-						},
-						...ustensilsIds.wanted.map((id) => ({
-							ustensils: {
-								some: {
-									id: id,
-								},
-							},
-						})),
-						{
-							ustensils: {
-								none: {
-									id: {
-										in: ustensilsIds.notWanted,
-									},
-								},
-							},
-						},
-						...(allergensIds.length > 0
-							? [
-									{
-										NOT: {
-											allergens: {
-												some: {
-													id: {
-														in: QueryToNumber(allergensIds),
-													},
-												},
-											},
-										},
-									},
-								]
-							: []),
-					],
-				},
-			},
-		},
-	});
+	const conditions = [
+		...(mealTypesIds
+			? [
+					exists(
+						useDrizzle()
+							.select()
+							.from(tables.mealType)
+							.where(
+								and(
+									eq(
+										tables.mealType.id,
+										tables.mealTypeToRecipeCategory.mealTypeId,
+									),
+									inArray(tables.mealType.id, ingredientsIds.wanted),
+								),
+							),
+					),
+				]
+			: []),
+		...(seasonalRecipes
+			? [
+					exists(
+						useDrizzle()
+							.select()
+							.from(tables.season)
+							.where(
+								and(
+									eq(tables.season.id, tables.recipe.seasonId),
+									lte(tables.season.start, dateIntoDayNumber()),
+									gte(tables.season.end, dateIntoDayNumber()),
+								),
+							),
+					),
+				]
+			: []),
+		...(ingredientsIds.wanted.length > 0
+			? [
+					exists(
+						useDrizzle()
+							.select()
+							.from(tables.recipeIngredient)
+							.where(
+								and(
+									eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+									inArray(
+										tables.recipeIngredient.ingredientId,
+										ingredientsIds.wanted,
+									),
+								),
+							),
+					),
+				]
+			: []),
+		not(
+			exists(
+				useDrizzle()
+					.select()
+					.from(tables.recipeIngredient)
+					.where(
+						and(
+							eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+							inArray(
+								tables.recipeIngredient.ingredientId,
+								ingredientsIds.notWanted,
+							),
+						),
+					),
+			),
+		),
+		...(ustensilsIds.wanted.length > 0
+			? [
+					exists(
+						useDrizzle()
+							.select()
+							.from(tables.recipeToUstensil)
+							.where(
+								and(
+									eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
+									inArray(
+										tables.recipeToUstensil.ustensilId,
+										ustensilsIds.wanted,
+									),
+								),
+							),
+					),
+				]
+			: []),
+		not(
+			exists(
+				useDrizzle()
+					.select()
+					.from(tables.recipeToUstensil)
+					.where(
+						and(
+							eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
+							inArray(
+								tables.recipeToUstensil.ustensilId,
+								ustensilsIds.notWanted,
+							),
+						),
+					),
+			),
+		),
+		...(allergensIds.length > 0
+			? [
+					not(
+						exists(
+							useDrizzle()
+								.select()
+								.from(tables.allergenToRecipe)
+								.where(
+									and(
+										eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
+										inArray(
+											tables.allergenToRecipe.allergenId,
+											QueryToNumber(allergensIds),
+										),
+									),
+								),
+						),
+					),
+				]
+			: []),
+	];
+
+	const recipesCategories = await useDrizzle()
+		.select()
+		.from(tables.recipesCategory)
+		.leftJoin(tables.recipe, eq(tables.recipe.id, tables.recipesCategory.id))
+		.leftJoin(
+			tables.recipeIngredient,
+			eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+		)
+		.leftJoin(
+			tables.ingredient,
+			eq(tables.ingredient.id, tables.recipeIngredient.ingredientId),
+		)
+		.leftJoin(
+			tables.allergenToRecipe,
+			eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
+		)
+		.leftJoin(
+			tables.allergen,
+			eq(tables.allergen.id, tables.allergenToRecipe.allergenId),
+		)
+		.leftJoin(
+			tables.recipeToUstensil,
+			eq(tables.recipe.id, tables.recipeToUstensil.recipeId),
+		)
+		.leftJoin(
+			tables.ustensil,
+			eq(tables.ustensil.id, tables.recipeToUstensil.ustensilId),
+		)
+		.leftJoin(
+			tables.mealTypeToRecipeCategory,
+			eq(
+				tables.mealTypeToRecipeCategory.recipeCategoryId,
+				tables.recipesCategory.id,
+			),
+		)
+		.leftJoin(
+			tables.mealType,
+			eq(tables.mealType.id, tables.mealTypeToRecipeCategory.mealTypeId),
+		)
+		.leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
+		.where(and(...conditions))
+		.all();
+	return recipesCategories;
 }
-*/

@@ -323,7 +323,6 @@ export async function getRecipesFiltered(query: RecipesFilter) {
 			tables.ustensil,
 			eq(tables.ustensil.id, tables.recipeToUstensil.ustensilId),
 		)
-		.leftJoin(tables.sequence, eq(tables.sequence.recipeId, tables.recipe.id))
 		.leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
 		.where(and(...conditions))
 		.all();
