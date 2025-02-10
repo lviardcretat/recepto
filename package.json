@@ -5,6 +5,7 @@
 	"scripts": {
 		"build": "nuxt build",
 		"dev": "nuxt dev",
+		"dev:remote": "nuxt dev --remote",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit generate",
 		"db:push": "drizzle-kit push",

@@ -58,12 +58,6 @@
 					}
 				}
 			}
-		},
-		{
-			"include": ["**/seed/models/*.ts"],
-			"formatter": {
-				"lineWidth": 320
-			}
 		}
 	]
 }

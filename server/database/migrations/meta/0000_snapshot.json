@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "3f4b072d-5252-4a5a-a394-448ff5aa5a74",
+  "id": "a97fc411-d0e6-4788-bc8e-ffadbecfe000",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "allergen": {
