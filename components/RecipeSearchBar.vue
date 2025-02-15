@@ -20,6 +20,7 @@ const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
 watch(searchValue, async (newValue) => {
 	if (newValue.trim().length > 0) {
 		await execute();
+		console.log(data.value);
 	} else {
 		clear();
 	}
@@ -44,25 +45,20 @@ const totalRecipes = computed(() => {
 
 <template>
   <div class="recipeSearchBar">
-	<UInput
-		:trailing="false"
+	<UInput :trailing="false"
 		icon="material-symbols:search"
 		color="white"
 		:placeholder="$t('findRecipe')"
 		size="xl"
 		v-model="searchValue"
 		autocomplete="on"
-		class="search"
-	/>
-	<div
-		class="categoryRecipes"
-		v-if="data && data.length > 0"
-	>
+		class="search"/>
+	<div class="categoryRecipes"
+		v-if="data && data.length > 0">
 		<div v-if="totalRecipes > 0" class="recipesFound">
 			{{ $t('recipesFound', totalRecipes, { count: totalRecipes }) }}
 		</div>
-		<ULink
-			class="categoryRecipe"
+		<ULink class="categoryRecipe"
 			v-for="(recipeCategory) in data"
 			:to="{
 				name: 'recipes-id',

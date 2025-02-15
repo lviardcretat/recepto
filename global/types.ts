@@ -15,6 +15,15 @@ export type SelectItem = {
 };
 
 /**
+ * @description Item in the custom select component wanted or not
+ * @type ItemsWantedOrNot
+ */
+export type ItemsIdsWantedOrNot = {
+	wanted: number[];
+	notWanted: number[];
+};
+
+/**
  * @description Icon/item in the icons grid component
  * @type IconsGridItem
  */

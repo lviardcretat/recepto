@@ -14,6 +14,7 @@ import { sequencesSeed } from '../database/seed/sequence';
 import { unitsSeed } from '../database/seed/unit';
 import { usersSeed } from '../database/seed/user';
 import { ustensilsSeed } from '../database/seed/ustensil';
+import { autochunk } from '../utils/autoChunk';
 
 export default defineTask({
 	meta: {
@@ -32,7 +33,12 @@ export default defineTask({
 		await useDrizzle()
 			.insert(tables.recipesCategory)
 			.values(recipesCategorySeed);
-		await useDrizzle().insert(tables.ingredient).values(ingredientsSeed);
+		await autochunk(
+			{
+				items: ingredientsSeed,
+			},
+			(chunk) => useDrizzle().insert(tables.ingredient).values(chunk),
+		);
 		await useDrizzle().insert(tables.unit).values(unitsSeed);
 		await useDrizzle().insert(tables.recipe).values(recipesSeed);
 		await useDrizzle()

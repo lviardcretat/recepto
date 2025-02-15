@@ -1,3 +1,8 @@
 {
-	"i18n-ally.localesPaths": ["./i18n/i18n.config.ts"]
+	"i18n-ally.localesPaths": [
+		"./i18n/i18n.config.ts"
+	],
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
 }

@@ -2,9 +2,9 @@ import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
 import { timestamps } from '../columns.helper';
 import { dishType } from './dishType';
-import { mealType } from './mealType';
 import { recipe } from './recipe';
 import { user } from './user';
+import { mealTypeToRecipeCategory } from './mealTypeToRecipeCategory';
 
 export const recipesCategory = sqliteTable('recipesCategory', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
@@ -29,7 +29,7 @@ export const recipesCategoriesRelations = relations(
 			fields: [recipesCategory.createdById],
 			references: [user.id],
 		}),
-		mealTypes: many(mealType),
+		mealTypeToRecipeCategories: many(mealTypeToRecipeCategory),
 		recipes: many(recipe),
 	}),
 );

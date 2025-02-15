@@ -39,6 +39,9 @@ export const useFiltersStore = defineStore('filters', {
 					watch: false,
 					immediate: false,
 					default: () => [],
+					headers: {
+						'Content-Type': 'application/json',
+					},
 					query: {
 						ingredients: {
 							wanted: this.ingredients.wanted,
@@ -61,7 +64,7 @@ export const useFiltersStore = defineStore('filters', {
 								}
 							: null,
 						seasonalRecipes: this.seasonalRecipes,
-						allergens: this.allergens,
+						allergens: this.allergens as number[],
 						recipeCategoryId: route.params.id,
 					},
 					onResponseError({ response }) {

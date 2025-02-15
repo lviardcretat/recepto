@@ -17,8 +17,7 @@ const store = useFiltersStore();
 				@click="
 					items[item.id - 1].active = !items[item.id - 1].active;
 					store.updateGridLists(items[item.id - 1].id, items[item.id - 1].active, items[item.id - 1].type);
-				"
-			/>
+				"/>
 		</UTooltip>
 	</div>
 </template>

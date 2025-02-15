@@ -34,7 +34,7 @@ const fetchAllergens = useFetch('/api/allergens/all', {
 watchEffect(() => {
 	ingredients.value = mapSelectItems(
 		fetchIngredients.data.value,
-		DataType.Ustensil,
+		DataType.Ingredient,
 		ustensils.value,
 	);
 	ustensils.value = mapSelectItems(
@@ -196,8 +196,7 @@ watch(
 							<UIcon
 								name="i-heroicons-chevron-right-20-solid"
 								class="w-5 h-5 ms-auto transform transition-transform duration-200"
-								:class="[open && 'rotate-90']"
-							/>
+								:class="[open && 'rotate-90']"/>
 						</template>
 					</UButton>
 					<div v-else class="border-b border-gray-200 dark:border-gray-700 flex justify-between p-3 items-center">
