@@ -10,7 +10,9 @@ import type {
 } from '../utils/drizzle';
 import { dateIntoDayNumber, QueryToNumber } from '../utils/number';
 import { exists, gte, inArray, lte, not } from 'drizzle-orm';
-import { areAllEmpty } from '../utils/filter';
+import { areAllEmpty, createAllergenSubQuery, createIngredientSubQuery, createSeasonalRecipeSubQuery, createUstensilSubQuery, recipeSelectType } from '../utils/filter';
+import { RecipesCategoriesWithLessData } from '~/global/types';
+import { intersect } from 'drizzle-orm/sqlite-core';
 
 export async function postRecipe(
 	name: string,
@@ -137,7 +139,7 @@ export async function getRecipe(id: number) {
 
 export async function getRecipesWithoutFilter(recipeCategoryId: number) {
 	const recipes = await useDrizzle()
-		.select()
+		.select(recipeSelectType)
 		.from(tables.recipe)
 		.leftJoin(
 			tables.recipesCategory,
@@ -145,6 +147,8 @@ export async function getRecipesWithoutFilter(recipeCategoryId: number) {
 		)
 		.where(eq(tables.recipesCategory.id, recipeCategoryId))
 		.all();
+	console.log('---------------------')
+	console.log(recipes)
 	return recipes;
 }
 
@@ -184,147 +188,37 @@ export async function getRecipesFiltered(query: RecipesFilter) {
 		];
 	}
 
-	const conditions = [
-		eq(tables.recipesCategory.id, recipeCategoryId),
-		...(seasonalRecipes
-			? [
-					exists(
-						useDrizzle()
-							.select()
-							.from(tables.season)
-							.where(
-								and(
-									eq(tables.season.id, tables.recipe.seasonId),
-									lte(tables.season.start, dateIntoDayNumber()),
-									gte(tables.season.end, dateIntoDayNumber()),
-								),
-							),
-					),
-				]
-			: []),
-		...(ingredientsIds.wanted.length > 0
-			? [
-					exists(
-						useDrizzle()
-							.select()
-							.from(tables.recipeIngredient)
-							.where(
-								and(
-									eq(tables.recipeIngredient.recipeId, tables.recipe.id),
-									inArray(
-										tables.recipeIngredient.ingredientId,
-										ingredientsIds.wanted,
-									),
-								),
-							),
-					),
-				]
-			: []),
-		not(
-			exists(
-				useDrizzle()
-					.select()
-					.from(tables.recipeIngredient)
-					.where(
-						and(
-							eq(tables.recipeIngredient.recipeId, tables.recipe.id),
-							inArray(
-								tables.recipeIngredient.ingredientId,
-								ingredientsIds.notWanted,
-							),
-						),
-					),
-			),
-		),
-		...(ustensilsIds.wanted.length > 0
-			? [
-					exists(
-						useDrizzle()
-							.select()
-							.from(tables.recipeToUstensil)
-							.where(
-								and(
-									eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
-									inArray(
-										tables.recipeToUstensil.ustensilId,
-										ustensilsIds.wanted,
-									),
-								),
-							),
-					),
-				]
-			: []),
-		not(
-			exists(
-				useDrizzle()
-					.select()
-					.from(tables.recipeToUstensil)
-					.where(
-						and(
-							eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
-							inArray(
-								tables.recipeToUstensil.ustensilId,
-								ustensilsIds.notWanted,
-							),
-						),
-					),
-			),
-		),
-		...(allergensIds.length > 0
-			? [
-					not(
-						exists(
-							useDrizzle()
-								.select()
-								.from(tables.allergenToRecipe)
-								.where(
-									and(
-										eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
-										inArray(
-											tables.allergenToRecipe.allergenId,
-											QueryToNumber(allergensIds),
-										),
-									),
-								),
-						),
-					),
-				]
-			: []),
+	let recipes = [];
+	const subQueries = [
+		createIngredientSubQuery(ingredientsIds, recipeCategoryId),
+		createUstensilSubQuery(ustensilsIds, recipeCategoryId),
+		createAllergenSubQuery(allergensIds, recipeCategoryId),
+		createSeasonalRecipeSubQuery(seasonalRecipes, recipeCategoryId),
 	];
+	const filters: any[] = [];
 
-	const recipes = await useDrizzle()
-		.select()
-		.from(tables.recipe)
-		.leftJoin(
-			tables.recipesCategory,
-			eq(tables.recipesCategory.id, tables.recipe.recipesCategoryId),
-		)
-		.leftJoin(
-			tables.recipeIngredient,
-			eq(tables.recipeIngredient.recipeId, tables.recipe.id),
-		)
-		.leftJoin(
-			tables.ingredient,
-			eq(tables.ingredient.id, tables.recipeIngredient.ingredientId),
-		)
-		.leftJoin(
-			tables.allergenToRecipe,
-			eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
-		)
-		.leftJoin(
-			tables.allergen,
-			eq(tables.allergen.id, tables.allergenToRecipe.allergenId),
-		)
-		.leftJoin(
-			tables.recipeToUstensil,
-			eq(tables.recipe.id, tables.recipeToUstensil.recipeId),
-		)
-		.leftJoin(
-			tables.ustensil,
-			eq(tables.ustensil.id, tables.recipeToUstensil.ustensilId),
-		)
-		.leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
-		.where(and(...conditions))
-		.all();
+	for(let subQuery of subQueries) {
+		if(subQuery) filters.push(subQuery);
+	}
+
+	// conditions due to the limitations of the intersect function, which requires specifically two parameters
+	if (filters.length > 2) {
+		recipes = await intersect(
+			filters[0],
+			filters[1],
+			...filters.slice(2)
+		).all() as unknown as RecipesCategoriesWithLessData[];
+	} else if (filters.length === 2) {
+		recipes = await intersect(filters[0], filters[1]).all() as unknown as RecipesCategoriesWithLessData[];
+	} else if (filters.length === 1) {
+		recipes = await filters[0]
+			// Dynamic query building to instantiate several where in a single query
+			.$dynamic()
+			.groupBy(tables.recipe.id)
+			.all();
+	}
+
+	console.log(recipes);
+
 	return recipes;
 }

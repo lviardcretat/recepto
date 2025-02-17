@@ -1,8 +1,8 @@
 import type { RecipesCategoriesFilter } from '~/global/validationSchemas';
 import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzle';
-import { inArray, notInArray, type SQL } from 'drizzle-orm';
-import type { ItemsIdsWantedOrNot } from '~/global/types';
-import { intersect, type SQLiteColumn } from 'drizzle-orm/sqlite-core';
+import type { ItemsIdsWantedOrNot, RecipesCategoriesWithLessData } from '~/global/types';
+import { intersect } from 'drizzle-orm/sqlite-core';
+import { createAllergenSubQuery, createIngredientSubQuery, createSeasonalRecipeSubQuery, createSubQueryConditions, createUstensilSubQuery, recipeCategorySelectType } from '../utils/filter';
 
 export async function postRecipesCategory(
 	name: string,
@@ -100,29 +100,30 @@ export async function getRecipesCategoriesFiltered(
 		return await getRecipesCategories();
 	}
 
-	const filters = [];
-	const mealTypeSubQuery = createMealTypeSubQuery(mealTypesIds);
-	const dishTypeSubQuery = createDishTypeSubQuery(dishTypesIds);
-	const ingredientSubQuery = createIngredientSubQuery(ingredientsIds);
-	const ustensilSubQuery = createUstensilSubQuery(ustensilsIds);
-	const allergenSubQuery = createAllergenSubQuery(allergensIds);
-	if (mealTypeSubQuery) filters.push(mealTypeSubQuery);
-	if (dishTypeSubQuery) filters.push(dishTypeSubQuery);
-	if (ingredientSubQuery) filters.push(ingredientSubQuery);
-	if (ustensilSubQuery) filters.push(ustensilSubQuery);
-	if (allergenSubQuery) filters.push(allergenSubQuery);
+	let recipesCategories: RecipesCategoriesWithLessData[] = [];
+	const subQueries = [
+		createMealTypeSubQuery(mealTypesIds),
+		createDishTypeSubQuery(dishTypesIds),
+		createIngredientSubQuery(ingredientsIds),
+		createUstensilSubQuery(ustensilsIds),
+		createAllergenSubQuery(allergensIds),
+		createSeasonalRecipeSubQuery(seasonalRecipes),
+	];
+	const filters: any[] = [];
 
-	let recipesCategories: { name: string }[] = [];
+	for(let subQuery of subQueries) {
+		if(subQuery) filters.push(subQuery);
+	}
 
 	// conditions due to the limitations of the intersect function, which requires specifically two parameters
 	if (filters.length > 2) {
 		recipesCategories = await intersect(
 			filters[0],
 			filters[1],
-			...filters.slice(2),
-		).all();
+			...filters.slice(2)
+		).all() as unknown as RecipesCategoriesWithLessData[];
 	} else if (filters.length === 2) {
-		recipesCategories = await intersect(filters[0], filters[1]).all();
+		recipesCategories = await intersect(filters[0], filters[1]).all() as unknown as RecipesCategoriesWithLessData[];
 	} else if (filters.length === 1) {
 		recipesCategories = await filters[0]
 			// Dynamic query building to instantiate several where in a single query
@@ -131,7 +132,6 @@ export async function getRecipesCategoriesFiltered(
 			.all();
 	}
 
-	console.log(recipesCategories);
 	return recipesCategories;
 }
 
@@ -142,7 +142,7 @@ function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
 	);
 	if (!conditions) return null;
 	return useDrizzle()
-		.select({ name: tables.recipesCategory.name })
+		.select(recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
 			tables.mealTypeToRecipeCategory,
@@ -168,7 +168,7 @@ function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
 	const conditions = createSubQueryConditions(dishTypesIds, tables.dishType.id);
 	if (!conditions) return null;
 	return useDrizzle()
-		.select({ name: tables.recipesCategory.name })
+		.select(recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
 			tables.dishType,
@@ -178,105 +178,3 @@ function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
 		.groupBy(tables.recipesCategory.id);
 }
 
-function createIngredientSubQuery(ingredientsIds: ItemsIdsWantedOrNot) {
-	const conditions = createSubQueryConditions(
-		ingredientsIds,
-		tables.recipeIngredient.ingredientId,
-	);
-	if (!conditions) return null;
-	return useDrizzle()
-		.select({ name: tables.recipesCategory.name })
-		.from(tables.recipesCategory)
-		.innerJoin(
-			tables.recipe,
-			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
-		)
-		.innerJoin(
-			tables.recipeIngredient,
-			eq(tables.recipeIngredient.recipeId, tables.recipe.id),
-		)
-		.where(and(...conditions))
-		.groupBy(tables.recipesCategory.id, tables.recipe.id)
-		.having(
-			ingredientsIds.wanted.length > 0
-				? sql`count(distinct ${tables.recipeIngredient.ingredientId}) > ${ingredientsIds.wanted.length - 1}`
-				: undefined,
-		);
-}
-
-function createUstensilSubQuery(ustensilsIds: ItemsIdsWantedOrNot) {
-	const conditions = createSubQueryConditions(
-		ustensilsIds,
-		tables.recipeToUstensil.ustensilId,
-	);
-	if (!conditions) return null;
-	return useDrizzle()
-		.select({ name: tables.recipesCategory.name })
-		.from(tables.recipesCategory)
-		.innerJoin(
-			tables.recipe,
-			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
-		)
-		.innerJoin(
-			tables.recipeToUstensil,
-			eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
-		)
-		.where(and(...conditions))
-		.groupBy(tables.recipesCategory.id, tables.recipe.id)
-		.having(
-			ustensilsIds.wanted.length > 0
-				? sql`count(distinct ${tables.recipeToUstensil.ustensilId}) > ${ustensilsIds.wanted.length - 1}`
-				: undefined,
-		);
-}
-
-function createAllergenSubQuery(allergensIds: number[]) {
-	const conditions = createSubQueryConditions(
-		allergensIds,
-		tables.allergenToRecipe.allergenId,
-	);
-	if (!conditions) return null;
-	return useDrizzle()
-		.select({ name: tables.recipesCategory.name })
-		.from(tables.recipesCategory)
-		.innerJoin(
-			tables.recipe,
-			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
-		)
-		.innerJoin(
-			tables.allergenToRecipe,
-			eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
-		)
-		.where(and(...conditions))
-		.groupBy(tables.recipesCategory.id, tables.recipe.id)
-		.having(
-			allergensIds.length > 0
-				? sql`count(distinct ${tables.allergenToRecipe.allergenId}) > ${allergensIds.length - 1}`
-				: undefined,
-		);
-}
-
-function createSubQueryConditions<T extends SQLiteColumn>(
-	ids: ItemsIdsWantedOrNot | number[],
-	sqliteColumn: T,
-): SQL[] | null {
-	const conditions: SQL[] = [];
-	if (Array.isArray(ids)) {
-		// If we're dealing with an icon filter like for allegens
-		if (ids.length > 0) {
-			conditions.push(inArray(sqliteColumn, ids));
-		}
-	} else {
-		// If we have to deal with a filter through a select
-		if (ids.wanted.length > 0) {
-			conditions.push(inArray(sqliteColumn, ids.wanted));
-		}
-		if (ids.notWanted.length > 0) {
-			conditions.push(notInArray(sqliteColumn, ids.notWanted));
-		}
-		if (conditions.length === 0) {
-			return null;
-		}
-	}
-	return conditions;
-}

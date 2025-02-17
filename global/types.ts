@@ -76,20 +76,16 @@ export type State = {
 	seasonalRecipes: boolean;
 	allergens: number[];
 	recipeCategoryList:
-		| SerializeObject<RecipesCategories>[]
+		| SerializeObject<RecipesCategoriesWithLessData>[]
 		| SerializeObject<RecipesWithLessData>[]
 		| null;
 };
 
 /**
- * @description RecipesCategories custom model
- * @type RecipesCategories
+ * @description RecipesCategories custom model with less data
+ * @type RecipesCategoriesWithLessData
  */
-export type RecipesCategories = {
+export type RecipesCategoriesWithLessData = {
 	id: number;
 	name: string;
-	dishTypeId: number;
-	createdById: number | null;
-	createdAt: Date;
-	updatedAt: Date | null;
 };
