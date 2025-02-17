@@ -1,8 +1,18 @@
 import type { RecipesCategoriesFilter } from '~/global/validationSchemas';
 import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzle';
-import type { ItemsIdsWantedOrNot, RecipesCategoriesWithLessData } from '~/global/types';
+import type {
+	ItemsIdsWantedOrNot,
+	RecipesCategoriesWithLessData,
+} from '~/global/types';
 import { intersect } from 'drizzle-orm/sqlite-core';
-import { createAllergenSubQuery, createIngredientSubQuery, createSeasonalRecipeSubQuery, createSubQueryConditions, createUstensilSubQuery, recipeCategorySelectType } from '../utils/filter';
+import {
+	createAllergenSubQuery,
+	createIngredientSubQuery,
+	createSeasonalRecipeSubQuery,
+	createSubQueryConditions,
+	createUstensilSubQuery,
+	recipeCategorySelectType,
+} from '../utils/filter';
 
 export async function postRecipesCategory(
 	name: string,
@@ -109,21 +119,25 @@ export async function getRecipesCategoriesFiltered(
 		createAllergenSubQuery(allergensIds),
 		createSeasonalRecipeSubQuery(seasonalRecipes),
 	];
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const filters: any[] = [];
 
-	for(let subQuery of subQueries) {
-		if(subQuery) filters.push(subQuery);
+	for (const subQuery of subQueries) {
+		if (subQuery) filters.push(subQuery);
 	}
 
 	// conditions due to the limitations of the intersect function, which requires specifically two parameters
 	if (filters.length > 2) {
-		recipesCategories = await intersect(
+		recipesCategories = (await intersect(
 			filters[0],
 			filters[1],
-			...filters.slice(2)
-		).all() as unknown as RecipesCategoriesWithLessData[];
+			...filters.slice(2),
+		).all()) as unknown as RecipesCategoriesWithLessData[];
 	} else if (filters.length === 2) {
-		recipesCategories = await intersect(filters[0], filters[1]).all() as unknown as RecipesCategoriesWithLessData[];
+		recipesCategories = (await intersect(
+			filters[0],
+			filters[1],
+		).all()) as unknown as RecipesCategoriesWithLessData[];
 	} else if (filters.length === 1) {
 		recipesCategories = await filters[0]
 			// Dynamic query building to instantiate several where in a single query
@@ -177,4 +191,3 @@ function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
 		.where(and(...conditions))
 		.groupBy(tables.recipesCategory.id);
 }
-

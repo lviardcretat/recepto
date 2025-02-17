@@ -72,6 +72,6 @@ const store = useFiltersStore();
   	</div>
 </template>
 
-<style>
+<style lang="scss">
 
 </style>

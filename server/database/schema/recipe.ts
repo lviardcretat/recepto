@@ -1,13 +1,13 @@
 import { sqliteTable, integer, text, real } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
 import { timestamps } from '../columns.helper';
-import { allergen } from './allergen';
 import { recipeIngredient } from './recipeIngredient';
 import { recipesCategory } from './recipesCategory';
 import { season } from './season';
 import { sequence } from './sequence';
 import { user } from './user';
-import { ustensil } from './ustensil';
+import { recipeToUstensil } from './recipeToUstensil';
+import { allergenToRecipe } from './allergenToRecipe';
 
 export const recipe = sqliteTable('recipe', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
@@ -43,8 +43,8 @@ export const recipeRelations = relations(recipe, ({ one, many }) => ({
 		fields: [recipe.createdById],
 		references: [user.id],
 	}),
-	ustensils: many(ustensil),
+	ustensils: many(recipeToUstensil),
 	sequences: many(sequence),
-	allergens: many(allergen),
+	allergens: many(allergenToRecipe),
 	ingredients: many(recipeIngredient),
 }));

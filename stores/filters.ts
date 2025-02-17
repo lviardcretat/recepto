@@ -64,7 +64,7 @@ export const useFiltersStore = defineStore('filters', {
 								}
 							: null,
 						seasonalRecipes: this.seasonalRecipes,
-						allergens: this.allergens as number[],
+						allergens: this.allergens,
 						recipeCategoryId: route.params.id,
 					},
 					onResponseError({ response }) {

@@ -1,4 +1,4 @@
-import type { RecipesWithLessData } from '~/global/types';
+import type { RecipeWithLessData } from '~/global/types';
 import { getRecipesFiltered } from '~/server/data/recipes';
 import {
 	recipesFilterSchema,
@@ -10,8 +10,7 @@ export default defineEventHandler(async (event) => {
 		event,
 		recipesFilterSchema.parse,
 	);
-	const recipesFiltered: RecipesWithLessData[] =
-		await getRecipesFiltered(query);
+	const recipesFiltered: RecipeWithLessData[] = await getRecipesFiltered(query);
 	if (!recipesFiltered) {
 		throw createError({
 			statusCode: 404,

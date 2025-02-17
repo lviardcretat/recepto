@@ -38,7 +38,7 @@ defineShortcuts({
 
 useListen('ingredient:created', async () => {
 	await refresh();
-	data = { datasets: datasetsFetch.value };
+	if (datasetsFetch.value) data = { datasets: datasetsFetch.value };
 });
 
 const {

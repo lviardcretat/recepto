@@ -1,17 +1,23 @@
-import type {
-	FilterSelectItem,
-	RecipesFilter,
-} from '~/global/validationSchemas';
+import type { RecipesFilter } from '~/global/validationSchemas';
 import type {
 	AllergenToRecipe,
 	Recipe,
 	RecipeInsert,
 	RecipeToUstensil,
 } from '../utils/drizzle';
-import { dateIntoDayNumber, QueryToNumber } from '../utils/number';
-import { exists, gte, inArray, lte, not } from 'drizzle-orm';
-import { areAllEmpty, createAllergenSubQuery, createIngredientSubQuery, createSeasonalRecipeSubQuery, createUstensilSubQuery, recipeSelectType } from '../utils/filter';
-import { RecipesCategoriesWithLessData } from '~/global/types';
+import {
+	areAllEmpty,
+	createAllergenSubQuery,
+	createIngredientSubQuery,
+	createSeasonalRecipeSubQuery,
+	createUstensilSubQuery,
+	recipeSelectType,
+} from '../utils/filter';
+import type {
+	RecipeDetail,
+	RecipesCategoriesWithLessData,
+	RecipeWithLessData,
+} from '~/global/types';
 import { intersect } from 'drizzle-orm/sqlite-core';
 
 export async function postRecipe(
@@ -79,65 +85,84 @@ export async function getRecipes(): Promise<Recipe[]> {
 	return recipes;
 }
 
-// TODO à voir
-export async function getRecipe(id: number) {
-	const recipes = await useDrizzle()
-		.select({
-			id: tables.recipe.id,
-			name: tables.recipe.name,
-			// Ingredients
-			ingredientId: tables.recipeIngredient.id,
-			ingredientName: tables.ingredient.name,
-			unitShortForm: tables.unit.shortForm,
-			quantity: tables.recipeIngredient.quantity,
-			// Allergens
-			allergenId: tables.allergen.id,
-			allergenName: tables.allergen.name,
-			allergenIcon: tables.allergen.icon,
-			// Ustensils
-			ustensilId: tables.ustensil.id,
-			ustensilName: tables.ustensil.name,
-			// Sequences
-			sequenceId: tables.sequence.id,
-			sequenceTitle: tables.sequence.title,
-			sequenceDescription: tables.sequence.description,
-			// CreatedBy
-			createdByFirstname: tables.user.firstname,
-			createdByLastname: tables.user.lastname,
-		})
-		.from(tables.recipe)
-		.leftJoin(
-			tables.recipeIngredient,
-			eq(tables.recipeIngredient.recipeId, tables.recipe.id),
-		)
-		.leftJoin(
-			tables.ingredient,
-			eq(tables.ingredient.id, tables.recipeIngredient.ingredientId),
-		)
-		.leftJoin(
-			tables.allergenToRecipe,
-			eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
-		)
-		.leftJoin(
-			tables.allergen,
-			eq(tables.allergen.id, tables.allergenToRecipe.allergenId),
-		)
-		.leftJoin(
-			tables.recipeToUstensil,
-			eq(tables.recipe.id, tables.recipeToUstensil.recipeId),
-		)
-		.leftJoin(
-			tables.ustensil,
-			eq(tables.ustensil.id, tables.recipeToUstensil.ustensilId),
-		)
-		.leftJoin(tables.sequence, eq(tables.sequence.recipeId, tables.recipe.id))
-		.leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
-		.where(eq(tables.recipe.id, id))
-		.all();
-	return recipes;
+export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
+	const recipe: RecipeDetail | undefined =
+		await useDrizzle().query.recipe.findFirst({
+			columns: {
+				id: true,
+				name: true,
+				peopleNumber: true,
+				cookingTime: true,
+				preparationTime: true,
+				restTime: true,
+				description: true,
+				tips: true,
+				seasonId: true,
+				createdAt: true,
+				recipesCategoryId: false,
+				updatedAt: false,
+				createdById: false,
+			},
+			with: {
+				allergens: {
+					orderBy: (allergen) => allergen.allergenId,
+					columns: {
+						allergenId: false,
+						recipeId: false,
+					},
+					with: {
+						allergen: {
+							columns: {
+								name: true,
+							},
+						},
+					},
+				},
+				ingredients: {
+					orderBy: (ingredient) => ingredient.ingredientId,
+					columns: { quantity: true },
+					with: {
+						ingredient: { columns: { name: true } },
+						unit: { columns: { shortForm: true } },
+					},
+				},
+				sequences: {
+					orderBy: (sequence) => sequence.id,
+					columns: {
+						id: true,
+						title: true,
+						description: true,
+					},
+				},
+				ustensils: {
+					orderBy: (ustensil) => ustensil.ustensilId,
+					columns: {
+						recipeId: false,
+						ustensilId: false,
+					},
+					with: {
+						ustensil: {
+							columns: {
+								name: true,
+							},
+						},
+					},
+				},
+				createdBy: {
+					columns: {
+						firstname: true,
+						lastname: true,
+					},
+				},
+			},
+			where: (recipe, { eq }) => eq(recipe.id, id),
+		});
+	return recipe;
 }
 
-export async function getRecipesWithoutFilter(recipeCategoryId: number) {
+export async function getRecipesWithoutFilter(
+	recipeCategoryId: number,
+): Promise<RecipeWithLessData[]> {
 	const recipes = await useDrizzle()
 		.select(recipeSelectType)
 		.from(tables.recipe)
@@ -145,14 +170,15 @@ export async function getRecipesWithoutFilter(recipeCategoryId: number) {
 			tables.recipesCategory,
 			eq(tables.recipesCategory.id, tables.recipe.recipesCategoryId),
 		)
+		.leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
 		.where(eq(tables.recipesCategory.id, recipeCategoryId))
 		.all();
-	console.log('---------------------')
-	console.log(recipes)
 	return recipes;
 }
 
-export async function getRecipesFiltered(query: RecipesFilter) {
+export async function getRecipesFiltered(
+	query: RecipesFilter,
+): Promise<RecipeWithLessData[]> {
 	const ingredientsIds = query.ingredients;
 	const ustensilsIds = query.ustensils;
 	const seasonalRecipes = query.seasonalRecipes === true;
@@ -181,11 +207,7 @@ export async function getRecipesFiltered(query: RecipesFilter) {
 		!seasonalRecipes
 	) {
 		// If all the filters lists are empty, return all the recipes without any filter
-		return [
-			{
-				...(await getRecipesWithoutFilter(recipeCategoryId)),
-			},
-		];
+		return getRecipesWithoutFilter(recipeCategoryId);
 	}
 
 	let recipes = [];
@@ -195,21 +217,25 @@ export async function getRecipesFiltered(query: RecipesFilter) {
 		createAllergenSubQuery(allergensIds, recipeCategoryId),
 		createSeasonalRecipeSubQuery(seasonalRecipes, recipeCategoryId),
 	];
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const filters: any[] = [];
 
-	for(let subQuery of subQueries) {
-		if(subQuery) filters.push(subQuery);
+	for (const subQuery of subQueries) {
+		if (subQuery) filters.push(subQuery);
 	}
 
 	// conditions due to the limitations of the intersect function, which requires specifically two parameters
 	if (filters.length > 2) {
-		recipes = await intersect(
+		recipes = (await intersect(
 			filters[0],
 			filters[1],
-			...filters.slice(2)
-		).all() as unknown as RecipesCategoriesWithLessData[];
+			...filters.slice(2),
+		).all()) as unknown as RecipesCategoriesWithLessData[];
 	} else if (filters.length === 2) {
-		recipes = await intersect(filters[0], filters[1]).all() as unknown as RecipesCategoriesWithLessData[];
+		recipes = (await intersect(
+			filters[0],
+			filters[1],
+		).all()) as unknown as RecipesCategoriesWithLessData[];
 	} else if (filters.length === 1) {
 		recipes = await filters[0]
 			// Dynamic query building to instantiate several where in a single query
@@ -217,8 +243,5 @@ export async function getRecipesFiltered(query: RecipesFilter) {
 			.groupBy(tables.recipe.id)
 			.all();
 	}
-
-	console.log(recipes);
-
 	return recipes;
 }

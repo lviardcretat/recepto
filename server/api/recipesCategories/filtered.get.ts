@@ -3,13 +3,15 @@ import {
 	recipesCategoriesFilterSchema,
 	type RecipesCategoriesFilter,
 } from '~/global/validationSchemas';
+import type { RecipesCategoriesWithLessData } from '~/global/types';
 
 export default defineEventHandler(async (event) => {
 	const query: RecipesCategoriesFilter = await getValidatedQuery(
 		event,
 		recipesCategoriesFilterSchema.parse,
 	);
-	const recipesCategoriesFiltered = await getRecipesCategoriesFiltered(query);
+	const recipesCategoriesFiltered: RecipesCategoriesWithLessData[] =
+		await getRecipesCategoriesFiltered(query);
 	if (!recipesCategoriesFiltered) {
 		throw createError({
 			statusCode: 404,

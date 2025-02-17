@@ -1,7 +1,8 @@
 import { getSequences } from '~/server/data/sequences';
+import type { Sequence } from '~/server/utils/drizzle';
 
 export default defineEventHandler(async () => {
-	const sequences = await getSequences();
+	const sequences: Sequence[] = await getSequences();
 	if (!sequences) {
 		throw createError({
 			statusCode: 404,

@@ -1,7 +1,8 @@
 import { getUnits } from '~/server/data/units';
+import type { Unit } from '~/server/utils/drizzle';
 
 export default defineEventHandler(async () => {
-	const units = await getUnits();
+	const units: Unit[] = await getUnits();
 	if (!units) {
 		throw createError({
 			statusCode: 404,

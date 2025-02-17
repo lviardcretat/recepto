@@ -5,8 +5,7 @@
  *
  * @returns An array of numbers
  */
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function QueryToNumber(query: any): number[] {
+export function QueryToNumber<T>(query: T): number[] {
 	return Array.isArray(query)
 		? query.map(Number)
 		: query

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RecipeWithLessData, RecipesWithLessData } from '~/global/types';
+import type { RecipeWithLessData } from '~/global/types';
 
 const route = useRoute();
 const recipeIndex = computed(() => {
@@ -21,7 +21,7 @@ useListen('recipe:created', async () => {
         <swiper-container :slides-per-view="'auto'" :loop="false" :effect="'coverflow'" :grabcursor="true" :centered-slides="true"
 			:coverflow-effect-rotate="0" :coverflow-effect-stretch="0" :coverflow-effect-depth="150" :coverflow-effect-modifier="2.5"
 			:coverflow-effect-slide-shadows="false" :mousewheel="true" :initial-slide="recipeIndex" :grabCursor="true">
-            <swiper-slide v-for="recipe in (store.recipeCategoryList as unknown as RecipesWithLessData[])[0]?.recipes">
+            <swiper-slide v-for="recipe in store.recipeCategoryList as RecipeWithLessData[]">
 				<RecipeCard
 					:name="recipe.name"
 					:description="recipe.description"
@@ -29,8 +29,8 @@ useListen('recipe:created', async () => {
 					:preparationTime="recipe.preparationTime ?? 0"
 					:cookingTime="recipe.cookingTime ?? 0"
 					:restTime="recipe.restTime ?? 0"
-					:createdAt="new Date(recipe.createdAt ?? '')"
-					:fullName="`${recipe.createdBy?.firstname} ${recipe.createdBy?.lastname}`"
+					:createdAt="new Date(recipe.createdAt)"
+					:fullName="`${recipe.userFirstname} ${recipe.userLastname}`"
 					@click="recipeActive = recipe; isModalOpen = true"/>
 			</swiper-slide>
         </swiper-container>

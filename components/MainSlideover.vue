@@ -10,20 +10,24 @@ const links = [
 	},
 	{
 		label: 'schedule',
+		pluralTranslation: false,
 		icon: 'material-symbols:calendar-today',
 		badge: '4',
 	},
 	{
 		label: 'shoppingList',
+		pluralTranslation: false,
 		icon: 'ic:baseline-featured-play-list',
 	},
 	{
 		label: 'dashboard',
+		pluralTranslation: false,
 		icon: 'material-symbols:space-dashboard-outline',
 		to: '/user/dashboard',
 	},
 	{
 		label: 'recipe',
+		pluralTranslation: false,
 		icon: 'i-heroicons-cog-8-tooth',
 		children: [
 			{

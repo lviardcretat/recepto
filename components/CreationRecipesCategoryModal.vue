@@ -12,11 +12,9 @@ const form = ref();
 const state = ref<{
 	name?: string;
 	dishTypeId?: number;
-	createdById?: number;
 }>({
 	name: undefined,
 	dishTypeId: undefined,
-	createdById: undefined,
 });
 
 const { data: dishTypes } = await useFetch('/api/dishTypes/all', {
@@ -56,9 +54,6 @@ async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
 
 <template>
 	<UForm ref="form" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-		<UFormGroup :label="$t('formCreation.createdById')" name="createdById">
-			<UInput v-model="state.createdById" type="number"/>
-		</UFormGroup>
 		<UFormGroup :label="$t('formCreation.name')" name="name">
 			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.category.nameExample')"/>
 		</UFormGroup>

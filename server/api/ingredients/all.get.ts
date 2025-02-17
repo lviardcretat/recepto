@@ -1,7 +1,8 @@
 import { getIngredients } from '~/server/data/ingredients';
+import type { Ingredient } from '~/server/utils/drizzle';
 
 export default defineEventHandler(async () => {
-	const ingredients = await getIngredients();
+	const ingredients: Ingredient[] = await getIngredients();
 	if (!ingredients) {
 		throw createError({
 			statusCode: 404,

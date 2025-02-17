@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DataType } from '~/global/enums';
-import type { IconsGridItem, SelectItem } from '~/global/types';
+import type { GeneralData, IconsGridItem, SelectItem } from '~/global/types';
 
 const store = useFiltersStore();
 
@@ -10,50 +10,52 @@ const mealTypes = ref<SelectItem[]>([]);
 const dishTypes = ref<SelectItem[]>([]);
 const allergens = ref<IconsGridItem[]>([]);
 
-const fetchUstensils = useFetch('/api/ustensils/all', {
+const fetchUstensils = await useFetch('/api/ustensils/all', {
 	method: 'GET',
 	watch: false,
 });
-const fetchIngredients = useFetch('/api/ingredients/all', {
+const fetchIngredients = await useFetch('/api/ingredients/all', {
 	method: 'GET',
 	watch: false,
 });
-const fetchMealTypes = useFetch('/api/mealTypes/all', {
+const fetchMealTypes = await useFetch('/api/mealTypes/all', {
 	method: 'GET',
 	watch: false,
 });
-const fetchDishTypes = useFetch('/api/dishTypes/all', {
+const fetchDishTypes = await useFetch('/api/dishTypes/all', {
 	method: 'GET',
 	watch: false,
 });
-const fetchAllergens = useFetch('/api/allergens/all', {
+const fetchAllergens = await useFetch('/api/allergens/all', {
 	method: 'GET',
 	watch: false,
 });
 
+/*	TODO : when an item is missing (e.g. item with id 1)
+	the code loops infinitely and crashes, I don't know why */
 watchEffect(() => {
 	ingredients.value = mapSelectItems(
-		fetchIngredients.data.value,
+		fetchIngredients.data.value ?? [],
 		DataType.Ingredient,
-		ustensils.value,
+		ingredients.value,
 	);
 	ustensils.value = mapSelectItems(
-		fetchUstensils.data.value,
+		fetchUstensils.data.value ?? [],
 		DataType.Ustensil,
 		ustensils.value,
 	);
 	mealTypes.value = mapSelectItems(
-		fetchMealTypes.data.value,
+		fetchMealTypes.data.value ?? [],
 		DataType.MealType,
 		mealTypes.value,
 	);
 	dishTypes.value = mapSelectItems(
-		fetchDishTypes.data.value,
+		fetchDishTypes.data.value ?? [],
 		DataType.DishType,
 		dishTypes.value,
 	);
 	allergens.value = mapIconsGridItems(
-		fetchAllergens.data.value,
+		fetchAllergens.data.value ?? [],
 		DataType.Allergen,
 		allergens.value,
 	);
@@ -67,15 +69,13 @@ useListen('ingredient:created', async () => {
 	await fetchIngredients.refresh();
 });
 
-function mapSelectItems(
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	items: any,
+function mapSelectItems<T extends GeneralData>(
+	items: T[],
 	dataType: DataType,
 	oldItems: SelectItem[],
 ): SelectItem[] {
 	return (
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		items?.map((item: any) => {
+		items?.map((item: T) => {
 			const existingItem = oldItems.find((oldItem) => oldItem.id === item.id);
 			return {
 				id: item.id,
@@ -88,15 +88,13 @@ function mapSelectItems(
 	);
 }
 
-function mapIconsGridItems(
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	items: any,
+function mapIconsGridItems<T extends GeneralData>(
+	items: T[],
 	dataType: DataType,
 	oldItems: IconsGridItem[],
 ): IconsGridItem[] {
 	return (
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		items?.map((item: any) => {
+		items?.map((item: T) => {
 			const existingItem = oldItems.find((oldItem) => oldItem.id === item.id);
 			return {
 				id: item.id,

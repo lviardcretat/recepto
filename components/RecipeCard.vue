@@ -3,13 +3,13 @@
 import { formatDuration } from '~/global/utils';
 
 const props = defineProps<{
-	name: any['name'];
-	description: any['description'];
-	peopleNumber: any['peopleNumber'];
-	preparationTime: any['preparationTime'];
-	cookingTime: any['cookingTime'];
-	restTime: any['restTime'];
-	createdAt: any['createdAt'];
+	name: string;
+	description: string | null;
+	peopleNumber: number;
+	preparationTime: number;
+	cookingTime: number;
+	restTime: number;
+	createdAt: Date;
 	fullName: string;
 }>();
 </script>

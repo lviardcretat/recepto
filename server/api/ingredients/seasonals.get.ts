@@ -1,10 +1,11 @@
 import type { ChartDataset } from 'chart.js';
 import { getSpecificsFoodTypes } from '~/server/data/foodTypes';
 import { getIngredientsSeasonalMonths } from '~/server/data/ingredients';
+import type { FoodType } from '~/server/utils/drizzle';
 
 export default defineEventHandler(async () => {
 	const foodTypesValid: number[] = [1, 2];
-	const foodTypes = await getSpecificsFoodTypes(foodTypesValid);
+	const foodTypes: FoodType[] = await getSpecificsFoodTypes(foodTypesValid);
 	const colors: string[] = ['#f87979', '#f56109'];
 	const datasets: ChartDataset<
 		'bar',
@@ -45,13 +46,13 @@ export default defineEventHandler(async () => {
 					return {
 						name: ingredient.name,
 						months: [],
-						type: ingredient.foodType.name,
+						type: ingredient.foodType ?? '',
 					};
 				}
 				return seasonalMonths.map((monthArray) => ({
 					name: ingredient.name,
 					months: monthArray,
-					type: ingredient.foodType.name,
+					type: ingredient.foodType ?? '',
 				}));
 			}),
 		});

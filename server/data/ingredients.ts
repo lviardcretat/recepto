@@ -11,7 +11,7 @@ export async function getIngredients(): Promise<Ingredient[]> {
 export async function postIngredient(
 	name: string,
 	foodTypeId: number,
-	seasonalMonths: number[][],
+	seasonalMonths: number[][] | undefined,
 	createdById: number,
 ): Promise<Ingredient> {
 	const ingredientInsert: IngredientInsert = {
@@ -41,6 +41,7 @@ export async function getIngredientsSeasonalMonths(foodTypeId: number) {
 			eq(tables.ingredient.foodTypeId, tables.foodType.id),
 		)
 		.where(eq(tables.ingredient.foodTypeId, foodTypeId))
+		.orderBy(tables.ingredient.name)
 		.all();
 	return ingredients;
 }

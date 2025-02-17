@@ -1,10 +1,25 @@
-import { lte, gte, SQL, inArray, notInArray, eq } from 'drizzle-orm';
-import { SQLiteColumn } from 'drizzle-orm/sqlite-core';
-import { ItemsIdsWantedOrNot } from '~/global/types';
+import { lte, gte, type SQL, inArray, notInArray, eq } from 'drizzle-orm';
+import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
+import type { ItemsIdsWantedOrNot } from '~/global/types';
 import type { FilterSelectItem } from '~/global/validationSchemas';
 
-export const recipeCategorySelectType = { id: tables.recipesCategory.id, name: tables.recipesCategory.name };
-export const recipeSelectType = { recipe: tables.recipe };
+export const recipeCategorySelectType = {
+	id: tables.recipesCategory.id,
+	name: tables.recipesCategory.name,
+};
+export const recipeSelectType = {
+	id: tables.recipe.id,
+	name: tables.recipe.name,
+	peopleNumber: tables.recipe.peopleNumber,
+	cookingTime: tables.recipe.cookingTime,
+	preparationTime: tables.recipe.preparationTime,
+	restTime: tables.recipe.restTime,
+	description: tables.recipe.description,
+	seasonId: tables.recipe.seasonId,
+	createdAt: tables.recipe.createdAt,
+	userFirstname: tables.user.firstname,
+	userLastname: tables.user.lastname,
+};
 
 /**
  * Checks if all the filters lists are empty or undefined
@@ -21,13 +36,17 @@ export function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
 	);
 }
 
-export function createIngredientSubQuery(ingredientsIds: ItemsIdsWantedOrNot, recipeCategoryId: number | null = null) {
+export function createIngredientSubQuery(
+	ingredientsIds: ItemsIdsWantedOrNot,
+	recipeCategoryId: number | null = null,
+) {
 	const conditions = createSubQueryConditions(
 		ingredientsIds,
 		tables.recipeIngredient.ingredientId,
 	);
 	if (!conditions) return null;
-	if(recipeCategoryId) conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
+	if (recipeCategoryId)
+		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	return useDrizzle()
 		.select(recipeCategoryId ? recipeCategorySelectType : recipeSelectType)
 		.from(tables.recipesCategory)
@@ -48,13 +67,17 @@ export function createIngredientSubQuery(ingredientsIds: ItemsIdsWantedOrNot, re
 		);
 }
 
-export function createUstensilSubQuery(ustensilsIds: ItemsIdsWantedOrNot, recipeCategoryId: number | null = null) {
+export function createUstensilSubQuery(
+	ustensilsIds: ItemsIdsWantedOrNot,
+	recipeCategoryId: number | null = null,
+) {
 	const conditions = createSubQueryConditions(
 		ustensilsIds,
 		tables.recipeToUstensil.ustensilId,
 	);
 	if (!conditions) return null;
-	if(recipeCategoryId) conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
+	if (recipeCategoryId)
+		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	return useDrizzle()
 		.select(recipeCategoryId ? recipeCategorySelectType : recipeSelectType)
 		.from(tables.recipesCategory)
@@ -75,13 +98,17 @@ export function createUstensilSubQuery(ustensilsIds: ItemsIdsWantedOrNot, recipe
 		);
 }
 
-export function createAllergenSubQuery(allergensIds: number[], recipeCategoryId: number | null = null) {
+export function createAllergenSubQuery(
+	allergensIds: number[],
+	recipeCategoryId: number | null = null,
+) {
 	const conditions = createSubQueryConditions(
 		allergensIds,
 		tables.allergenToRecipe.allergenId,
 	);
 	if (!conditions) return null;
-	if(recipeCategoryId) conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
+	if (recipeCategoryId)
+		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	return useDrizzle()
 		.select(recipeCategoryId ? recipeCategorySelectType : recipeSelectType)
 		.from(tables.recipesCategory)
@@ -102,10 +129,14 @@ export function createAllergenSubQuery(allergensIds: number[], recipeCategoryId:
 		);
 }
 
-export function createSeasonalRecipeSubQuery(seasonalRecipes: boolean, recipeCategoryId: number | null = null) {
+export function createSeasonalRecipeSubQuery(
+	seasonalRecipes: boolean,
+	recipeCategoryId: number | null = null,
+) {
 	if (!seasonalRecipes) return null;
 	const conditions = [];
-	if(recipeCategoryId) conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
+	if (recipeCategoryId)
+		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	conditions.push(lte(tables.season.start, dateIntoDayNumber()));
 	conditions.push(gte(tables.season.end, dateIntoDayNumber()));
 	return useDrizzle()
@@ -115,10 +146,7 @@ export function createSeasonalRecipeSubQuery(seasonalRecipes: boolean, recipeCat
 			tables.recipe,
 			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
 		)
-		.innerJoin(
-			tables.season,
-			eq(tables.season.id, tables.recipe.seasonId),
-		)
+		.innerJoin(tables.season, eq(tables.season.id, tables.recipe.seasonId))
 		.where(and(...conditions))
 		.groupBy(tables.recipesCategory.id, tables.recipe.id);
 }
@@ -147,4 +175,3 @@ export function createSubQueryConditions<T extends SQLiteColumn>(
 	}
 	return conditions;
 }
-

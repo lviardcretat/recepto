@@ -1,26 +1,30 @@
 <script lang="ts" setup>
+import type { RecipeSearched } from '~/global/types';
+
 // Search value
 const searchValue = ref<string>('');
-const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
-	method: 'GET',
-	query: {
-		name: searchValue,
+const { data, execute, clear } = useFetch<RecipeSearched[]>(
+	'/api/recipesCategories/search',
+	{
+		method: 'GET',
+		query: {
+			name: searchValue,
+		},
+		immediate: false,
+		default: () => [],
+		watch: false,
+		onResponseError({ response }) {
+			throw showError({
+				statusCode: response.status,
+				statusMessage: response.statusText,
+			});
+		},
 	},
-	immediate: false,
-	default: () => [],
-	watch: false,
-	onResponseError({ response }) {
-		throw showError({
-			statusCode: response.status,
-			statusMessage: response.statusText,
-		});
-	},
-});
+);
 
 watch(searchValue, async (newValue) => {
 	if (newValue.trim().length > 0) {
 		await execute();
-		console.log(data.value);
 	} else {
 		clear();
 	}
@@ -33,8 +37,7 @@ const totalRecipes = computed(() => {
 	let result = 0;
 
 	if (data.value) {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		result = data.value.reduce((total: number, category: any) => {
+		result = data.value.reduce((total: number, category: RecipeSearched) => {
 			return total + (category?.recipes?.length || 0);
 		}, 0);
 	}

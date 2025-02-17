@@ -1,11 +1,12 @@
 <script lang="ts" setup>
+import type { RecipeDetail } from '~/global/types';
 import { formatDuration } from '~/global/utils';
 
 const props = defineProps<{
 	recipeId: number;
 }>();
 
-const { data: recipeFetch } = await useFetch(
+const { data: recipeFetch } = await useFetch<RecipeDetail>(
 	`/api/recipesCategories/recipes/${props.recipeId}`,
 	{
 		method: 'GET',
@@ -19,28 +20,31 @@ const { data: recipeFetch } = await useFetch(
 		},
 	},
 );
-const recipe = recipeFetch.value as unknown as any;
+
+const recipe = recipeFetch.value;
 const ingredients = ref(
-	recipe.ingredients.map((ingredient) => ({
+	recipe?.ingredients.map((ingredient) => ({
 		name: ingredient.ingredient.name,
 		quantity: ingredient.quantity,
 		unit: ingredient.unit.shortForm,
-		singlePortion: ingredient.quantity / recipe.peopleNumber,
+		singlePortion: ingredient.quantity / (recipe.peopleNumber ?? 1),
 	})),
 );
-const sequences = recipe.sequences.map((sequence) => ({
+const sequences = recipe?.sequences.map((sequence) => ({
 	label: sequence.title,
 	content: sequence.description,
 }));
-const peopleNumberModified = ref(recipe.peopleNumber);
+const peopleNumberModified = ref(recipe?.peopleNumber ?? 1);
 
 function renderIngredient(): void {
-	for (const [index] of ingredients.value.entries()) {
-		ingredients.value[index].quantity = Number(
-			(
-				ingredients.value[index].singlePortion * peopleNumberModified.value
-			).toFixed(2),
-		);
+	if (ingredients.value) {
+		for (const [index] of ingredients.value.entries()) {
+			ingredients.value[index].quantity = Number(
+				(
+					ingredients.value[index].singlePortion * peopleNumberModified.value
+				).toFixed(2),
+			);
+		}
 	}
 }
 </script>
@@ -49,7 +53,7 @@ function renderIngredient(): void {
 	<UCard class="w-full" :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
 		<template #header>
 			<div class="layer"></div>
-			<div class="text-center text-4xl m-4 font-bold text-green-500">{{ recipe.name }}</div>
+			<div class="text-center text-4xl m-4 font-bold text-green-500">{{ recipe?.name }}</div>
 			<div class="icons flex justify-center items-center gap-4">
 				<div class="peopleNumber flex justify-around items-center gap-1">
 					<UIcon name="ic:baseline-people-alt"/>
@@ -58,27 +62,27 @@ function renderIngredient(): void {
 				</div>
 				<div class="preparationTime flex justify-around items-center gap-1">
 					<UIcon name="mdi:knife"/>
-					<span class="value">{{ formatDuration(recipe.preparationTime)}}</span>
+					<span class="value">{{ formatDuration(recipe?.preparationTime)}}</span>
 				</div>
 				<div class="cookingTime flex justify-around items-center gap-1">
 					<UIcon name="material-symbols:oven-outline-rounded"/>
-					<span class="value">{{ formatDuration(recipe.cookingTime) }}</span>
+					<span class="value">{{ formatDuration(recipe?.cookingTime) }}</span>
 				</div>
 				<div class="restTime flex justify-around items-center gap-1">
 					<UIcon name="mdi:sleep"/>
-					<span class="value">{{ formatDuration(recipe.restTime) }}</span>
+					<span class="value">{{ formatDuration(recipe?.restTime) }}</span>
 				</div>
 			</div>
 			<div class="text-center mt-2">
-				<UTooltip v-if="recipe.allergens?.length > 0" :text="allergen.name" v-for="allergen in recipe.allergens">
+				<UTooltip v-if="recipe?.allergens?.length ?? 0 > 0" :text="allergen.allergen.name" v-for="allergen in recipe?.allergens">
 					<UIcon name="vscode-icons:default-file" />
 				</UTooltip>
 				<div v-else>{{ $t('allergenFree') }}</div>
 			</div>
 		</template>
 		<UContainer class="info mb-6">
-			<div>{{ recipe.description }}</div>
-			<div class="mt-4 italic text-center">{{ `❝ ${recipe.tips} ❞` }}</div>
+			<div>{{ recipe?.description }}</div>
+			<div class="mt-4 italic text-center">{{ `❝ ${recipe?.tips} ❞` }}</div>
 		</UContainer>
 		<UDivider/>
 		<UContainer class="base flex pb-6 pt-6">
@@ -93,7 +97,7 @@ function renderIngredient(): void {
 				<UDivider class="pb-6 pt-6"/>
 				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ustensil', 2) }}</h1>
 				<div class="flex flex-col">
-					<div v-for="ustensil in recipe.ustensils">{{ ustensil.name }}</div>
+					<div v-for="ustensil in recipe?.ustensils">{{ ustensil.ustensil.name }}</div>
 				</div>
 			</div>
 			<UDivider class="mr-6 ml-6" orientation="vertical" />
@@ -116,8 +120,8 @@ function renderIngredient(): void {
 		</UContainer>
 		<template #footer>
 			<div class="footer flex justify-between items-center">
-				<p>{{ $t('createdBy', { username: `${recipe.createdBy?.firstname} ${recipe.createdBy?.lastname}` })}}</p>
-				<p>{{ $d(recipe.createdAt, 'short') }}</p>
+				<p>{{ $t('createdBy', { username: `${recipe?.createdBy.firstname} ${recipe?.createdBy.lastname}` })}}</p>
+				<p>{{ $d(new Date(recipe?.createdAt ?? ''), 'short') }}</p>
 			</div>
 		</template>
 	</UCard>

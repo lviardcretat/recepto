@@ -1,5 +1,5 @@
-export function formatDuration(duration: number | null): string {
-	if (duration === null) {
+export function formatDuration(duration: number | null | undefined): string {
+	if (!duration) {
 		return '0m';
 	}
 	if (duration % 1 === 0) {

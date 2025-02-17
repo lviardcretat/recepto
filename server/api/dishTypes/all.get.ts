@@ -1,7 +1,8 @@
 import { getDishTypes } from '~/server/data/dishTypes';
+import type { DishType } from '~/server/utils/drizzle';
 
 export default defineEventHandler(async () => {
-	const dishTypes = await getDishTypes();
+	const dishTypes: DishType[] = await getDishTypes();
 	if (!dishTypes) {
 		throw createError({
 			statusCode: 404,

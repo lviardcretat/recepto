@@ -2,15 +2,6 @@ import type { IngredientInsert } from '~/server/utils/drizzle';
 
 export const ingredientsSeed: IngredientInsert[] = [
 	{
-		name: 'Chou rouge',
-		foodTypeId: 1,
-		seasonalMonths: [
-			[7, 12],
-			[0, 2],
-		],
-		createdById: 1,
-	},
-	{
 		name: 'Ail',
 		foodTypeId: 1,
 		seasonalMonths: [[0, 12]],

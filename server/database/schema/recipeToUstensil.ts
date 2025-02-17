@@ -23,7 +23,7 @@ export const recipeToUstensilRelations = relations(
 			fields: [recipeToUstensil.recipeId],
 			references: [recipe.id],
 		}),
-		user: one(ustensil, {
+		ustensil: one(ustensil, {
 			fields: [recipeToUstensil.ustensilId],
 			references: [ustensil.id],
 		}),

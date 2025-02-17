@@ -116,7 +116,6 @@ const { data: units } = await useFetch('/api/units/all', {
 });
 
 async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
-	console.log(event.data);
 	await $fetch('/api/recipesCategories/recipes', {
 		method: 'POST',
 		body: event.data,

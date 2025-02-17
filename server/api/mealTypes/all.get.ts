@@ -1,7 +1,8 @@
 import { getMealTypes } from '~/server/data/mealTypes';
+import type { MealType } from '~/server/utils/drizzle';
 
 export default defineEventHandler(async () => {
-	const mealTypes = await getMealTypes();
+	const mealTypes: MealType[] = await getMealTypes();
 	if (!mealTypes) {
 		throw createError({
 			statusCode: 404,
