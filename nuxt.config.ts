@@ -5,13 +5,14 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 	extends: ['@nuxt/ui-pro'],
 	modules: [
+		// Must be loaded before @nuxtjs/i18nssssssssssssssssssssssssssssssssssssss
+		'nuxt-zod-i18n',
 		'@nuxt/image',
 		'@nuxt/ui',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'nuxt-swiper',
 		'@nuxthub/core',
-		'nuxt-zod-i18n',
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
