@@ -1,0 +1,47 @@
+{
+	// Wiki : https://containers.dev/implementors/json_reference/
+	"name": "Recepto",
+	"forwardPorts": [3000],
+	"containerEnv": {
+		"NUXT_HUB_PROJECT_KEY": "${containerEnv:NUXT_HUB_PROJECT_KEY}",
+		"NUXT_UI_PRO_LICENSE": "${containerEnv:NUXT_UI_PRO_LICENSE}"
+	},
+	"image": "node:23-alpine3.20",
+	"shutdownAction": "stopContainer",
+	//"onCreateCommand": "pnpm install",
+	"postCreateCommand": "pnpm install",
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			"settings": {
+				"workbench.iconTheme": "material-icon-theme",
+				"workbench.startupEditor": "none",
+				"editor.gotoLocation.multipleDefinitions": "goto",
+				"terminal.integrated.defaultProfile.linux": "JavaScript Debug Terminal",
+				"terminal.integrated.defaultProfile.windows": "JavaScript Debug Terminal",
+				"[vue]": {
+					"editor.defaultFormatter": "biomejs.biome"
+				},
+				"editor.defaultFormatter": "biomejs.biome",
+				"editor.formatOnSave": true
+			},
+			"extensions": [
+				"editorconfig.editorconfig",
+				"biomejs.biome",
+				"joshbolduc.commitlint",
+				"lokalise.i18n-ally",
+				"ecmel.vscode-html-css",
+				"bradlc.vscode-tailwindcss",
+				"nuxtr.nuxtr-vscode",
+				"vue.volar",
+				"luongnd.edge",
+				"nuxt.mdc",
+				"nicholashsiang.vscode-pinia-snippets",
+				"imgildev.vscode-drizzle-snippets",
+				"rphlmr.vscode-drizzle-orm",
+				"antfu.goto-alias",
+				"jacano.vscode-pnpm"
+			]
+		}
+	}
+}
