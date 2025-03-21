@@ -2,11 +2,10 @@
 	// Wiki : https://containers.dev/implementors/json_reference/
 	"name": "Recepto",
 	"forwardPorts": [3000],
-	"containerEnv": {
-		"NUXT_HUB_PROJECT_KEY": "${containerEnv:NUXT_HUB_PROJECT_KEY}",
-		"NUXT_UI_PRO_LICENSE": "${containerEnv:NUXT_UI_PRO_LICENSE}"
+	"runArgs": ["--env-file", ".env"],
+	"build": {
+		"dockerfile": "../Dockerfile"
 	},
-	"image": "node:23-alpine3.20",
 	"shutdownAction": "stopContainer",
 	//"onCreateCommand": "pnpm install",
 	"postCreateCommand": "pnpm install",
@@ -26,21 +25,37 @@
 				"editor.formatOnSave": true
 			},
 			"extensions": [
-				"editorconfig.editorconfig",
+				"akamud.vscode-theme-onedark",
+				"antfu.goto-alias",
 				"biomejs.biome",
+				"bradlc.vscode-tailwindcss",
+				"continue.continue",
+				"eamodio.gitlens",
+				"ecmel.vscode-html-css",
+				"editorconfig.editorconfig",
+				"formulahendry.auto-close-tag",
+				"formulahendry.auto-rename-tag",
+				"imgildev.vscode-drizzle-snippets",
+				"jacano.vscode-pnpm",
+				"jdinhlife.gruvbox",
 				"joshbolduc.commitlint",
 				"lokalise.i18n-ally",
-				"ecmel.vscode-html-css",
-				"bradlc.vscode-tailwindcss",
-				"nuxtr.nuxtr-vscode",
-				"vue.volar",
-				"luongnd.edge",
-				"nuxt.mdc",
+				"mikestead.dotenv",
+				"ms-python.debugpy",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-vscode-remote.remote-containers",
+				"ms-vscode-remote.remote-ssh",
+				"ms-vscode-remote.remote-ssh-edit",
+				"ms-vscode.remote-explorer",
 				"nicholashsiang.vscode-pinia-snippets",
-				"imgildev.vscode-drizzle-snippets",
+				"nuxt.mdc",
+				"nuxtr.nuxt-vscode-extentions",
+				"nuxtr.nuxtr-vscode",
+				"pkief.material-icon-theme",
 				"rphlmr.vscode-drizzle-orm",
-				"antfu.goto-alias",
-				"jacano.vscode-pnpm"
+				"sainnhe.gruvbox-material",
+				"vue.volar"
 			]
 		}
 	}

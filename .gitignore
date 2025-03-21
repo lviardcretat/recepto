@@ -26,6 +26,10 @@ logs
 # BDD
 *.db
 
+# Docker / Devcontainer
+
+.pnpm-store
+
 # Crappy direnv nix stuff
 nix-profile*
 /.vs
