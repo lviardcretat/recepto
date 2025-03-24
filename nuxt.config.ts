@@ -5,14 +5,14 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 	extends: ['@nuxt/ui-pro'],
 	modules: [
-		// Must be loaded before @nuxtjs/i18nssssssssssssssssssssssssssssssssssssss
+		// Must be loaded before @nuxtjs/i18n
 		'nuxt-zod-i18n',
 		'@nuxt/image',
 		'@nuxt/ui',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'nuxt-swiper',
-		'@nuxthub/core',
+		'@nuxthub/core', // Comment it for local bdd
 	],
 	css: ['~/assets/css/main.css'],
 	postcss: {
@@ -55,6 +55,7 @@ export default defineNuxtConfig({
 		},
 	},
 	hub: {
+		// Comment it for local bdd
 		database: true,
 		blob: true,
 	},
@@ -65,6 +66,7 @@ export default defineNuxtConfig({
 		},
 	},
 	$development: {
+		// Comment it for local bdd
 		hub: {
 			remote: true,
 		},
