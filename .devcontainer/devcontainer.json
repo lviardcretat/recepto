@@ -2,7 +2,11 @@
 	// Wiki : https://containers.dev/implementors/json_reference/
 	"name": "Recepto",
 	"forwardPorts": [3000],
-	"runArgs": ["--env-file", ".env"],
+	"containerEnv": {
+	    "NUXT_HUB_PROJECT_KEY": "${localEnv:NUXT_HUB_PROJECT_KEY}",
+	    "NUXT_UI_PRO_LICENSE": "${localEnv:NUXT_UI_PRO_LICENSE}",
+	    "DB_FILE_NAME": "${localEnv:DB_FILE_NAME}"
+	},
 	"build": {
 		"dockerfile": "../Dockerfile"
 	},
