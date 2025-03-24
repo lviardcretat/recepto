@@ -48,7 +48,7 @@ export function createIngredientSubQuery(
 	if (recipeCategoryId)
 		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	return useDrizzle()
-		.select(recipeCategoryId ? recipeCategorySelectType : recipeSelectType)
+		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
 			tables.recipe,
@@ -79,7 +79,7 @@ export function createUstensilSubQuery(
 	if (recipeCategoryId)
 		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	return useDrizzle()
-		.select(recipeCategoryId ? recipeCategorySelectType : recipeSelectType)
+		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
 			tables.recipe,
@@ -110,7 +110,7 @@ export function createAllergenSubQuery(
 	if (recipeCategoryId)
 		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	return useDrizzle()
-		.select(recipeCategoryId ? recipeCategorySelectType : recipeSelectType)
+		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
 			tables.recipe,
@@ -140,7 +140,7 @@ export function createSeasonalRecipeSubQuery(
 	conditions.push(lte(tables.season.start, dateIntoDayNumber()));
 	conditions.push(gte(tables.season.end, dateIntoDayNumber()));
 	return useDrizzle()
-		.select(recipeCategoryId ? recipeCategorySelectType : recipeSelectType)
+		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
 			tables.recipe,
