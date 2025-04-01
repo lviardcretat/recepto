@@ -1,20 +1,19 @@
 {
 	// Wiki : https://containers.dev/implementors/json_reference/
 	"name": "Recepto",
-	"forwardPorts": [3000],
+	"forwardPorts": [
+		3000
+	],
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
 	"containerEnv": {
 	    "NUXT_HUB_PROJECT_KEY": "${localEnv:NUXT_HUB_PROJECT_KEY}",
 	    "NUXT_UI_PRO_LICENSE": "${localEnv:NUXT_UI_PRO_LICENSE}",
 	    "DB_FILE_NAME": "${localEnv:DB_FILE_NAME}"
 	},
-	"build": {
-		"dockerfile": "../Dockerfile"
-	},
-	"shutdownAction": "stopContainer",
-	//"onCreateCommand": "pnpm install",
-	"postCreateCommand": "pnpm install",
 	"customizations": {
-		// Configure properties specific to VS Code.
 		"vscode": {
 			"settings": {
 				"workbench.iconTheme": "material-icon-theme",
