@@ -1,23 +1,8 @@
 <script setup lang="ts">
-import type { BreadcrumbItem } from '@nuxt/ui';
-
-const items = ref<BreadcrumbItem[]>([
-	{
-		label: 'Home',
-		icon: 'i-lucide-house',
-		to: '/',
-	},
-	{
-		label: 'Recettes',
-		icon: 'ri:bowl-fill',
-		to: '/recipes/all',
-	},
-]);
 </script>
 
 <template>
 	<UDashboardGroup>
-		<RecipeFilter/>
 		<UDashboardPanel>
 			<template #header>
 				<UDashboardNavbar>
@@ -32,9 +17,6 @@ const items = ref<BreadcrumbItem[]>([
 						</div>
 					</template>
 				</UDashboardNavbar>
-				<UDashboardToolbar>
-					<UBreadcrumb :items="items" />
-				</UDashboardToolbar>
 			</template>
 			<template #body>
 				<slot />

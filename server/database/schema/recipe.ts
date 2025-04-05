@@ -27,6 +27,7 @@ export const recipe = sqliteTable('recipe', {
 	createdById: integer('createdById')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
+	selectMenuType: text('item').generatedAlwaysAs('is'),
 	...timestamps,
 });
 

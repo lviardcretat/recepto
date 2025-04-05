@@ -39,9 +39,9 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
 
 <template>
 	<UForm ref="form" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-		<UFormGroup :label="$t('formCreation.name')" name="name">
+		<UFormField :label="$t('formCreation.name')" name="name">
 			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.ustensil.nameExample')"/>
-		</UFormGroup>
+		</UFormField>
 		<div class="flex justify-between">
 			<UButton variant="outline" @click="form.clear()">
 				{{ $t('formCreation.clear') }}

@@ -46,7 +46,7 @@ export type RecipeWithLessData = {
 	cookingTime: number | null;
 	preparationTime: number | null;
 	restTime: number | null;
-	description: string | null;
+	description: string | null | undefined;
 	seasonId: number;
 	createdAt: string;
 	userFirstname: string | null;
@@ -90,19 +90,6 @@ export type GeneralData = {
 };
 
 /**
- * @description Recipes searched type return
- * @type RecipeDetail
- */
-export type RecipeSearched = {
-	id: number;
-	name: string;
-	recipes: {
-		id: number;
-		name: string;
-	}[];
-};
-
-/**
  * @description Recipe custom model with all data needed for card details
  * @type RecipeDetail
  */
@@ -126,4 +113,14 @@ export type RecipeDetail = {
 	sequences: { id: number; description: string; title: string }[];
 	ustensils: { ustensil: { name: string } }[];
 	createdBy: { firstname: string; lastname: string };
+};
+
+/**
+ * @description Recipes searched type return
+ * @type RecipeDetail
+ */
+export type RecipeSearched = {
+	id: number;
+	label: string;
+	type: string | null;
 };

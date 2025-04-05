@@ -17,7 +17,7 @@ defineProps<{
 		<UContainer>
 			<UMain>
 				<UPage>
-					<UPageError :error="error" />
+					<Error :error="error" />
 				</UPage>
 			</UMain>
 		</UContainer>

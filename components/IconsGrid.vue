@@ -11,7 +11,7 @@ const store = useFiltersStore();
 			class="w-6 h-6 ml-4 mr-4 mt-2 mb-2 flex items-center justify-center">
 			<UButton
 				:icon="item.icon"
-				color="white"
+				color="neutral"
 				variant="ghost"
 				:class="items[item.id - 1].active ? 'opacity-100' : 'opacity-20'"
 				@click="

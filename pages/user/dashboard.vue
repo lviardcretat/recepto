@@ -65,7 +65,7 @@ const cards = [
 </script>
 
 <template>
-	<UDashboardPage class="h-full">
+	<UDashboardGroup class="h-full">
 		<MainSlideover></MainSlideover>
 		<UDashboardPanel grow>
 			<UDashboardNavbar :title="$t('recipe', 2)">
@@ -79,11 +79,11 @@ const cards = [
 						@click="test = !test"/>
 				</template>
 			</UDashboardNavbar>
-			<UDashboardPanelContent>
+			<template #body>
 				<UContainer class="w-full h-full flex flex-col items-center justify-center">
 					<h1 class="text-4xl font-bold self-stretch flex items-center justify-center h-1/4">Vous avez été très performant !</h1>
 					<div class="gap-10 w-full flex justify-evenly flex-wrap h-3/4">
-						<UCard v-for="card in cards" class="w-1/4 h-1/3" :ui="{ body: {base: 'h-1/3'} }">
+						<UCard v-for="card in cards" class="w-1/4 h-1/3">
 							<template #header>
 								<div class="flex justify-between flex-col items-center gap-4 h-3/5">
 									<UIcon class="text-4xl" :name="card.icon" />
@@ -96,9 +96,9 @@ const cards = [
 						</UCard>
 					</div>
 				</UContainer>
-			</UDashboardPanelContent>
+			</template>
 		</UDashboardPanel>
-	</UDashboardPage>
+	</UDashboardGroup>
 </template>
 
 <style lang="scss" scoped>

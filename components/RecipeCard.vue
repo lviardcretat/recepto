@@ -4,7 +4,7 @@ import { formatDuration } from '~/global/utils';
 
 const props = defineProps<{
 	name: string;
-	description: string | null;
+	description: string | null | undefined;
 	peopleNumber: number;
 	preparationTime: number;
 	cookingTime: number;
@@ -15,7 +15,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<UCard class="recipeCard flex flex-col" :ui="{body: { base: 'grow-2', }}">
+	<UCard class="recipeCard flex flex-col">
 		<template #header>
 			<h1 class="name text-3xl text-center mb-6 mt-6">{{ props.name }}</h1>
 			<img src="~/assets/img/lasagnes.jpg" />

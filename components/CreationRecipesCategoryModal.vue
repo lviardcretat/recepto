@@ -54,14 +54,14 @@ async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
 
 <template>
 	<UForm ref="form" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-		<UFormGroup :label="$t('formCreation.name')" name="name">
+		<UFormField :label="$t('formCreation.name')" name="name">
 			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.category.nameExample')"/>
-		</UFormGroup>
-		<UFormGroup :label="$t('formCreation.category.dishType')" name="dishTypeId">
-			<USelectMenu v-model="state.dishTypeId" :options="dishTypes ?? []"
+		</UFormField>
+		<UFormField :label="$t('formCreation.category.dishType')" name="dishTypeId">
+			<USelectMenu v-model="state.dishTypeId" :items="dishTypes ?? []"
 				:placeholder="$t('formCreation.category.selectByDishType')"
 				option-attribute="name" value-attribute="id" @update:modelValue="state.dishTypeId = Number($event)"/>
-		</UFormGroup>
+		</UFormField>
 		<div class="flex justify-between">
 			<UButton variant="outline" @click="form.clear()">
 				{{ $t('formCreation.clear') }}

@@ -34,8 +34,10 @@ useListen('recipe:created', async () => {
 					@click="recipeActive = recipe; isModalOpen = true"/>
 			</swiper-slide>
         </swiper-container>
-		<UModal v-model="isModalOpen" :ui="{ width: 'sm:max-w-4xl' }">
-			<RecipeCardDetails :recipeId="recipeActive?.id ?? 1"/>
+		<UModal v-model:open="isModalOpen" class="max-w-4xl">
+			<template #body>
+				<RecipeCardDetails :recipeId="recipeActive?.id ?? 1"/>
+		    </template>
 		</UModal>
     </div>
 </template>

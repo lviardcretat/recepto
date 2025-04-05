@@ -47,28 +47,31 @@ function renderIngredient(): void {
 		}
 	}
 }
+
+// TODO : make it work
+const active = ref(['0', '1']);
 </script>
 
 <template>
-	<UCard class="w-full" :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+	<UCard class="w-full card">
 		<template #header>
 			<div class="layer"></div>
 			<div class="text-center text-4xl m-4 font-bold text-green-500">{{ recipe?.name }}</div>
 			<div class="icons flex justify-center items-center gap-4">
-				<div class="peopleNumber flex justify-around items-center gap-1">
+				<div class="peopleNumber flex justify-center items-center gap-1 w-20">
 					<UIcon name="ic:baseline-people-alt"/>
-					<UInput type="number" min="1" max="50" size="sm" v-model="peopleNumberModified" variant="none"
-						class="w-11" @update:model-value="renderIngredient()" :ui="{ padding: { sm: 'px-0' }}"/>
+					<UInputNumber :min="1" :max="50" size="md" v-model="peopleNumberModified" variant="none"
+						orientation="vertical" class="w-15" @update:modelValue="renderIngredient()"/>
 				</div>
-				<div class="preparationTime flex justify-around items-center gap-1">
+				<div class="preparationTime flex justify-center items-center gap-1 w-20">
 					<UIcon name="mdi:knife"/>
 					<span class="value">{{ formatDuration(recipe?.preparationTime)}}</span>
 				</div>
-				<div class="cookingTime flex justify-around items-center gap-1">
+				<div class="cookingTime flex justify-center items-center gap-1 w-20">
 					<UIcon name="material-symbols:oven-outline-rounded"/>
 					<span class="value">{{ formatDuration(recipe?.cookingTime) }}</span>
 				</div>
-				<div class="restTime flex justify-around items-center gap-1">
+				<div class="restTime flex justify-center items-center gap-1 w-20">
 					<UIcon name="mdi:sleep"/>
 					<span class="value">{{ formatDuration(recipe?.restTime) }}</span>
 				</div>
@@ -84,7 +87,7 @@ function renderIngredient(): void {
 			<div>{{ recipe?.description }}</div>
 			<div class="mt-4 italic text-center">{{ `❝ ${recipe?.tips} ❞` }}</div>
 		</UContainer>
-		<UDivider/>
+		<USeparator/>
 		<UContainer class="base flex pb-6 pt-6">
 			<div class="ingredientsUstensils w-1/4">
 				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ingredient', 2) }}</h1>
@@ -94,26 +97,18 @@ function renderIngredient(): void {
 						<span>{{ ingredient.name }}</span>
 					</div>
 				</div>
-				<UDivider class="pb-6 pt-6"/>
+				<USeparator class="pb-6 pt-6"/>
 				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('ustensil', 2) }}</h1>
 				<div class="flex flex-col">
 					<div v-for="ustensil in recipe?.ustensils">{{ ustensil.ustensil.name }}</div>
 				</div>
 			</div>
-			<UDivider class="mr-6 ml-6" orientation="vertical" />
+			<USeparator class="mr-6 ml-6" orientation="vertical" />
 			<div class="sequences w-3/4 flex flex-col">
 				<h1 class="text-3xl mb-4 font-semibold text-green-500">{{ $t('preparationSteps') }}</h1>
-				<UAccordion multiple default-open :items="sequences" :ui="{ wrapper: 'flex flex-col w-full' }">
-					<template #default="{ item, index, open }">
-						<UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
-							<span class="truncate">{{ index + 1 }}. {{ item.label }}</span>
-							<template #trailing>
-								<UIcon
-									name="i-heroicons-chevron-right-20-solid"
-									class="w-5 h-5 ms-auto transform transition-transform duration-200"
-									:class="[open && 'rotate-90']"/>
-							</template>
-						</UButton>
+				<UAccordion type="multiple" :items="sequences" :v-model="active">
+					<template #leading="{ index }">
+						<span class="truncate">{{ index + 1 }}.</span>
 					</template>
 				</UAccordion>
 			</div>
@@ -128,6 +123,10 @@ function renderIngredient(): void {
 </template>
 
 <style lang="scss" scoped>
+	.card {
+		--tw-ring-color: transparent;
+	}
+
 	.layer {
 		aspect-ratio: 3 / 1;
 		background:

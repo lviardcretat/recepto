@@ -2,65 +2,14 @@
 </script>
 
 <template>
-	<UDashboardPage class="homepage h-full w-full">
-		<UDashboardPanel grow>
-			<UDashboardNavbar :title="$t('recipes')">
-				<template #right>
-					<TranslationSelect></TranslationSelect>
-					<UColorModeToggle />
-				</template>
-			</UDashboardNavbar>
-			<UDashboardPanelContent class="searchPanelContent">
-				<RecipeSearchBar/>
-				<div class="allRecipes">
-					<label>
-						{{ $t('inspiration') }}
-					</label>
-					<ULink class="moreRecipes"
-						:to="{
-						   name: 'recipes-all'
-						}"
-					>
-						{{ $t('here') }}
-					</ULink>
-				</div>
-			</UDashboardPanelContent>
-		</UDashboardPanel>
-	</UDashboardPage>
+	<div class="m-auto w-1/2 flex flex-col">
+		<RecipeSearchBar/>
+		<UButton icon="ri:bowl-fill" trailing-icon="i-lucide-arrow-right"
+			color="primary" variant="ghost" size="xl" class="mt-3 ml-auto mr-auto"
+			:to="{
+				name: 'recipes-all'
+			}">
+			{{ $t('recipeAll') }}
+		</UButton>
+	</div>
 </template>
-
-<style lang="scss">
-	:root {
-	color-scheme: light dark;
-	}
-	.homepage {
-		display: flex;
-		flex-direction: column;
-
-		.searchPanelContent {
-			display: flex;
-			flex-direction: column;
-			padding: 2rem;
-			justify-content: center;
-			align-items: center;
-
-			> .recipeSearchBar {
-				width: 75%;
-			}
-
-			> .allRecipes {
-				display: flex;
-				flex-direction: row;
-				column-gap: 0.5rem;
-
-				> .moreRecipes {
-					font-weight: bold;
-				}
-
-				> .moreRecipes:hover {
-					text-decoration: underline;
-				}
-			}
-		}
-	}
-</style>

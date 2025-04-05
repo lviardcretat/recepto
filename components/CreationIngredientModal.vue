@@ -88,16 +88,16 @@ function mapFlatMonthsToSeasonalMonths(): void {
 
 <template>
 	<UForm ref="form" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-		<UFormGroup :label="$t('formCreation.name')" name="name" eager-validation>
+		<UFormField :label="$t('formCreation.name')" name="name" eager-validation>
 			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.ingredient.nameExample')"/>
-		</UFormGroup>
-		<UFormGroup :label="$t('formCreation.ingredient.foodType')" name="foodTypeId">
-			<USelectMenu v-model="state.foodTypeId" :options="foodTypes ?? []"
+		</UFormField>
+		<UFormField :label="$t('formCreation.ingredient.foodType')" name="foodTypeId">
+			<USelectMenu v-model="state.foodTypeId" :items="foodTypes ?? []"
 				:searchable-placeholder="$t('search')"
 				:placeholder="$t('formCreation.ingredient.selectByFoodTypeId')"
 				option-attribute="name" value-attribute="id" @update:modelValue="state.foodTypeId = Number($event)"/>
-		</UFormGroup>
-		<UFormGroup :label="$t('formCreation.ingredient.seasonalMonths')" name="seasonalMonths" :hint="$t('formCreation.recipe.optional')">
+		</UFormField>
+		<UFormField :label="$t('formCreation.ingredient.seasonalMonths')" name="seasonalMonths" :hint="$t('formCreation.recipe.optional')">
 			<div class="flex justify-evenly w-full">
 				<UButton v-for="(month, index) of Object.values(Months)" :key="month"
 					:variant="flatSeasonalMonths.includes(index) ? 'solid' : 'ghost'"
@@ -105,7 +105,7 @@ function mapFlatMonthsToSeasonalMonths(): void {
 					{{ $t(month) }}
 				</UButton>
 			</div>
-		</UFormGroup>
+		</UFormField>
 		<div class="flex justify-between">
 			<UButton variant="outline" @click="form.clear()">
 				{{ $t('formCreation.clear') }}

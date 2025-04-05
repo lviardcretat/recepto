@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { AccordionItem } from '@nuxt/ui';
 import { DataType } from '~/global/enums';
 import type { GeneralData, IconsGridItem, SelectItem } from '~/global/types';
 
@@ -107,53 +108,49 @@ function mapIconsGridItems<T extends GeneralData>(
 	);
 }
 
-let accordionKey = ref(0);
+const { t } = useI18n();
 const route = useRoute();
 const inRecipesPage = computed(() => {
 	return route.params.id !== undefined;
 });
-const items = ref([
+const items = ref<AccordionItem[]>([
 	{
-		label: 'ingredient',
-		pluralTranslation: true,
+		label: t('ingredient', 1),
 		icon: 'fa6-solid:carrot',
 		slot: 'select',
 		items: ingredients,
 	},
 	{
-		label: 'ustensil',
-		pluralTranslation: true,
+		label: t('ustensil', 2),
 		icon: 'solar:ladle-bold',
 		slot: 'select',
 		items: ustensils,
 	},
 	{
-		label: 'allergens',
+		label: t('allergens', 1),
 		icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
 		slot: 'icons',
 		items: allergens,
 	},
 	{
-		label: 'seasonalRecipes',
+		label: t('seasonalRecipes', 1),
 		icon: 'fa6-solid:snowflake',
 		slot: 'toggle',
 		disabled: true,
 	},
 	{
-		label: 'mealTypes',
+		label: t('mealTypes', 1),
 		icon: 'tabler:sun-moon',
 		slot: 'select',
 		items: mealTypes,
-		defaultOpen: inRecipesPage,
-		disabled: inRecipesPage,
+		disabled: inRecipesPage.value,
 	},
 	{
-		label: 'dishTypes',
+		label: t('dishTypes', 1),
 		icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
 		slot: 'select',
 		items: dishTypes,
-		defaultOpen: inRecipesPage,
-		disabled: inRecipesPage,
+		disabled: inRecipesPage.value,
 	},
 ]);
 
@@ -165,62 +162,33 @@ watch(
 	},
 	{ deep: true },
 );
-// See https://github.com/nuxt/ui/issues/934
-watch(
-	inRecipesPage,
-	async () => {
-		accordionKey.value += 1;
-	},
-	{ deep: true },
-);
 </script>
 
 <template>
-	<UDashboardPanel :width="300" :resizable="{ min: 200, max: 400 }">
-		<UDashboardNavbar :title="$t('filter')" :badge="store.filterNumber ?? 0">
-			<template #right>
-				<UIcon name="material-symbols:filter-alt" class="w-7 h-7" />
-        	</template>
-		</UDashboardNavbar>
-		<UDashboardSidebar>
-			<UAccordion :key="accordionKey" :items="items" multiple :ui="{ wrapper: 'flex flex-col w-full' }">
-				<template #default="{ item, open }">
-					<UButton v-if="item.slot != 'toggle'" color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
-						<template #leading>
-							<UIcon :name="item.icon" class="w-4 h-4 text-gray-900 dark:text-white" />
-						</template>
-						<span class="truncate">{{ $t(item.label, item.pluralTranslation ? 2 : 1) }}</span>
-						<template #trailing>
-							<UIcon
-								name="i-heroicons-chevron-right-20-solid"
-								class="w-5 h-5 ms-auto transform transition-transform duration-200"
-								:class="[open && 'rotate-90']"/>
-						</template>
-					</UButton>
-					<div v-else class="border-b border-gray-200 dark:border-gray-700 flex justify-between p-3 items-center">
-						<div class="flex items-center gap-x-1.5">
-							<UIcon :name="item.icon" class="w-4 h-4 text-sm font-medium text-gray-900 dark:text-white" />
-							<span class="truncate text-sm font-medium">{{ $t(item.label) }}</span>
-						</div>
-						<UToggle
-							on-icon="i-heroicons-check-20-solid"
-							off-icon="i-heroicons-x-mark-20-solid"
-							v-model="store.seasonalRecipes"/>
-					</div>
-				</template>
-				<template #select="{ item, open }">
-					<CustomSelect @hook:mounted="() => {
-						if (item.disabled) {
-							open()
-						}
-						}" :items="item.items" :placeholder="$t(item.label)" :disabled="item.disabled ?? false" />
-				</template>
-				<template #icons="{ item }">
-					<IconsGrid :items="item.items" />
-				</template>
-			</UAccordion>
-		</UDashboardSidebar>
-	</UDashboardPanel>
+	<UDashboardSidebar resizable :defaultSize="22" :minSize="10" :maxSize="30">
+		<template #header>
+			<span class="mr-auto font-bold">{{ $t('filter') }}</span>
+			<UIcon name="material-symbols:filter-alt" class="w-7 h-7" />
+		</template>
+		<UAccordion :items="items" type="multiple" :ui="{ root: 'flex flex-col w-full' }">
+			<template #trailing="{ item }">
+				<USwitch v-if="item.slot === 'toggle'" class="ml-auto"
+					unchecked-icon="i-lucide-x"
+					checked-icon="i-lucide-check"
+					v-model="store.seasonalRecipes"/>
+			</template>
+			<template #body="{ item }">
+				<!--<CustomSelect v-if="item.slot != 'toggle'" :items="item.items" :placeholder="$t(item.label!)" :disabled="item.disabled ?? false" />
+				<IconsGrid v-else :items="item.items" />-->
+				This is the dzqdzq panel.
+			</template>
+			<template #content="{ item }">
+				<!--<CustomSelect v-if="item.slot != 'toggle'" :items="item.items" :placeholder="$t(item.label!)" :disabled="item.disabled ?? false" />
+				<IconsGrid v-else :items="item.items" />-->
+				This is the dzqdzq panel.
+			</template>
+		</UAccordion>
+	</UDashboardSidebar>
 </template>
 
 <style lang="scss">

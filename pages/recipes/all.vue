@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useFiltersStore } from '@/stores/filters';
-import type { RecipesCategoriesWithLessData } from '~/global/types';
 
 const store = useFiltersStore();
 await store.fetchFilteredRecipes();
@@ -23,15 +22,10 @@ useListen('recipesCategory:created', async () => {
 </script>
 
 <template>
-	<NuxtLink v-if="isData()" v-for="recipeCategory in store.recipeCategoryList as unknown as RecipesCategoriesWithLessData[]" :key="recipeCategory.id" :to="{ name: 'recipes-id', params: { id: recipeCategory.id }, query: { recipeIndex: 0}}">
-		<UDashboardCard class="mb-4" :title="recipeCategory?.name"></UDashboardCard>
-	</NuxtLink>
+	<UPageCard v-if="isData()" v-for="recipeCategory in store.recipeCategoryList"
+		:title="recipeCategory?.name" variant="outline" target="_self"
+		:to="{ name: 'recipes-id', params: { id: recipeCategory.id }, query: { recipeIndex: 0}}"></UPageCard>
 </template>
 
 <style lang="scss">
-	.recipe-content {
-		width: 100vw;
-		height: 100vh;
-		display: flex;
-	}
 </style>

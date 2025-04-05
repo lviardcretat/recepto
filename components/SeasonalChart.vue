@@ -120,25 +120,18 @@ let data: ChartData<'bar'> = {
 </script>
 
 <template>
-	<UModal v-model="isModalOpen" class="z-10" :ui="{ width: 'sm:max-w-4xl', height: 'h-[80vh]' }">
-		<UCard>
-			<template #header>
-				<h1 class="h-8">Calendrier de saison</h1>
-			</template>
-
-			<div class="relative flex-1 overflow-y-auto h-[70vh] p-4" id="container">
-				<div id="chartContainer">
-					<Bar :data="data" :options="chartOptions"/>
+	<UModal title="Calendrier de saison" v-model:open="isModalOpen" class="z-10">
+		<template #body>
+			<UCard>
+				<div class="relative flex-1 overflow-y-auto h-[70vh] p-4" id="container">
+					<div id="chartContainer">
+						<Bar :data="data" :items="chartOptions"/>
+					</div>
 				</div>
-			</div>
-		</UCard>
+			</UCard>
+		</template>
 	</UModal>
 </template>
 
 <style lang="scss">
-	#container {
-		#chartContainer{
-			height: 300%;
-		}
-	}
 </style>

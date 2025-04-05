@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const test = useTest();
+import type { NavigationMenuItem } from '@nuxt/ui';
 
-const links = [
+const links: NavigationMenuItem[] = [
 	{
 		label: 'recipe',
 		pluralTranslation: true,
@@ -45,19 +45,17 @@ const links = [
 </script>
 
 <template>
-	<UDashboardSlideover v-model="test" :title="$t('menu')" side="right">
-		<UDashboardPanel>
-			<UDashboardSearchButton :label="$t('search')" />
-			<UDashboardSidebar>
-				<UDashboardSidebarLinks :links="links">
-					<template #default="{ link }">
-						<!-- Don't know why but this is needed for the dashboard text to be visible -->
-						<div class="z-10">{{ $t(link.label, link.pluralTranslation ? 2 : 1) }}</div>
-					</template>
-				</UDashboardSidebarLinks>
-			</UDashboardSidebar>
-		</UDashboardPanel>
-	</UDashboardSlideover>
+	<USlideover :title="$t('menu')" side="right">
+		<UButton variant="link"
+			icon="streamline:interface-setting-menu-1-button-parallel-horizontal-lines-menu-navigation-three-hamburger"/>
+		<template #body>
+			<UNavigationMenu :items="links" orientation="vertical">
+				<template #item-content="{ item }">
+					<div>{{ $t(item.label!, item.pluralTranslation ? 2 : 1) }}</div>
+				</template>
+			</UNavigationMenu>
+		</template>
+	</USlideover>
 </template>
 
 <style lang="scss">

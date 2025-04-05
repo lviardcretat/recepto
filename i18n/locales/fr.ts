@@ -61,9 +61,7 @@ export default defineI18nLocale(async () => {
 			submit: 'Créer',
 		},
 		fromTo: 'De {from} à {to}',
-		here: "C'est par ici !",
 		ingredient: 'Ingrédient | Ingrédients',
-		inspiration: "En quête d'inspiration ?",
 		january: 'Janvier',
 		july: 'Juillet',
 		june: 'Juin',
@@ -77,6 +75,7 @@ export default defineI18nLocale(async () => {
 		preparationSteps: 'Étapes de préparation',
 		schedule: 'Planning',
 		recipe: 'Recette | Recettes',
+		recipeAll: 'Toutes les recettes',
 		recipesCreated: 'Recettes créés',
 		recipesFound:
 			'Aucune recette trouvée | 1 recette trouvée | {count} recettes trouvées',

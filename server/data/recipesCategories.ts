@@ -1,10 +1,12 @@
 import type { RecipesCategoriesFilter } from '~/global/validationSchemas';
 import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzle';
 import type {
+	GeneralData,
 	ItemsIdsWantedOrNot,
 	RecipesCategoriesWithLessData,
+	RecipeSearched,
 } from '~/global/types';
-import { intersect } from 'drizzle-orm/sqlite-core';
+import { intersect, text, union } from 'drizzle-orm/sqlite-core';
 import {
 	createAllergenSubQuery,
 	createIngredientSubQuery,
@@ -13,6 +15,7 @@ import {
 	createUstensilSubQuery,
 	recipeCategorySelectType,
 } from '../utils/filter';
+import { asc, desc, like } from 'drizzle-orm';
 
 export async function postRecipesCategory(
 	name: string,
@@ -40,25 +43,33 @@ export async function getRecipesCategories(): Promise<RecipesCategory[]> {
 	return recipesCategories;
 }
 
-export async function getRecipesCategoriesAndRecipesNames(name: string) {
-	const recipesCategories = await useDrizzle().query.recipesCategory.findMany({
-		columns: {
-			id: true,
-			name: true,
-		},
-		where: (recipesCategory, { like }) =>
-			like(recipesCategory.name, `%${name}%`),
-		with: {
-			recipes: {
-				columns: {
-					id: true,
-					name: true,
-				},
-				where: (recipes, { like }) => like(recipes.name, `%${name}%`),
-			},
-		},
-	});
-	return recipesCategories;
+export async function getRecipesCategoriesAndRecipesNames(
+	name: string,
+): Promise<RecipeSearched[]> {
+	const recipesCategoriesRecipes: RecipeSearched[] = await union(
+		useDrizzle()
+			.select({
+				id: tables.recipesCategory.id,
+				label: tables.recipesCategory.name,
+				type: tables.recipesCategory.selectMenuType,
+			})
+			.from(tables.recipesCategory)
+			.where(like(tables.recipesCategory.name, `%${name}%`)),
+		useDrizzle()
+			.select({
+				id: tables.recipe.recipesCategoryId,
+				label: tables.recipe.name,
+				type: tables.recipe.selectMenuType,
+			})
+			.from(tables.recipe)
+			.where(like(tables.recipe.name, `%${name}%`)),
+	)
+		.orderBy(
+			asc(tables.recipe.recipesCategoryId),
+			desc(tables.recipe.selectMenuType),
+		)
+		.all();
+	return recipesCategoriesRecipes;
 }
 
 export async function getRecipesCategoryName(

@@ -7,11 +7,9 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-	<USelect id="locale-select" variant="none" :model-value="locale" @change="setLocale($event)"
-		:options="localeCodes">
-		<template #trailing>
-			<UIcon name="lucide:languages"/>
-		</template>
+	<USelect id="locale-select" variant="none" :model-value="locale" @update:modelValue="setLocale($event)"
+		trailing-icon="lucide:languages"
+		:items="localeCodes">
 	</Uselect>
 </template>
 

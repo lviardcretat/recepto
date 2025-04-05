@@ -1,6 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import "@nuxt/ui-pro";
+
+@theme {
+  --flex-grow-2: 2;
+  --flex-grow-3: 3;
+  --flex-grow-4: 4;
+
+  --color-cool-50: #f0f7fe;
+  --color-cool-100: #deecfb;
+  --color-cool-200: #c4e0f9;
+  --color-cool-300: #9cccf4;
+  --color-cool-400: #6dafed;
+  --color-cool-500: #4b90e6;
+  --color-cool-600: #3674da;
+  --color-cool-700: #2d60c8;
+  --color-cool-800: #2a4fa3;
+  --color-cool-900: #274481;
+  --color-cool-950: #0f172a;
+
+  --color-green-50: #edfff7;
+  --color-green-100: #d5ffee;
+  --color-green-200: #aeffde;
+  --color-green-300: #70ffc6;
+  --color-green-400: #2bfda7;
+  --color-green-500: #00dc82;
+  --color-green-600: #00c06d;
+  --color-green-700: #009658;
+  --color-green-800: #067549;
+  --color-green-900: #07603e;
+  --color-green-950: #003721;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-neutral-200, currentColor);
+  }
+}
 
 html, body, #__nuxt, #__layout {
 	height: 100% !important;
