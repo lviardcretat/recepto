@@ -99,6 +99,28 @@ export const recipesCategoryCreation = z.object({
 /**
  * Validation schema for recipe post requests
  */
+
+export type RecipeSequenceCreation = z.infer<typeof recipeSequenceCreation>;
+const recipeSequenceCreation = z
+	.array(
+		z.object({
+			title: z.string().min(3).max(100),
+			description: z.string().min(3).max(200),
+		}),
+	)
+	.nonempty();
+export type RecipeIngredientsCreation = z.infer<
+	typeof recipeIngredientsCreation
+>;
+const recipeIngredientsCreation = z
+	.array(
+		z.object({
+			ingredientId: z.number().int().positive(),
+			quantity: z.number().positive(),
+			unitId: z.number().int().positive(),
+		}),
+	)
+	.nonempty();
 export type RecipeCreation = z.infer<typeof recipeCreation>;
 export const recipeCreation = z.object({
 	name: z.string().min(3).max(50),
@@ -109,39 +131,23 @@ export const recipeCreation = z.object({
 	cookingTime: z.number().nonnegative(),
 	restTime: z.number().nonnegative(),
 	seasonId: z.number().int().positive(),
-	sequences: z
-		.array(
-			z.object({
-				title: z.string().min(3).max(100),
-				description: z.string().min(3).max(200),
-			}),
-		)
-		.nonempty(),
-	ingredients: z
-		.array(
-			z.object({
-				ingredientId: z.number().int().positive(),
-				quantity: z.number().positive(),
-				unitId: z.number().int().positive(),
-			}),
-		)
-		.nonempty()
-		.refine(
-			(val) => {
-				const ingredientsIds = val.map(
-					(ingredientIds) => ingredientIds.ingredientId,
-				);
-				const uniqueValues = new Set(ingredientsIds);
-				return uniqueValues.size === ingredientsIds.length;
-			},
-			{
-				params: {
-					i18n: {
-						key: 'zodErrors.duplicateIngredients',
-					},
+	sequences: recipeSequenceCreation,
+	ingredients: recipeIngredientsCreation.refine(
+		(val) => {
+			const ingredientsIds = val.map(
+				(ingredientIds) => ingredientIds.ingredientId,
+			);
+			const uniqueValues = new Set(ingredientsIds);
+			return uniqueValues.size === ingredientsIds.length;
+		},
+		{
+			params: {
+				i18n: {
+					key: 'zodErrors.duplicateIngredients',
 				},
 			},
-		),
+		},
+	),
 	allergens: z.array(z.number().int().positive()),
 	ustensils: z.array(z.number().int().positive()).nonempty(),
 	recipesCategoryId: z.number().int().positive(),

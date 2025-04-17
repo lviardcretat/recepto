@@ -65,40 +65,22 @@ const cards = [
 </script>
 
 <template>
-	<UDashboardGroup class="h-full">
-		<MainSlideover></MainSlideover>
-		<UDashboardPanel grow>
-			<UDashboardNavbar :title="$t('recipe', 2)">
-				<template #right>
-					<TranslationSelect></TranslationSelect>
-					<UColorModeButton />
-					<UButton
-						:padded="false"
-						variant="link"
-						icon="streamline:interface-setting-menu-1-button-parallel-horizontal-lines-menu-navigation-three-hamburger"
-						@click="test = !test"/>
-				</template>
-			</UDashboardNavbar>
-			<template #body>
-				<UContainer class="w-full h-full flex flex-col items-center justify-center">
-					<h1 class="text-4xl font-bold self-stretch flex items-center justify-center h-1/4">Vous avez été très performant !</h1>
-					<div class="gap-10 w-full flex justify-evenly flex-wrap h-3/4">
-						<UCard v-for="card in cards" class="w-1/4 h-1/3">
-							<template #header>
-								<div class="flex justify-between flex-col items-center gap-4 h-3/5">
-									<UIcon class="text-4xl" :name="card.icon" />
-									<div class="text-center">{{ $t(card.name) }}</div>
-								</div>
-							</template>
-							<div class="flex justify-between flex-col items-center h-full">
-								<h1 class="h-full text-4xl">{{ card.value[0] }}</h1>
-							</div>
-						</UCard>
+	<UContainer class="w-full h-full flex flex-col items-center justify-center">
+		<h1 class="text-4xl font-bold self-stretch flex items-center justify-center h-1/4">Vous avez été très performant !</h1>
+		<div class="gap-10 w-full flex justify-evenly flex-wrap h-3/4">
+			<UCard v-for="card in cards" class="w-1/4 h-1/3">
+				<template #header>
+					<div class="flex justify-between flex-col items-center gap-4 h-3/5">
+						<UIcon class="text-4xl" :name="card.icon" />
+						<div class="text-center">{{ $t(card.name) }}</div>
 					</div>
-				</UContainer>
-			</template>
-		</UDashboardPanel>
-	</UDashboardGroup>
+				</template>
+				<div class="flex justify-between flex-col items-center h-full">
+					<h1 class="h-full text-4xl">{{ card.value[0] }}</h1>
+				</div>
+			</UCard>
+		</div>
+	</UContainer>
 </template>
 
 <style lang="scss" scoped>

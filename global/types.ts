@@ -8,10 +8,10 @@ import type { FilterSelectItem } from './validationSchemas';
  */
 export type SelectItem = {
 	id: number;
-	name: string;
+	label: string;
 	wanted: boolean;
 	notWanted: boolean;
-	type: DataType;
+	dataType: DataType;
 };
 
 /**
@@ -29,10 +29,10 @@ export type ItemsIdsWantedOrNot = {
  */
 export type IconsGridItem = {
 	id: number;
-	name: string;
+	label: string;
 	icon: string;
 	active: boolean;
-	type: DataType;
+	dataType: DataType;
 };
 
 /**

@@ -1,30 +1,4 @@
 <script setup lang="ts">
-import {
-	Chart,
-	type ChartOptions,
-	Title,
-	Tooltip,
-	Legend,
-	BarElement,
-	CategoryScale,
-	LinearScale,
-	type ChartData,
-	type ChartDataset,
-} from 'chart.js';
-import { Bar } from 'vue-chartjs';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Months } from '~/global/enums';
-
-Chart.register(
-	Title,
-	Tooltip,
-	Legend,
-	BarElement,
-	CategoryScale,
-	LinearScale,
-	ChartDataLabels,
-);
-
 const { t } = useI18n();
 const isModalOpen = ref<boolean>(false);
 defineShortcuts({
@@ -38,16 +12,14 @@ defineShortcuts({
 
 useListen('ingredient:created', async () => {
 	await refresh();
-	if (datasetsFetch.value) data = { datasets: datasetsFetch.value };
+	//if (datasetsFetch.value) data = { datasets: datasetsFetch.value };
 });
 
 const {
 	data: datasetsFetch,
 	refresh,
 	execute,
-} = await useFetch<
-	ChartDataset<'bar', { name: string; months: number[]; type: string }[]>[]
->('/api/ingredients/seasonals', {
+} = await useFetch('/api/ingredients/seasonals', {
 	method: 'GET',
 	immediate: false,
 	onResponseError({ response }) {
@@ -60,63 +32,27 @@ const {
 
 await execute();
 
-const chartOptions: ChartOptions<'bar'> = {
-	maintainAspectRatio: false,
-	indexAxis: 'y',
-	plugins: {
-		tooltip: {
-			enabled: true,
-			xAlign: 'center',
-			yAlign: 'center',
-			callbacks: {
-				title: () => '',
-				label: (context) => {
-					const range: number[] = (
-						context.raw as { name: string; months: number[]; type: string }
-					).months;
-					const startMonth: string = Object.values(Months)[range[0]];
-					const endMonth: string = Object.values(Months)[range[1] - 1];
-					if (startMonth === endMonth) {
-						return startMonth;
-					}
-					return t('fromTo', { from: t(startMonth), to: t(endMonth) });
-				},
-			},
-		},
-		legend: {
-			display: true,
-			position: 'top',
-		},
-		title: {
-			display: false,
-		},
-	},
-	scales: {
-		y: {
-			stacked: true,
-			ticks: {
-				stepSize: 1,
-				autoSkip: false,
-			},
-		},
-		x: {
-			position: 'top',
-			stacked: true,
-			ticks: {
-				callback: (index) =>
-					Object.values(Months)[Number(index)]
-						? t(Object.values(Months)[Number(index)])
-						: '',
-				stepSize: 1,
-				autoSkip: false,
-			},
-		},
-	},
+type RevenueDataItem = {
+	month: string;
+	desktop: number;
+	mobile: number;
 };
 
-let data: ChartData<'bar'> = {
-	datasets: datasetsFetch.value,
+const RevenueData = [
+	{ month: 'January', desktop: 186, mobile: 80 },
+	{ month: 'February', desktop: 305, mobile: 200 },
+	{ month: 'March', desktop: 237, mobile: 120 },
+	{ month: 'April', desktop: 73, mobile: 190 },
+	{ month: 'May', desktop: 209, mobile: 130 },
+	{ month: 'June', desktop: 214, mobile: 140 },
+];
+
+const RevenueCategories = {
+	desktop: { name: 'Desktop' },
 };
+
+const xFormatter = (i: number): string => `${RevenueData[i]?.month}`;
+const yFormatter = (i: number) => i;
 </script>
 
 <template>
@@ -125,7 +61,18 @@ let data: ChartData<'bar'> = {
 			<UCard>
 				<div class="relative flex-1 overflow-y-auto h-[70vh] p-4" id="container">
 					<div id="chartContainer">
-						<Bar :data="data" :items="chartOptions"/>
+						<BarChart
+							:data="RevenueData"
+							:height="275"
+							:categories="RevenueCategories"
+							:y-axis="['desktop']"
+							:xNumTicks="6"
+							:radius="4"
+							:y-grid-line="false"
+							:x-formatter="xFormatter"
+							:y-formatter="yFormatter"
+							:legend-position="LegendPosition.Top"
+						/>
 					</div>
 				</div>
 			</UCard>

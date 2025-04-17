@@ -30,26 +30,21 @@ const isModalOpen = ref(false);
 <template>
 	<UDropdownMenu class="absolute bottom-10 right-10" :items="items" size="xl"
 		:ui="{
-		content: 'w-48'
+			content: 'w-48',
+			item: 'p-0'
 		}"
 		:content="{
 			align: 'end',
 			side: 'top',
-			sideOffset: 2
+			sideOffset: 16
     	}">
 		<UButton color="primary" size="xl" class="rounded-full"
 			variant="solid" icon="material-symbols:add"></UButton>
 
-		<template #content>
-			<UButtonGroup size="xl" orientation="vertical">
-				<UDropdownMenu :items="items">
-					<template #item>
-						<UButton v-for="item in items" color="primary" size="xl"
-							variant="solid" :icon="item.icon"
-							@click="isModalOpen = true; mainModalName = item.label!">{{ $t(item.label!) }}</UButton>
-					</template>
-				</UDropdownMenu>
-			</UButtonGroup>
+		<template #item="{ item }">
+			<UButton size="xl" class="flex justify-center w-full pl-6 pr-6" :icon="item.icon" variant="ghost"
+				@click="isModalOpen = true; mainModalName = item.label!">
+				<div class="grow-1 text-left ml-4">{{ $t(item.label!) }}</div></UButton>
 		</template>
 	</UDropdownMenu>
 	<UModal v-model:open="isModalOpen" :dismissible="false" :class="mainModalName === 'recipe' ? 'sm:max-w-6xl' : 'sm:max-w-4xl'">
@@ -58,7 +53,7 @@ const isModalOpen = ref(false);
 				<template #header>
 					<div class="flex items-center justify-between">
 						<h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
-							{{ $t(`formCreation.${items.find((item) => item.label === mainModalName)?.modalNameTrad ?? ''}`, { element: $t(mainModalName).toLowerCase() }) }}
+							{{ $t(`formCreation.${items.find((item: DropdownMenuItem) => item.label === mainModalName)?.modalNameTrad ?? ''}`, { element: $t(mainModalName).toLowerCase() }) }}
 						</h3>
 						<UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isModalOpen = false" />
 					</div>

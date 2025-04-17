@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useFiltersStore } from '@/stores/filters';
-import type { SelectMenuItem } from '@nuxt/ui';
+import { DataType } from '~/global/enums';
 import type { SelectItem } from '~/global/types';
 
 const props = defineProps<{
@@ -10,79 +10,91 @@ const props = defineProps<{
 }>();
 const itemsSelected = ref<SelectItem[]>([]);
 const store = useFiltersStore();
-const fzqfzq = ref<SelectMenuItem[]>([
-	{
-		label: 'dzqdqz',
-		type: 'item',
-	},
-	{
-		type: 'separator',
-	},
-	{
-		label: 'dzqdqz',
-		type: 'item',
-	},
-]);
+
+function getButtonsColor(
+	selectMenuItem: SelectItem,
+	buttonType: 'wanted' | 'notWanted',
+) {
+	const item: SelectItem | undefined = props.items.find(
+		(item) => item.id === selectMenuItem.id,
+	);
+	const isWanted: boolean = buttonType === 'wanted';
+	if (item?.notWanted) {
+		return isWanted ? 'opacity-20' : 'opacity-100';
+	}
+	if (item?.wanted) {
+		return isWanted ? 'opacity-100' : 'opacity-20';
+	}
+	return 'opacity-20';
+}
+
+function onButtonClick(
+	selectMenuItem: SelectItem,
+	buttonType: 'wanted' | 'notWanted',
+) {
+	const isWanted: boolean = buttonType === 'wanted';
+	if (isWanted) {
+		props.items[selectMenuItem.id - 1].wanted =
+			!props.items[selectMenuItem.id - 1].wanted;
+		props.items[selectMenuItem.id - 1].notWanted = false;
+		store.updateSelectLists(
+			selectMenuItem.id,
+			props.items[selectMenuItem.id - 1].wanted
+				? false
+				: props.items[selectMenuItem.id - 1].notWanted
+					? true
+					: null,
+			selectMenuItem.dataType,
+		);
+	} else {
+		props.items[selectMenuItem.id - 1].notWanted =
+			!props.items[selectMenuItem.id - 1].notWanted;
+		props.items[selectMenuItem.id - 1].wanted = false;
+		store.updateSelectLists(
+			selectMenuItem.id,
+			props.items[selectMenuItem.id - 1].notWanted
+				? false
+				: props.items[selectMenuItem.id - 1].wanted
+					? true
+					: null,
+			selectMenuItem.dataType,
+		);
+	}
+}
 </script>
 
 <template>
   	<div>
-		<USelectMenu multiple searchable v-model="itemsSelected" value-key="id" :items="fzqfzq"/>
-		<!--<div class="mb-2 flex-1 flex-wrap h-auto">
+		<div class="mb-2 flex-1 flex-wrap h-auto">
 			<UBadge v-for="item in items.filter(item => item.wanted || item.notWanted)" class="h-6 m-0.5"
-				:color="item.wanted ? 'primary' : 'error'"
-				variant="solid"
-				size="sm">{{item.name}}</UBadge>
+				:color="item.wanted ? 'primary' : 'error'" size="md" variant="solid" :label="item.label"></UBadge>
 		</div>
 		<USelectMenu
 			:disabled="disabled"
 			:v-model="itemsSelected"
 			value-key="id"
 			:items="items"
+			class="w-full"
 			multiple
 			:placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
 			searchable
-			option-attribute="name"
 			:searchable-placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
-			:uiMenu="{
-				strategy: 'override',
-				option: {
-					base: 'cursor-default select-none relative flex items-center justify-between gap-1',
-					container: 'flex items-center gap-1.5 min-w-0 w-full',
-					active: 'bg-emerald-700 dark:bg-emerald-700',
-					selected: 'pe-7',
-				}
-			}">
-			<template #label>
-				<span v-if="itemsSelected.length">{{
-					$t('selected', items.filter(item => item.notWanted || item.wanted).length, { count: items.filter(item => item.notWanted || item.wanted).length })
-				}}</span>
-     			<span v-else>{{$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })}}</span>
-			</template>
-			<template #leading="{ modelValue }">
+			:ui="{ itemTrailing: 'hidden' }">
+			<template #item-leading="{ item }">
 				<UButton
-					:padded="false"
-					variant="link"
-					icon="material-symbols:circle-outline"
-					:class="items[item.id - 1].wanted ? 'opacity-100' : 'opacity-20'"
-					@click="
-						items[item.id - 1].wanted = !items[item.id - 1].wanted;
-						items[item.id - 1].notWanted = false;
-						store.updateSelectLists(item.id, items[item.id- 1].wanted ? true : items[item.id- 1].notWanted ? false : null, item.type);
-					"/>
+					:padded="false" variant="link" icon="material-symbols:circle-outline"
+					:class="getButtonsColor(item, 'wanted')" @click="onButtonClick(item, 'wanted')"
+					:ui="{
+						base: 'p-0'
+					}"/>
 				<UButton
-					:padded="false"
-					variant="link"
-					icon="radix-icons:value-none"
-					:class="items[item.id - 1].notWanted ? 'opacity-100' : 'opacity-20'"
-					@click="
-						items[item.id - 1].notWanted = !items[item.id - 1].notWanted;
-						items[item.id - 1].wanted = false;
-						store.updateSelectLists(item.id, items[item.id - 1].notWanted ? false : items[item.id - 1].wanted ? true : null, item.type);
-					"/>
-				<span class="truncate">{{ item.name }}</span>
+					:padded="false" variant="link" icon="radix-icons:value-none"
+					:class="getButtonsColor(item, 'notWanted')" @click="onButtonClick(item, 'notWanted')"
+					:ui="{
+						base: 'p-0 pr-1.5'
+					}"/>
 			</template>
-		</USelectMenu>-->
+		</USelectMenu>
   	</div>
 </template>
 

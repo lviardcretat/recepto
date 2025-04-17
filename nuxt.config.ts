@@ -7,6 +7,7 @@ export default defineNuxtConfig({
 		// Must be loaded before @nuxtjs/i18n
 		'nuxt-zod-i18n',
 		'@nuxt/image',
+		'nuxt-charts',
 		'@nuxtjs/i18n',
 		'@nuxt/ui-pro',
 		'@pinia/nuxt',

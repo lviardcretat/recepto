@@ -6,6 +6,7 @@ import {
 } from '~/global/validationSchemas';
 import { Months } from '~/global/enums';
 
+console.log('ddqzd');
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const schema = ingredientCreationSchema;
@@ -89,11 +90,11 @@ function mapFlatMonthsToSeasonalMonths(): void {
 <template>
 	<UForm ref="form" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
 		<UFormField :label="$t('formCreation.name')" name="name" eager-validation>
-			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.ingredient.nameExample')"/>
+			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.ingredient.nameExample')" class="w-full"/>
 		</UFormField>
 		<UFormField :label="$t('formCreation.ingredient.foodType')" name="foodTypeId">
-			<USelectMenu v-model="state.foodTypeId" :items="foodTypes ?? []"
-				:searchable-placeholder="$t('search')"
+			<USelectMenu v-model="state.foodTypeId" value-key="id" :items="foodTypes ?? []"
+				:searchable-placeholder="$t('search')" class="w-full"
 				:placeholder="$t('formCreation.ingredient.selectByFoodTypeId')"
 				option-attribute="name" value-attribute="id" @update:modelValue="state.foodTypeId = Number($event)"/>
 		</UFormField>
