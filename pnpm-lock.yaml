@@ -16,16 +16,16 @@ importers:
         version: 0.15.4
       '@nuxt/image':
         specifier: ^1.10.0
-        version: 1.10.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)
+        version: 1.10.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)
       '@nuxt/ui':
         specifier: ^3.0.2
-        version: 3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(zod@3.24.3)
+        version: 3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(zod@3.24.3)
       '@nuxt/ui-pro':
         specifier: ^3.0.2
-        version: 3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)
+        version: 3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)
       '@nuxthub/core':
         specifier: 0.8.17
-        version: 0.8.17(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
+        version: 0.8.17(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
       '@nuxtjs/i18n':
         specifier: 9.4.0
         version: 9.4.0(@vue/compiler-dom@3.5.13)(eslint@9.23.0(jiti@2.4.2))(magicast@0.3.5)(rollup@4.39.0)(vue@3.5.13(typescript@5.8.3))
@@ -38,6 +38,12 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.1
         version: 4.1.4(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
+      '@unovis/ts':
+        specifier: ^1.5.1
+        version: 1.5.1
+      '@unovis/vue':
+        specifier: ^1.5.1
+        version: 1.5.1(@unovis/ts@1.5.1)(vue@3.5.13(typescript@5.8.3))
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -46,16 +52,13 @@ importers:
         version: 16.5.0
       drizzle-orm:
         specifier: ^0.41.0
-        version: 0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)
+        version: 0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)
       mitt:
         specifier: ^3.0.1
         version: 3.0.1
       nuxt:
         specifier: 3.16.2
-        version: 3.16.2(@biomejs/biome@1.9.4)(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(@parcel/watcher@2.5.1)(@types/node@22.14.1)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2))(eslint@9.23.0(jiti@2.4.2))(ioredis@5.6.1)(lightningcss@1.29.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.39.0)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue-tsc@2.2.8(typescript@5.8.3))(yaml@2.7.1)
-      nuxt-charts:
-        specifier: ^0.1.3
-        version: 0.1.3(@unovis/ts@1.5.1)(magicast@0.3.5)(vue@3.5.13(typescript@5.8.3))
+        version: 3.16.2(@biomejs/biome@1.9.4)(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(@parcel/watcher@2.5.1)(@types/node@22.14.1)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2))(eslint@9.23.0(jiti@2.4.2))(ioredis@5.6.1)(lightningcss@1.29.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.39.0)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue-tsc@2.2.8(typescript@5.8.3))(yaml@2.7.1)
       nuxt-swiper:
         specifier: 2.0.0
         version: 2.0.0(magicast@0.3.5)
@@ -140,10 +143,10 @@ importers:
         version: 1.11.10
       nuxi:
         specifier: ^3.24.1
-        version: 3.24.1
+        version: 3.25.0
       nuxthub:
         specifier: ^0.8.11
-        version: 0.8.11(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)
+        version: 0.8.11(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)
       postcss:
         specifier: ^8.5.3
         version: 8.5.3
@@ -167,7 +170,7 @@ importers:
         version: 3.1.2(@popperjs/core@2.11.8)(vue@3.5.13(typescript@5.8.3))
       wrangler:
         specifier: ^4.7.0
-        version: 4.12.0(@cloudflare/workers-types@4.20250417.0)
+        version: 4.12.0(@cloudflare/workers-types@4.20250418.0)
 
 packages:
 
@@ -435,8 +438,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-types@4.20250417.0':
-    resolution: {integrity: sha512-YsLXtMc1DezXW2x1KTiB7Hgqy9M4d2tbdohSO98npc208ZWD5W0UNjr6ej7sh5/jgqptIcP5jV4Czh+mpPYhcQ==}
+  '@cloudflare/workers-types@4.20250418.0':
+    resolution: {integrity: sha512-cPnHbEAryOX1FwEjjMXXCLudkxXUlfy7Hf55lqTPpYRSUA76NGLFfkhUF7+KkRrFg2u6pNpXTj24Gv5pMEHlqg==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -1504,13 +1507,13 @@ packages:
   '@libsql/core@0.15.4':
     resolution: {integrity: sha512-NMvh6xnn3vrcd7DNehj0HiJcRWB2a8hHhJUTkOBej3Pf3KB21HOmdOUjXxJ5pGbjWXh4ezQBmHtF5ozFhocXaA==}
 
-  '@libsql/darwin-arm64@0.5.6':
-    resolution: {integrity: sha512-N0lt/I6xCTW6zE3J1I0/YH+TFnoMeZyeSorfLWg1wQi6QrB2PQ3je4R/bGViaU1uMEXaCc5OyI3GrrXJIDOLWg==}
+  '@libsql/darwin-arm64@0.5.7':
+    resolution: {integrity: sha512-3rex2cdEihYY5HIxOvn66CxdvEtjQDXyrX+EggaV3Qf4vZOWeow+jIqVjZoNLmfb7AwJuSL088G645zyMitcbQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@libsql/darwin-x64@0.5.6':
-    resolution: {integrity: sha512-v8YYImGB3klHvLViWAqsmgYuG32iO+Mt52VSfuqM5m8KzI2XQ2CRxKdBGYnLI9D3Q1T7upYGuHVTSoK3GpKoXQ==}
+  '@libsql/darwin-x64@0.5.7':
+    resolution: {integrity: sha512-OEJPm0G+s+MZhBpf5TNTj9ODRPwIiBjtrHJoYNsGm0fPZM62wdHryLAGqu6gl4IuQ+e4GzC3c5c8J0lu4u6p+A==}
     cpu: [x64]
     os: [darwin]
 
@@ -1524,28 +1527,28 @@ packages:
   '@libsql/isomorphic-ws@0.1.5':
     resolution: {integrity: sha512-DtLWIH29onUYR00i0GlQ3UdcTRC6EP4u9w/h9LxpUZJWRMARk6dQwZ6Jkd+QdwVpuAOrdxt18v0K2uIYR3fwFg==}
 
-  '@libsql/linux-arm64-gnu@0.5.6':
-    resolution: {integrity: sha512-2SdnSd/Tg+l5qN4yuc7Fh9Uvy/TakL8RiBJMSZEQkFta4FBk9H/Cp49SF9YRx9g2jItTlzOGJ+PAfnkU5HbabA==}
+  '@libsql/linux-arm64-gnu@0.5.7':
+    resolution: {integrity: sha512-86PusgAOzxu8e/8YCxwdbi8/6HkBRWW49FCXgAqVjlDaNC/08jSQy7XnIZuRqHYRNg9uXk3fZ+Nug/6kbEqH5Q==}
     cpu: [arm64]
     os: [linux]
 
-  '@libsql/linux-arm64-musl@0.5.6':
-    resolution: {integrity: sha512-DhfDtTWksAGXe70fA4cyhJHGYBB2BpLnF9EB1Rli2ACHrQbgWFHCiSrSg91tk4UVCVRDZ91KkXqU5bWL16Kwcg==}
+  '@libsql/linux-arm64-musl@0.5.7':
+    resolution: {integrity: sha512-KSNrF4wd7xqQQYx12PrF808QhX5oL+EwvzippvDs/NNJWSM035AwCG0z2t7tqNVTZWaN6MVuRGbMlhQDCFj66w==}
     cpu: [arm64]
     os: [linux]
 
-  '@libsql/linux-x64-gnu@0.5.6':
-    resolution: {integrity: sha512-lB6zcJw0u+Y3d2rN4ruxJtqxq9UjtzsoA+naJFmYEiDcls1p6OZQ+0OphO5qzTuet/MwbmiHrda/Kk15brBQBw==}
+  '@libsql/linux-x64-gnu@0.5.7':
+    resolution: {integrity: sha512-gMHAKtn2UuIJdFU1DeHD2CgIEhT5OZFJtyyTFXNVs2A4VZmjlOmss+QVANO59cO4/3E4MnJQ1KyJF4fbBNp9fw==}
     cpu: [x64]
     os: [linux]
 
-  '@libsql/linux-x64-musl@0.5.6':
-    resolution: {integrity: sha512-gNbiJg0GGhKZSCTiRpbd9cD2/xT1Nj8bnXra+5ZvPYxiIaphE9xy3ELPIZjGIzBLX9dnn5E920K2tIOrBMRVBw==}
+  '@libsql/linux-x64-musl@0.5.7':
+    resolution: {integrity: sha512-qh6nLCZ+YI6fKRCR525Ryw/LHd7vNvi/A7hhPtlwewYkxUumNsz7t9kwTlhXFlYmBNmOYP/FfaP+vj5CHvZvrQ==}
     cpu: [x64]
     os: [linux]
 
-  '@libsql/win32-x64-msvc@0.5.6':
-    resolution: {integrity: sha512-8PtI2LrcacvFvzGOkm1CFCGWR5Y5eJDliAlZUEv7BTSAWf07FIVi21mEAyB9VG5y3VpWtY0f+6JYblrwqgqD3A==}
+  '@libsql/win32-x64-msvc@0.5.7':
+    resolution: {integrity: sha512-66c5bN2UF6rnuvzxgRLRkrAXMlv2aNYivPjMa175M0IVbFB3XQl1joOL2hO4/HxijL5xHf7xYJxs7X6HvpiG7Q==}
     cpu: [x64]
     os: [win32]
 
@@ -1659,8 +1662,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@nuxt/cli@3.24.1':
-    resolution: {integrity: sha512-dWoB3gZj2H04x58QWNWpshQUxjsf0TB6Ppy7YKswS5hGtQkOlQ5k85f133+Bg50TJqzNuZ3OUMRduftppdJjrg==}
+  '@nuxt/cli@3.25.0':
+    resolution: {integrity: sha512-PZ8q+a/VY3zp6C8AvYb8zg0nhd3RmzSxegUuz6tTgBjvNdrK8IMA9gbiA3HT2TIJQ+qfKG62PXJXFggDYNvBEA==}
     engines: {node: ^16.10.0 || >=18.0.0}
     hasBin: true
 
@@ -3712,8 +3715,8 @@ packages:
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
-  db0@0.3.1:
-    resolution: {integrity: sha512-3RogPLE2LLq6t4YiFCREyl572aBjkfMvfwPyN51df00TbPbryL3XqBYuJ/j6mgPssPK8AKfYdLxizaO5UG10sA==}
+  db0@0.3.2:
+    resolution: {integrity: sha512-xzWNQ6jk/+NtdfLyXEipbX55dmDSeteLFt/ayF+wZUU5bzKgmrDOxmInUTbyVRp46YwnJdkDA1KhB7WIXFofJw==}
     peerDependencies:
       '@electric-sql/pglite': '*'
       '@libsql/client': '*'
@@ -4272,8 +4275,8 @@ packages:
     resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
     engines: {node: '>=6'}
 
-  exsolve@1.0.4:
-    resolution: {integrity: sha512-xsZH6PXaER4XoV+NiT7JHp1bJodJVT+cxeSH1G0f0tlT0lJqYuHUP3bUx2HtfTDvOagMINYp8rsqusxud3RXhw==}
+  exsolve@1.0.5:
+    resolution: {integrity: sha512-pz5dvkYYKQ1AHVrgOzBKWeP4u4FRb3a6DNK2ucr0OoNwYIU4QWsJ+NM36LLzORT+z845MzKHHhpXiUF5nvQoJg==}
 
   externality@1.0.2:
     resolution: {integrity: sha512-LyExtJWKxtgVzmgtEHyQtLFpw1KFhQphF9nTG8TpAIVkiI/xQ3FJh75tRFLYl4hkn7BNIIdLJInuDAavX35pMw==}
@@ -5087,8 +5090,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libsql@0.5.6:
-    resolution: {integrity: sha512-k0qHpyU47iWBplT4IJKEcMgUbms8jl9cNGE6aqsdOYmSJjtZIaYkn8f4ku5DzxRHpk1+o4FK7ZwGVCExYboZqQ==}
+  libsql@0.5.7:
+    resolution: {integrity: sha512-YbWW3YsGZl6PrBRNAtUVuMLqKRqYcYPa/QqhQCuR67SlcOHIhJ11ksTLAHxXkDRJs6kSrzr9JgGJGJQ91e1Bww==}
     cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
@@ -5569,13 +5572,10 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
-  nuxi@3.24.1:
-    resolution: {integrity: sha512-78r93j0+03YxMLeCWNAqPRKO/6pGHIpmRrnrwR+ff0nRJ785uddqMzLfGDMAXVG7OtSnBNm0vHkSGsUZID7bkw==}
+  nuxi@3.25.0:
+    resolution: {integrity: sha512-gNWVOCB73aZHFNWCeiYeZwl7K3m5580iphKllwrzXMAHgHnUpiwy6zjpvpEFnc08bG5KPcPby64yAGeoSWVtMw==}
     engines: {node: ^16.10.0 || >=18.0.0}
     hasBin: true
-
-  nuxt-charts@0.1.3:
-    resolution: {integrity: sha512-1oUusgt4x1QqczQDVfNSjf6S861mcUIoZNhB+qHIdj9d58hI0RKVMmCzP3KSq74hVDq4ElSLGNVGee942rpQVg==}
 
   nuxt-swiper@2.0.0:
     resolution: {integrity: sha512-9NJ7ipoo3sBqFOtnYccVjVPuywGqY1vA82R2YinHo/U4Mw8c0Uy/Q+ep7qihLWr/3wZq9BqFOKPuWKw5xKl77Q==}
@@ -7289,8 +7289,8 @@ packages:
       vue-tsc:
         optional: true
 
-  vite-plugin-inspect@11.0.0:
-    resolution: {integrity: sha512-Q0RDNcMs1mbI2yGRwOzSapnnA6NFO0j88+Vb8pJX0iYMw34WczwKJi3JgheItDhbWRq/CLUR0cs+ajZpcUaIFQ==}
+  vite-plugin-inspect@11.0.1:
+    resolution: {integrity: sha512-aABw7eGTr9Cmbn9RAs76e0BztVUFDl6a2R+/IJXpoUZxjx5YHB0P+Em3ZTWzpIPZzuRj28tAMblvcUyhgJc4aQ==}
     engines: {node: '>=14'}
     peerDependencies:
       '@nuxt/kit': '*'
@@ -7373,11 +7373,6 @@ packages:
 
   vue-bundle-renderer@2.1.1:
     resolution: {integrity: sha512-+qALLI5cQncuetYOXp4yScwYvqh8c6SMXee3B+M7oTZxOgtESP0l4j/fXdEJoZ+EdMxkGWIj+aSEyjXkOdmd7g==}
-
-  vue-chrts@0.1.3:
-    resolution: {integrity: sha512-wqq47a15Dxr906FUhQXGlxV7RKsZlMsOEWF25vh/2OmvtB8hRu1TwEOkBUBRrpSDS92EFPLDv19VL0QEU98ETw==}
-    peerDependencies:
-      vue: ^3.5.13
 
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
@@ -7923,7 +7918,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20250416.0':
     optional: true
 
-  '@cloudflare/workers-types@4.20250417.0': {}
+  '@cloudflare/workers-types@4.20250418.0': {}
 
   '@colors/colors@1.6.0': {}
 
@@ -8793,7 +8788,7 @@ snapshots:
       '@libsql/core': 0.15.4
       '@libsql/hrana-client': 0.7.0
       js-base64: 3.7.7
-      libsql: 0.5.6
+      libsql: 0.5.7
       promise-limit: 2.7.0
     transitivePeerDependencies:
       - bufferutil
@@ -8803,10 +8798,10 @@ snapshots:
     dependencies:
       js-base64: 3.7.7
 
-  '@libsql/darwin-arm64@0.5.6':
+  '@libsql/darwin-arm64@0.5.7':
     optional: true
 
-  '@libsql/darwin-x64@0.5.6':
+  '@libsql/darwin-x64@0.5.7':
     optional: true
 
   '@libsql/hrana-client@0.7.0':
@@ -8829,19 +8824,19 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@libsql/linux-arm64-gnu@0.5.6':
+  '@libsql/linux-arm64-gnu@0.5.7':
     optional: true
 
-  '@libsql/linux-arm64-musl@0.5.6':
+  '@libsql/linux-arm64-musl@0.5.7':
     optional: true
 
-  '@libsql/linux-x64-gnu@0.5.6':
+  '@libsql/linux-x64-gnu@0.5.7':
     optional: true
 
-  '@libsql/linux-x64-musl@0.5.6':
+  '@libsql/linux-x64-musl@0.5.7':
     optional: true
 
-  '@libsql/win32-x64-msvc@0.5.6':
+  '@libsql/win32-x64-msvc@0.5.7':
     optional: true
 
   '@mapbox/geojson-rewind@0.5.2':
@@ -9035,7 +9030,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@nuxt/cli@3.24.1(magicast@0.3.5)':
+  '@nuxt/cli@3.25.0(magicast@0.3.5)':
     dependencies:
       c12: 3.0.3(magicast@0.3.5)
       chokidar: 4.0.3
@@ -9117,7 +9112,7 @@ snapshots:
       structured-clone-es: 1.0.0
       tinyglobby: 0.2.12
       vite: 6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
-      vite-plugin-inspect: 11.0.0(@nuxt/kit@3.16.2(magicast@0.3.5))(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
+      vite-plugin-inspect: 11.0.1(@nuxt/kit@3.16.2(magicast@0.3.5))(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
       vite-plugin-vue-tracer: 0.1.3(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))
       which: 5.0.0
       ws: 8.18.1
@@ -9127,7 +9122,7 @@ snapshots:
       - utf-8-validate
       - vue
 
-  '@nuxt/fonts@0.11.1(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))':
+  '@nuxt/fonts@0.11.1(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))':
     dependencies:
       '@nuxt/devtools-kit': 2.4.0(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
       '@nuxt/kit': 3.16.2(magicast@0.3.5)
@@ -9148,7 +9143,7 @@ snapshots:
       ufo: 1.6.1
       unifont: 0.1.7
       unplugin: 2.3.2
-      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
+      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -9194,7 +9189,7 @@ snapshots:
       - vite
       - vue
 
-  '@nuxt/image@1.10.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)':
+  '@nuxt/image@1.10.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)':
     dependencies:
       '@nuxt/kit': 3.16.2(magicast@0.3.5)
       consola: 3.4.2
@@ -9207,7 +9202,7 @@ snapshots:
       std-env: 3.9.0
       ufo: 1.6.1
     optionalDependencies:
-      ipx: 2.1.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
+      ipx: 2.1.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -9237,7 +9232,7 @@ snapshots:
       defu: 6.1.4
       destr: 2.0.5
       errx: 0.1.0
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       globby: 14.1.0
       ignore: 7.0.3
       jiti: 2.4.2
@@ -9281,11 +9276,11 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/ui-pro@3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)':
+  '@nuxt/ui-pro@3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)':
     dependencies:
       '@nuxt/kit': 3.16.2(magicast@0.3.5)
       '@nuxt/schema': 3.16.2
-      '@nuxt/ui': 3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(zod@3.24.3)
+      '@nuxt/ui': 3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(zod@3.24.3)
       '@standard-schema/spec': 1.0.0
       '@vueuse/core': 13.1.0(vue@3.5.13(typescript@5.8.3))
       consola: 3.4.2
@@ -9342,12 +9337,12 @@ snapshots:
       - vite
       - vue
 
-  '@nuxt/ui@3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(zod@3.24.3)':
+  '@nuxt/ui@3.0.2(@babel/parser@7.27.0)(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(embla-carousel@8.6.0)(ioredis@5.6.1)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(zod@3.24.3)':
     dependencies:
       '@iconify/vue': 4.3.0(vue@3.5.13(typescript@5.8.3))
       '@internationalized/date': 3.8.0
       '@internationalized/number': 3.6.1
-      '@nuxt/fonts': 0.11.1(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
+      '@nuxt/fonts': 0.11.1(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
       '@nuxt/icon': 1.12.0(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))
       '@nuxt/kit': 3.16.2(magicast@0.3.5)
       '@nuxt/schema': 3.16.2
@@ -9439,7 +9434,7 @@ snapshots:
       defu: 6.1.4
       esbuild: 0.25.2
       escape-string-regexp: 5.0.0
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       externality: 1.0.2
       get-port-please: 3.1.2
       h3: 1.15.1
@@ -9488,9 +9483,9 @@ snapshots:
       - vue-tsc
       - yaml
 
-  '@nuxthub/core@0.8.17(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))':
+  '@nuxthub/core@0.8.17(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))':
     dependencies:
-      '@cloudflare/workers-types': 4.20250417.0
+      '@cloudflare/workers-types': 4.20250418.0
       '@nuxt/devtools-kit': 2.4.0(magicast@0.3.5)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))
       '@nuxt/kit': 3.16.2(magicast@0.3.5)
       '@uploadthing/mime-types': 0.3.4
@@ -9507,7 +9502,7 @@ snapshots:
       std-env: 3.9.0
       ufo: 1.6.1
       uncrypto: 0.1.3
-      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
+      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
       zod: 3.24.3
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -10973,7 +10968,7 @@ snapshots:
       confbox: 0.2.2
       defu: 6.1.4
       dotenv: 16.5.0
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       giget: 2.0.0
       jiti: 2.4.2
       ohash: 2.0.11
@@ -11593,10 +11588,10 @@ snapshots:
 
   dayjs@1.11.13: {}
 
-  db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)):
+  db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)):
     optionalDependencies:
       '@libsql/client': 0.15.4
-      drizzle-orm: 0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)
+      drizzle-orm: 0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)
 
   de-indent@1.0.2: {}
 
@@ -11765,9 +11760,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2):
+  drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2):
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250417.0
+      '@cloudflare/workers-types': 4.20250418.0
       '@libsql/client': 0.15.4
       gel: 2.0.2
 
@@ -12132,7 +12127,7 @@ snapshots:
   expand-template@2.0.3:
     optional: true
 
-  exsolve@1.0.4: {}
+  exsolve@1.0.5: {}
 
   externality@1.0.2:
     dependencies:
@@ -12639,7 +12634,7 @@ snapshots:
       jsbn: 1.1.0
       sprintf-js: 1.1.3
 
-  ipx@2.1.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1):
+  ipx@2.1.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1):
     dependencies:
       '@fastify/accept-negotiator': 1.1.0
       citty: 0.1.6
@@ -12655,7 +12650,7 @@ snapshots:
       sharp: 0.32.6
       svgo: 3.3.2
       ufo: 1.6.1
-      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
+      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
       xss: 1.0.15
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -12942,18 +12937,18 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libsql@0.5.6:
+  libsql@0.5.7:
     dependencies:
       '@neon-rs/load': 0.0.4
       detect-libc: 2.0.2
     optionalDependencies:
-      '@libsql/darwin-arm64': 0.5.6
-      '@libsql/darwin-x64': 0.5.6
-      '@libsql/linux-arm64-gnu': 0.5.6
-      '@libsql/linux-arm64-musl': 0.5.6
-      '@libsql/linux-x64-gnu': 0.5.6
-      '@libsql/linux-x64-musl': 0.5.6
-      '@libsql/win32-x64-msvc': 0.5.6
+      '@libsql/darwin-arm64': 0.5.7
+      '@libsql/darwin-x64': 0.5.7
+      '@libsql/linux-arm64-gnu': 0.5.7
+      '@libsql/linux-arm64-musl': 0.5.7
+      '@libsql/linux-x64-gnu': 0.5.7
+      '@libsql/linux-x64-musl': 0.5.7
+      '@libsql/win32-x64-msvc': 0.5.7
 
   lightningcss-darwin-arm64@1.29.2:
     optional: true
@@ -13340,7 +13335,7 @@ snapshots:
       mlly: 1.7.4
       pkg-types: 2.1.0
 
-  nitropack@2.11.9(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)):
+  nitropack@2.11.9(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@netlify/functions': 3.1.2(rollup@4.39.0)
@@ -13362,14 +13357,14 @@ snapshots:
       cookie-es: 2.0.0
       croner: 9.0.0
       crossws: 0.3.4
-      db0: 0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2))
+      db0: 0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2))
       defu: 6.1.4
       destr: 2.0.5
       dot-prop: 9.0.0
       esbuild: 0.25.2
       escape-string-regexp: 5.0.0
       etag: 1.8.1
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       globby: 14.1.0
       gzip-size: 7.0.0
       h3: 1.15.1
@@ -13408,7 +13403,7 @@ snapshots:
       unenv: 2.0.0-rc.15
       unimport: 5.0.0
       unplugin-utils: 0.2.4
-      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
+      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
       untyped: 2.0.0
       unwasm: 0.3.9
       youch: 4.1.0-beta.7
@@ -13518,17 +13513,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxi@3.24.1: {}
-
-  nuxt-charts@0.1.3(@unovis/ts@1.5.1)(magicast@0.3.5)(vue@3.5.13(typescript@5.8.3)):
-    dependencies:
-      '@nuxt/kit': 3.16.2(magicast@0.3.5)
-      '@unovis/vue': 1.5.1(@unovis/ts@1.5.1)(vue@3.5.13(typescript@5.8.3))
-      vue-chrts: 0.1.3(vue@3.5.13(typescript@5.8.3))
-    transitivePeerDependencies:
-      - '@unovis/ts'
-      - magicast
-      - vue
+  nuxi@3.25.0: {}
 
   nuxt-swiper@2.0.0(magicast@0.3.5):
     dependencies:
@@ -13549,9 +13534,9 @@ snapshots:
       - magicast
       - typescript
 
-  nuxt@3.16.2(@biomejs/biome@1.9.4)(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(@parcel/watcher@2.5.1)(@types/node@22.14.1)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2))(eslint@9.23.0(jiti@2.4.2))(ioredis@5.6.1)(lightningcss@1.29.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.39.0)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue-tsc@2.2.8(typescript@5.8.3))(yaml@2.7.1):
+  nuxt@3.16.2(@biomejs/biome@1.9.4)(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(@parcel/watcher@2.5.1)(@types/node@22.14.1)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2))(eslint@9.23.0(jiti@2.4.2))(ioredis@5.6.1)(lightningcss@1.29.2)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.39.0)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(typescript@5.8.3)(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue-tsc@2.2.8(typescript@5.8.3))(yaml@2.7.1):
     dependencies:
-      '@nuxt/cli': 3.24.1(magicast@0.3.5)
+      '@nuxt/cli': 3.25.0(magicast@0.3.5)
       '@nuxt/devalue': 2.0.2
       '@nuxt/devtools': 2.4.0(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))
       '@nuxt/kit': 3.16.2(magicast@0.3.5)
@@ -13573,7 +13558,7 @@ snapshots:
       esbuild: 0.25.2
       escape-string-regexp: 5.0.0
       estree-walker: 3.0.3
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       globby: 14.1.0
       h3: 1.15.1
       hookable: 5.5.3
@@ -13586,7 +13571,7 @@ snapshots:
       mlly: 1.7.4
       mocked-exports: 0.1.1
       nanotar: 0.2.0
-      nitropack: 2.11.9(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2))
+      nitropack: 2.11.9(@libsql/client@0.15.4)(@netlify/blobs@8.2.0)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2))
       nypm: 0.6.0
       ofetch: 1.4.1
       ohash: 2.0.11
@@ -13608,7 +13593,7 @@ snapshots:
       unimport: 4.2.0
       unplugin: 2.3.2
       unplugin-vue-router: 0.12.0(vue-router@4.5.0(vue@3.5.13(typescript@5.8.3)))(vue@3.5.13(typescript@5.8.3))
-      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
+      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
       untyped: 2.0.0
       vue: 3.5.13(typescript@5.8.3)
       vue-bundle-renderer: 2.1.1
@@ -13670,7 +13655,7 @@ snapshots:
       - xml2js
       - yaml
 
-  nuxthub@0.8.11(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5):
+  nuxthub@0.8.11(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)(magicast@0.3.5):
     dependencies:
       '@clack/prompts': 0.10.1
       c12: 3.0.3(magicast@0.3.5)
@@ -13696,7 +13681,7 @@ snapshots:
       rc9: 2.1.2
       signal-exit: 4.1.0
       ufo: 1.6.1
-      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
+      unstorage: 1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1)
       update-notifier: 7.3.1
       ws: 8.18.1
     transitivePeerDependencies:
@@ -14018,7 +14003,7 @@ snapshots:
   pkg-types@2.1.0:
     dependencies:
       confbox: 0.2.2
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       pathe: 2.0.3
 
   points-on-curve@0.2.0: {}
@@ -15277,7 +15262,7 @@ snapshots:
   unenv@2.0.0-rc.15:
     dependencies:
       defu: 6.1.4
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       ohash: 2.0.11
       pathe: 2.0.3
       ufo: 1.6.1
@@ -15410,7 +15395,7 @@ snapshots:
       picomatch: 4.0.2
       webpack-virtual-modules: 0.6.2
 
-  unstorage@1.15.0(@netlify/blobs@8.2.0)(db0@0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1):
+  unstorage@1.15.0(@netlify/blobs@8.2.0)(db0@0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2)))(ioredis@5.6.1):
     dependencies:
       anymatch: 3.1.3
       chokidar: 4.0.3
@@ -15422,7 +15407,7 @@ snapshots:
       ufo: 1.6.1
     optionalDependencies:
       '@netlify/blobs': 8.2.0
-      db0: 0.3.1(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250417.0)(@libsql/client@0.15.4)(gel@2.0.2))
+      db0: 0.3.2(@libsql/client@0.15.4)(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250418.0)(@libsql/client@0.15.4)(gel@2.0.2))
       ioredis: 5.6.1
 
   untun@0.1.3:
@@ -15559,7 +15544,7 @@ snapshots:
       typescript: 5.8.3
       vue-tsc: 2.2.8(typescript@5.8.3)
 
-  vite-plugin-inspect@11.0.0(@nuxt/kit@3.16.2(magicast@0.3.5))(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)):
+  vite-plugin-inspect@11.0.1(@nuxt/kit@3.16.2(magicast@0.3.5))(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)):
     dependencies:
       ansis: 3.17.0
       debug: 4.4.0
@@ -15579,7 +15564,7 @@ snapshots:
   vite-plugin-vue-tracer@0.1.3(vite@6.2.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.3)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3)):
     dependencies:
       estree-walker: 3.0.3
-      exsolve: 1.0.4
+      exsolve: 1.0.5
       magic-string: 0.30.17
       pathe: 2.0.3
       source-map-js: 1.2.1
@@ -15629,10 +15614,6 @@ snapshots:
   vue-bundle-renderer@2.1.1:
     dependencies:
       ufo: 1.6.1
-
-  vue-chrts@0.1.3(vue@3.5.13(typescript@5.8.3)):
-    dependencies:
-      vue: 3.5.13(typescript@5.8.3)
 
   vue-demi@0.14.10(vue@3.5.13(typescript@5.8.3)):
     dependencies:
@@ -15746,7 +15727,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20250416.0
       '@cloudflare/workerd-windows-64': 1.20250416.0
 
-  wrangler@4.12.0(@cloudflare/workers-types@4.20250417.0):
+  wrangler@4.12.0(@cloudflare/workers-types@4.20250418.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@cloudflare/unenv-preset': 2.3.1(unenv@2.0.0-rc.15)(workerd@1.20250416.0)
@@ -15757,7 +15738,7 @@ snapshots:
       unenv: 2.0.0-rc.15
       workerd: 1.20250416.0
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250417.0
+      '@cloudflare/workers-types': 4.20250418.0
       fsevents: 2.3.3
       sharp: 0.33.5
     transitivePeerDependencies:

@@ -1,17 +1,18 @@
-import type { ChartDataset } from 'chart.js';
 import { getSpecificsFoodTypes } from '~/server/data/foodTypes';
 import { getIngredientsSeasonalMonths } from '~/server/data/ingredients';
 import type { FoodType } from '~/server/utils/drizzle';
 
+export type DataRecord = {
+	name: string;
+	startMonth: number;
+	endMonth: number;
+	typeId: number;
+};
+
 export default defineEventHandler(async () => {
 	const foodTypesValid: number[] = [1, 2];
 	const foodTypes: FoodType[] = await getSpecificsFoodTypes(foodTypesValid);
-	const colors: string[] = ['#f87979', '#f56109'];
-	const datasets: ChartDataset<
-		'bar',
-		{ name: string; months: number[]; type: string }[]
-	>[] = [];
-	let index = 0;
+	let datasets: DataRecord[] = [];
 
 	if (!foodTypes) {
 		throw createError({
@@ -30,33 +31,24 @@ export default defineEventHandler(async () => {
 			});
 		}
 
-		datasets.push({
-			label: foodType.name,
-			backgroundColor: colors[index],
-			datalabels: {
-				display: false,
-			},
-			parsing: {
-				xAxisKey: 'months',
-				yAxisKey: 'name',
-			},
-			data: ingredients.flatMap((ingredient) => {
+		const dataRecords: DataRecord[] = ingredients.flatMap<DataRecord>(
+			(ingredient) => {
+				const data: DataRecord[] = [];
 				const seasonalMonths = ingredient.seasonalMonths as number[][];
-				if (!seasonalMonths) {
-					return {
+				seasonalMonths.map((seasonalMonth) => {
+					data.push({
 						name: ingredient.name,
-						months: [],
-						type: ingredient.foodType ?? '',
-					};
-				}
-				return seasonalMonths.map((monthArray) => ({
-					name: ingredient.name,
-					months: monthArray,
-					type: ingredient.foodType ?? '',
-				}));
-			}),
-		});
-		index += 1;
+						startMonth: seasonalMonth ? seasonalMonth[0] : 0,
+						endMonth: seasonalMonth ? seasonalMonth[1] : 12,
+						typeId: foodType.id,
+					});
+					seasonalMonth[0];
+				});
+				return data;
+			},
+		);
+
+		datasets = datasets.concat(dataRecords);
 	}
 
 	return datasets;

@@ -1,4 +1,15 @@
 <script setup lang="ts">
+import type { DataRecord } from '~/server/api/ingredients/seasonals.get';
+import {
+	VisXYContainer,
+	VisAxis,
+	VisTimeline,
+	VisBulletLegend,
+	VisTooltip,
+} from '@unovis/vue';
+import { colors, Timeline, type BulletLegendItemInterface } from '@unovis/ts';
+import { Months } from '~/global/enums';
+
 const { t } = useI18n();
 const isModalOpen = ref<boolean>(false);
 defineShortcuts({
@@ -12,14 +23,13 @@ defineShortcuts({
 
 useListen('ingredient:created', async () => {
 	await refresh();
-	//if (datasetsFetch.value) data = { datasets: datasetsFetch.value };
 });
 
 const {
 	data: datasetsFetch,
 	refresh,
 	execute,
-} = await useFetch('/api/ingredients/seasonals', {
+} = await useFetch<DataRecord[]>('/api/ingredients/seasonals', {
 	method: 'GET',
 	immediate: false,
 	onResponseError({ response }) {
@@ -30,55 +40,74 @@ const {
 	},
 });
 
+const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
+	method: 'GET',
+	watch: false,
+	default: () => null,
+	onResponseError({ response }) {
+		throw showError({
+			statusCode: response.status,
+			statusMessage: response.statusText,
+		});
+	},
+});
+
+const x = (d: DataRecord) => d.startMonth;
+const length = (d: DataRecord) => {
+	return d.endMonth - d.startMonth > 0 ? d.endMonth - d.startMonth : 1;
+};
+const type = (d: DataRecord) => d.name;
+const color = (d: DataRecord) => colors[d.typeId];
 await execute();
-
-type RevenueDataItem = {
-	month: string;
-	desktop: number;
-	mobile: number;
+const legendItems: BulletLegendItemInterface[] =
+	foodTypes.value?.slice(0, 2).map((foodType) => ({
+		name: foodType.name,
+		color: colors[foodType.id],
+	})) ?? [];
+const triggers = {
+	[Timeline.selectors.line]: (d: DataRecord) => {
+		const startMonth: string = Object.values(Months)[d.startMonth];
+		const endMonth: string = Object.values(Months)[d.endMonth - 1];
+		if (startMonth === endMonth) {
+			return t(startMonth);
+		}
+		return t('fromTo', { from: t(startMonth), to: t(endMonth) });
+	},
 };
-
-const RevenueData = [
-	{ month: 'January', desktop: 186, mobile: 80 },
-	{ month: 'February', desktop: 305, mobile: 200 },
-	{ month: 'March', desktop: 237, mobile: 120 },
-	{ month: 'April', desktop: 73, mobile: 190 },
-	{ month: 'May', desktop: 209, mobile: 130 },
-	{ month: 'June', desktop: 214, mobile: 140 },
-];
-
-const RevenueCategories = {
-	desktop: { name: 'Desktop' },
+const tickFormat = (tick: number) => {
+	return t(Object.values(Months)[tick]);
 };
-
-const xFormatter = (i: number): string => `${RevenueData[i]?.month}`;
-const yFormatter = (i: number) => i;
 </script>
 
 <template>
-	<UModal title="Calendrier de saison" v-model:open="isModalOpen" class="z-10">
+	<UModal title="Calendrier de saison" v-model:open="isModalOpen" class="z-10 max-w-7xl">
 		<template #body>
-			<UCard>
-				<div class="relative flex-1 overflow-y-auto h-[70vh] p-4" id="container">
-					<div id="chartContainer">
-						<BarChart
-							:data="RevenueData"
-							:height="275"
-							:categories="RevenueCategories"
-							:y-axis="['desktop']"
-							:xNumTicks="6"
-							:radius="4"
-							:y-grid-line="false"
-							:x-formatter="xFormatter"
-							:y-formatter="yFormatter"
-							:legend-position="LegendPosition.Top"
-						/>
-					</div>
-				</div>
-			</UCard>
+			<div class="m-9 customTimeline">
+				<VisXYContainer :data="datasetsFetch" :height="500" :xDomain="[0,12]">
+					<VisBulletLegend :items="legendItems" class="flex! justify-center mb-6"/>
+					<VisTimeline :x="x" :length="length" :type="type" :showLabels="true" :color="color" :lineCap="true"/>
+					<VisAxis type="x" :tickValues="[0,1,2,3,4,5,6,7,8,9,10,11]" :tickFormat="tickFormat" :domainLine="false"/>
+					<VisTooltip :triggers="triggers" />
+				</VisXYContainer>
+			</div>
 		</template>
 	</UModal>
 </template>
 
 <style lang="scss">
+.customTimeline {
+	--vis-timeline-row-even-fill-color: var(--ui-bg);
+	--vis-timeline-row-odd-fill-color: var(--ui-bg);
+	--vis-timeline-scrollbar-background-color: var(--ui-bg);
+	--vis-timeline-scrollbar-color: var(--ui-text);
+	--vis-timeline-label-color: var(--ui-text);
+
+	--vis-axis-tick-label-color: var(--ui-text);
+
+	--vis-legend-label-color: var(--ui-text);
+
+	--vis-tooltip-background-color: var(--ui-bg);
+	--vis-tooltip-border-color: var(--ui-border);
+	--vis-tooltip-text-color: var(--ui-text-highlighted);
+}
 </style>
