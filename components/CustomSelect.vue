@@ -1,79 +1,66 @@
 <script lang="ts" setup>
-import { useFiltersStore } from '@/stores/filters';
-import { DataType } from '~/global/enums';
-import type { SelectItem } from '~/global/types';
+import type { SelectMenuItem } from '@nuxt/ui';
+import {
+	FilterResultStatesType,
+	type FilterSelectMenuStatesType,
+} from '~/global/enums/filter';
+import type {
+	CustomSelectMenuItem,
+	RecipesCategoriesWithLessData,
+	RecipeWithLessData,
+} from '~/global/types/filter';
 
 const props = defineProps<{
-	items: SelectItem[];
 	placeholder: string;
 	disabled: boolean;
+	dataType: FilterSelectMenuStatesType;
 }>();
-const itemsSelected = ref<SelectItem[]>([]);
-const store = useFiltersStore();
+const selectMenuStates = useFilterSelectMenuStates();
+const iconsGridStates = useFilterIconsGridStates();
+const switchStates = useFilterSwitchStates();
+const resultsStates = useFilterResults();
+const selectedItemsStates = useFilterSelectedItemsStates();
+const route = useRoute();
 
 function getButtonsColor(
-	selectMenuItem: SelectItem,
-	buttonType: 'wanted' | 'notWanted',
-) {
-	const item: SelectItem | undefined = props.items.find(
-		(item) => item.id === selectMenuItem.id,
-	);
-	const isWanted: boolean = buttonType === 'wanted';
-	if (item?.notWanted) {
+	selectMenuItem: SelectMenuItem & CustomSelectMenuItem,
+	isWanted: boolean,
+): string {
+	if (selectMenuItem.notWanted) {
 		return isWanted ? 'opacity-20' : 'opacity-100';
 	}
-	if (item?.wanted) {
+	if (selectMenuItem.wanted) {
 		return isWanted ? 'opacity-100' : 'opacity-20';
 	}
 	return 'opacity-20';
 }
 
-function onButtonClick(
-	selectMenuItem: SelectItem,
-	buttonType: 'wanted' | 'notWanted',
-) {
-	const isWanted: boolean = buttonType === 'wanted';
-	if (isWanted) {
-		props.items[selectMenuItem.id - 1].wanted =
-			!props.items[selectMenuItem.id - 1].wanted;
-		props.items[selectMenuItem.id - 1].notWanted = false;
-		store.updateSelectLists(
-			selectMenuItem.id,
-			props.items[selectMenuItem.id - 1].wanted
-				? false
-				: props.items[selectMenuItem.id - 1].notWanted
-					? true
-					: null,
-			selectMenuItem.dataType,
-		);
-	} else {
-		props.items[selectMenuItem.id - 1].notWanted =
-			!props.items[selectMenuItem.id - 1].notWanted;
-		props.items[selectMenuItem.id - 1].wanted = false;
-		store.updateSelectLists(
-			selectMenuItem.id,
-			props.items[selectMenuItem.id - 1].notWanted
-				? false
-				: props.items[selectMenuItem.id - 1].wanted
-					? true
-					: null,
-			selectMenuItem.dataType,
-		);
+async function fetchFilteredItems() {
+	const result = await useFetchFilteredItems(
+		selectMenuStates.value,
+		iconsGridStates.value,
+		switchStates.value,
+		route.params.id ?? null,
+	);
+	if (route.params.id) {
+		resultsStates.value.recipes = result as RecipeWithLessData[];
 	}
+	resultsStates.value.recipesCategories = result;
 }
 </script>
 
 <template>
   	<div>
 		<div class="mb-2 flex-1 flex-wrap h-auto">
-			<UBadge v-for="item in items.filter(item => item.wanted || item.notWanted)" class="h-6 m-0.5"
+			<!-- @vue-ignore -->
+			<UBadge v-for="item of selectedItemsStates[dataType]" class="h-6 m-0.5"
 				:color="item.wanted ? 'primary' : 'error'" size="md" variant="solid" :label="item.label"></UBadge>
 		</div>
 		<USelectMenu
 			:disabled="disabled"
-			:v-model="itemsSelected"
-			value-key="id"
-			:items="items"
+			v-model="selectedItemsStates[dataType]"
+			:v-model:open="disabled"
+			:items="selectMenuStates[dataType]"
 			class="w-full"
 			multiple
 			:placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
@@ -83,13 +70,19 @@ function onButtonClick(
 			<template #item-leading="{ item }">
 				<UButton
 					:padded="false" variant="link" icon="material-symbols:circle-outline"
-					:class="getButtonsColor(item, 'wanted')" @click="onButtonClick(item, 'wanted')"
+					:class="getButtonsColor(item, true)" @click="
+						useUpdateFilterSelectMenu(item.id, true, item.dataType);
+						fetchFilteredItems();
+					"
 					:ui="{
 						base: 'p-0'
 					}"/>
 				<UButton
 					:padded="false" variant="link" icon="radix-icons:value-none"
-					:class="getButtonsColor(item, 'notWanted')" @click="onButtonClick(item, 'notWanted')"
+					:class="getButtonsColor(item, false)" @click="
+						useUpdateFilterSelectMenu(item.id, false, item.dataType);
+						fetchFilteredItems();
+					"
 					:ui="{
 						base: 'p-0 pr-1.5'
 					}"/>

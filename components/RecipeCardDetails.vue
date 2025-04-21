@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { RecipeDetail } from '~/global/types';
+import type { RecipeDetail } from '~/global/types/recipeCard';
 import { formatDuration } from '~/global/utils';
 
 const props = defineProps<{

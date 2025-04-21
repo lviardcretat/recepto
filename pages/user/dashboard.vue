@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const test = useTest();
 const counts: Ref<number[][]> = ref([
 	[0, 15],
 	[0, 67],

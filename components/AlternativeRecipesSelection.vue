@@ -1,18 +1,36 @@
 <script setup lang="ts">
-import type { RecipeWithLessData } from '~/global/types';
+import type { RecipeWithLessData } from '~/global/types/filter';
 
+const selectMenuStates = useFilterSelectMenuStates();
+const iconsGridStates = useFilterIconsGridStates();
+const switchStates = useFilterSwitchStates();
+const resultsStates = useFilterResults();
 const route = useRoute();
-const recipeIndex = computed(() => {
-	return Number(route.query.recipeIndex);
-});
-const store = useFiltersStore();
+
 const isModalOpen: Ref<boolean> = ref(false);
 const recipeActive: Ref<RecipeWithLessData | undefined> = ref();
 
-await store.fetchFilteredRecipes(0);
+useListen('recipe:created', async () => {});
+
+await callOnce(
+	async () => {
+		resultsStates.value.recipes = (await useFetchFilteredItems(
+			selectMenuStates.value,
+			iconsGridStates.value,
+			switchStates.value,
+			route.params.id,
+		)) as RecipeWithLessData[];
+	},
+	{ mode: 'navigation' },
+);
 
 useListen('recipe:created', async () => {
-	await store.fetchFilteredRecipes();
+	resultsStates.value.recipes = (await useFetchFilteredItems(
+		selectMenuStates.value,
+		iconsGridStates.value,
+		switchStates.value,
+		route.params.id,
+	)) as RecipeWithLessData[];
 });
 </script>
 
@@ -20,8 +38,8 @@ useListen('recipe:created', async () => {
     <div class="alternative-recipes-selection-content">
         <swiper-container :slides-per-view="'auto'" :loop="false" :effect="'coverflow'" :grabcursor="true" :centered-slides="true"
 			:coverflow-effect-rotate="0" :coverflow-effect-stretch="0" :coverflow-effect-depth="150" :coverflow-effect-modifier="2.5"
-			:coverflow-effect-slide-shadows="false" :mousewheel="true" :initial-slide="recipeIndex" :grabCursor="true">
-            <swiper-slide v-for="recipe in store.recipeCategoryList as RecipeWithLessData[]">
+			:coverflow-effect-slide-shadows="false" :mousewheel="true":grabCursor="true">
+            <swiper-slide v-for="recipe in resultsStates.recipes">
 				<RecipeCard
 					:name="recipe.name"
 					:description="recipe.description"
@@ -30,7 +48,7 @@ useListen('recipe:created', async () => {
 					:cookingTime="recipe.cookingTime ?? 0"
 					:restTime="recipe.restTime ?? 0"
 					:createdAt="new Date(recipe.createdAt)"
-					:fullName="`${recipe.userFirstname} ${recipe.userLastname}`"
+					fullName="dzqdzqdzqqzd"
 					@click="recipeActive = recipe; isModalOpen = true"/>
 			</swiper-slide>
         </swiper-container>

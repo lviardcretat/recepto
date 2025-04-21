@@ -1,22 +1,42 @@
 <script lang="ts" setup>
-import type { IconsGridItem } from '~/global/types';
+import type { FilterIconsGridStatesType } from '~/global/enums/filter';
+import type { RecipeWithLessData } from '~/global/types/filter';
 
-defineProps<{ items: IconsGridItem[] }>();
-const store = useFiltersStore();
+defineProps<{ dataType: FilterIconsGridStatesType }>();
+
+const selectMenuStates = useFilterSelectMenuStates();
+const iconsGridStates = useFilterIconsGridStates();
+const switchStates = useFilterSwitchStates();
+const resultsStates = useFilterResults();
+const route = useRoute();
+
+async function fetchFilteredItems() {
+	const result = await useFetchFilteredItems(
+		selectMenuStates.value,
+		iconsGridStates.value,
+		switchStates.value,
+		route.params.id ?? null,
+	);
+	if (route.params.id) {
+		resultsStates.value.recipes = result as RecipeWithLessData[];
+	}
+	resultsStates.value.recipesCategories = result;
+}
 </script>
 
 <template>
 	<div class="grid grid-cols-3 grid-rows-2 gap-2 justify-items-center">
-		<UTooltip v-for="item in items" :text="item.label" :delay-duration="0" :content="{ side: 'top' }"
+		<UTooltip v-for="item in iconsGridStates[dataType]" :text="item.label" :delay-duration="0" :content="{ side: 'top' }"
 			class="w-6 h-6 ml-4 mr-4 mt-2 mb-2 flex items-center justify-center">
 			<UButton
 				:icon="item.icon"
 				color="neutral"
 				variant="ghost"
-				:class="items[item.id - 1].active ? 'opacity-100' : 'opacity-20'"
+				:class="item.active ? 'opacity-100' : 'opacity-20'"
 				@click="
-					items[item.id - 1].active = !items[item.id - 1].active;
-					store.updateGridLists(items[item.id - 1].id, items[item.id - 1].active, items[item.id - 1].dataType);
+					item.active = !item.active;
+					useUpdateFilterIconsGrid(item.id, item.active, item.dataType);
+					fetchFilteredItems();
 				"/>
 		</UTooltip>
 	</div>

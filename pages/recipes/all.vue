@@ -1,8 +1,18 @@
 <script setup lang="ts">
-import { useFiltersStore } from '@/stores/filters';
+import type { RecipesCategoriesWithLessData } from '~/global/types/filter';
 
-const store = useFiltersStore();
-await store.fetchFilteredRecipes();
+const selectMenuStates = useFilterSelectMenuStates();
+const iconsGridStates = useFilterIconsGridStates();
+const switchStates = useFilterSwitchStates();
+const resultsStates = useFilterResults();
+
+await callOnce(async () => {
+	resultsStates.value.recipesCategories = (await useFetchFilteredItems(
+		selectMenuStates.value,
+		iconsGridStates.value,
+		switchStates.value,
+	)) as RecipesCategoriesWithLessData[];
+});
 
 definePageMeta({
 	layout: 'filter',
@@ -10,19 +20,23 @@ definePageMeta({
 
 function isData() {
 	return (
-		store.recipeCategoryList !== undefined &&
-		store.recipeCategoryList !== null &&
-		store.recipeCategoryList.length > 0
+		resultsStates.value.recipesCategories !== undefined &&
+		resultsStates.value.recipesCategories !== null &&
+		resultsStates.value.recipesCategories.length > 0
 	);
 }
 
 useListen('recipesCategory:created', async () => {
-	await store.fetchFilteredRecipes();
+	resultsStates.value.recipesCategories = (await useFetchFilteredItems(
+		selectMenuStates.value,
+		iconsGridStates.value,
+		switchStates.value,
+	)) as RecipesCategoriesWithLessData[];
 });
 </script>
 
 <template>
-	<UPageCard v-if="isData()" v-for="recipeCategory in store.recipeCategoryList"
+	<UPageCard v-if="isData()" v-for="recipeCategory in resultsStates.recipesCategories"
 		:title="recipeCategory?.name" variant="outline" target="_self"
 		:to="{ name: 'recipes-id', params: { id: recipeCategory.id }, query: { recipeIndex: 0}}"></UPageCard>
 </template>

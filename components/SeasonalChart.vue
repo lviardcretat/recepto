@@ -8,7 +8,7 @@ import {
 	VisTooltip,
 } from '@unovis/vue';
 import { colors, Timeline, type BulletLegendItemInterface } from '@unovis/ts';
-import { Months } from '~/global/enums';
+import { Months } from '~/global/enums/data';
 
 const { t } = useI18n();
 const isModalOpen = ref<boolean>(false);
@@ -22,16 +22,17 @@ defineShortcuts({
 });
 
 useListen('ingredient:created', async () => {
-	await refresh();
+	await refreshDatasetsFetch();
 });
 
 const {
 	data: datasetsFetch,
-	refresh,
-	execute,
+	refresh: refreshDatasetsFetch,
+	execute: executeDatasetsFetch,
 } = await useFetch<DataRecord[]>('/api/ingredients/seasonals', {
 	method: 'GET',
 	immediate: false,
+	watch: false,
 	onResponseError({ response }) {
 		throw showError({
 			statusCode: response.status,
@@ -40,17 +41,24 @@ const {
 	},
 });
 
-const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
-	method: 'GET',
-	watch: false,
-	default: () => null,
-	onResponseError({ response }) {
-		throw showError({
-			statusCode: response.status,
-			statusMessage: response.statusText,
-		});
+const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFetch(
+	'/api/foodTypes/all',
+	{
+		method: 'GET',
+		immediate: false,
+		watch: false,
+		default: () => null,
+		onResponseError({ response }) {
+			throw showError({
+				statusCode: response.status,
+				statusMessage: response.statusText,
+			});
+		},
 	},
-});
+);
+
+await executeDatasetsFetch();
+await executeFoodTypesFetch();
 
 const x = (d: DataRecord) => d.startMonth;
 const length = (d: DataRecord) => {
@@ -58,9 +66,8 @@ const length = (d: DataRecord) => {
 };
 const type = (d: DataRecord) => d.name;
 const color = (d: DataRecord) => colors[d.typeId];
-await execute();
 const legendItems: BulletLegendItemInterface[] =
-	foodTypes.value?.slice(0, 2).map((foodType) => ({
+	foodTypesFetch.value?.slice(0, 2).map((foodType) => ({
 		name: foodType.name,
 		color: colors[foodType.id],
 	})) ?? [];

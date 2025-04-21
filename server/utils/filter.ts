@@ -1,6 +1,6 @@
 import { lte, gte, type SQL, inArray, notInArray, eq } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
-import type { ItemsIdsWantedOrNot } from '~/global/types';
+import type { ItemsIdsWantedOrNot } from '~/global/types/filter';
 import type { FilterSelectItem } from '~/global/validationSchemas';
 
 export const recipeCategorySelectType = {
@@ -17,8 +17,6 @@ export const recipeSelectType = {
 	description: tables.recipe.description,
 	seasonId: tables.recipe.seasonId,
 	createdAt: tables.recipe.createdAt,
-	userFirstname: tables.user.firstname,
-	userLastname: tables.user.lastname,
 };
 
 /**

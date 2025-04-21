@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
+import { useMapSelectMenuItems } from '~/global/utils';
 import {
 	recipesCategoryCreation,
 	type RecipesCategoryCreation,
@@ -26,6 +27,9 @@ const { data: dishTypes } = await useFetch('/api/dishTypes/all', {
 			statusCode: response.status,
 			statusMessage: response.statusText,
 		});
+	},
+	transform: (dishTypes) => {
+		return useMapSelectMenuItems(dishTypes);
 	},
 });
 

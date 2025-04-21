@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
+import { useMapSelectMenuItems } from '~/global/utils';
 import {
 	recipeCreation,
 	type RecipeCreation,
@@ -51,12 +52,7 @@ const { data: seasons } = await useFetch('/api/seasons/all', {
 		});
 	},
 	transform: (seasons) => {
-		return seasons.map((season) => {
-			return {
-				id: season.id,
-				label: season.name,
-			};
-		});
+		return useMapSelectMenuItems(seasons);
 	},
 });
 
@@ -73,12 +69,7 @@ const { data: recipesCategories } = await useFetch(
 			});
 		},
 		transform: (recipesCategories) => {
-			return recipesCategories.map((recipesCategory) => {
-				return {
-					id: recipesCategory.id,
-					label: recipesCategory.name,
-				};
-			});
+			return useMapSelectMenuItems(recipesCategories);
 		},
 	},
 );
@@ -94,12 +85,7 @@ const { data: ingredients } = await useFetch('/api/ingredients/all', {
 		});
 	},
 	transform: (ingredients) => {
-		return ingredients.map((ingredient) => {
-			return {
-				id: ingredient.id,
-				label: ingredient.name,
-			};
-		});
+		return useMapSelectMenuItems(ingredients);
 	},
 });
 
@@ -114,12 +100,7 @@ const { data: allergens } = await useFetch('/api/allergens/all', {
 		});
 	},
 	transform: (allergens) => {
-		return allergens.map((allergen) => {
-			return {
-				id: allergen.id,
-				label: allergen.name,
-			};
-		});
+		return useMapSelectMenuItems(allergens);
 	},
 });
 
@@ -134,12 +115,7 @@ const { data: ustensils } = await useFetch('/api/ustensils/all', {
 		});
 	},
 	transform: (ustensils) => {
-		return ustensils.map((ustensil) => {
-			return {
-				id: ustensil.id,
-				label: ustensil.name,
-			};
-		});
+		return useMapSelectMenuItems(ustensils);
 	},
 });
 
@@ -154,12 +130,7 @@ const { data: units } = await useFetch('/api/units/all', {
 		});
 	},
 	transform: (units) => {
-		return units.map((unit) => {
-			return {
-				id: unit.id,
-				label: unit.name,
-			};
-		});
+		return useMapSelectMenuItems(units);
 	},
 });
 

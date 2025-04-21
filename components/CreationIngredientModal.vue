@@ -4,9 +4,9 @@ import {
 	ingredientCreationSchema,
 	type IngredientCreation,
 } from '~/global/validationSchemas';
-import { Months } from '~/global/enums';
+import { Months } from '~/global/enums/data';
+import { useMapSelectMenuItems } from '~/global/utils';
 
-console.log('ddqzd');
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const schema = ingredientCreationSchema;
@@ -31,6 +31,9 @@ const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
 			statusCode: response.status,
 			statusMessage: response.statusText,
 		});
+	},
+	transform: (foodTypes) => {
+		return useMapSelectMenuItems(foodTypes);
 	},
 });
 

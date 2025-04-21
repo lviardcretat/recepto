@@ -9,7 +9,6 @@ export default defineNuxtConfig({
 		'@nuxt/image',
 		'@nuxtjs/i18n',
 		'@nuxt/ui-pro',
-		'@pinia/nuxt',
 		'nuxt-swiper', // Comment it for local bdd
 		'@nuxthub/core',
 	],

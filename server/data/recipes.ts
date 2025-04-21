@@ -13,12 +13,12 @@ import {
 	createUstensilSubQuery,
 	recipeSelectType,
 } from '../utils/filter';
-import type {
-	RecipeDetail,
-	RecipesCategoriesWithLessData,
-	RecipeWithLessData,
-} from '~/global/types';
 import { intersect } from 'drizzle-orm/sqlite-core';
+import type {
+	RecipeWithLessData,
+	RecipesCategoriesWithLessData,
+} from '~/global/types/filter';
+import type { RecipeDetail } from '~/global/types/recipeCard';
 
 export async function postRecipe(
 	name: string,
