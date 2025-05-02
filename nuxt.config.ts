@@ -57,6 +57,7 @@ export default defineNuxtConfig({
 	},
 	nitro: {
 		replace: {
+			// https://github.com/betterwrite/pdfeasy/issues/18#issuecomment-2619794759
 			// replace the browser detection in a server lib
 			'globalThis.navigator': 'undefined',
 			'global.navigator': 'undefined',
