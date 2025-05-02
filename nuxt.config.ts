@@ -56,6 +56,11 @@ export default defineNuxtConfig({
 		blob: true,
 	},
 	nitro: {
+		replace: {
+			// replace the browser detection in a server lib
+			'globalThis.navigator': 'undefined',
+			'global.navigator': 'undefined',
+		},
 		experimental: {
 			tasks: true,
 			openAPI: true,
