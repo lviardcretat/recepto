@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-async function uploadWithPresignedUrl(file: File) {
-	const { url } = await $fetch(`/api/blob/sign/${file.name}`);
-	await $fetch(url, {
-		method: 'PUT',
-		body: file,
-	});
+async function uploadWithPresignedUrl(event: Event) {
+	const files = (event.target as HTMLInputElement)?.files;
+	if (files) {
+		const { url } = await $fetch(`/api/blob/sign/${files[0].name}`, {
+			method: 'GET',
+		});
+		await $fetch(url, {
+			method: 'PUT',
+			body: files[0],
+		});
+	}
 }
 </script>
 
 <template>
 	<div class="m-auto w-1/2 flex flex-col">
-		<input type="file" @change="uploadWithPresignedUrl($event.target.files[0])">
 		<RecipeSearchBar/>
 		<UButton icon="ri:bowl-fill" trailing-icon="i-lucide-arrow-right"
 			color="primary" variant="ghost" size="xl" class="mt-3 ml-auto mr-auto"
@@ -19,5 +23,6 @@ async function uploadWithPresignedUrl(file: File) {
 			}">
 			{{ $t('recipeAll') }}
 		</UButton>
+		<UInput type="file" @change="uploadWithPresignedUrl($event)"></UInput>
 	</div>
 </template>

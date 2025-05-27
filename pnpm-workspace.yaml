@@ -1,0 +1,11 @@
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+  - '@parcel/watcher'
+  - '@tailwindcss/oxide'
+  - esbuild
+  - lefthook
+  - maplibre-gl
+  - puppeteer
+  - sharp
+  - vue-demi
+  - workerd
