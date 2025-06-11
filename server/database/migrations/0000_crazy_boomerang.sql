@@ -1,4 +1,21 @@
-CREATE TABLE IF NOT EXISTS `allergen` (
+CREATE TABLE `account` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`user_id` text NOT NULL,
+	`account_id` text NOT NULL,
+	`provider_id` text NOT NULL,
+	`access_token` text,
+	`refresh_token` text,
+	`access_token_expires_at` integer,
+	`refresh_token_expires_at` integer,
+	`scope` text,
+	`id_token` text,
+	`password` text,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `allergen` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`icon` text,
@@ -8,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `allergen` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `allergenToRecipe` (
+CREATE TABLE `allergenToRecipe` (
 	`allergenId` integer NOT NULL,
 	`recipeId` integer NOT NULL,
 	PRIMARY KEY(`allergenId`, `recipeId`),
@@ -16,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `allergenToRecipe` (
 	FOREIGN KEY (`recipeId`) REFERENCES `recipe`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `dishType` (
+CREATE TABLE `dishType` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
@@ -25,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `dishType` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `foodType` (
+CREATE TABLE `foodType` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
@@ -34,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `foodType` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `ingredient` (
+CREATE TABLE `ingredient` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`foodTypeId` integer NOT NULL,
@@ -46,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `ingredient` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `mealType` (
+CREATE TABLE `mealType` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
@@ -55,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `mealType` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `mealTypeToRecipeCategory` (
+CREATE TABLE `mealTypeToRecipeCategory` (
 	`mealTypeId` integer NOT NULL,
 	`recipeCategoryId` integer NOT NULL,
 	PRIMARY KEY(`mealTypeId`, `recipeCategoryId`),
@@ -63,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `mealTypeToRecipeCategory` (
 	FOREIGN KEY (`recipeCategoryId`) REFERENCES `recipesCategory`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `recipe` (
+CREATE TABLE `recipe` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`peopleNumber` integer NOT NULL,
@@ -75,6 +92,7 @@ CREATE TABLE IF NOT EXISTS `recipe` (
 	`seasonId` integer NOT NULL,
 	`recipesCategoryId` integer NOT NULL,
 	`createdById` integer NOT NULL,
+	`selectMenuType` text,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`seasonId`) REFERENCES `season`(`id`) ON UPDATE no action ON DELETE cascade,
@@ -82,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `recipe` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `recipeIngredient` (
+CREATE TABLE `recipeIngredient` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`ingredientId` integer NOT NULL,
 	`recipeId` integer NOT NULL,
@@ -93,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `recipeIngredient` (
 	FOREIGN KEY (`unitId`) REFERENCES `unit`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `recipeToUstensil` (
+CREATE TABLE `recipeToUstensil` (
 	`recipeId` integer NOT NULL,
 	`ustensilId` integer NOT NULL,
 	PRIMARY KEY(`recipeId`, `ustensilId`),
@@ -101,18 +119,19 @@ CREATE TABLE IF NOT EXISTS `recipeToUstensil` (
 	FOREIGN KEY (`ustensilId`) REFERENCES `ustensil`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `recipesCategory` (
+CREATE TABLE `recipesCategory` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`dishTypeId` integer NOT NULL,
 	`createdById` integer NOT NULL,
+	`selectMenuType` text,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`dishTypeId`) REFERENCES `dishType`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `season` (
+CREATE TABLE `season` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`start` integer NOT NULL,
@@ -123,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `season` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `sequence` (
+CREATE TABLE `sequence` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL,
 	`description` text NOT NULL,
@@ -135,7 +154,20 @@ CREATE TABLE IF NOT EXISTS `sequence` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `unit` (
+CREATE TABLE `session` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`user_id` text NOT NULL,
+	`token` text NOT NULL,
+	`expires_at` integer NOT NULL,
+	`ip_address` text,
+	`user_agent` text,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `session_token_unique` ON `session` (`token`);--> statement-breakpoint
+CREATE TABLE `unit` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`shortForm` text NOT NULL,
@@ -145,10 +177,12 @@ CREATE TABLE IF NOT EXISTS `unit` (
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE `user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`email` text NOT NULL,
-	`password` text NOT NULL,
+	`email_verified` integer DEFAULT false NOT NULL,
+	`image` text,
+	`name` text NOT NULL,
 	`firstname` text NOT NULL,
 	`lastname` text NOT NULL,
 	`role` text NOT NULL,
@@ -158,11 +192,20 @@ CREATE TABLE IF NOT EXISTS `user` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint
-CREATE TABLE IF NOT EXISTS `ustensil` (
+CREATE TABLE `ustensil` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`createdById` integer NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `verification` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`identifier` text NOT NULL,
+	`value` text NOT NULL,
+	`expires_at` integer NOT NULL,
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );

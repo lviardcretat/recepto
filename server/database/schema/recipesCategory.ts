@@ -15,7 +15,7 @@ export const recipesCategory = sqliteTable('recipesCategory', {
 	createdById: integer('createdById')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
-	selectMenuType: text('label').generatedAlwaysAs('is'),
+	selectMenuType: text('selectMenuType'),
 	...timestamps,
 });
 
