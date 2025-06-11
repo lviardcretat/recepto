@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	compatibilityDate: '2024-04-03',
+	compatibilityDate: '2025-01-01',
 	ssr: true,
 	devtools: { enabled: true },
 	modules: [
@@ -9,8 +9,8 @@ export default defineNuxtConfig({
 		'@nuxt/image',
 		'@nuxtjs/i18n',
 		'@nuxt/ui-pro',
-		'nuxt-swiper', // Comment it for local bdd
-		'@nuxthub/core',
+		'nuxt-swiper',
+		'@nuxthub/core', // Comment it for local bdd
 	],
 	css: ['~/assets/css/main.css'],
 	vue: {

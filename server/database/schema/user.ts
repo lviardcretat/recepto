@@ -16,7 +16,11 @@ import { ustensil } from './ustensil';
 export const user = sqliteTable('user', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	email: text('email').notNull().unique(),
-	password: text('password').notNull(),
+	emailVerified: integer('email_verified', { mode: 'boolean' })
+		.default(false)
+		.notNull(),
+	image: text('image'),
+	name: text('name').notNull(),
 	firstname: text('firstname').notNull(),
 	lastname: text('lastname').notNull(),
 	role: text('role').notNull(),
