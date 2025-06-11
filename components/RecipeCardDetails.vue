@@ -115,7 +115,7 @@ const active = ref(['0', '1']);
 		</UContainer>
 		<template #footer>
 			<div class="footer flex justify-between items-center">
-				<p>{{ $t('createdBy', { username: `${recipe?.createdBy.firstname} ${recipe?.createdBy.lastname}` })}}</p>
+				<p>{{ $t('createdBy', { username: recipe?.name })}}</p>
 				<p>{{ $d(new Date(recipe?.createdAt ?? ''), 'short') }}</p>
 			</div>
 		</template>

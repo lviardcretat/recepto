@@ -21,10 +21,6 @@ export const user = sqliteTable('user', {
 		.notNull(),
 	image: text('image'),
 	name: text('name').notNull(),
-	firstname: text('firstname').notNull(),
-	lastname: text('lastname').notNull(),
-	role: text('role').notNull(),
-	avatar: text('avatar').notNull(),
 	...timestamps,
 });
 

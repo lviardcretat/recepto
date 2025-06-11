@@ -183,10 +183,6 @@ CREATE TABLE `user` (
 	`email_verified` integer DEFAULT false NOT NULL,
 	`image` text,
 	`name` text NOT NULL,
-	`firstname` text NOT NULL,
-	`lastname` text NOT NULL,
-	`role` text NOT NULL,
-	`avatar` text NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );

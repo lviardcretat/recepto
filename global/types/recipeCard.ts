@@ -21,5 +21,5 @@ export type RecipeDetail = {
 	}[];
 	sequences: { id: number; description: string; title: string }[];
 	ustensils: { ustensil: { name: string } }[];
-	createdBy: { firstname: string; lastname: string };
+	createdBy: { name: string };
 };

@@ -150,8 +150,7 @@ export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
 				},
 				createdBy: {
 					columns: {
-						firstname: true,
-						lastname: true,
+						name: true,
 					},
 				},
 			},
