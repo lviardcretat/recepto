@@ -1,17 +1,31 @@
 import type { H3Event } from 'h3';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { user } from '../database/schema/user';
+import { account } from '../database/schema/account';
+import { session } from '../database/schema/session';
+import { verification } from '../database/schema/verification';
+import { admin, username } from 'better-auth/plugins';
 
 function createAuth() {
 	return betterAuth({
 		database: drizzleAdapter(useDrizzle(), {
 			provider: 'sqlite',
+			schema: {
+				user,
+				session,
+				account,
+				verification,
+			},
 		}),
 		emailAndPassword: {
 			enabled: true,
 		},
+		plugins: [username(), admin()],
 		advanced: {
-			generateId: false,
+			database: {
+				generateId: false,
+			},
 		},
 	});
 }

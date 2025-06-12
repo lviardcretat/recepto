@@ -5,21 +5,21 @@ import { relations } from 'drizzle-orm';
 
 export const account = sqliteTable('account', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
-	userId: text('user_id')
+	userId: text('userId')
 		.notNull()
 		.references(() => user.id),
-	accountId: text('account_id').notNull(),
-	providerId: text('provider_id').notNull(),
-	accessToken: text('access_token'),
-	refreshToken: text('refresh_token'),
-	accessTokenExpiresAt: integer('access_token_expires_at', {
+	accountId: text('accountId').notNull(),
+	providerId: text('providerId').notNull(),
+	accessToken: text('accessToken'),
+	refreshToken: text('refreshToken'),
+	accessTokenExpiresAt: integer('accessTokenExpiresAt', {
 		mode: 'timestamp_ms',
 	}),
-	refreshTokenExpiresAt: integer('refresh_token_expires_at', {
+	refreshTokenExpiresAt: integer('refreshTokenExpiresAt', {
 		mode: 'timestamp_ms',
 	}),
 	scope: text('scope'),
-	idToken: text('id_token'),
+	idToken: text('idToken'),
 	password: text('password'),
 	...timestamps,
 });

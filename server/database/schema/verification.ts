@@ -5,6 +5,6 @@ export const verification = sqliteTable('verification', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	identifier: text('identifier').notNull(),
 	value: text('value').notNull(),
-	expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
+	expiresAt: integer('expiresAt', { mode: 'timestamp_ms' }).notNull(),
 	...timestamps,
 });

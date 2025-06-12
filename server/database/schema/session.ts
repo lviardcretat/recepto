@@ -6,13 +6,14 @@ import { relations } from 'drizzle-orm';
 
 export const session = sqliteTable('session', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
-	userId: text('user_id')
+	userId: text('userId')
 		.notNull()
 		.references(() => user.id),
 	token: text('token').notNull().unique(),
-	expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
-	ipAddress: text('ip_address'),
-	userAgent: text('user_agent'),
+	expiresAt: integer('expiresAt', { mode: 'timestamp_ms' }).notNull(),
+	ipAddress: text('ipAddress'),
+	userAgent: text('userAgent'),
+	impersonatedBy: text('impersonatedBy'),
 	...timestamps,
 });
 

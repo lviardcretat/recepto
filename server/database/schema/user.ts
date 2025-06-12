@@ -20,7 +20,15 @@ export const user = sqliteTable('user', {
 		.default(false)
 		.notNull(),
 	image: text('image'),
+	role: text('role').notNull().default('user'),
+	banned: integer('email_verified', { mode: 'boolean' })
+		.default(false)
+		.notNull(),
 	name: text('name').notNull(),
+	banReason: text('banReason'),
+	banExpires: integer('banExpires', { mode: 'timestamp_ms' }),
+	username: text('username').notNull(),
+	displayUsername: text('displayUsername').notNull(),
 	...timestamps,
 });
 

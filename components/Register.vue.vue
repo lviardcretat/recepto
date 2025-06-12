@@ -7,6 +7,12 @@ const toast = useToast();
 
 const fields = [
 	{
+		name: 'username',
+		type: 'text' as const,
+		label: 'Username',
+		required: true,
+	},
+	{
 		name: 'name',
 		type: 'text' as const,
 		label: 'Name',
@@ -27,7 +33,8 @@ const fields = [
 ];
 
 const schema = z.object({
-	name: z.string().min(1),
+	username: z.string().min(3),
+	name: z.string().min(3),
 	email: z.string().email('Invalid email'),
 	password: z.string().min(8, 'Must be at least 8 characters'),
 });
@@ -36,6 +43,7 @@ type Schema = z.output<typeof schema>;
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
 	const response = await authClient.signUp.email({
+		username: payload.data.username,
 		name: payload.data.name,
 		email: payload.data.email,
 		password: payload.data.password,
@@ -50,7 +58,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 		return null;
 	}
 
-	return navigateTo('/app');
+	return navigateTo('/search');
 }
 </script>
 

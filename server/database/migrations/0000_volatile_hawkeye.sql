@@ -1,18 +1,18 @@
 CREATE TABLE `account` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`user_id` text NOT NULL,
-	`account_id` text NOT NULL,
-	`provider_id` text NOT NULL,
-	`access_token` text,
-	`refresh_token` text,
-	`access_token_expires_at` integer,
-	`refresh_token_expires_at` integer,
+	`userId` text NOT NULL,
+	`accountId` text NOT NULL,
+	`providerId` text NOT NULL,
+	`accessToken` text,
+	`refreshToken` text,
+	`accessTokenExpiresAt` integer,
+	`refreshTokenExpiresAt` integer,
 	`scope` text,
-	`id_token` text,
+	`idToken` text,
 	`password` text,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `allergen` (
@@ -156,14 +156,15 @@ CREATE TABLE `sequence` (
 --> statement-breakpoint
 CREATE TABLE `session` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`user_id` text NOT NULL,
+	`userId` text NOT NULL,
 	`token` text NOT NULL,
-	`expires_at` integer NOT NULL,
-	`ip_address` text,
-	`user_agent` text,
+	`expiresAt` integer NOT NULL,
+	`ipAddress` text,
+	`userAgent` text,
+	`impersonatedBy` text,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `session_token_unique` ON `session` (`token`);--> statement-breakpoint
@@ -182,7 +183,12 @@ CREATE TABLE `user` (
 	`email` text NOT NULL,
 	`email_verified` integer DEFAULT false NOT NULL,
 	`image` text,
+	`role` text DEFAULT 'user' NOT NULL,
 	`name` text NOT NULL,
+	`banReason` text,
+	`banExpires` integer,
+	`username` text NOT NULL,
+	`displayUsername` text NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
@@ -201,7 +207,7 @@ CREATE TABLE `verification` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`identifier` text NOT NULL,
 	`value` text NOT NULL,
-	`expires_at` integer NOT NULL,
+	`expiresAt` integer NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
