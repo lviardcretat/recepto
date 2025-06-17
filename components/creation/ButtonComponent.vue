@@ -59,10 +59,10 @@ const isModalOpen = ref(false);
 					</div>
 				</template>
 
-				<CreationUstensilModal v-if="mainModalName === 'ustensil'" @closeModal="isModalOpen = false"/>
-				<CreationIngredientModal v-if="mainModalName === 'ingredient'" @closeModal="isModalOpen = false"/>
-				<CreationRecipesCategoryModal v-if="mainModalName === 'category'" @closeModal="isModalOpen = false"/>
-				<CreationRecipeModal v-if="mainModalName === 'recipe'" @closeModal="isModalOpen = false"/>
+				<CreationUstensilModalComponent v-if="mainModalName === 'ustensil'" @closeModal="isModalOpen = false"/>
+				<CreationIngredientModalComponent v-if="mainModalName === 'ingredient'" @closeModal="isModalOpen = false"/>
+				<CreationRecipesCategoryModalComponent v-if="mainModalName === 'category'" @closeModal="isModalOpen = false"/>
+				<CreationRecipeModalComponent v-if="mainModalName === 'recipe'" @closeModal="isModalOpen = false"/>
 			</UCard>
 		</template>
 	</UModal>

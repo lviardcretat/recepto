@@ -1,11 +1,8 @@
 <script setup lang="ts">
-definePageMeta({
-	layout: 'filter',
-});
 </script>
 
 <template>
-	<AlternativeRecipesSelection/>
+	<SelectionAlternativeRecipesComponent/>
 </template>
 
 <style lang="scss">

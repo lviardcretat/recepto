@@ -7,7 +7,7 @@ import type {
 	FilterSelectMenuStates,
 	FilterIconsGridStates,
 	FilterSwitchStates,
-} from '~/global/types/filter';
+} from '~/types/filter';
 
 /**
  * Allows you to recover states from the composable.

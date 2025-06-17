@@ -1,14 +1,7 @@
 <script lang="ts" setup>
 import type { SelectMenuItem } from '@nuxt/ui';
-import {
-	FilterResultStatesType,
-	type FilterSelectMenuStatesType,
-} from '~/global/enums/filter';
-import type {
-	CustomSelectMenuItem,
-	RecipesCategoriesWithLessData,
-	RecipeWithLessData,
-} from '~/global/types/filter';
+import { type FilterSelectMenuStatesType } from '~/enums/filter';
+import type { CustomSelectMenuItem, RecipeWithLessData } from '~/types/filter';
 
 const props = defineProps<{
 	placeholder: string;
@@ -53,31 +46,31 @@ async function fetchFilteredItems() {
   	<div>
 		<div class="mb-2 flex flex-wrap h-auto">
 			<!-- @vue-ignore -->
-			<UBadge v-for="item of selectedItemsStates[dataType]" class="h-6 m-0.5"
+			<UBadge v-for="item of selectedItemsStates[props.dataType]" class="h-6 m-0.5"
 				:color="item.wanted ? 'primary' : 'error'" size="md" variant="solid" :label="item.label"></UBadge>
 		</div>
 		<USelectMenu
-			:disabled="disabled"
-			v-model="selectedItemsStates[dataType]"
-			:v-model:open="disabled"
-			:items="selectMenuStates[dataType]"
+			:disabled="props.disabled"
+			v-model="selectedItemsStates[props.dataType]"
+			:v-model:open="props.disabled"
+			:items="selectMenuStates[props.dataType]"
 			class="w-full"
 			multiple
-			:placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
+			:placeholder="$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })"
 			searchable
-			:searchable-placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
+			:searchable-placeholder="$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })"
 			:ui="{ itemTrailing: 'hidden' }">
 			<template #default>
-				<span v-if="selectMenuStates[dataType].length">{{
-					$t('selected', selectMenuStates[dataType].filter(item => item.notWanted || item.wanted).length, { count: selectMenuStates[dataType].filter(item => item.notWanted || item.wanted).length })
+				<span v-if="selectMenuStates[props.dataType].length">{{
+					$t('selected', selectMenuStates[props.dataType].filter(item => item.notWanted || item.wanted).length, { count: selectMenuStates[props.dataType].filter(item => item.notWanted || item.wanted).length })
 				}}</span>
-     			<span v-else>{{$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })}}</span>
+     			<span v-else>{{$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })}}</span>
 			</template>
 			<template #item-leading="{ item }">
 				<UButton
 					:padded="false" variant="link" icon="material-symbols:circle-outline"
 					:class="getButtonsColor(item, true)" @click="
-						useUpdateFilterSelectMenu(item.id, true, item.dataType);
+						useUpdateFilterSelectMenu(item.id, true, props.dataType);
 						fetchFilteredItems();
 					"
 					:ui="{
@@ -86,7 +79,7 @@ async function fetchFilteredItems() {
 				<UButton
 					:padded="false" variant="link" icon="radix-icons:value-none"
 					:class="getButtonsColor(item, false)" @click="
-						useUpdateFilterSelectMenu(item.id, false, item.dataType);
+						useUpdateFilterSelectMenu(item.id, false, props.dataType);
 						fetchFilteredItems();
 					"
 					:ui="{

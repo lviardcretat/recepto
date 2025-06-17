@@ -1,5 +1,5 @@
 import { getSequences } from '~/server/data/sequences';
-import type { Sequence } from '~/server/utils/drizzle';
+import type { Sequence } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async () => {
 	const sequences: Sequence[] = await getSequences();

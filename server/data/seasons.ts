@@ -1,4 +1,4 @@
-import type { Season } from '../utils/drizzle';
+import type { Season } from '../utils/drizzleUtils';
 
 export async function getSeasons(): Promise<Season[]> {
 	const seasons: Season[] = await useDrizzle()

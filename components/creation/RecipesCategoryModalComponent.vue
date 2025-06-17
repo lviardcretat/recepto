@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
-import { useMapSelectMenuItems } from '~/global/utils';
 import {
 	recipesCategoryCreation,
 	type RecipesCategoryCreation,
-} from '~/global/validationSchemas';
+} from '~/schemas/creation/recipesCategory';
 
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
@@ -29,7 +28,7 @@ const { data: dishTypes } = await useFetch('/api/dishTypes/all', {
 		});
 	},
 	transform: (dishTypes) => {
-		return useMapSelectMenuItems(dishTypes);
+		return mapSelectMenuItemsUtils(dishTypes);
 	},
 });
 

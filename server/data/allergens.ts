@@ -1,4 +1,4 @@
-import type { Allergen } from '../utils/drizzle';
+import type { Allergen } from '../utils/drizzleUtils';
 
 export async function getAllergens(): Promise<Allergen[]> {
 	const allergens: Allergen[] = await useDrizzle()

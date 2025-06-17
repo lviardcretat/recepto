@@ -1,4 +1,4 @@
-import type { Unit } from '../utils/drizzle';
+import type { Unit } from '../utils/drizzleUtils';
 
 export async function getUnits(): Promise<Unit[]> {
 	const units: Unit[] = await useDrizzle().select().from(tables.unit).all();

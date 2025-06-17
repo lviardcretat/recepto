@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { FilterIconsGridStatesType } from '~/global/enums/filter';
-import type { RecipeWithLessData } from '~/global/types/filter';
+import type { FilterIconsGridStatesType } from '~/enums/filter';
+import type { RecipeWithLessData } from '~/types/filter';
 
 defineProps<{ dataType: FilterIconsGridStatesType }>();
 

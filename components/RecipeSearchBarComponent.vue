@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { InputMenuItem } from '@nuxt/ui';
-import type { RecipeSearched } from '~/global/types/search';
+import type { RecipeSearched } from '~/types/search';
 
 const searchValue = ref<string>('');
 const { data, execute, clear } = useFetch('/api/recipesCategories/search', {

@@ -1,7 +1,7 @@
 import type {
 	RecipeIngredient,
 	RecipeIngredientInsert,
-} from '../utils/drizzle';
+} from '../utils/drizzleUtils';
 
 export async function getRecipeIngredients(): Promise<RecipeIngredient[]> {
 	const recipeIngredients: RecipeIngredient[] = await useDrizzle()

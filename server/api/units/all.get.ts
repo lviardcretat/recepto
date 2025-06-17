@@ -1,5 +1,5 @@
 import { getUnits } from '~/server/data/units';
-import type { Unit } from '~/server/utils/drizzle';
+import type { Unit } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async () => {
 	const units: Unit[] = await getUnits();

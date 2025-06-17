@@ -1,5 +1,5 @@
 import { getDishTypes } from '~/server/data/dishTypes';
-import type { DishType } from '~/server/utils/drizzle';
+import type { DishType } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async () => {
 	const dishTypes: DishType[] = await getDishTypes();

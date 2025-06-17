@@ -1,5 +1,5 @@
 import { inArray } from 'drizzle-orm';
-import type { FoodType } from '../utils/drizzle';
+import type { FoodType } from '../utils/drizzleUtils';
 
 export async function getFoodTypes(): Promise<FoodType[]> {
 	const foodTypes: FoodType[] = await useDrizzle()

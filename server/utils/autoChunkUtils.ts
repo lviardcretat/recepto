@@ -1,7 +1,7 @@
 const D1_MAX_PARAMETERS = 100;
 
 // Cloudflare supports max 100 parameters in a query
-export const autochunk = async <
+export default async function <
 	T extends Record<string, unknown> | string | number,
 	U,
 >(
@@ -13,7 +13,7 @@ export const autochunk = async <
 		otherParametersCount?: number;
 	},
 	cb: (chunk: T[]) => Promise<U>,
-) => {
+) {
 	const chunks: T[][] = [];
 
 	let chunk: T[] = [];

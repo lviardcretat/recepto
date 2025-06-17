@@ -1,6 +1,6 @@
 import { getRecipe } from '~/server/data/recipes';
-import { idSchema } from '~/global/validationSchemas';
-import type { RecipeDetail } from '~/global/types/recipeCard';
+import { idSchema } from '~/schemas/businessObjects';
+import type { RecipeDetail } from '~/types/recipeCard';
 
 export default defineEventHandler(async (event) => {
 	const { id } = await getValidatedRouterParams(event, idSchema.parse);

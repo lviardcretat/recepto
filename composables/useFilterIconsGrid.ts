@@ -1,9 +1,9 @@
-import type { FilterIconsGridStatesType } from '~/global/enums/filter';
+import type { FilterIconsGridStatesType } from '~/enums/filter';
 import type {
 	FilterIconsGridStates,
 	GeneralIconsGridData,
 	IconsGridItem,
-} from '~/global/types/filter';
+} from '~/types/filter';
 
 /**
  * Allows you to recover states from the composable.

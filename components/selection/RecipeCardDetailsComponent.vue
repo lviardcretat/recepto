@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { RecipeDetail } from '~/global/types/recipeCard';
-import { formatDuration } from '~/global/utils';
+import type { RecipeDetail } from '~/types/recipeCard';
 
 const props = defineProps<{
 	recipeId: number;
@@ -65,15 +64,15 @@ const active = ref(['0', '1']);
 				</div>
 				<div class="preparationTime flex justify-center items-center gap-1 w-20">
 					<UIcon name="mdi:knife"/>
-					<span class="value">{{ formatDuration(recipe?.preparationTime)}}</span>
+					<span class="value">{{ formatDurationUtils(recipe?.preparationTime)}}</span>
 				</div>
 				<div class="cookingTime flex justify-center items-center gap-1 w-20">
 					<UIcon name="material-symbols:oven-outline-rounded"/>
-					<span class="value">{{ formatDuration(recipe?.cookingTime) }}</span>
+					<span class="value">{{ formatDurationUtils(recipe?.cookingTime) }}</span>
 				</div>
 				<div class="restTime flex justify-center items-center gap-1 w-20">
 					<UIcon name="mdi:sleep"/>
-					<span class="value">{{ formatDuration(recipe?.restTime) }}</span>
+					<span class="value">{{ formatDurationUtils(recipe?.restTime) }}</span>
 				</div>
 			</div>
 			<div class="text-center mt-2">

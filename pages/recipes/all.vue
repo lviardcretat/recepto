@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RecipesCategoriesWithLessData } from '~/global/types/filter';
+import type { RecipesCategoriesWithLessData } from '~/types/filter';
 
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
@@ -12,10 +12,6 @@ await callOnce(async () => {
 		iconsGridStates.value,
 		switchStates.value,
 	)) as RecipesCategoriesWithLessData[];
-});
-
-definePageMeta({
-	layout: 'filter',
 });
 
 function isData() {

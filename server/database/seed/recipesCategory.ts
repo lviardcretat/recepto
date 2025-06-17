@@ -1,4 +1,4 @@
-import type { RecipesCategoryInsert } from '~/server/utils/drizzle';
+import type { RecipesCategoryInsert } from '~/server/utils/drizzleUtils';
 
 export const recipesCategorySeed: RecipesCategoryInsert[] = [
 	{

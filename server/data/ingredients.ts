@@ -1,4 +1,4 @@
-import type { Ingredient, IngredientInsert } from '../utils/drizzle';
+import type { Ingredient, IngredientInsert } from '../utils/drizzleUtils';
 
 export async function getIngredients(): Promise<Ingredient[]> {
 	const ingredients: Ingredient[] = await useDrizzle()

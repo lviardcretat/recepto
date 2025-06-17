@@ -1,4 +1,4 @@
-import type { FilterSwitchStates } from '~/global/types/filter';
+import type { FilterSwitchStates } from '~/types/filter';
 
 /**
  * Allows you to recover states from the composable.

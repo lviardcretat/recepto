@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import type {
-	AccordionItem,
-	NavigationMenuChildItem,
-	NavigationMenuItem,
-} from '@nuxt/ui';
+import type { NavigationMenuItem } from '@nuxt/ui';
 import {
 	FilterAccordionsDataType,
 	FilterAccordionsSlots,
 	FilterIconsGridStatesType,
 	FilterSelectMenuStatesType,
-} from '~/global/enums/filter';
-import type { CustomAccordionItem } from '~/global/types/filter';
+} from '~/enums/filter';
+import type { CustomAccordionItem } from '~/types/filter';
 
 defineProps<{
 	collapsed?: boolean;
@@ -70,28 +66,28 @@ await callOnce(async () => {
 
 	selectMenuStates.value.ustensils = useMapFilterSelectMenuItems(
 		ustensilsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.Ustensil],
-		FilterSelectMenuStatesType.Ustensil,
+		selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
+		FilterSelectMenuStatesType.USTENSIL,
 	);
 	selectMenuStates.value.ingredients = useMapFilterSelectMenuItems(
 		ingredientsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.Ingredient],
-		FilterSelectMenuStatesType.Ingredient,
+		selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],
+		FilterSelectMenuStatesType.INGREDIENT,
 	);
 	selectMenuStates.value.mealTypes = useMapFilterSelectMenuItems(
 		mealTypesFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.MealType],
-		FilterSelectMenuStatesType.MealType,
+		selectMenuStates.value[FilterSelectMenuStatesType.MEAL_TYPE],
+		FilterSelectMenuStatesType.MEAL_TYPE,
 	);
 	selectMenuStates.value.dishTypes = useMapFilterSelectMenuItems(
 		dishTypesFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.DishType],
-		FilterSelectMenuStatesType.DishType,
+		selectMenuStates.value[FilterSelectMenuStatesType.DISH_TYPE],
+		FilterSelectMenuStatesType.DISH_TYPE,
 	);
 	iconsGridStates.value.allergens = useMapIconsGridItems(
 		allergensFetch,
-		iconsGridStates.value[FilterIconsGridStatesType.Allergen],
-		FilterIconsGridStatesType.Allergen,
+		iconsGridStates.value[FilterIconsGridStatesType.ALLERGEN],
+		FilterIconsGridStatesType.ALLERGEN,
 	);
 });
 
@@ -101,8 +97,8 @@ useListen('ustensil:created', async () => {
 	});
 	selectMenuStates.value.ustensils = useMapFilterSelectMenuItems(
 		ustensilsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.Ustensil],
-		FilterSelectMenuStatesType.Ustensil,
+		selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
+		FilterSelectMenuStatesType.USTENSIL,
 	);
 });
 
@@ -112,8 +108,8 @@ useListen('ingredient:created', async () => {
 	});
 	selectMenuStates.value.ingredients = useMapFilterSelectMenuItems(
 		ingredientsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.Ingredient],
-		FilterSelectMenuStatesType.Ingredient,
+		selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],
+		FilterSelectMenuStatesType.INGREDIENT,
 	);
 });
 
@@ -128,8 +124,8 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		children: [
 			{
 				label: t('ingredient', 1),
-				itemSlot: FilterAccordionsSlots.Select,
-				dataType: FilterAccordionsDataType.Ingredient,
+				itemSlot: FilterAccordionsSlots.SELECT,
+				dataType: FilterAccordionsDataType.INGREDIENT,
 				slot: 'custom',
 			},
 		],
@@ -140,8 +136,8 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		children: [
 			{
 				label: t('ustensil', 2),
-				itemSlot: FilterAccordionsSlots.Select,
-				dataType: FilterAccordionsDataType.Ustensil,
+				itemSlot: FilterAccordionsSlots.SELECT,
+				dataType: FilterAccordionsDataType.USTENSIL,
 				slot: 'custom',
 			},
 		],
@@ -152,8 +148,8 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		children: [
 			{
 				label: t('allergens', 1),
-				itemSlot: FilterAccordionsSlots.Grid,
-				dataType: FilterAccordionsDataType.Allergen,
+				itemSlot: FilterAccordionsSlots.GRID,
+				dataType: FilterAccordionsDataType.ALLERGEN,
 				slot: 'custom',
 			},
 		],
@@ -166,8 +162,8 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 			{
 				label: t('seasonalRecipes', 1),
 				disabled: true,
-				itemSlot: FilterAccordionsSlots.Switch,
-				dataType: FilterAccordionsDataType.Season,
+				itemSlot: FilterAccordionsSlots.SWITCH,
+				dataType: FilterAccordionsDataType.SEASON,
 				slot: 'custom',
 			},
 		],
@@ -178,8 +174,8 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		children: [
 			{
 				label: t('mealTypes', 1),
-				itemSlot: FilterAccordionsSlots.Select,
-				dataType: FilterAccordionsDataType.MealType,
+				itemSlot: FilterAccordionsSlots.SELECT,
+				dataType: FilterAccordionsDataType.MEAL_TYPE,
 				slot: 'custom',
 			},
 		],
@@ -190,8 +186,8 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		children: [
 			{
 				label: t('dishTypes', 1),
-				itemSlot: FilterAccordionsSlots.Select,
-				dataType: FilterAccordionsDataType.DishType,
+				itemSlot: FilterAccordionsSlots.SELECT,
+				dataType: FilterAccordionsDataType.DISH_TYPE,
 				slot: 'custom',
 			},
 		],
@@ -206,14 +202,14 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		:collapsed="collapsed"
 		popover>
 		<template #item-content="{ item }">
-			<CustomSelect v-if="item.children![0].itemSlot === FilterAccordionsSlots.Select" class="w-full"
+			<FilterCustomSelectComponent v-if="item.children![0].itemSlot === FilterAccordionsSlots.SELECT" class="w-full"
 				:placeholder="item.label!" :disabled="item.disabled ?? false" :dataType="item.children![0].dataType as unknown as FilterSelectMenuStatesType"/>
-			<IconsGrid v-if="item.children![0].itemSlot === FilterAccordionsSlots.Grid" :dataType="item.children![0].dataType as unknown as FilterIconsGridStatesType"/>
+			<FilterIconsGridComponent v-if="item.children![0].itemSlot === FilterAccordionsSlots.GRID" :dataType="item.children![0].dataType as unknown as FilterIconsGridStatesType"/>
 		</template>
 		<template #custom="{ item }">
-			<CustomSelect v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.Select" class="w-full"
+			<FilterCustomSelectComponent v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.SELECT" class="w-full"
 				:placeholder="(item as NavigationMenuItem & CustomAccordionItem).label!" :disabled="(item as NavigationMenuItem & CustomAccordionItem).disabled ?? false" :dataType="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterSelectMenuStatesType"/>
-			<IconsGrid v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.Grid" :dataType="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterIconsGridStatesType"/>
+			<FilterIconsGridComponent v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.GRID" :dataType="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterIconsGridStatesType"/>
 		</template>
 	</UNavigationMenu>
 </template>

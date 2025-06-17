@@ -1,4 +1,4 @@
-import { recipesCategoryCreation } from '~/global/validationSchemas';
+import { recipesCategoryCreation } from '~/schemas/creation/recipesCategory';
 import { postRecipesCategory } from '~/server/data/recipesCategories';
 
 export default defineEventHandler(async (event) => {

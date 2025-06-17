@@ -1,6 +1,6 @@
 import { getRecipesCategoriesAndRecipesNames } from '~/server/data/recipesCategories';
-import { namesSearchBarSchema } from '~/global/validationSchemas';
-import type { RecipeSearched } from '~/global/types/search';
+import { namesSearchBarSchema } from '~/schemas/search';
+import type { RecipeSearched } from '~/types/search';
 
 export default defineEventHandler(async (event) => {
 	const result = await getValidatedQuery(event, namesSearchBarSchema.safeParse);

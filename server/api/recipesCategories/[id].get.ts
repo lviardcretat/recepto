@@ -2,7 +2,7 @@ import {
 	getRecipesCategory,
 	getRecipesCategoryName,
 } from '~/server/data/recipesCategories';
-import { idSchema } from '~/global/validationSchemas';
+import { idSchema } from '~/schemas/businessObjects';
 
 export default defineEventHandler(async (event) => {
 	const { id } = await getValidatedRouterParams(event, idSchema.parse);

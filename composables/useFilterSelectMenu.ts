@@ -1,11 +1,11 @@
 import type { SelectMenuItem } from '@nuxt/ui';
-import type { FilterSelectMenuStatesType } from '~/global/enums/filter';
+import type { FilterSelectMenuStatesType } from '~/enums/filter';
 import type {
 	FilterSelectMenuStates,
 	CustomSelectMenuItem,
 	ItemsIdsWantedOrNot,
 	GeneralSelectMenuData,
-} from '~/global/types/filter';
+} from '~/types/filter';
 
 /**
  * Allows you to recover states from the composable.

@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
-import { useMapSelectMenuItems } from '~/global/utils';
 import {
 	recipeCreation,
 	type RecipeCreation,
 	type RecipeIngredientsCreation,
 	type RecipeSequenceCreation,
-} from '~/global/validationSchemas';
+} from '~/schemas/creation/recipe';
 
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
@@ -52,7 +51,7 @@ const { data: seasons } = await useFetch('/api/seasons/all', {
 		});
 	},
 	transform: (seasons) => {
-		return useMapSelectMenuItems(seasons);
+		return mapSelectMenuItemsUtils(seasons);
 	},
 });
 
@@ -69,7 +68,7 @@ const { data: recipesCategories } = await useFetch(
 			});
 		},
 		transform: (recipesCategories) => {
-			return useMapSelectMenuItems(recipesCategories);
+			return mapSelectMenuItemsUtils(recipesCategories);
 		},
 	},
 );
@@ -85,7 +84,7 @@ const { data: ingredients } = await useFetch('/api/ingredients/all', {
 		});
 	},
 	transform: (ingredients) => {
-		return useMapSelectMenuItems(ingredients);
+		return mapSelectMenuItemsUtils(ingredients);
 	},
 });
 
@@ -100,7 +99,7 @@ const { data: allergens } = await useFetch('/api/allergens/all', {
 		});
 	},
 	transform: (allergens) => {
-		return useMapSelectMenuItems(allergens);
+		return mapSelectMenuItemsUtils(allergens);
 	},
 });
 
@@ -115,7 +114,7 @@ const { data: ustensils } = await useFetch('/api/ustensils/all', {
 		});
 	},
 	transform: (ustensils) => {
-		return useMapSelectMenuItems(ustensils);
+		return mapSelectMenuItemsUtils(ustensils);
 	},
 });
 
@@ -130,7 +129,7 @@ const { data: units } = await useFetch('/api/units/all', {
 		});
 	},
 	transform: (units) => {
-		return useMapSelectMenuItems(units);
+		return mapSelectMenuItemsUtils(units);
 	},
 });
 

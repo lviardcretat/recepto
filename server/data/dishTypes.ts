@@ -1,4 +1,4 @@
-import type { DishType } from '../utils/drizzle';
+import type { DishType } from '../utils/drizzleUtils';
 
 export async function getDishTypes(): Promise<DishType[]> {
 	const dishTypes: DishType[] = await useDrizzle()

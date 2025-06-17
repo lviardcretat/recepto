@@ -1,4 +1,4 @@
-import type { UstensilInsert } from '~/server/utils/drizzle';
+import type { UstensilInsert } from '~/server/utils/drizzleUtils';
 
 export const ustensilsSeed: UstensilInsert[] = [
 	{

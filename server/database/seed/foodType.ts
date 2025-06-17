@@ -1,4 +1,4 @@
-import type { FoodTypeInsert } from '~/server/utils/drizzle';
+import type { FoodTypeInsert } from '~/server/utils/drizzleUtils';
 
 export const foodTypesSeed: FoodTypeInsert[] = [
 	{

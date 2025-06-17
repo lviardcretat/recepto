@@ -1,4 +1,4 @@
-import type { Ustensil, UstensilInsert } from '../utils/drizzle';
+import type { Ustensil, UstensilInsert } from '../utils/drizzleUtils';
 
 export async function getUstensils(): Promise<Ustensil[]> {
 	const ustensils: Ustensil[] = await useDrizzle()

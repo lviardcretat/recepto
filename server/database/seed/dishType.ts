@@ -1,4 +1,4 @@
-import type { DishTypeInsert } from '~/server/utils/drizzle';
+import type { DishTypeInsert } from '~/server/utils/drizzleUtils';
 
 export const dishTypesSeed: DishTypeInsert[] = [
 	{

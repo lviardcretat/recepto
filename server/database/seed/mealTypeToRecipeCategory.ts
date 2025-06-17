@@ -1,5 +1,5 @@
 
-import type { MealTypeToRecipeCategoryInsert } from '~/server/utils/drizzle';
+import type { MealTypeToRecipeCategoryInsert } from '~/server/utils/drizzleUtils';
 
 export const mealTypeToRecipeCategoriesSeed: MealTypeToRecipeCategoryInsert[] = [
 	{

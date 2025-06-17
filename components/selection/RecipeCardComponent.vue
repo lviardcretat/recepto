@@ -1,7 +1,5 @@
 
 <script setup lang="ts">
-import { formatDuration } from '~/global/utils';
-
 const props = defineProps<{
 	name: string;
 	description: string | null | undefined;
@@ -28,15 +26,15 @@ const props = defineProps<{
 				</div>
 				<div class="preparationTime flex justify-around items-center gap-1">
 					<UIcon name="mdi:knife"/>
-					<span class="value">{{ formatDuration(props.preparationTime)}}</span>
+					<span class="value">{{ formatDurationUtils(props.preparationTime)}}</span>
 				</div>
 				<div class="cookingTime flex justify-around items-center gap-1">
 					<UIcon name="material-symbols:oven-outline-rounded"/>
-					<span class="value">{{ formatDuration(props.cookingTime) }}</span>
+					<span class="value">{{ formatDurationUtils(props.cookingTime) }}</span>
 				</div>
 				<div class="restTime flex justify-around items-center gap-1">
 					<UIcon name="mdi:sleep"/>
-					<span class="value">{{ formatDuration(props.restTime) }}</span>
+					<span class="value">{{ formatDurationUtils(props.restTime) }}</span>
 				</div>
 			</div>
             <p class="mt-3 ellipsis h-20">{{ props.description }}</p>

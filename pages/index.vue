@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui';
-import { LoginType } from '~/global/enums/login';
+import { LoginType } from '~/enums/login';
 
 definePageMeta({
 	layout: 'auth',
@@ -10,12 +10,12 @@ const items = ref<TabsItem[]>([
 	{
 		label: t('auth.login.tab'),
 		icon: 'i-lucide-lock',
-		type: LoginType.Login,
+		type: LoginType.LOGIN,
 	},
 	{
 		label: t('auth.register.tab'),
 		icon: 'i-lucide-user',
-		type: LoginType.Register,
+		type: LoginType.REGISTER,
 	},
 ]);
 </script>
@@ -24,8 +24,8 @@ const items = ref<TabsItem[]>([
 	<UPageCard class="m-auto w-1/3 h-[65vh]">
 		<UTabs :items="items" class="mb-6">
 			<template #content="{ item }">
-				<Login v-if="item.type === LoginType.Login" />
-				<Register v-if="item.type === LoginType.Register" />
+				<AuthLoginComponent v-if="item.type === LoginType.LOGIN" />
+				<AuthRegisterComponent v-if="item.type === LoginType.REGISTER" />
 			</template>
 		</UTabs>
 	</UPageCard>

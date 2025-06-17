@@ -1,8 +1,8 @@
-import { recipeCreation } from '~/global/validationSchemas';
+import { recipeCreation } from '~/schemas/creation/recipe';
 import { postRecipeIngredient } from '~/server/data/recipeIngredients';
 import { postRecipe } from '~/server/data/recipes';
 import { postSequence } from '~/server/data/sequences';
-import type { Recipe } from '~/server/utils/drizzle';
+import type { Recipe } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async (event) => {
 	const body = await readValidatedBody(event, recipeCreation.parse);

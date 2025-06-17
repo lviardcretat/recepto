@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from '#ui/types';
 import {
 	ustensilCreationSchema,
 	type UstensilCreationSchema,
-} from '~/global/validationSchemas';
+} from '~/schemas/creation/ustensil';
 const form = ref();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();

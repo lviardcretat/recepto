@@ -1,7 +1,7 @@
 import { lte, gte, type SQL, inArray, notInArray, eq } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
-import type { ItemsIdsWantedOrNot } from '~/global/types/filter';
-import type { FilterSelectItem } from '~/global/validationSchemas';
+import type { ItemsIdsWantedOrNot } from '~/types/filter';
+import type { FilterSelectItem } from '~/schemas/filter';
 
 export const recipeCategorySelectType = {
 	id: tables.recipesCategory.id,

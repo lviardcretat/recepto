@@ -3,9 +3,8 @@ import type { FormSubmitEvent } from '#ui/types';
 import {
 	ingredientCreationSchema,
 	type IngredientCreation,
-} from '~/global/validationSchemas';
-import { Months } from '~/global/enums/data';
-import { useMapSelectMenuItems } from '~/global/utils';
+} from '~/schemas/creation/ingredient';
+import { Months } from '~/enums/data';
 
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
@@ -33,7 +32,7 @@ const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
 		});
 	},
 	transform: (foodTypes) => {
-		return useMapSelectMenuItems(foodTypes);
+		return mapSelectMenuItemsUtils(foodTypes);
 	},
 });
 

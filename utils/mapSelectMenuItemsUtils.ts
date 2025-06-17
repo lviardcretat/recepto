@@ -1,23 +1,11 @@
 import type { SelectMenuItem } from '@nuxt/ui';
-import type { GeneralSelectMenuData } from './types/filter';
-
-export function formatDuration(duration: number | null | undefined): string {
-	if (!duration) {
-		return '0m';
-	}
-	if (duration % 1 === 0) {
-		return `${duration}h`;
-	}
-	return `${duration * 100}m`;
-}
+import type { GeneralSelectMenuData } from '../types/filter';
 
 /**
  * Transforms the data received by the bdd to match the type required by the component SelectMenu.
  * @param newItems The filter list to map.
  */
-export const useMapSelectMenuItems = <T extends GeneralSelectMenuData>(
-	newItems: T[] | null,
-): SelectMenuItem[] => {
+export default function<T extends GeneralSelectMenuData>(newItems: T[] | null): SelectMenuItem[] {
 	if (newItems == null || newItems.length === 0) {
 		return [];
 	}
@@ -29,4 +17,4 @@ export const useMapSelectMenuItems = <T extends GeneralSelectMenuData>(
 		};
 	});
 	return items;
-};
+}

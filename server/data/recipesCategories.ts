@@ -1,5 +1,5 @@
-import type { RecipesCategoriesFilter } from '~/global/validationSchemas';
-import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzle';
+import type { RecipesCategoriesFilter } from '~/schemas/filter';
+import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzleUtils';
 import { intersect, text, union } from 'drizzle-orm/sqlite-core';
 import {
 	createAllergenSubQuery,
@@ -8,13 +8,13 @@ import {
 	createSubQueryConditions,
 	createUstensilSubQuery,
 	recipeCategorySelectType,
-} from '../utils/filter';
+} from '../utils/filterUtils';
 import { asc, desc, like } from 'drizzle-orm';
 import type {
 	ItemsIdsWantedOrNot,
 	RecipesCategoriesWithLessData,
-} from '~/global/types/filter';
-import type { RecipeSearched } from '~/global/types/search';
+} from '~/types/filter';
+import type { RecipeSearched } from '~/types/search';
 
 export async function postRecipesCategory(
 	name: string,

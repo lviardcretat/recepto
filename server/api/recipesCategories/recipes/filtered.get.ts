@@ -2,8 +2,8 @@ import { getRecipesFiltered } from '~/server/data/recipes';
 import {
 	recipesFilterSchema,
 	type RecipesFilter,
-} from '~/global/validationSchemas';
-import type { RecipeWithLessData } from '~/global/types/filter';
+} from '~/schemas/filter';
+import type { RecipeWithLessData } from '~/types/filter';
 
 export default defineEventHandler(async (event) => {
 	const query: RecipesFilter = await getValidatedQuery(

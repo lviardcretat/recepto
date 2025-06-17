@@ -8,7 +8,7 @@ import {
 	VisTooltip,
 } from '@unovis/vue';
 import { colors, Timeline, type BulletLegendItemInterface } from '@unovis/ts';
-import { Months } from '~/global/enums/data';
+import { Months } from '~/enums/data';
 
 const { t } = useI18n();
 const isModalOpen = ref<boolean>(false);

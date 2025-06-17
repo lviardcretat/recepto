@@ -1,5 +1,5 @@
 import { getSeasons } from '~/server/data/seasons';
-import type { Season } from '~/server/utils/drizzle';
+import type { Season } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async () => {
 	const seasons: Season[] = await getSeasons();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RecipeWithLessData } from '~/global/types/filter';
+import type { RecipeWithLessData } from '~/types/filter';
 
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
@@ -40,7 +40,7 @@ useListen('recipe:created', async () => {
 			:coverflow-effect-rotate="0" :coverflow-effect-stretch="0" :coverflow-effect-depth="150" :coverflow-effect-modifier="2.5"
 			:coverflow-effect-slide-shadows="false" :mousewheel="true":grabCursor="true">
             <swiper-slide v-for="recipe in resultsStates.recipes">
-				<RecipeCard
+				<SelectionRecipeCardComponent
 					:name="recipe.name"
 					:description="recipe.description"
 					:peopleNumber="recipe.peopleNumber ?? 1"
@@ -54,7 +54,7 @@ useListen('recipe:created', async () => {
         </swiper-container>
 		<UModal v-model:open="isModalOpen" class="max-w-4xl">
 			<template #body>
-				<RecipeCardDetails :recipeId="recipeActive?.id ?? 1"/>
+				<SelectionRecipeCardDetails :recipeId="recipeActive?.id ?? 1"/>
 		    </template>
 		</UModal>
     </div>

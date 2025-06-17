@@ -1,4 +1,4 @@
-import type { Sequence, SequenceInsert } from '../utils/drizzle';
+import type { Sequence, SequenceInsert } from '../utils/drizzleUtils';
 
 export async function getSequences(): Promise<Sequence[]> {
 	const sequences: Sequence[] = await useDrizzle()
