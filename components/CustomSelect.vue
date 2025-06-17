@@ -51,7 +51,7 @@ async function fetchFilteredItems() {
 
 <template>
   	<div>
-		<div class="mb-2 flex-1 flex-wrap h-auto">
+		<div class="mb-2 flex flex-wrap h-auto">
 			<!-- @vue-ignore -->
 			<UBadge v-for="item of selectedItemsStates[dataType]" class="h-6 m-0.5"
 				:color="item.wanted ? 'primary' : 'error'" size="md" variant="solid" :label="item.label"></UBadge>
@@ -67,6 +67,12 @@ async function fetchFilteredItems() {
 			searchable
 			:searchable-placeholder="$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })"
 			:ui="{ itemTrailing: 'hidden' }">
+			<template #default>
+				<span v-if="selectMenuStates[dataType].length">{{
+					$t('selected', selectMenuStates[dataType].filter(item => item.notWanted || item.wanted).length, { count: selectMenuStates[dataType].filter(item => item.notWanted || item.wanted).length })
+				}}</span>
+     			<span v-else>{{$t('filterBy', { filterName: placeholder.toLocaleLowerCase() })}}</span>
+			</template>
 			<template #item-leading="{ item }">
 				<UButton
 					:padded="false" variant="link" icon="material-symbols:circle-outline"

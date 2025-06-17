@@ -1,47 +1,45 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { authClient } from '~/lib/auth-client';
 
+const { t } = useI18n();
 const links: NavigationMenuItem[] = [
 	{
-		label: 'recipe',
-		pluralTranslation: true,
+		label: t('mainSlideOver.search'),
+		icon: 'cil:magnifying-glass',
+		to: '/search',
+	},
+	{
+		label: t('mainSlideOver.recipes'),
 		icon: 'material-symbols:fastfood',
 		to: '/recipes/all',
 	},
 	{
-		label: 'schedule',
-		pluralTranslation: false,
-		icon: 'material-symbols:calendar-today',
-		badge: '4',
-	},
-	{
-		label: 'shoppingList',
-		pluralTranslation: false,
-		icon: 'ic:baseline-featured-play-list',
-	},
-	{
-		label: 'dashboard',
-		pluralTranslation: false,
+		label: t('mainSlideOver.dashboard'),
 		icon: 'material-symbols:space-dashboard-outline',
 		to: '/user/dashboard',
 	},
 	{
-		label: 'recipe',
-		pluralTranslation: false,
-		icon: 'i-heroicons-cog-8-tooth',
-		children: [
-			{
-				label: 'recipe',
-			},
-			{
-				label: 'recipe',
-			},
-			{
-				label: 'recipe',
-			},
-		],
+		label: t('mainSlideOver.account'),
+		icon: 'i-lucide-user',
+		to: '/user/account',
+	},
+	{
+		label: t('mainSlideOver.calendar'),
+		icon: 'material-symbols:calendar-today',
+		disabled: true,
 	},
 ];
+
+async function signout() {
+	await authClient.signOut({
+		fetchOptions: {
+			onSuccess: () => {
+				navigateTo('/');
+			},
+		},
+	});
+}
 </script>
 
 <template>
@@ -51,9 +49,13 @@ const links: NavigationMenuItem[] = [
 		<template #body>
 			<UNavigationMenu :items="links" orientation="vertical">
 				<template #item-content="{ item }">
-					<div>{{ $t(item.label!, item.pluralTranslation ? 2 : 1) }}</div>
+					<div>{{ item.label }}</div>
 				</template>
 			</UNavigationMenu>
+		</template>
+		<template #footer>
+			<UButton size="lg" variant="ghost" color="neutral" trailing-icon="material-symbols:logout"
+				@click="signout()" class="ml-auto">Se déconnecter</UButton>
 		</template>
 	</USlideover>
 </template>

@@ -6,7 +6,7 @@ const { locale } = useI18n();
 
 <template>
 	<UApp :toaster="{ position: 'bottom-left' }" :tooltip="{ disableHoverableContent: true }" :locale="locales[locale]">
-		<!-- <NuxtLoadingIndicator :throttle="0" /> -->
+		<NuxtLoadingIndicator />
 		<NuxtLayout>
 			<SeasonalChart/>
 			<NuxtPage/>

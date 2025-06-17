@@ -6,6 +6,9 @@
 		<UDashboardPanel>
 			<template #header>
 				<UDashboardNavbar>
+					<template #leading>
+						<UDashboardSidebarCollapse />
+					</template>
 					<template #left>
 						<h1 class="font-bold">{{ $t('recipe', 2) }}</h1>
 					</template>

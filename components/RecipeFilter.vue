@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { AccordionItem } from '@nuxt/ui';
+import type {
+	AccordionItem,
+	NavigationMenuChildItem,
+	NavigationMenuItem,
+} from '@nuxt/ui';
 import {
 	FilterAccordionsDataType,
 	FilterAccordionsSlots,
@@ -7,6 +11,10 @@ import {
 	FilterSelectMenuStatesType,
 } from '~/global/enums/filter';
 import type { CustomAccordionItem } from '~/global/types/filter';
+
+defineProps<{
+	collapsed?: boolean;
+}>();
 
 const { t } = useI18n();
 const swicthStates = useFilterSwitchStates();
@@ -109,74 +117,105 @@ useListen('ingredient:created', async () => {
 	);
 });
 
-const items = ref<(AccordionItem & CustomAccordionItem)[]>([
+const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
+	{
+		label: 'Filtres',
+		type: 'label',
+	},
 	{
 		label: t('ingredient', 1),
 		icon: 'fa6-solid:carrot',
-		itemSlot: FilterAccordionsSlots.Select,
-		dataType: FilterAccordionsDataType.Ingredient,
+		children: [
+			{
+				label: t('ingredient', 1),
+				itemSlot: FilterAccordionsSlots.Select,
+				dataType: FilterAccordionsDataType.Ingredient,
+				slot: 'custom',
+			},
+		],
 	},
 	{
 		label: t('ustensil', 2),
 		icon: 'solar:ladle-bold',
-		itemSlot: FilterAccordionsSlots.Select,
-		dataType: FilterAccordionsDataType.Ustensil,
+		children: [
+			{
+				label: t('ustensil', 2),
+				itemSlot: FilterAccordionsSlots.Select,
+				dataType: FilterAccordionsDataType.Ustensil,
+				slot: 'custom',
+			},
+		],
 	},
 	{
 		label: t('allergens', 1),
 		icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
-		itemSlot: FilterAccordionsSlots.Grid,
-		dataType: FilterAccordionsDataType.Allergen,
+		children: [
+			{
+				label: t('allergens', 1),
+				itemSlot: FilterAccordionsSlots.Grid,
+				dataType: FilterAccordionsDataType.Allergen,
+				slot: 'custom',
+			},
+		],
 	},
 	{
 		label: t('seasonalRecipes', 1),
 		icon: 'fa6-solid:snowflake',
 		disabled: true,
-		itemSlot: FilterAccordionsSlots.Switch,
-		dataType: FilterAccordionsDataType.Season,
+		children: [
+			{
+				label: t('seasonalRecipes', 1),
+				disabled: true,
+				itemSlot: FilterAccordionsSlots.Switch,
+				dataType: FilterAccordionsDataType.Season,
+				slot: 'custom',
+			},
+		],
 	},
 	{
 		label: t('mealTypes', 1),
 		icon: 'tabler:sun-moon',
-		itemSlot: FilterAccordionsSlots.Select,
-		dataType: FilterAccordionsDataType.MealType,
+		children: [
+			{
+				label: t('mealTypes', 1),
+				itemSlot: FilterAccordionsSlots.Select,
+				dataType: FilterAccordionsDataType.MealType,
+				slot: 'custom',
+			},
+		],
 	},
 	{
 		label: t('dishTypes', 1),
 		icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
-		itemSlot: FilterAccordionsSlots.Select,
-		dataType: FilterAccordionsDataType.DishType,
+		children: [
+			{
+				label: t('dishTypes', 1),
+				itemSlot: FilterAccordionsSlots.Select,
+				dataType: FilterAccordionsDataType.DishType,
+				slot: 'custom',
+			},
+		],
 	},
 ]);
 </script>
 
 <template>
-	<UDashboardSidebar resizable :defaultSize="22" :minSize="10" :maxSize="30">
-		<template #header>
-			<span class="mr-auto font-bold">{{ $t('filter') }}</span>
-			<UIcon name="material-symbols:filter-alt" class="w-7 h-7" />
+	<UNavigationMenu
+		:items="items"
+		orientation="vertical"
+		:collapsed="collapsed"
+		popover>
+		<template #item-content="{ item }">
+			<CustomSelect v-if="item.children![0].itemSlot === FilterAccordionsSlots.Select" class="w-full"
+				:placeholder="item.label!" :disabled="item.disabled ?? false" :dataType="item.children![0].dataType as unknown as FilterSelectMenuStatesType"/>
+			<IconsGrid v-if="item.children![0].itemSlot === FilterAccordionsSlots.Grid" :dataType="item.children![0].dataType as unknown as FilterIconsGridStatesType"/>
 		</template>
-		<template #default>
-			<UAccordion :items="items" type="multiple"
-				:ui="{
-					root: 'flex flex-col w-full',
-					trigger: 'cursor-default! opacity-100!',
-				}">
-				<template #default="{ item }">
-					<!-- TODO : fix this thing
-						<USwitch v-if="item.itemSlot === 'switch'" class="ml-auto"
-						unchecked-icon="i-lucide-x"
-						checked-icon="i-lucide-check"
-						v-model="store.seasonalRecipes"/>-->
-				</template>
-				<template #body="{ item }">
-					<CustomSelect v-if="item.itemSlot === FilterAccordionsSlots.Select" class="w-full"
-						:placeholder="item.label!" :disabled="item.disabled ?? false" :dataType="item.dataType as unknown as FilterSelectMenuStatesType"/>
-					<IconsGrid v-if="item.itemSlot === FilterAccordionsSlots.Grid" :dataType="item.dataType as unknown as FilterIconsGridStatesType"/>
-				</template>
-			</UAccordion>
+		<template #custom="{ item }">
+			<CustomSelect v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.Select" class="w-full"
+				:placeholder="(item as NavigationMenuItem & CustomAccordionItem).label!" :disabled="(item as NavigationMenuItem & CustomAccordionItem).disabled ?? false" :dataType="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterSelectMenuStatesType"/>
+			<IconsGrid v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.Grid" :dataType="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterIconsGridStatesType"/>
 		</template>
-	</UDashboardSidebar>
+	</UNavigationMenu>
 </template>
 
 <style lang="scss">

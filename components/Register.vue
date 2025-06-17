@@ -1,32 +1,26 @@
 <script setup lang="ts">
 import * as z from 'zod';
 import type { FormSubmitEvent } from '@nuxt/ui';
-import { authClient } from '~~/lib/auth-client';
+import { authClient } from '~/lib/auth-client';
 
+const { t } = useI18n();
 const toast = useToast();
-
 const fields = [
 	{
 		name: 'username',
 		type: 'text' as const,
-		label: 'Username',
-		required: true,
-	},
-	{
-		name: 'name',
-		type: 'text' as const,
-		label: 'Name',
+		label: t('auth.username'),
 		required: true,
 	},
 	{
 		name: 'email',
 		type: 'text' as const,
-		label: 'Email',
+		label: t('auth.email'),
 		required: true,
 	},
 	{
 		name: 'password',
-		label: 'Password',
+		label: t('auth.password'),
 		type: 'password' as const,
 		required: true,
 	},
@@ -34,7 +28,6 @@ const fields = [
 
 const schema = z.object({
 	username: z.string().min(3),
-	name: z.string().min(3),
 	email: z.string().email('Invalid email'),
 	password: z.string().min(8, 'Must be at least 8 characters'),
 });
@@ -44,14 +37,14 @@ type Schema = z.output<typeof schema>;
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
 	const response = await authClient.signUp.email({
 		username: payload.data.username,
-		name: payload.data.name,
+		name: payload.data.username,
 		email: payload.data.email,
 		password: payload.data.password,
 	});
 
 	if (response.error != null) {
 		toast.add({
-			title: 'Error signing up',
+			title: t('auth.register.failedToastTitle'),
 			description: response.error.message,
 			color: 'error',
 		});
@@ -63,17 +56,15 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center gap-4 p-4">
-    <UPageCard class="w-full max-w-md">
-      <UAuthForm
-        :schema="schema"
-        title="Register"
-        description="Enter your information to create your account."
-        icon="i-lucide-user"
-        :fields="fields"
-        @submit="onSubmit"
-        :submit="{ label: 'Create account' }"
-      />
-    </UPageCard>
-  </div>
+	<div class="w-full mt-10">
+		<UAuthForm
+		:schema="schema"
+		:title="$t('auth.register.title')"
+		:description="$t('auth.register.description')"
+		icon="i-lucide-user"
+		:fields="fields"
+		@submit="onSubmit"
+		:submit="{ label: $t('auth.register.button') }"
+		/>
+	</div>
 </template>

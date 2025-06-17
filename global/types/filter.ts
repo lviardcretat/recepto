@@ -130,6 +130,6 @@ export type FilterSwitchStates = {
 /* --------------- Accordion part --------------- */
 
 export type CustomAccordionItem = {
-	dataType: FilterAccordionsDataType;
-	itemSlot: FilterAccordionsSlots;
+	dataType?: FilterAccordionsDataType;
+	itemSlot?: FilterAccordionsSlots;
 };

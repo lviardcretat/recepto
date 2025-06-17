@@ -2,10 +2,10 @@ import type { UserInsert } from '~/server/utils/drizzle';
 
 export const usersSeed: UserInsert[] = [
 	{
-		id: 1,
+		id: 999,
 		username: 'admin',
 		displayUsername: 'admin',
-		email: 'admin@admin.com',
+		email: 'test@test.com',
 		emailVerified: true,
 		name: 'Admin admin',
 		image: 'https://example.com/avatar/john.png',
