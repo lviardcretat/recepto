@@ -6,18 +6,17 @@ import { account } from '../database/schema/account';
 import { session } from '../database/schema/session';
 import { verification } from '../database/schema/verification';
 import { admin, username } from 'better-auth/plugins';
+import { D1Dialect } from '@atinux/kysely-d1';
 
 function createAuth() {
 	return betterAuth({
-		database: drizzleAdapter(useDrizzle(), {
-			provider: 'sqlite',
-			schema: {
-				user,
-				session,
-				account,
-				verification,
-			},
-		}),
+		database: {
+			dialect: new D1Dialect({
+				database: hubDatabase(),
+			}),
+			type: 'sqlite',
+		},
+		baseURL: getBaseURL(),
 		emailAndPassword: {
 			enabled: true,
 		},
@@ -65,6 +64,16 @@ export function requireAuth(event: H3Event): void {
 			message: 'Unauthorized',
 		});
 	}
+}
+
+function getBaseURL() {
+	let baseURL = process.env.BETTER_AUTH_URL;
+	if (!baseURL) {
+		try {
+			baseURL = getRequestURL(useEvent()).origin;
+		} catch (e) {}
+	}
+	return baseURL;
 }
 
 export type SessionUser = typeof _auth.$Infer.Session.user;
