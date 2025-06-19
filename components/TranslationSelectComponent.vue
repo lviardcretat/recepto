@@ -1,5 +1,7 @@
 <script  lang="ts" setup>
-const { locale, localeCodes, setLocale, loadLocaleMessages } = useI18n();
+import { en, fr } from '@nuxt/ui/locale';
+
+const { locale, setLocale, loadLocaleMessages } = useI18n();
 
 onBeforeMount(async () => {
 	await loadLocaleMessages('en');
@@ -7,9 +9,5 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-	<USelect id="locale-select" variant="none" :model-value="locale" @update:modelValue="setLocale($event)"
-		trailing-icon="lucide:languages"
-		:items="localeCodes">
-	</Uselect>
+  <ULocaleSelect v-model="locale" @update:modelValue="setLocale($event as 'en' | 'fr')" :locales="[en, fr]" />
 </template>
-

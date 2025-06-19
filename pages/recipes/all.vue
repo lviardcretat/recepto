@@ -32,9 +32,19 @@ useListen('recipesCategory:created', async () => {
 </script>
 
 <template>
-	<UPageCard v-if="isData()" v-for="recipeCategory in resultsStates.recipesCategories"
-		:title="recipeCategory?.name" variant="outline" target="_self"
-		:to="{ name: 'recipes-id', params: { id: recipeCategory.id }, query: { recipeIndex: 0}}"></UPageCard>
+	<UPageList divide>
+		<UPageCard v-if="isData()" v-for="(recipeCategory, index) in resultsStates.recipesCategories"
+			:key="index" variant="ghost" target="_self"
+			:to="{ name: 'recipes-id', params: { id: recipeCategory.id }, query: { recipeIndex: 0}}">
+			<div class="flex justify-between gap-8 items-center">
+				<div class="flex justify-between grow items-center">
+					<div>{{ recipeCategory.name }}</div>
+					<div>{{ `${recipeCategory.count} recettes` }}</div>
+				</div>
+				<UIcon name="material-symbols:arrow-forward-ios" class="size-5" />
+			</div>
+		</UPageCard>
+	</UPageList>
 </template>
 
 <style lang="scss">

@@ -12,14 +12,9 @@ defineProps<{
 </script>
 
 <template>
-  	<div>
+	<UApp>
 		<UHeader />
-		<UContainer>
-			<UMain>
-				<UPage>
-					<Error :error="error" />
-				</UPage>
-			</UMain>
-		</UContainer>
-	</div>
+		<UError :error="error" />
+		<UFooter />
+	</UApp>
 </template>

@@ -1,4 +1,12 @@
-import { lte, gte, type SQL, inArray, notInArray, eq } from 'drizzle-orm';
+import {
+	lte,
+	gte,
+	type SQL,
+	inArray,
+	notInArray,
+	eq,
+	count,
+} from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
 import type { ItemsIdsWantedOrNot } from '~/types/filter';
 import type { FilterSelectItem } from '~/schemas/filter';
@@ -6,6 +14,7 @@ import type { FilterSelectItem } from '~/schemas/filter';
 export const recipeCategorySelectType = {
 	id: tables.recipesCategory.id,
 	name: tables.recipesCategory.name,
+	count: count(tables.recipe.id),
 };
 export const recipeSelectType = {
 	id: tables.recipe.id,

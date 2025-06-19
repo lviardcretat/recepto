@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type {
 	BreadcrumbItem,
-	DropdownMenuItem,
+	CommandPaletteGroup,
+	CommandPaletteItem,
 	NavigationMenuItem,
 } from '@nuxt/ui';
+import type { RecipeSearched } from '~/types/search';
 
 const { t } = useI18n();
 const items = ref<BreadcrumbItem[]>([
@@ -38,6 +40,39 @@ const links = [
 	],
 	[],
 ] satisfies NavigationMenuItem[][];
+
+const searchValue = ref({});
+const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
+	method: 'GET',
+	query: {
+		name: searchValue,
+	},
+	immediate: false,
+	default: () => [],
+	watch: false,
+	transform: (recipes: RecipeSearched[]): CommandPaletteItem[] => {
+		return recipes.map((recipe): CommandPaletteItem => {
+			return {
+				label: recipe.label,
+				icon: 'i-lucide-music',
+			};
+		});
+	},
+	onResponseError({ response }) {
+		throw showError({
+			statusCode: response.status,
+			statusMessage: response.statusText,
+		});
+	},
+});
+
+await execute();
+const search = ref<CommandPaletteGroup<CommandPaletteItem>[]>([
+	{
+		id: 'recipes',
+		items: data.value,
+	},
+]);
 </script>
 
 <template>
@@ -49,8 +84,7 @@ const links = [
 			collapsible
 			resizable
 			class="bg-elevated/25"
-			:ui="{ footer: 'lg:border-t lg:border-default' }"
-			>
+			:ui="{ footer: 'lg:border-t lg:border-default' }">
 			<template #header="{ collapsed }">
 				<NuxtImg src="image" />
 			</template>
@@ -72,7 +106,8 @@ const links = [
 			</template>
 		</UDashboardSidebar>
 
-		<UDashboardSearch :color-mode="false"/>
+		<UDashboardSearch :color-mode="false" v-model="searchValue" :groups="search"/>
+		<CreationButtonComponent />
 
 		<UDashboardPanel id="home">
 			<template #header>
@@ -86,10 +121,6 @@ const links = [
 						<UColorModeButton />
 					</template>
 				</UDashboardNavbar>
-
-				<UDashboardToolbar>
-					<UBreadcrumb :items="items" />
-				</UDashboardToolbar>
 			</template>
 
 			<template #body>

@@ -36,6 +36,7 @@ export type RecipeWithLessData = {
 export type RecipesCategoriesWithLessData = {
 	id: number;
 	name: string;
+	count: number;
 };
 
 export type FethRecipesCategoriesQuery = {

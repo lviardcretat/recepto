@@ -1,5 +1,8 @@
 import type { RecipesCategoriesFilter } from '~/schemas/filter';
-import type { RecipesCategory, RecipesCategoryInsert } from '../utils/drizzleUtils';
+import type {
+	RecipesCategory,
+	RecipesCategoryInsert,
+} from '../utils/drizzleUtils';
 import { intersect, text, union } from 'drizzle-orm/sqlite-core';
 import {
 	createAllergenSubQuery,
@@ -9,7 +12,7 @@ import {
 	createUstensilSubQuery,
 	recipeCategorySelectType,
 } from '../utils/filterUtils';
-import { asc, desc, like } from 'drizzle-orm';
+import { asc, count, desc, like } from 'drizzle-orm';
 import type {
 	ItemsIdsWantedOrNot,
 	RecipesCategoriesWithLessData,
@@ -42,9 +45,29 @@ export async function getRecipesCategories(): Promise<RecipesCategory[]> {
 	return recipesCategories;
 }
 
-export async function getRecipesCategoriesAndRecipesNames(
-	name: string,
-): Promise<RecipeSearched[]> {
+export async function getRecipesCategoriesWithRecipeCount(): Promise<
+	RecipesCategoriesWithLessData[]
+> {
+	const recipesCategories: RecipesCategoriesWithLessData[] = await useDrizzle()
+		.select({
+			id: tables.recipesCategory.id,
+			name: tables.recipesCategory.name,
+			count: count(tables.recipe.id),
+		})
+		.from(tables.recipesCategory)
+		.innerJoin(
+			tables.recipe,
+			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+		)
+		.groupBy(tables.recipesCategory.id)
+		.all();
+	console.log(recipesCategories);
+	return recipesCategories;
+}
+
+export async function getRecipesCategoriesAndRecipesNames(): Promise<
+	RecipeSearched[]
+> {
 	const recipesCategoriesRecipes: RecipeSearched[] = await union(
 		useDrizzle()
 			.select({
@@ -52,16 +75,14 @@ export async function getRecipesCategoriesAndRecipesNames(
 				label: tables.recipesCategory.name,
 				type: tables.recipesCategory.selectMenuType,
 			})
-			.from(tables.recipesCategory)
-			.where(like(tables.recipesCategory.name, `%${name}%`)),
+			.from(tables.recipesCategory),
 		useDrizzle()
 			.select({
 				id: tables.recipe.recipesCategoryId,
 				label: tables.recipe.name,
 				type: tables.recipe.selectMenuType,
 			})
-			.from(tables.recipe)
-			.where(like(tables.recipe.name, `%${name}%`)),
+			.from(tables.recipe),
 	)
 		.orderBy(
 			asc(tables.recipe.recipesCategoryId),
@@ -97,7 +118,7 @@ export async function getRecipesCategory(
 
 export async function getRecipesCategoriesFiltered(
 	query: RecipesCategoriesFilter,
-) {
+): Promise<RecipesCategoriesWithLessData[]> {
 	const ingredientsIds: ItemsIdsWantedOrNot = query.ingredients;
 	const ustensilsIds: ItemsIdsWantedOrNot = query.ustensils;
 	const mealTypesIds: ItemsIdsWantedOrNot = query.mealTypes ?? {
@@ -117,7 +138,7 @@ export async function getRecipesCategoriesFiltered(
 		allergensIds?.length === 0 &&
 		!seasonalRecipes
 	) {
-		return await getRecipesCategories();
+		return await getRecipesCategoriesWithRecipeCount();
 	}
 
 	let recipesCategories: RecipesCategoriesWithLessData[] = [];
@@ -156,6 +177,8 @@ export async function getRecipesCategoriesFiltered(
 			.all();
 	}
 
+	console.log(recipesCategories);
+
 	return recipesCategories;
 }
 
@@ -176,6 +199,10 @@ function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
 			),
 		)
 		.innerJoin(
+			tables.recipe,
+			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+		)
+		.innerJoin(
 			tables.mealType,
 			eq(tables.mealType.id, tables.mealTypeToRecipeCategory.mealTypeId),
 		)
@@ -194,6 +221,10 @@ function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
 	return useDrizzle()
 		.select(recipeCategorySelectType)
 		.from(tables.recipesCategory)
+		.innerJoin(
+			tables.recipe,
+			eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+		)
 		.innerJoin(
 			tables.dishType,
 			eq(tables.dishType.id, tables.recipesCategory.dishTypeId),
