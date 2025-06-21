@@ -21,7 +21,7 @@ function createAuth() {
 			enabled: true,
 		},
 		plugins: [username(), admin()],
-		trustedOrigins: ['https://*.recepto.pages.dev/'],
+		trustedOrigins: ['https://recepto.net/'],
 		advanced: {
 			database: {
 				generateId: false,
