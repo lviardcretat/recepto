@@ -50,7 +50,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 		return null;
 	}
 
-	return navigateTo('/recipes/all');
+	return await navigateTo('/recipes/all');
 }
 </script>
 

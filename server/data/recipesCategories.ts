@@ -67,43 +67,22 @@ export async function getRecipesCategoriesWithRecipeCount(): Promise<
 export async function getRecipesCategoriesAndRecipesNames(): Promise<
 	RecipeSearched[]
 > {
-	const recipesCategoriesRecipes = await useDrizzle()
-		.select({
-			recipesCategoryId: tables.recipesCategory.id,
-			recipesCategoryName: tables.recipesCategory.name,
-			recipeId: tables.recipe.id,
-			recipeName: tables.recipe.name,
-		})
-		.from(tables.recipesCategory)
-		.innerJoin(tables.recipe, eq(tables.recipesCategory.id, tables.recipe.id))
-		.all();
-
-	const recipesCategoriesRecipesMap = new Map<number, RecipeSearched>();
-
-	for (const row of recipesCategoriesRecipes) {
-		if (!recipesCategoriesRecipesMap.has(row.recipesCategoryId)) {
-			recipesCategoriesRecipesMap.set(row.recipesCategoryId, {
-				id: row.recipeId.toString().toLowerCase(),
-				label: row.recipesCategoryName,
-				items: [],
-			});
-		}
-		if (row.recipeId) {
-			const recipeCategoryItems = recipesCategoriesRecipesMap.get(
-				row.recipesCategoryId,
-			)?.items;
-			recipeCategoryItems?.push({
-				id: row.recipeId,
-				label: row.recipeName,
-				onSelect: () => {},
-			});
-		}
-	}
-
-	const searchResult: RecipeSearched[] = Array.from(
-		recipesCategoriesRecipesMap.values(),
-	);
-	return searchResult;
+	const recipesCategoriesRecipes: RecipeSearched[] =
+		await useDrizzle().query.recipesCategory.findMany({
+			columns: {
+				id: true,
+				name: true,
+			},
+			with: {
+				recipes: {
+					columns: {
+						id: true,
+						name: true,
+					},
+				},
+			},
+		});
+	return recipesCategoriesRecipes;
 }
 
 export async function getRecipesCategoryName(

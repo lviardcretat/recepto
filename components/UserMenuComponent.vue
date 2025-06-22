@@ -34,8 +34,8 @@ const items = ref<DropdownMenuItem[][]>([
 async function signout() {
 	await authClient.signOut({
 		fetchOptions: {
-			onSuccess: () => {
-				navigateTo('/');
+			onSuccess: async () => {
+				await navigateTo('/');
 			},
 		},
 	});

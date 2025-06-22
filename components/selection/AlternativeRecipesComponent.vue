@@ -54,7 +54,7 @@ useListen('recipe:created', async () => {
         </swiper-container>
 		<UModal v-model:open="isModalOpen" class="max-w-4xl">
 			<template #body>
-				<SelectionRecipeCardDetails :recipeId="recipeActive?.id ?? 1"/>
+				<SelectionRecipeCardDetailsComponent :recipeId="recipeActive?.id ?? 1"/>
 		    </template>
 		</UModal>
     </div>

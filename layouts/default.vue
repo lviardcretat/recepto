@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import type {
-	BreadcrumbItem,
-	CommandPaletteGroup,
-	CommandPaletteItem,
-	NavigationMenuItem,
-} from '@nuxt/ui';
-import type { RecipeSearched } from '~/types/search';
+import type { NavigationMenuItem } from '@nuxt/ui';
+import CustomDashboardSearch from '~/components/CustomDashboardSearchComponent.vue';
 
 const { t } = useI18n();
 const open = ref(false);
@@ -28,27 +23,6 @@ const links = [
 	],
 	[],
 ] satisfies NavigationMenuItem[][];
-
-const searchValue = ref({});
-const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
-	method: 'GET',
-	query: {
-		name: searchValue,
-	},
-	immediate: false,
-	default: () => [],
-	watch: false,
-	onResponseError({ response }) {
-		throw showError({
-			statusCode: response.status,
-			statusMessage: response.statusText,
-		});
-	},
-});
-
-await execute();
-const search = ref<CommandPaletteGroup<CommandPaletteItem>[]>(data.value);
-console.log(search.value);
 </script>
 
 <template>
@@ -82,11 +56,7 @@ console.log(search.value);
 			</template>
 		</UDashboardSidebar>
 
-		<UDashboardSearch :color-mode="false" v-model="searchValue" :groups="search">
-			<template #truc-label="{ item }">
-				<span onclick="console.log('ddzqd')">{{ item.label }}</span>
-			</template>
-		</UDashboardSearch>
+		<CustomDashboardSearchComponent />
 		<CreationButtonComponent />
 
 		<UDashboardPanel id="home">
