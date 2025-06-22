@@ -8,18 +8,6 @@ import type {
 import type { RecipeSearched } from '~/types/search';
 
 const { t } = useI18n();
-const items = ref<BreadcrumbItem[]>([
-	{
-		label: 'Home',
-		icon: 'i-lucide-house',
-		to: '/',
-	},
-	{
-		label: 'Recettes',
-		icon: 'ri:bowl-fill',
-		to: '/recipes/all',
-	},
-]);
 const open = ref(false);
 const links = [
 	[
@@ -50,14 +38,6 @@ const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
 	immediate: false,
 	default: () => [],
 	watch: false,
-	transform: (recipes: RecipeSearched[]): CommandPaletteItem[] => {
-		return recipes.map((recipe): CommandPaletteItem => {
-			return {
-				label: recipe.label,
-				icon: 'i-lucide-music',
-			};
-		});
-	},
 	onResponseError({ response }) {
 		throw showError({
 			statusCode: response.status,
@@ -67,12 +47,8 @@ const { data, execute, clear } = useFetch('/api/recipesCategories/search', {
 });
 
 await execute();
-const search = ref<CommandPaletteGroup<CommandPaletteItem>[]>([
-	{
-		id: 'recipes',
-		items: data.value,
-	},
-]);
+const search = ref<CommandPaletteGroup<CommandPaletteItem>[]>(data.value);
+console.log(search.value);
 </script>
 
 <template>
@@ -106,7 +82,11 @@ const search = ref<CommandPaletteGroup<CommandPaletteItem>[]>([
 			</template>
 		</UDashboardSidebar>
 
-		<UDashboardSearch :color-mode="false" v-model="searchValue" :groups="search"/>
+		<UDashboardSearch :color-mode="false" v-model="searchValue" :groups="search">
+			<template #truc-label="{ item }">
+				<span onclick="console.log('ddzqd')">{{ item.label }}</span>
+			</template>
+		</UDashboardSearch>
 		<CreationButtonComponent />
 
 		<UDashboardPanel id="home">

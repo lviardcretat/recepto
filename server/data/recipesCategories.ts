@@ -61,35 +61,49 @@ export async function getRecipesCategoriesWithRecipeCount(): Promise<
 		)
 		.groupBy(tables.recipesCategory.id)
 		.all();
-	console.log(recipesCategories);
 	return recipesCategories;
 }
 
 export async function getRecipesCategoriesAndRecipesNames(): Promise<
 	RecipeSearched[]
 > {
-	const recipesCategoriesRecipes: RecipeSearched[] = await union(
-		useDrizzle()
-			.select({
-				id: tables.recipesCategory.id,
-				label: tables.recipesCategory.name,
-				type: tables.recipesCategory.selectMenuType,
-			})
-			.from(tables.recipesCategory),
-		useDrizzle()
-			.select({
-				id: tables.recipe.recipesCategoryId,
-				label: tables.recipe.name,
-				type: tables.recipe.selectMenuType,
-			})
-			.from(tables.recipe),
-	)
-		.orderBy(
-			asc(tables.recipe.recipesCategoryId),
-			desc(tables.recipe.selectMenuType),
-		)
+	const recipesCategoriesRecipes = await useDrizzle()
+		.select({
+			recipesCategoryId: tables.recipesCategory.id,
+			recipesCategoryName: tables.recipesCategory.name,
+			recipeId: tables.recipe.id,
+			recipeName: tables.recipe.name,
+		})
+		.from(tables.recipesCategory)
+		.innerJoin(tables.recipe, eq(tables.recipesCategory.id, tables.recipe.id))
 		.all();
-	return recipesCategoriesRecipes;
+
+	const recipesCategoriesRecipesMap = new Map<number, RecipeSearched>();
+
+	for (const row of recipesCategoriesRecipes) {
+		if (!recipesCategoriesRecipesMap.has(row.recipesCategoryId)) {
+			recipesCategoriesRecipesMap.set(row.recipesCategoryId, {
+				id: row.recipeId.toString().toLowerCase(),
+				label: row.recipesCategoryName,
+				items: [],
+			});
+		}
+		if (row.recipeId) {
+			const recipeCategoryItems = recipesCategoriesRecipesMap.get(
+				row.recipesCategoryId,
+			)?.items;
+			recipeCategoryItems?.push({
+				id: row.recipeId,
+				label: row.recipeName,
+				onSelect: () => {},
+			});
+		}
+	}
+
+	const searchResult: RecipeSearched[] = Array.from(
+		recipesCategoriesRecipesMap.values(),
+	);
+	return searchResult;
 }
 
 export async function getRecipesCategoryName(
@@ -143,12 +157,12 @@ export async function getRecipesCategoriesFiltered(
 
 	let recipesCategories: RecipesCategoriesWithLessData[] = [];
 	const subQueries = [
-		createMealTypeSubQuery(mealTypesIds),
-		createDishTypeSubQuery(dishTypesIds),
-		createIngredientSubQuery(ingredientsIds),
-		createUstensilSubQuery(ustensilsIds),
-		createAllergenSubQuery(allergensIds),
-		createSeasonalRecipeSubQuery(seasonalRecipes),
+		await createMealTypeSubQuery(mealTypesIds),
+		await createDishTypeSubQuery(dishTypesIds),
+		await createIngredientSubQuery(ingredientsIds),
+		await createUstensilSubQuery(ustensilsIds),
+		await createAllergenSubQuery(allergensIds),
+		await createSeasonalRecipeSubQuery(seasonalRecipes),
 	];
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const filters: any[] = [];
@@ -176,19 +190,16 @@ export async function getRecipesCategoriesFiltered(
 			.groupBy(tables.recipesCategory.id)
 			.all();
 	}
-
-	console.log(recipesCategories);
-
 	return recipesCategories;
 }
 
-function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
+async function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
 	const conditions = createSubQueryConditions(
 		mealTypesIds,
 		tables.mealTypeToRecipeCategory.mealTypeId,
 	);
 	if (!conditions) return null;
-	return useDrizzle()
+	return await useDrizzle()
 		.select(recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
@@ -215,10 +226,10 @@ function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
 		);
 }
 
-function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
+async function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
 	const conditions = createSubQueryConditions(dishTypesIds, tables.dishType.id);
 	if (!conditions) return null;
-	return useDrizzle()
+	return await useDrizzle()
 		.select(recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(

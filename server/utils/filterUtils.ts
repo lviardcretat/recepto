@@ -43,7 +43,7 @@ export function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
 	);
 }
 
-export function createIngredientSubQuery(
+export async function createIngredientSubQuery(
 	ingredientsIds: ItemsIdsWantedOrNot,
 	recipeCategoryId: number | null = null,
 ) {
@@ -54,7 +54,7 @@ export function createIngredientSubQuery(
 	if (!conditions) return null;
 	if (recipeCategoryId)
 		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
-	return useDrizzle()
+	return await useDrizzle()
 		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
@@ -74,7 +74,7 @@ export function createIngredientSubQuery(
 		);
 }
 
-export function createUstensilSubQuery(
+export async function createUstensilSubQuery(
 	ustensilsIds: ItemsIdsWantedOrNot,
 	recipeCategoryId: number | null = null,
 ) {
@@ -85,7 +85,7 @@ export function createUstensilSubQuery(
 	if (!conditions) return null;
 	if (recipeCategoryId)
 		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
-	return useDrizzle()
+	return await useDrizzle()
 		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
@@ -105,7 +105,7 @@ export function createUstensilSubQuery(
 		);
 }
 
-export function createAllergenSubQuery(
+export async function createAllergenSubQuery(
 	allergensIds: number[],
 	recipeCategoryId: number | null = null,
 ) {
@@ -116,7 +116,7 @@ export function createAllergenSubQuery(
 	if (!conditions) return null;
 	if (recipeCategoryId)
 		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
-	return useDrizzle()
+	return await useDrizzle()
 		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
@@ -136,7 +136,7 @@ export function createAllergenSubQuery(
 		);
 }
 
-export function createSeasonalRecipeSubQuery(
+export async function createSeasonalRecipeSubQuery(
 	seasonalRecipes: boolean,
 	recipeCategoryId: number | null = null,
 ) {
@@ -146,7 +146,7 @@ export function createSeasonalRecipeSubQuery(
 		conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
 	conditions.push(lte(tables.season.start, dateIntoDayNumber()));
 	conditions.push(gte(tables.season.end, dateIntoDayNumber()));
-	return useDrizzle()
+	return await useDrizzle()
 		.select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(

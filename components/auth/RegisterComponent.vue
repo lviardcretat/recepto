@@ -51,7 +51,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 		return null;
 	}
 
-	return navigateTo('/search');
+	return navigateTo('/recipes/all');
 }
 </script>
 
