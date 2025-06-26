@@ -35,23 +35,19 @@ useListen('recipe:created', async () => {
 </script>
 
 <template>
-    <div class="alternative-recipes-selection-content m-auto p-36 w-full overflow-hidden">
-		<UCarousel v-slot="{ item }" :items="resultsStates.recipes" class-names
-    		:ui="{
-				item: 'basis-[70%] transition-transform [&:not(.is-snapped)]:scale-90',
-				container: 'align-middle'
-			}">
-			<SelectionRecipeCardComponent
-					:name="item.name"
-					:description="item.description"
-					:peopleNumber="item.peopleNumber ?? 1"
-					:preparationTime="item.preparationTime ?? 0"
-					:cookingTime="item.cookingTime ?? 0"
-					:restTime="item.restTime ?? 0"
-					:createdAt="new Date(item.createdAt)"
+    <div class="alternative-recipes-selection-content">
+		<UPageColumns>
+			<SelectionRecipeCardComponent v-for="recipe in resultsStates.recipes"
+					:name="recipe.name"
+					:description="recipe.description"
+					:peopleNumber="recipe.peopleNumber ?? 1"
+					:preparationTime="recipe.preparationTime ?? 0"
+					:cookingTime="recipe.cookingTime ?? 0"
+					:restTime="recipe.restTime ?? 0"
+					:createdAt="new Date(recipe.createdAt)"
 					fullName="dzqdzqdzqqzd"
-					@click="recipeActive = item; isModalOpen = true"/>
-		</UCarousel>
+					@click="recipeActive = recipe; isModalOpen = true"/>
+		</UPageColumns>
 
 		<UModal v-model:open="isModalOpen" class="max-w-4xl">
 			<template #body>
