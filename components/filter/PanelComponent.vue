@@ -12,7 +12,6 @@ defineProps<{
 	collapsed?: boolean;
 }>();
 
-const { t } = useI18n();
 const swicthStates = useFilterSwitchStates();
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
@@ -115,15 +114,15 @@ useListen('ingredient:created', async () => {
 
 const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 	{
-		label: 'Filtres',
+		label: 'filter',
 		type: 'label',
 	},
 	{
-		label: t('ingredient', 1),
+		label: 'ingredient',
 		icon: 'fa6-solid:carrot',
 		children: [
 			{
-				label: t('ingredient', 1),
+				label: 'ingredient',
 				itemSlot: FilterAccordionsSlots.SELECT,
 				dataType: FilterAccordionsDataType.INGREDIENT,
 				slot: 'custom',
@@ -131,11 +130,11 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		],
 	},
 	{
-		label: t('ustensil', 2),
+		label: 'ustensil',
 		icon: 'solar:ladle-bold',
 		children: [
 			{
-				label: t('ustensil', 2),
+				label: 'ustensil',
 				itemSlot: FilterAccordionsSlots.SELECT,
 				dataType: FilterAccordionsDataType.USTENSIL,
 				slot: 'custom',
@@ -143,11 +142,11 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		],
 	},
 	{
-		label: t('allergens', 1),
+		label: 'allergens',
 		icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
 		children: [
 			{
-				label: t('allergens', 1),
+				label: 'allergens',
 				itemSlot: FilterAccordionsSlots.GRID,
 				dataType: FilterAccordionsDataType.ALLERGEN,
 				slot: 'custom',
@@ -155,12 +154,12 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		],
 	},
 	{
-		label: t('seasonalRecipes', 1),
+		label: 'seasonalRecipes',
 		icon: 'fa6-solid:snowflake',
 		disabled: true,
 		children: [
 			{
-				label: t('seasonalRecipes', 1),
+				label: 'seasonalRecipes',
 				disabled: true,
 				itemSlot: FilterAccordionsSlots.SWITCH,
 				dataType: FilterAccordionsDataType.SEASON,
@@ -169,11 +168,11 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		],
 	},
 	{
-		label: t('mealTypes', 1),
+		label: 'mealTypes',
 		icon: 'tabler:sun-moon',
 		children: [
 			{
-				label: t('mealTypes', 1),
+				label: 'mealTypes',
 				itemSlot: FilterAccordionsSlots.SELECT,
 				dataType: FilterAccordionsDataType.MEAL_TYPE,
 				slot: 'custom',
@@ -181,11 +180,11 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		],
 	},
 	{
-		label: t('dishTypes', 1),
+		label: 'dishTypes',
 		icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
 		children: [
 			{
-				label: t('dishTypes', 1),
+				label: 'dishTypes',
 				itemSlot: FilterAccordionsSlots.SELECT,
 				dataType: FilterAccordionsDataType.DISH_TYPE,
 				slot: 'custom',
@@ -201,6 +200,9 @@ const items = ref<(NavigationMenuItem & CustomAccordionItem)[]>([
 		orientation="vertical"
 		:collapsed="collapsed"
 		popover>
+		<template #item-label="{ item }">
+			{{ $t(item.label ?? "", 1) }}
+		</template>
 		<template #item-content="{ item }">
 			<FilterCustomSelectComponent v-if="item.children![0].itemSlot === FilterAccordionsSlots.SELECT" class="w-full"
 				:placeholder="item.label!" :disabled="item.disabled ?? false" :dataType="item.children![0].dataType as unknown as FilterSelectMenuStatesType"/>

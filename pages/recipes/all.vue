@@ -39,7 +39,7 @@ useListen('recipesCategory:created', async () => {
 			<div class="flex justify-between gap-8 items-center">
 				<div class="flex justify-between grow items-center">
 					<div>{{ recipeCategory.name }}</div>
-					<div>{{ `${recipeCategory.count} recettes` }}</div>
+					<div>{{ `${recipeCategory.count} ${$t('recipe', 2)}` }}</div>
 				</div>
 				<UIcon name="material-symbols:arrow-forward-ios" class="size-5" />
 			</div>

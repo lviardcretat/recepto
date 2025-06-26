@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
-import CustomDashboardSearch from '~/components/CustomDashboardSearchComponent.vue';
 
-const { t } = useI18n();
 const open = ref(false);
 const links = [
 	[
 		{
-			label: 'Pages',
+			label: 'mainSlideOver.pages',
 			type: 'label',
 		},
 		{
-			label: t('mainSlideOver.recipes'),
+			label: 'mainSlideOver.recipes',
 			icon: 'material-symbols:fastfood',
 			to: '/recipes/all',
 		},
 		{
-			label: t('mainSlideOver.calendar'),
+			label: 'mainSlideOver.calendar',
 			icon: 'material-symbols:calendar-today',
 			disabled: true,
 		},
@@ -47,7 +45,11 @@ const links = [
 					:items="links"
 					orientation="vertical"
 					tooltip
-					popover />
+					popover>
+					<template #item-label="{ item }">
+						{{ $t(item.label) }}
+					</template>
+				</UNavigationMenu>
 				<FilterPanelComponent :collapsed="collapsed" />
 			</template>
 
@@ -61,7 +63,7 @@ const links = [
 
 		<UDashboardPanel id="home">
 			<template #header>
-				<UDashboardNavbar title="Recettes" :ui="{ right: 'gap-3' }">
+				<UDashboardNavbar :title="$t('recipe', 2)" :ui="{ right: 'gap-3' }">
 					<template #leading>
 						<UDashboardSidebarCollapse />
 					</template>

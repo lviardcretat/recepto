@@ -9,15 +9,9 @@ export default defineNuxtConfig({
 		'@nuxt/image',
 		'@nuxtjs/i18n',
 		'@nuxt/ui-pro',
-		'nuxt-swiper',
 		'@nuxthub/core', // Comment it for local bdd
 	],
 	css: ['~/assets/css/main.css'],
-	vue: {
-		compilerOptions: {
-			isCustomElement: (tag) => tag.includes('swiper-'),
-		},
-	},
 	app: {
 		head: {
 			htmlAttrs: {
@@ -30,7 +24,6 @@ export default defineNuxtConfig({
 		},
 	},
 	i18n: {
-		langDir: 'locales',
 		defaultLocale: 'fr',
 		// https://github.com/nuxt-modules/i18n/issues/3238
 		bundle: {

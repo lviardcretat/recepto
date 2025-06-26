@@ -7,24 +7,23 @@ defineProps<{
 	collapsed?: boolean;
 }>();
 
-const { t } = useI18n();
 const { data: loggedIn } = await authClient.useSession(useFetch);
 const user = loggedIn.value?.user;
 const items = ref<DropdownMenuItem[][]>([
 	[
 		{
-			label: t('mainSlideOver.settings'),
+			label: 'mainSlideOver.settings',
 			icon: 'material-symbols:settings',
 		},
 		{
-			label: t('mainSlideOver.dashboard'),
+			label: 'mainSlideOver.dashboard',
 			icon: 'material-symbols:space-dashboard-outline',
 			to: '/user/dashboard',
 		},
 	],
 	[
 		{
-			label: t('mainSlideOver.logout'),
+			label: 'mainSlideOver.logout',
 			icon: 'material-symbols:logout',
 			onSelect: (_event: Event) => signout(),
 		},
@@ -61,7 +60,9 @@ async function signout() {
       :square="collapsed"
       class="data-[state=open]:bg-elevated"
     />
-
+	<template #item-label="{ item }">
+		{{ $t(item.label ?? "", 1) }}
+	</template>
     <template #chip-leading="{ item }">
       <span class="ms-0.5 size-2 rounded-full"/>
     </template>

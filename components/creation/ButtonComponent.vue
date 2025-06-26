@@ -51,6 +51,9 @@ const items: DropdownMenuItem[] = [
 			sideOffset: 16
     	}">
 		<UButton color="primary" size="xl" class="rounded-full"  icon="material-symbols:add" />
+		<template #item-label="{ item }">
+			{{ $t(item.label ?? "", 1) }}
+		</template>
 	</UDropdownMenu>
 	<UModal v-model:open="isModalOpen" :dismissible="false" :class="mainModalName === 'recipe' ? 'sm:max-w-6xl' : 'sm:max-w-4xl'">
 		<template #content>

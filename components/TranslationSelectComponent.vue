@@ -9,5 +9,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <ULocaleSelect v-model="locale" @update:modelValue="setLocale($event as 'en' | 'fr')" :locales="[en, fr]" />
+  <ULocaleSelect variant="ghost" v-model="locale"
+  	@update:modelValue="setLocale($event as 'en' | 'fr')" :locales="[en, fr]" />
 </template>

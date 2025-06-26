@@ -86,6 +86,7 @@ export default defineI18nLocale(async () => {
 			},
 		},
 		mainSlideOver: {
+			pages: 'Pages',
 			search: 'Recherche',
 			recipes: 'Recettes',
 			dashboard: 'Tableau de bord',
@@ -106,11 +107,11 @@ export default defineI18nLocale(async () => {
 		recipeAll: 'Toutes les recettes',
 		recipesCreated: 'Recettes créés',
 		recipesFound:
-			'Aucune recette trouvée | 1 recette trouvée | {count} recettes trouvées',
+			'Aucune recette trouvée | {n} recette trouvée | {n} recettes trouvées',
 		registeredMembersThanks: 'Membres inscrits grâce à vous',
 		search: 'Recherchez...',
 		seasonalRecipes: 'Recettes de saison',
-		selected: 'Aucun sélectionné | 1 sélectionné | {count} sélectionnés',
+		selected: 'Aucun sélectionné | {n} sélectionné | {n} sélectionnés',
 		september: 'Septembre',
 		settings: 'Paramètres',
 		shoppingList: 'Liste de courses',

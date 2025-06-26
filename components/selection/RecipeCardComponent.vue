@@ -13,9 +13,9 @@ const props = defineProps<{
 </script>
 
 <template>
-	<UCard class="recipeCard flex flex-col">
+	<UCard class="recipeCard flex flex-col" variant="soft" :ui="{header: 'flex flex-col gap-4'}">
 		<template #header>
-			<h1 class="name text-3xl text-center mb-6 mt-6">{{ props.name }}</h1>
+			<h1 class="text-3xl text-center">{{ props.name }}</h1>
 			<img src="~/assets/img/lasagnes.jpg" />
 		</template>
         <div class="data">
@@ -50,9 +50,6 @@ const props = defineProps<{
 
 <style lang="scss">
 .recipeCard {
-	height: 95%;
-	margin-top: 2.5%;
-
 	.ellipsis {
 		display: -webkit-box;
 		-webkit-line-clamp: 4;

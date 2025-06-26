@@ -35,23 +35,24 @@ useListen('recipe:created', async () => {
 </script>
 
 <template>
-    <div class="alternative-recipes-selection-content">
-        <swiper-container :slides-per-view="'auto'" :loop="false" :effect="'coverflow'" :grabcursor="true" :centered-slides="true"
-			:coverflow-effect-rotate="0" :coverflow-effect-stretch="0" :coverflow-effect-depth="150" :coverflow-effect-modifier="2.5"
-			:coverflow-effect-slide-shadows="false" :mousewheel="true":grabCursor="true">
-            <swiper-slide v-for="recipe in resultsStates.recipes">
-				<SelectionRecipeCardComponent
-					:name="recipe.name"
-					:description="recipe.description"
-					:peopleNumber="recipe.peopleNumber ?? 1"
-					:preparationTime="recipe.preparationTime ?? 0"
-					:cookingTime="recipe.cookingTime ?? 0"
-					:restTime="recipe.restTime ?? 0"
-					:createdAt="new Date(recipe.createdAt)"
+    <div class="alternative-recipes-selection-content m-auto p-36 w-full overflow-hidden">
+		<UCarousel v-slot="{ item }" :items="resultsStates.recipes" class-names
+    		:ui="{
+				item: 'basis-[70%] transition-transform [&:not(.is-snapped)]:scale-90',
+				container: 'align-middle'
+			}">
+			<SelectionRecipeCardComponent
+					:name="item.name"
+					:description="item.description"
+					:peopleNumber="item.peopleNumber ?? 1"
+					:preparationTime="item.preparationTime ?? 0"
+					:cookingTime="item.cookingTime ?? 0"
+					:restTime="item.restTime ?? 0"
+					:createdAt="new Date(item.createdAt)"
 					fullName="dzqdzqdzqqzd"
-					@click="recipeActive = recipe; isModalOpen = true"/>
-			</swiper-slide>
-        </swiper-container>
+					@click="recipeActive = item; isModalOpen = true"/>
+		</UCarousel>
+
 		<UModal v-model:open="isModalOpen" class="max-w-4xl">
 			<template #body>
 				<SelectionRecipeCardDetailsComponent :recipeId="recipeActive?.id ?? 1"/>
@@ -61,21 +62,4 @@ useListen('recipe:created', async () => {
 </template>
 
 <style lang="scss">
-    .alternative-recipes-selection-content {
-        height: 100vh;
-        width: 70vw;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        swiper-container {
-            width: 100%;
-            height: 80%;
-
-            swiper-slide {
-                width: 40%;
-                height: 100%;
-            }
-        }
-    }
 </style>
