@@ -17,9 +17,13 @@ useHead({
 <template>
 	<UApp :toaster="{ position: 'bottom-left' }" :tooltip="{ disableHoverableContent: true }" :locale="locales[locale]">
 		<NuxtLoadingIndicator />
-		<NuxtLayout>
-			<SeasonalChartComponent />
-			<NuxtPage/>
-		</NuxtLayout>
+		<UHeader />
+		<UMain>
+			<NuxtLayout>
+				<SeasonalChartComponent />
+				<NuxtPage/>
+			</NuxtLayout>
+		</UMain>
+		<UFooter />
 	</UApp>
 </template>
