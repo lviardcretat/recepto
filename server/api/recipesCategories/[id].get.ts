@@ -1,7 +1,7 @@
 import {
 	getRecipesCategory,
 	getRecipesCategoryName,
-} from '~/server/data/recipesCategories';
+} from '~~/server/data/recipesCategories';
 import { idSchema } from '~/schemas/businessObjects';
 
 export default defineEventHandler(async (event) => {

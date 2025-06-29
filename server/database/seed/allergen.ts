@@ -1,4 +1,4 @@
-import type { AllergenInsert } from '~/server/utils/drizzleUtils';
+import type { AllergenInsert } from '~~/server/utils/drizzleUtils';
 
 export const allergensSeed: AllergenInsert[] = [
 	{

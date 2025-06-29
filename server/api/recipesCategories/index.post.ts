@@ -1,5 +1,5 @@
 import { recipesCategoryCreation } from '~/schemas/creation/recipesCategory';
-import { postRecipesCategory } from '~/server/data/recipesCategories';
+import { postRecipesCategory } from '~~/server/data/recipesCategories';
 
 export default defineEventHandler(async (event) => {
 	const body = await readValidatedBody(event, recipesCategoryCreation.parse);

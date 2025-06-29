@@ -1,4 +1,4 @@
-import type { RecipeIngredientInsert } from '~/server/utils/drizzleUtils';
+import type { RecipeIngredientInsert } from '~~/server/utils/drizzleUtils';
 
 export const recipeIngredientsSeed: RecipeIngredientInsert[] = [
 	{
