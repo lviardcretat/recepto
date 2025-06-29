@@ -1,4 +1,4 @@
-import type { UnitInsert } from '~~/server/utils/drizzleUtils';
+import type { UnitInsert } from '~/server/utils/drizzleUtils';
 
 export const unitsSeed: UnitInsert[] = [
 	{

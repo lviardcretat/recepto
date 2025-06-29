@@ -1,4 +1,4 @@
-import type { SeasonInsert } from '~~/server/utils/drizzleUtils';
+import type { SeasonInsert } from '~/server/utils/drizzleUtils';
 
 export const seasonsSeed: SeasonInsert[] = [
 	{

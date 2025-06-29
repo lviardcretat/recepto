@@ -1,5 +1,5 @@
-import { getAllergens } from '~~/server/data/allergens';
-import type { Allergen } from '~~/server/utils/drizzleUtils';
+import { getAllergens } from '~/server/data/allergens';
+import type { Allergen } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async () => {
 	const allergens: Allergen[] = await getAllergens();

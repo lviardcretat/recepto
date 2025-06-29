@@ -1,6 +1,6 @@
-import { getIngredient } from '~~/server/data/ingredients';
+import { getIngredient } from '~/server/data/ingredients';
 import { idSchema } from '~/schemas/businessObjects';
-import type { Ingredient } from '~~/server/utils/drizzleUtils';
+import type { Ingredient } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async (event) => {
 	const { id } = await getValidatedRouterParams(event, idSchema.parse);

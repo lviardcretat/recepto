@@ -1,4 +1,4 @@
-import { getRecipe } from '~~/server/data/recipes';
+import { getRecipe } from '~/server/data/recipes';
 import { idSchema } from '~/schemas/businessObjects';
 import type { RecipeDetail } from '~/types/recipeCard';
 

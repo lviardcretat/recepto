@@ -1,4 +1,4 @@
-import { getRecipesCategoriesFiltered } from '~~/server/data/recipesCategories';
+import { getRecipesCategoriesFiltered } from '~/server/data/recipesCategories';
 import {
 	recipesCategoriesFilterSchema,
 	type RecipesCategoriesFilter,

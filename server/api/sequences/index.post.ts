@@ -1,6 +1,6 @@
 import { sequenceCreation } from '~/schemas/creation/sequence';
-import { postSequence } from '~~/server/data/sequences';
-import type { Sequence } from '~~/server/utils/drizzleUtils';
+import { postSequence } from '~/server/data/sequences';
+import type { Sequence } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async (event) => {
 	const body = await readValidatedBody(event, sequenceCreation.parse);

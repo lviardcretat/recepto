@@ -1,6 +1,6 @@
-import { getSpecificsFoodTypes } from '~~/server/data/foodTypes';
-import { getIngredientsSeasonalMonths } from '~~/server/data/ingredients';
-import type { FoodType } from '~~/server/utils/drizzleUtils';
+import { getSpecificsFoodTypes } from '~/server/data/foodTypes';
+import { getIngredientsSeasonalMonths } from '~/server/data/ingredients';
+import type { FoodType } from '~/server/utils/drizzleUtils';
 
 export type DataRecord = {
 	name: string;

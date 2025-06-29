@@ -1,4 +1,4 @@
-import type { SequenceInsert } from '~~/server/utils/drizzleUtils';
+import type { SequenceInsert } from '~/server/utils/drizzleUtils';
 
 export const sequencesSeed: SequenceInsert[] = [
 	{

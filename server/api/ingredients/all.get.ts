@@ -1,5 +1,5 @@
-import { getIngredients } from '~~/server/data/ingredients';
-import type { Ingredient } from '~~/server/utils/drizzleUtils';
+import { getIngredients } from '~/server/data/ingredients';
+import type { Ingredient } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async () => {
 	const ingredients: Ingredient[] = await getIngredients();

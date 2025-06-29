@@ -1,6 +1,6 @@
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
-import { postIngredient } from '~~/server/data/ingredients';
-import type { Ingredient } from '~~/server/utils/drizzleUtils';
+import { postIngredient } from '~/server/data/ingredients';
+import type { Ingredient } from '~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async (event) => {
 	const body = await readValidatedBody(event, ingredientCreationSchema.parse);
