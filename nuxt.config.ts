@@ -3,6 +3,9 @@ export default defineNuxtConfig({
 	compatibilityDate: '2025-01-01',
 	ssr: true,
 	devtools: { enabled: true },
+	future: {
+		compatibilityVersion: 4,
+	},
 	modules: [
 		// Must be loaded before @nuxtjs/i18n
 		'nuxt-zod-i18n',

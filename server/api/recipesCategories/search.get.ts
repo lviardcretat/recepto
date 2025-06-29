@@ -1,4 +1,4 @@
-import { getRecipesCategoriesAndRecipesNames } from '~/server/data/recipesCategories';
+import { getRecipesCategoriesAndRecipesNames } from '~~/server/data/recipesCategories';
 import type { RecipeSearched } from '~/types/search';
 
 export default defineEventHandler(async (event) => {

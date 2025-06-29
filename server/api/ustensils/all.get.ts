@@ -1,5 +1,5 @@
-import { getUstensils } from '~/server/data/ustensils';
-import type { Ustensil } from '~/server/utils/drizzleUtils';
+import { getUstensils } from '~~/server/data/ustensils';
+import type { Ustensil } from '~~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async () => {
 	const ustensils: Ustensil[] = await getUstensils();

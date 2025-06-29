@@ -1,4 +1,4 @@
-import { getRecipesCategories } from '~/server/data/recipesCategories';
+import { getRecipesCategories } from '~~/server/data/recipesCategories';
 
 export default defineEventHandler(async () => {
 	const recipesCategories = await getRecipesCategories();

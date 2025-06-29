@@ -1,4 +1,4 @@
-import type { RecipeToUstensilInsert } from '~/server/utils/drizzleUtils';
+import type { RecipeToUstensilInsert } from '~~/server/utils/drizzleUtils';
 
 export const recipeToUstensilsSeed: RecipeToUstensilInsert[] = [
 	{

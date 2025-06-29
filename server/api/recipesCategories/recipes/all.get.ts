@@ -1,4 +1,4 @@
-import { getRecipes } from '~/server/data/recipes';
+import { getRecipes } from '~~/server/data/recipes';
 
 export default defineEventHandler(async () => {
 	const recipes: Recipe[] = await getRecipes();
