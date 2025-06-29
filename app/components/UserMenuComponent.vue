@@ -1,14 +1,14 @@
 
 <script lang="ts" setup>
 import type { DropdownMenuItem } from '@nuxt/ui';
-import { authClient } from '~/lib/auth-client';
+import { authClient } from '~/utils/auth-client';
 
 defineProps<{
 	collapsed?: boolean;
 }>();
 
-const { data: loggedIn } = await authClient.useSession(useFetch);
-const user = loggedIn.value?.user;
+const { data: session } = await authClient.useSession(useFetch);
+const user = session.value?.user;
 const items = ref<DropdownMenuItem[][]>([
 	[
 		{

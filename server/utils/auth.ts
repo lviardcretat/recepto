@@ -1,10 +1,5 @@
 import type { H3Event } from 'h3';
 import { betterAuth } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { user } from '../database/schema/user';
-import { account } from '../database/schema/account';
-import { session } from '../database/schema/session';
-import { verification } from '../database/schema/verification';
 import { admin, username } from 'better-auth/plugins';
 import { D1Dialect } from '@atinux/kysely-d1';
 
@@ -16,7 +11,6 @@ function createAuth() {
 			}),
 			type: 'sqlite',
 		},
-		baseURL: getBaseURL(),
 		emailAndPassword: {
 			enabled: true,
 		},
@@ -66,15 +60,3 @@ export function requireAuth(event: H3Event): void {
 		});
 	}
 }
-
-function getBaseURL() {
-	let baseURL = process.env.BETTER_AUTH_URL;
-	if (!baseURL) {
-		try {
-			baseURL = getRequestURL(useEvent()).origin;
-		} catch (e) {}
-	}
-	return baseURL;
-}
-
-export type SessionUser = typeof _auth.$Infer.Session.user;
