@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DataRecord } from '~/server/api/ingredients/seasonals.get';
+import type { DataRecord } from '~~/server/api/ingredients/seasonals.get';
 import {
 	VisXYContainer,
 	VisAxis,
@@ -11,15 +11,6 @@ import { colors, Timeline, type BulletLegendItemInterface } from '@unovis/ts';
 import { Months } from '~/enums/data';
 
 const { t } = useI18n();
-const isModalOpen = ref<boolean>(false);
-defineShortcuts({
-	shift_s: {
-		usingInput: true,
-		handler: () => {
-			isModalOpen.value = !isModalOpen.value;
-		},
-	},
-});
 
 useListen('ingredient:created', async () => {
 	await refreshDatasetsFetch();
@@ -87,7 +78,7 @@ const tickFormat = (tick: number) => {
 </script>
 
 <template>
-	<UModal title="Calendrier de saison" v-model:open="isModalOpen" class="z-10 max-w-7xl">
+	<UModal title="Calendrier de saison" class="z-10 max-w-7xl">
 		<template #body>
 			<div class="m-9 customTimeline">
 				<VisXYContainer :data="datasetsFetch" :height="500" :xDomain="[0,12]">

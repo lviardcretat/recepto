@@ -6,13 +6,10 @@ export default defineNuxtRouteMiddleware(
 		_from: RouteLocationNormalizedGeneric,
 	) => {
 		const { data: session } = await authClient.useSession(useFetch);
-		if (!session.value) {
-			return navigateTo('/');
-		}
-
-		const isNavigatingToLoginOrRegister = to.path === '/';
+		const isNavigatingToLoginOrRegister =
+			to.path === '/' || to.path === '/login';
 		if (!isNavigatingToLoginOrRegister && !session.value) {
-			return await navigateTo('/');
+			return await navigateTo('/login');
 		}
 		if (isNavigatingToLoginOrRegister && session.value) {
 			return await navigateTo('/recipes/all');

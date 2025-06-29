@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { SeasonalChartComponent } from '#components';
+
+const overlay = useOverlay();
+const modal = overlay.create(SeasonalChartComponent);
+defineShortcuts({
+	shift_s: {
+		usingInput: true,
+		handler: () => {
+			modal.open();
+		},
+	},
+});
 
 const open = ref(false);
-const links = [
+const links: NavigationMenuItem[][] = [
 	[
 		{
 			label: 'mainSlideOver.pages',
@@ -14,13 +26,21 @@ const links = [
 			to: '/recipes/all',
 		},
 		{
+			label: 'Recettes de saisons',
+			icon: 'i-lucide-sun-snow',
+			slot: 'shortcut',
+			onSelect: (_event: Event) => {
+				modal.open();
+			},
+		},
+		{
 			label: 'mainSlideOver.calendar',
 			icon: 'material-symbols:calendar-today',
 			disabled: true,
 		},
 	],
 	[],
-] satisfies NavigationMenuItem[][];
+];
 </script>
 
 <template>
@@ -33,7 +53,7 @@ const links = [
 			resizable
 			class="bg-elevated/25"
 			:ui="{ footer: 'lg:border-t lg:border-default' }">
-			<template #header="{ collapsed }">
+			<template #header>
 				<NuxtImg src="image" />
 			</template>
 
@@ -45,9 +65,19 @@ const links = [
 					:items="links"
 					orientation="vertical"
 					tooltip
-					popover>
+					popover
+					:ui="{linkLabel: 'inherit'}">
 					<template #item-label="{ item }">
-						{{ $t(item.label) }}
+						{{ $t(item.label ?? "") }}
+					</template>
+					<template #shortcut-label="{ item }">
+						<div class="flex items-center justify-between">
+							{{ $t(item.label ?? "") }}
+							<div class="flex items-center gap-1">
+								<UKbd value="shift"></UKbd>
+								<UKbd value="S"></UKbd>
+							</div>
+						</div>
 					</template>
 				</UNavigationMenu>
 				<FilterPanelComponent :collapsed="collapsed" />
@@ -81,3 +111,9 @@ const links = [
 		</UDashboardPanel>
   	</UDashboardGroup>
 </template>
+
+<style>
+	button:not(*:disabled) > .inherit {
+		width: inherit;
+	}
+</style>

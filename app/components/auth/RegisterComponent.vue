@@ -13,12 +13,6 @@ const fields = [
 		required: true,
 	},
 	{
-		name: 'email',
-		type: 'text' as const,
-		label: t('auth.email'),
-		required: true,
-	},
-	{
 		name: 'password',
 		label: t('auth.password'),
 		type: 'password' as const,
@@ -28,7 +22,6 @@ const fields = [
 
 const schema = z.object({
 	username: z.string().min(3),
-	email: z.string().email('Invalid email'),
 	password: z.string().min(8, 'Must be at least 8 characters'),
 });
 
@@ -38,7 +31,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 	const response = await authClient.signUp.email({
 		username: payload.data.username,
 		name: payload.data.username,
-		email: payload.data.email,
+		email: `${payload.data.username}@email.com`,
 		password: payload.data.password,
 	});
 

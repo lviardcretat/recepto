@@ -23,6 +23,14 @@ const items = ref<DropdownMenuItem[][]>([
 	],
 	[
 		{
+			label: 'GitHub',
+			icon: 'i-simple-icons-github',
+			to: 'https://github.com/nuxt-ui-pro/dashboard',
+			target: '_blank',
+		},
+	],
+	[
+		{
 			label: 'mainSlideOver.logout',
 			icon: 'material-symbols:logout',
 			onSelect: (_event: Event) => signout(),

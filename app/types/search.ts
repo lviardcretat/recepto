@@ -1,5 +1,3 @@
-import type { Recipe, RecipesCategory } from '~/server/utils/drizzleUtils';
-
 /**
  * @description Recipes searched type return
  * @type RecipeDetail
