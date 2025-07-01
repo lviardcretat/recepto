@@ -161,7 +161,6 @@ CREATE TABLE `session` (
 	`expiresAt` integer NOT NULL,
 	`ipAddress` text,
 	`userAgent` text,
-	`impersonatedBy` text,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
@@ -181,9 +180,10 @@ CREATE TABLE `unit` (
 CREATE TABLE `user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`email` text NOT NULL,
-	`email_verified` integer DEFAULT false NOT NULL,
+	`emailVerified` integer DEFAULT false NOT NULL,
 	`image` text,
 	`role` text DEFAULT 'user' NOT NULL,
+	`banned` integer DEFAULT false NOT NULL,
 	`name` text NOT NULL,
 	`banReason` text,
 	`banExpires` integer,

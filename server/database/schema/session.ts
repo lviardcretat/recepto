@@ -13,7 +13,6 @@ export const session = sqliteTable('session', {
 	expiresAt: integer('expiresAt', { mode: 'timestamp_ms' }).notNull(),
 	ipAddress: text('ipAddress'),
 	userAgent: text('userAgent'),
-	impersonatedBy: text('impersonatedBy'),
 	...timestamps,
 });
 

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "0986127e-4157-4042-a672-08b3216b17e1",
+  "id": "ce7ea624-1ffe-412c-a718-7386f48796f7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -1168,13 +1168,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "impersonatedBy": {
-          "name": "impersonatedBy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "createdAt": {
           "name": "createdAt",
           "type": "text",
@@ -1305,8 +1298,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "email_verified": {
-          "name": "email_verified",
+        "emailVerified": {
+          "name": "emailVerified",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -1327,6 +1320,14 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'user'"
+        },
+        "banned": {
+          "name": "banned",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         },
         "name": {
           "name": "name",

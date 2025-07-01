@@ -16,14 +16,12 @@ import { ustensil } from './ustensil';
 export const user = sqliteTable('user', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	email: text('email').notNull().unique(),
-	emailVerified: integer('email_verified', { mode: 'boolean' })
+	emailVerified: integer('emailVerified', { mode: 'boolean' })
 		.default(false)
 		.notNull(),
 	image: text('image'),
 	role: text('role').notNull().default('user'),
-	banned: integer('email_verified', { mode: 'boolean' })
-		.default(false)
-		.notNull(),
+	banned: integer('banned', { mode: 'boolean' }).default(false).notNull(),
 	name: text('name').notNull(),
 	banReason: text('banReason'),
 	banExpires: integer('banExpires', { mode: 'timestamp_ms' }),
