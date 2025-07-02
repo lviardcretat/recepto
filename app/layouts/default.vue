@@ -12,35 +12,38 @@ defineShortcuts({
 		},
 	},
 });
-
+const { t } = useI18n();
 const open = ref(false);
-const links: NavigationMenuItem[][] = [
-	[
-		{
-			label: 'mainSlideOver.pages',
-			type: 'label',
-		},
-		{
-			label: 'mainSlideOver.recipes',
-			icon: 'material-symbols:fastfood',
-			to: '/recipes/all',
-		},
-		{
-			label: 'Recettes de saisons',
-			icon: 'i-lucide-sun-snow',
-			slot: 'shortcut',
-			onSelect: (_event: Event) => {
-				modal.open();
-			},
-		},
-		{
-			label: 'mainSlideOver.calendar',
-			icon: 'material-symbols:calendar-today',
-			disabled: true,
-		},
-	],
-	[],
-];
+const links = computed(
+	() =>
+		[
+			[
+				{
+					label: t('mainSlideOver.pages'),
+					type: 'label',
+				},
+				{
+					label: t('mainSlideOver.recipes'),
+					icon: 'material-symbols:fastfood',
+					to: '/recipes/all',
+				},
+				{
+					label: t('mainSlideOver.seasonalRecipes'),
+					icon: 'i-lucide-sun-snow',
+					slot: 'shortcut',
+					onSelect: (_event: Event) => {
+						modal.open();
+					},
+				},
+				{
+					label: t('mainSlideOver.calendar'),
+					icon: 'material-symbols:calendar-today',
+					disabled: true,
+				},
+			],
+			[],
+		] satisfies NavigationMenuItem[][],
+);
 </script>
 
 <template>
@@ -67,9 +70,6 @@ const links: NavigationMenuItem[][] = [
 					tooltip
 					popover
 					:ui="{linkLabel: 'inherit'}">
-					<template #item-label="{ item }">
-						{{ $t(item.label ?? "") }}
-					</template>
 					<template #shortcut-label="{ item }">
 						<div class="flex items-center justify-between">
 							{{ $t(item.label ?? "") }}

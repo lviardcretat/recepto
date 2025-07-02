@@ -7,18 +7,21 @@ definePageMeta({
 });
 
 const { t } = useI18n();
-const items = ref<TabsItem[]>([
-	{
-		label: t('auth.login.tab'),
-		icon: 'i-lucide-lock',
-		type: LoginType.LOGIN,
-	},
-	{
-		label: t('auth.register.tab'),
-		icon: 'i-lucide-user',
-		type: LoginType.REGISTER,
-	},
-]);
+const items = computed(
+	() =>
+		[
+			{
+				label: t('auth.login.tab'),
+				icon: 'i-lucide-lock',
+				type: LoginType.LOGIN,
+			},
+			{
+				label: t('auth.register.tab'),
+				icon: 'i-lucide-user',
+				type: LoginType.REGISTER,
+			},
+		] satisfies TabsItem[],
+);
 </script>
 
 <template>

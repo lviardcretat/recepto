@@ -69,16 +69,19 @@ const triggers = {
 		if (startMonth === endMonth) {
 			return t(startMonth);
 		}
-		return t('fromTo', { from: t(startMonth), to: t(endMonth) });
+		return t('fromTo', {
+			from: t(`months.${startMonth}`),
+			to: t(`months.${endMonth}`),
+		});
 	},
 };
 const tickFormat = (tick: number) => {
-	return t(Object.values(Months)[tick]);
+	return t(`months.${Object.values(Months)[tick]}`);
 };
 </script>
 
 <template>
-	<UModal title="Calendrier de saison" class="z-10 max-w-7xl">
+	<UModal :title="$t('seasonalChart.title')" class="z-10 max-w-7xl">
 		<template #body>
 			<div class="m-9 customTimeline">
 				<VisXYContainer :data="datasetsFetch" :height="500" :xDomain="[0,12]">

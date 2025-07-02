@@ -6,7 +6,7 @@ import { authClient } from '~/utils/auth-client';
 const { t } = useI18n();
 const toast = useToast();
 
-const fields = [
+const fields = computed(() => [
 	{
 		name: 'username',
 		type: 'text' as const,
@@ -21,10 +21,10 @@ const fields = [
 	},
 	{
 		name: 'remember',
-		label: 'Remember me',
+		label: t('auth.login.rememberMe'),
 		type: 'checkbox' as const,
 	},
-];
+]);
 
 const schema = z.object({
 	username: z.string().min(3, 'Trop court !'),

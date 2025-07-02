@@ -8,6 +8,7 @@
 		</template>
 
 		<template #right>
+			<TranslationSelectComponent />
 			<UColorModeButton />
 			<UButton
 				icon="i-simple-icons-github"

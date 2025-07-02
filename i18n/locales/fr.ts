@@ -3,21 +3,21 @@ export default defineI18nLocale(async () => {
 		add: 'Ajouter',
 		allergenFree: 'Aucun allergène',
 		allergens: 'Allergènes',
-		april: 'Avril',
-		august: 'Août',
 		category: 'Catégorie | Catégories',
 		categoriesCreated: 'Catégories créés',
 		createdBy: 'Créé par {username}',
 		dashboard: 'Dashboard',
-		december: 'Décembre',
 		delete: 'Supprimer',
 		dishTypes: 'Types de plat',
-		february: 'Février',
 		filter: 'Filtres',
 		filterBy: 'Filtrez par {filterName}...',
 		findRecipe: 'Cherchez une recette...',
 		formCreation: {
+			clear: 'Effacer les erreurs',
+			name: 'Nom',
+			submit: 'Créer',
 			recipe: {
+				cardTitle: 'Créer une nouvelle recette',
 				cookingTime: 'Temps de cuisson',
 				description: 'Description',
 				descriptionExample:
@@ -41,33 +41,27 @@ export default defineI18nLocale(async () => {
 				unit: 'Unité de mesure',
 			},
 			ingredient: {
+				cardTitle: 'Créer un nouvel ingrédient',
 				nameExample: 'Pomme',
 				foodType: "Catégorie d'aliment",
 				seasonalMonths: 'Période de consommation idéale',
 				selectByFoodTypeId: 'Sélectionnez une catégorie...',
 			},
 			category: {
+				cardTitle: 'Créer une nouvelle catégorie',
 				dishType: 'Type de repas',
 				selectByDishType: 'Sélectionnez un type de repas...',
 				nameExample: 'Lasagnes',
 			},
 			ustensil: {
+				cardTitle: 'Créer un nouvel ustensile',
 				nameExample: 'Marmite',
 			},
-			clear: 'Effacer les erreurs',
-			modalName_female: 'Créer une nouvelle {element}',
-			modalName_male: 'Créer un nouvel {element}',
-			name: 'Nom',
-			submit: 'Créer',
 		},
 		fromTo: 'De {from} à {to}',
 		ingredient: 'Ingrédient | Ingrédients',
-		january: 'Janvier',
-		july: 'Juillet',
-		june: 'Juin',
 		auth: {
 			username: "Nom d'utilisateur",
-			email: 'Adresse mail',
 			password: 'Mot de passe',
 			name: 'Nom complet',
 			login: {
@@ -76,6 +70,7 @@ export default defineI18nLocale(async () => {
 				description: 'Entrez vos informations pour vous connecter.',
 				button: 'Se connecter',
 				failedToastTitle: 'Erreur lors de la connexion',
+				rememberMe: 'Se souvenir de moi',
 			},
 			register: {
 				tab: 'Inscription',
@@ -85,6 +80,49 @@ export default defineI18nLocale(async () => {
 				failedToastTitle: "Erreur lors de l'inscription",
 			},
 		},
+		heroPage: {
+			title: 'Recepto',
+			description:
+				"Recepto est une collection collaborative de recettes et d'ingrédients pour un usage quotidien et accessible par tous.",
+			loginButton: 'Connectez-vous',
+			features: {
+				title: 'Une solution complète',
+				recipe: {
+					title: 'Bibliothèque de Recettes',
+					description:
+						"Stockez vos recettes préférées et explorez des variantes pour chaque plat. Plus jamais vous n'oublierez une recette.",
+				},
+				filter: {
+					title: 'Filtres Intelligents',
+					description:
+						'Trouvez la recette parfaite en utilisant une multitude de filtres pour affiner vos recherches selon vos besoins.',
+				},
+				planner: {
+					title: 'Planification Hebdomadaire',
+					description:
+						'Organisez vos repas pour toute la semaine et gérez votre liste de courses directement depuis un calendrier hebdomadaire.',
+				},
+				dashboard: {
+					title: 'Tableau de Bord',
+					description:
+						'Accédez à toutes vos recettes créées, consultez vos statistiques et partagez-les avec vos amis.',
+				},
+				privacy: {
+					title: 'Sécurité et vie privée',
+					description:
+						"Cuisinez en toute tranquillité, aucune de vos données n'est stockée ou partagée avec des tiers.",
+				},
+				collaborative: {
+					title: 'Collaboratif',
+					description:
+						'Notre site grandit avec vos recettes. Participez et faites partie de la communauté.',
+				},
+			},
+		},
+		errorPage: {
+			title: 'Page not found',
+			description: 'We are sorry but this page could not be found.',
+		},
 		mainSlideOver: {
 			pages: 'Pages',
 			search: 'Recherche',
@@ -93,13 +131,25 @@ export default defineI18nLocale(async () => {
 			settings: 'Paramètres',
 			calendar: 'Calendrier',
 			logout: 'Se déconnecter',
+			github: 'Github',
+			seasonalRecipes: 'Recettes de saison',
 		},
-		march: 'Mars',
-		may: 'Mai',
+		months: {
+			april: 'Avril',
+			february: 'Février',
+			january: 'Janvier',
+			july: 'Juillet',
+			june: 'Juin',
+			august: 'Août',
+			december: 'Décembre',
+			march: 'Mars',
+			may: 'Mai',
+			november: 'Novembre',
+			october: 'Octobre',
+			september: 'Septembre',
+		},
 		mealTypes: 'Types de repas',
 		menu: 'Menu',
-		november: 'Novembre',
-		october: 'Octobre',
 		plannedMeals: 'Repas planifiés',
 		preparationSteps: 'Étapes de préparation',
 		schedule: 'Planning',
@@ -112,7 +162,6 @@ export default defineI18nLocale(async () => {
 		search: 'Recherchez...',
 		seasonalRecipes: 'Recettes de saison',
 		selected: 'Aucun sélectionné | {n} sélectionné | {n} sélectionnés',
-		september: 'Septembre',
 		settings: 'Paramètres',
 		shoppingList: 'Liste de courses',
 		strokesPerformed: 'Courses effectués',

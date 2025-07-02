@@ -1,46 +1,46 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem } from '@nuxt/ui';
 
+const { t } = useI18n();
 const mainModalName: Ref<string> = ref('');
 const isModalOpen = ref(false);
-const items: DropdownMenuItem[] = [
-	{
-		label: 'ingredient',
-		modalNameTrad: 'modalName_male',
-		icon: 'fluent:food-carrot-24-filled',
-		onSelect: () => {
-			isModalOpen.value = true;
-			mainModalName.value = 'ingredient';
-		},
-	},
-	{
-		label: 'recipe',
-		modalNameTrad: 'modalName_female',
-		icon: 'material-symbols:fastfood',
-		onSelect: () => {
-			isModalOpen.value = true;
-			mainModalName.value = 'recipe';
-		},
-	},
-	{
-		label: 'category',
-		modalNameTrad: 'modalName_female',
-		icon: 'tabler:category-filled',
-		onSelect: () => {
-			isModalOpen.value = true;
-			mainModalName.value = 'category';
-		},
-	},
-	{
-		label: 'ustensil',
-		modalNameTrad: 'modalName_male',
-		icon: 'solar:ladle-bold',
-		onSelect: () => {
-			isModalOpen.value = true;
-			mainModalName.value = 'ustensil';
-		},
-	},
-];
+const items = computed(
+	() =>
+		[
+			{
+				label: t('ingredient'),
+				icon: 'fluent:food-carrot-24-filled',
+				onSelect: () => {
+					isModalOpen.value = true;
+					mainModalName.value = 'ingredient';
+				},
+			},
+			{
+				label: t('recipe'),
+				icon: 'material-symbols:fastfood',
+				onSelect: () => {
+					isModalOpen.value = true;
+					mainModalName.value = 'recipe';
+				},
+			},
+			{
+				label: t('category'),
+				icon: 'tabler:category-filled',
+				onSelect: () => {
+					isModalOpen.value = true;
+					mainModalName.value = 'category';
+				},
+			},
+			{
+				label: t('ustensil'),
+				icon: 'solar:ladle-bold',
+				onSelect: () => {
+					isModalOpen.value = true;
+					mainModalName.value = 'ustensil';
+				},
+			},
+		] satisfies DropdownMenuItem,
+);
 </script>
 
 <template>
@@ -51,9 +51,6 @@ const items: DropdownMenuItem[] = [
 			sideOffset: 16
     	}">
 		<UButton color="primary" size="xl" class="rounded-full"  icon="material-symbols:add" />
-		<template #item-label="{ item }">
-			{{ $t(item.label ?? "", 1) }}
-		</template>
 	</UDropdownMenu>
 	<UModal v-model:open="isModalOpen" :dismissible="false" :class="mainModalName === 'recipe' ? 'sm:max-w-6xl' : 'sm:max-w-4xl'">
 		<template #content>
@@ -61,7 +58,7 @@ const items: DropdownMenuItem[] = [
 				<template #header>
 					<div class="flex items-center justify-between">
 						<h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
-							{{ $t(`formCreation.${items.find((item: DropdownMenuItem) => item.label === mainModalName)?.modalNameTrad ?? ''}`, { element: $t(mainModalName).toLowerCase() }) }}
+							{{ $t(`formCreation.${mainModalName}.cardTitle`) }}
 						</h3>
 						<UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isModalOpen = false" />
 					</div>

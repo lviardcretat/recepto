@@ -16,7 +16,7 @@ const animateCounter = () => {
 		const progress = Math.min(elapsedTime / duration, 1);
 
 		for (let count of counts.value) {
-			count[0] = Math.floor(progress * count[1]);
+			count[0] = Math.floor(progress * (count[1] ?? 1));
 		}
 
 		if (progress < 1) {

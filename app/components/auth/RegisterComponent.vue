@@ -5,7 +5,7 @@ import { authClient } from '~/utils/auth-client';
 
 const { t } = useI18n();
 const toast = useToast();
-const fields = [
+const fields = computed(() => [
 	{
 		name: 'username',
 		type: 'text' as const,
@@ -18,7 +18,7 @@ const fields = [
 		type: 'password' as const,
 		required: true,
 	},
-];
+]);
 
 const schema = z.object({
 	username: z.string().min(3),
@@ -31,7 +31,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 	const response = await authClient.signUp.email({
 		username: payload.data.username,
 		name: payload.data.username,
-		email: `${payload.data.username}@email.com`,
+		email: `recepto-prod-${payload.data.username}@email.com`,
 		password: payload.data.password,
 	});
 
@@ -51,13 +51,12 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 <template>
 	<div class="w-full mt-10">
 		<UAuthForm
-		:schema="schema"
-		:title="$t('auth.register.title')"
-		:description="$t('auth.register.description')"
-		icon="i-lucide-user"
-		:fields="fields"
-		@submit="onSubmit"
-		:submit="{ label: $t('auth.register.button') }"
-		/>
+			:schema="schema"
+			:title="$t('auth.register.title')"
+			:description="$t('auth.register.description')"
+			icon="i-lucide-user"
+			:fields="fields"
+			@submit="onSubmit"
+			:submit="{ label: $t('auth.register.button') }"/>
 	</div>
 </template>
