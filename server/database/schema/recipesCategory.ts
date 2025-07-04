@@ -7,30 +7,30 @@ import { user } from './user';
 import { mealTypeToRecipeCategory } from './mealTypeToRecipeCategory';
 
 export const recipesCategory = sqliteTable('recipesCategory', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
-	name: text('name').notNull(),
-	dishTypeId: integer('dishTypeId')
-		.notNull()
-		.references(() => dishType.id, { onDelete: 'cascade' }),
-	createdById: integer('createdById')
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	selectMenuType: text('selectMenuType'),
-	...timestamps,
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  dishTypeId: integer('dishTypeId')
+    .notNull()
+    .references(() => dishType.id, { onDelete: 'cascade' }),
+  createdById: integer('createdById')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  selectMenuType: text('selectMenuType'),
+  ...timestamps,
 });
 
 export const recipesCategoriesRelations = relations(
-	recipesCategory,
-	({ one, many }) => ({
-		dishType: one(dishType, {
-			fields: [recipesCategory.dishTypeId],
-			references: [dishType.id],
-		}),
-		createdBy: one(user, {
-			fields: [recipesCategory.createdById],
-			references: [user.id],
-		}),
-		mealTypeToRecipeCategories: many(mealTypeToRecipeCategory),
-		recipes: many(recipe),
-	}),
+  recipesCategory,
+  ({ one, many }) => ({
+    dishType: one(dishType, {
+      fields: [recipesCategory.dishTypeId],
+      references: [dishType.id],
+    }),
+    createdBy: one(user, {
+      fields: [recipesCategory.createdById],
+      references: [user.id],
+    }),
+    mealTypeToRecipeCategories: many(mealTypeToRecipeCategory),
+    recipes: many(recipe),
+  }),
 );

@@ -5,20 +5,20 @@ import { recipe } from './recipe';
 import { user } from './user';
 
 export const season = sqliteTable('season', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
-	name: text('name').notNull(),
-	start: integer('start').notNull(),
-	end: integer('end').notNull(),
-	createdById: integer('createdById')
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	...timestamps,
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  start: integer('start').notNull(),
+  end: integer('end').notNull(),
+  createdById: integer('createdById')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  ...timestamps,
 });
 
 export const seasonRelations = relations(season, ({ one, many }) => ({
-	createdBy: one(user, {
-		fields: [season.createdById],
-		references: [user.id],
-	}),
-	recipes: many(recipe),
+  createdBy: one(user, {
+    fields: [season.createdById],
+    references: [user.id],
+  }),
+  recipes: many(recipe),
 }));

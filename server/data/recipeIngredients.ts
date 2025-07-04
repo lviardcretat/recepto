@@ -1,43 +1,43 @@
 import type {
-	RecipeIngredient,
-	RecipeIngredientInsert,
+  RecipeIngredient,
+  RecipeIngredientInsert,
 } from '../utils/drizzleUtils';
 
 export async function getRecipeIngredients(): Promise<RecipeIngredient[]> {
-	const recipeIngredients: RecipeIngredient[] = await useDrizzle()
-		.select()
-		.from(tables.recipeIngredient)
-		.all();
-	return recipeIngredients;
+  const recipeIngredients: RecipeIngredient[] = await useDrizzle()
+    .select()
+    .from(tables.recipeIngredient)
+    .all();
+  return recipeIngredients;
 }
 
 export async function postRecipeIngredient(
-	ingredientId: number,
-	quantity: number,
-	unitId: number,
-	recipeId: number,
+  ingredientId: number,
+  quantity: number,
+  unitId: number,
+  recipeId: number,
 ): Promise<RecipeIngredient> {
-	const recipeIngredientInsert: RecipeIngredientInsert = {
-		ingredientId: ingredientId,
-		quantity: quantity,
-		unitId: unitId,
-		recipeId: recipeId,
-	};
-	const recipeIngredient: RecipeIngredient = await useDrizzle()
-		.insert(tables.recipeIngredient)
-		.values(recipeIngredientInsert)
-		.returning()
-		.get();
-	return recipeIngredient;
+  const recipeIngredientInsert: RecipeIngredientInsert = {
+    ingredientId: ingredientId,
+    quantity: quantity,
+    unitId: unitId,
+    recipeId: recipeId,
+  };
+  const recipeIngredient: RecipeIngredient = await useDrizzle()
+    .insert(tables.recipeIngredient)
+    .values(recipeIngredientInsert)
+    .returning()
+    .get();
+  return recipeIngredient;
 }
 
 export async function getRecipeIngredient(
-	id: number,
+  id: number,
 ): Promise<RecipeIngredient | undefined> {
-	const recipeIngredient: RecipeIngredient | undefined = await useDrizzle()
-		.select()
-		.from(tables.recipeIngredient)
-		.where(eq(tables.recipeIngredient.id, id))
-		.get();
-	return recipeIngredient;
+  const recipeIngredient: RecipeIngredient | undefined = await useDrizzle()
+    .select()
+    .from(tables.recipeIngredient)
+    .where(eq(tables.recipeIngredient.id, id))
+    .get();
+  return recipeIngredient;
 }

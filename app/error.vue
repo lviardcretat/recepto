@@ -3,19 +3,19 @@ import type { NuxtError } from '#app';
 
 const { t } = useI18n();
 useSeoMeta({
-	title: t('title'),
-	description: t('description'),
+  title: t('title'),
+  description: t('description'),
 });
 
 defineProps<{
-	error: NuxtError;
+  error: NuxtError;
 }>();
 </script>
 
 <template>
-	<UApp>
-		<UHeader />
-		<UError :error="error" />
-		<UFooter />
-	</UApp>
+  <UApp>
+    <UHeader />
+    <UError :error="error" />
+    <UFooter />
+  </UApp>
 </template>

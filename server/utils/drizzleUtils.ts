@@ -1,4 +1,3 @@
-export { sql, eq, and, or } from 'drizzle-orm';
 import * as userSchema from '../database/schema/user';
 import * as foodTypeSchema from '../database/schema/foodType';
 import * as ingredientSchema from '../database/schema/ingredient';
@@ -18,34 +17,36 @@ import * as recipeToUstensilSchema from '../database/schema/recipeToUstensil';
 import 'dotenv/config';
 /* Uncomment this for local bdd
 import { drizzle } from 'drizzle-orm/libsql'; */
-import { drizzle } from 'drizzle-orm/d1'; // Comment this for local bdd
+import { drizzle } from 'drizzle-orm/d1';
+
+export { sql, eq, and, or } from 'drizzle-orm'; // Comment this for local bdd
 
 export const schema = {
-	...userSchema,
-	...foodTypeSchema,
-	...ingredientSchema,
-	...recipesCategorySchema,
-	...recipeSchema,
-	...recipeIngredientSchema,
-	...sequenceSchema,
-	...ustensilSchema,
-	...seasonSchema,
-	...unitSchema,
-	...mealTypeSchema,
-	...dishTypeSchema,
-	...allergenSchema,
-	...allergenToRecipeSchema,
-	...mealTypeToRecipeCategorySchema,
-	...recipeToUstensilSchema,
+  ...userSchema,
+  ...foodTypeSchema,
+  ...ingredientSchema,
+  ...recipesCategorySchema,
+  ...recipeSchema,
+  ...recipeIngredientSchema,
+  ...sequenceSchema,
+  ...ustensilSchema,
+  ...seasonSchema,
+  ...unitSchema,
+  ...mealTypeSchema,
+  ...dishTypeSchema,
+  ...allergenSchema,
+  ...allergenToRecipeSchema,
+  ...mealTypeToRecipeCategorySchema,
+  ...recipeToUstensilSchema,
 };
 
 export const tables = schema;
 
 export function useDrizzle() {
-	// Comment this for local bdd
-	return drizzle(hubDatabase(), { schema, casing: 'snake_case' });
-	/* Uncomment this for local bdd
-	return drizzle(process.env.DB_FILE_NAME!, { schema, casing: 'snake_case' }); */
+  // Comment this for local bdd
+  return drizzle(hubDatabase(), { schema, casing: 'snake_case' });
+  /* Uncomment this for local bdd
+  return drizzle(process.env.DB_FILE_NAME!, { schema, casing: 'snake_case' }); */
 }
 
 export type User = typeof schema.user.$inferSelect;
@@ -64,8 +65,7 @@ export type Recipe = typeof schema.recipe.$inferSelect;
 export type RecipeInsert = typeof schema.recipe.$inferInsert;
 
 export type RecipeIngredient = typeof schema.recipeIngredient.$inferSelect;
-export type RecipeIngredientInsert =
-	typeof schema.recipeIngredient.$inferInsert;
+export type RecipeIngredientInsert = typeof schema.recipeIngredient.$inferInsert;
 
 export type Sequence = typeof schema.sequence.$inferSelect;
 export type SequenceInsert = typeof schema.sequence.$inferInsert;
@@ -89,14 +89,10 @@ export type Allergen = typeof schema.allergen.$inferSelect;
 export type AllergenInsert = typeof schema.allergen.$inferInsert;
 
 export type AllergenToRecipe = typeof schema.allergenToRecipe.$inferSelect;
-export type AllergenToRecipeInsert =
-	typeof schema.allergenToRecipe.$inferInsert;
+export type AllergenToRecipeInsert = typeof schema.allergenToRecipe.$inferInsert;
 
-export type MealTypeToRecipeCategory =
-	typeof schema.mealTypeToRecipeCategory.$inferSelect;
-export type MealTypeToRecipeCategoryInsert =
-	typeof schema.mealTypeToRecipeCategory.$inferInsert;
+export type MealTypeToRecipeCategory = typeof schema.mealTypeToRecipeCategory.$inferSelect;
+export type MealTypeToRecipeCategoryInsert = typeof schema.mealTypeToRecipeCategory.$inferInsert;
 
 export type RecipeToUstensil = typeof schema.recipeToUstensil.$inferSelect;
-export type RecipeToUstensilInsert =
-	typeof schema.recipeToUstensil.$inferInsert;
+export type RecipeToUstensilInsert = typeof schema.recipeToUstensil.$inferInsert;

@@ -6,9 +6,9 @@ import type { FilterIconsGridStates } from '~/types/filter';
  * @returns The list of IconsGrid filters under the states form.
  */
 export const useFilterIconsGridStates = () =>
-	useState<FilterIconsGridStates>('filterIconsGridStates', () => ({
-		allergens: [],
-	}));
+  useState<FilterIconsGridStates>('filterIconsGridStates', () => ({
+    allergens: [],
+  }));
 
 /**
  * Update the corresponding state according to the filter modified by the user.
@@ -17,28 +17,27 @@ export const useFilterIconsGridStates = () =>
  * @param dataType The type of the filter list modified.
  */
 export const useUpdateFilterIconsGrid = async (
-	id: number,
-	active: boolean,
-	dataType: FilterIconsGridStatesType,
+  id: number,
+  active: boolean,
+  dataType: FilterIconsGridStatesType,
 ): Promise<void> => {
-	if (id <= 0) {
-		return;
-	}
-	const iconsGridStates = useFilterIconsGridStates();
-	const itemIndex: number = iconsGridStates.value[dataType].findIndex(
-		(item) => item.id === id,
-	);
-	const iconsGridItem = iconsGridStates.value[dataType][itemIndex];
+  if (id <= 0) {
+    return;
+  }
+  const iconsGridStates = useFilterIconsGridStates();
+  const itemIndex: number = iconsGridStates.value[dataType].findIndex(
+    item => item.id === id,
+  );
+  const iconsGridItem = iconsGridStates.value[dataType][itemIndex];
 
-	if (iconsGridStates.value[dataType].length === 0 || !iconsGridItem) {
-		return;
-	}
+  if (iconsGridStates.value[dataType].length === 0 || !iconsGridItem) {
+    return;
+  }
 
-	if (active) {
-		iconsGridStates.value[dataType][itemIndex] =
-			FilterIconsGridUtils.onItemSelected(iconsGridItem);
-	} else {
-		iconsGridStates.value[dataType][itemIndex] =
-			FilterIconsGridUtils.onItemUnselected(iconsGridItem);
-	}
+  if (active) {
+    iconsGridStates.value[dataType][itemIndex] = FilterIconsGridUtils.onItemSelected(iconsGridItem);
+  }
+  else {
+    iconsGridStates.value[dataType][itemIndex] = FilterIconsGridUtils.onItemUnselected(iconsGridItem);
+  }
 };

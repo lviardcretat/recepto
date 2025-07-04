@@ -3,8 +3,8 @@
  * @enum {string}
  */
 export enum FilterResultStatesType {
-	RECIPE = 'recipes',
-	RECIPES_CATEGORIES = 'recipesCategories',
+  RECIPE = 'recipes',
+  RECIPES_CATEGORIES = 'recipesCategories',
 }
 
 /**
@@ -12,10 +12,10 @@ export enum FilterResultStatesType {
  * @enum {string}
  */
 export enum FilterSelectMenuStatesType {
-	USTENSIL = 'ustensils',
-	INGREDIENT = 'ingredients',
-	MEAL_TYPE = 'mealTypes',
-	DISH_TYPE = 'dishTypes',
+  USTENSIL = 'ustensils',
+  INGREDIENT = 'ingredients',
+  MEAL_TYPE = 'mealTypes',
+  DISH_TYPE = 'dishTypes',
 }
 
 /**
@@ -23,7 +23,7 @@ export enum FilterSelectMenuStatesType {
  * @enum {string}
  */
 export enum FilterIconsGridStatesType {
-	ALLERGEN = 'allergens',
+  ALLERGEN = 'allergens',
 }
 
 /**
@@ -31,9 +31,9 @@ export enum FilterIconsGridStatesType {
  * @enum {string}
  */
 export enum FilterAccordionsSlots {
-	SELECT = 'select',
-	SWITCH = 'switch',
-	GRID = 'grid',
+  SELECT = 'select',
+  SWITCH = 'switch',
+  GRID = 'grid',
 }
 
 /**
@@ -41,10 +41,10 @@ export enum FilterAccordionsSlots {
  * @enum {string}
  */
 export enum FilterAccordionsDataType {
-	USTENSIL = 'ustensils',
-	INGREDIENT = 'ingredients',
-	SEASON = 'seasons',
-	ALLERGEN = 'allergens',
-	MEAL_TYPE = 'mealTypes',
-	DISH_TYPE = 'dishTypes',
+  USTENSIL = 'ustensils',
+  INGREDIENT = 'ingredients',
+  SEASON = 'seasons',
+  ALLERGEN = 'allergens',
+  MEAL_TYPE = 'mealTypes',
+  DISH_TYPE = 'dishTypes',
 }

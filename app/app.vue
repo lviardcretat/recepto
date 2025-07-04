@@ -7,21 +7,25 @@ const lang = computed(() => locales[locale.value].code);
 const dir = computed(() => locales[locale.value].dir);
 
 useHead({
-	htmlAttrs: {
-		lang,
-		dir,
-	},
+  htmlAttrs: {
+    lang,
+    dir,
+  },
 });
 </script>
 
 <template>
-	<UApp :toaster="{ position: 'bottom-left' }" :tooltip="{ disableHoverableContent: true }" :locale="locales[locale]">
-		<NuxtLoadingIndicator />
-		<UMain>
-			<NuxtLayout>
-					<SeasonalChartComponent />
-					<NuxtPage />
-			</NuxtLayout>
-		</UMain>
-	</UApp>
+  <UApp
+    :toaster="{ position: 'bottom-left' }"
+    :tooltip="{ disableHoverableContent: true }"
+    :locale="locales[locale]"
+  >
+    <NuxtLoadingIndicator />
+    <UMain>
+      <NuxtLayout>
+        <SeasonalChartComponent />
+        <NuxtPage />
+      </NuxtLayout>
+    </UMain>
+  </UApp>
 </template>

@@ -6,11 +6,11 @@
  * @returns An array of numbers
  */
 export function QueryToNumber<T>(query: T): number[] {
-	return Array.isArray(query)
-		? query.map(Number)
-		: query
-			? [Number(query)]
-			: [];
+  return Array.isArray(query)
+    ? query.map(Number)
+    : query
+      ? [Number(query)]
+      : [];
 }
 
 /**
@@ -19,13 +19,13 @@ export function QueryToNumber<T>(query: T): number[] {
  * @returns the day based on the today's date
  */
 export function dateIntoDayNumber(): number {
-	const date = new Date();
-	return (
-		(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
-			Date.UTC(date.getFullYear(), 0, 0)) /
-		24 /
-		60 /
-		60 /
-		1000
-	);
+  const date = new Date();
+  return (
+    (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+      - Date.UTC(date.getFullYear(), 0, 0))
+    / 24
+    / 60
+    / 60
+    / 1000
+  );
 }

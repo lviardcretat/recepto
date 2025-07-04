@@ -10,42 +10,42 @@ import { recipeToUstensil } from './recipeToUstensil';
 import { allergenToRecipe } from './allergenToRecipe';
 
 export const recipe = sqliteTable('recipe', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
-	name: text('name').notNull(),
-	peopleNumber: integer('peopleNumber').notNull(),
-	cookingTime: real('cookingTime'),
-	preparationTime: real('preparationTime'),
-	restTime: real('restTime'),
-	description: text('description'),
-	tips: text('tips'),
-	seasonId: integer('seasonId')
-		.notNull()
-		.references(() => season.id, { onDelete: 'cascade' }),
-	recipesCategoryId: integer('recipesCategoryId')
-		.notNull()
-		.references(() => recipesCategory.id, { onDelete: 'cascade' }),
-	createdById: integer('createdById')
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	selectMenuType: text('selectMenuType'),
-	...timestamps,
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  peopleNumber: integer('peopleNumber').notNull(),
+  cookingTime: real('cookingTime'),
+  preparationTime: real('preparationTime'),
+  restTime: real('restTime'),
+  description: text('description'),
+  tips: text('tips'),
+  seasonId: integer('seasonId')
+    .notNull()
+    .references(() => season.id, { onDelete: 'cascade' }),
+  recipesCategoryId: integer('recipesCategoryId')
+    .notNull()
+    .references(() => recipesCategory.id, { onDelete: 'cascade' }),
+  createdById: integer('createdById')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  selectMenuType: text('selectMenuType'),
+  ...timestamps,
 });
 
 export const recipeRelations = relations(recipe, ({ one, many }) => ({
-	season: one(season, {
-		fields: [recipe.seasonId],
-		references: [season.id],
-	}),
-	recipesCategory: one(recipesCategory, {
-		fields: [recipe.recipesCategoryId],
-		references: [recipesCategory.id],
-	}),
-	createdBy: one(user, {
-		fields: [recipe.createdById],
-		references: [user.id],
-	}),
-	ustensils: many(recipeToUstensil),
-	sequences: many(sequence),
-	allergens: many(allergenToRecipe),
-	ingredients: many(recipeIngredient),
+  season: one(season, {
+    fields: [recipe.seasonId],
+    references: [season.id],
+  }),
+  recipesCategory: one(recipesCategory, {
+    fields: [recipe.recipesCategoryId],
+    references: [recipesCategory.id],
+  }),
+  createdBy: one(user, {
+    fields: [recipe.createdById],
+    references: [user.id],
+  }),
+  ustensils: many(recipeToUstensil),
+  sequences: many(sequence),
+  allergens: many(allergenToRecipe),
+  ingredients: many(recipeIngredient),
 }));

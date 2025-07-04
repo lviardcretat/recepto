@@ -5,6 +5,6 @@ import type { FilterSwitchStates } from '~/types/filter';
  * @returns The list of Switch filters under the states form.
  */
 export const useFilterSwitchStates = () =>
-	useState<FilterSwitchStates>('filterSwitchStates', () => ({
-		seasonalRecipes: false,
-	}));
+  useState<FilterSwitchStates>('filterSwitchStates', () => ({
+    seasonalRecipes: false,
+  }));

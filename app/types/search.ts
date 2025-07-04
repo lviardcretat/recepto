@@ -3,7 +3,7 @@
  * @type RecipeDetail
  */
 export type RecipeSearched = {
-	id: number;
-	name: string;
-	recipes: { id: number; name: string }[];
+  id: number;
+  name: string;
+  recipes: { id: number; name: string }[];
 };

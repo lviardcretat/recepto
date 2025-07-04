@@ -14,32 +14,32 @@ import { unit } from './unit';
 import { ustensil } from './ustensil';
 
 export const user = sqliteTable('user', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
-	email: text('email').notNull().unique(),
-	emailVerified: integer('emailVerified', { mode: 'boolean' })
-		.default(false)
-		.notNull(),
-	image: text('image'),
-	role: text('role').notNull().default('user'),
-	banned: integer('banned', { mode: 'boolean' }).default(false).notNull(),
-	name: text('name').notNull(),
-	banReason: text('banReason'),
-	banExpires: integer('banExpires', { mode: 'timestamp_ms' }),
-	username: text('username').notNull(),
-	displayUsername: text('displayUsername').notNull(),
-	...timestamps,
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  email: text('email').notNull().unique(),
+  emailVerified: integer('emailVerified', { mode: 'boolean' })
+    .default(false)
+    .notNull(),
+  image: text('image'),
+  role: text('role').notNull().default('user'),
+  banned: integer('banned', { mode: 'boolean' }).default(false).notNull(),
+  name: text('name').notNull(),
+  banReason: text('banReason'),
+  banExpires: integer('banExpires', { mode: 'timestamp_ms' }),
+  username: text('username').notNull(),
+  displayUsername: text('displayUsername').notNull(),
+  ...timestamps,
 });
 
 export const userRelations = relations(user, ({ many }) => ({
-	recipes: many(recipe),
-	seasons: many(season),
-	sequences: many(sequence),
-	ustensils: many(ustensil),
-	ingredients: many(ingredient),
-	foodTypes: many(foodType),
-	allergens: many(allergen),
-	units: many(unit),
-	recipesCategories: many(recipesCategory),
-	mealTypes: many(mealType),
-	dishTypes: many(dishType),
+  recipes: many(recipe),
+  seasons: many(season),
+  sequences: many(sequence),
+  ustensils: many(ustensil),
+  ingredients: many(ingredient),
+  foodTypes: many(foodType),
+  allergens: many(allergen),
+  units: many(unit),
+  recipesCategories: many(recipesCategory),
+  mealTypes: many(mealType),
+  dishTypes: many(dishType),
 }));

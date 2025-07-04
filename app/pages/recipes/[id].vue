@@ -2,13 +2,13 @@
 </script>
 
 <template>
-	<SelectionAlternativeRecipesComponent/>
+  <SelectionAlternativeRecipesComponent />
 </template>
 
 <style lang="scss">
-	.recipe-content {
-		width: 100vw;
-		height: 100vh;
-		display: flex;
-	}
+  .recipe-content {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+  }
 </style>

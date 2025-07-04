@@ -1,10 +1,10 @@
 import mitt from 'mitt';
 
 type ApplicationEvents = {
-	'ustensil:created': boolean;
-	'ingredient:created': boolean;
-	'recipesCategory:created': boolean;
-	'recipe:created': boolean;
+  'ustensil:created': boolean;
+  'ingredient:created': boolean;
+  'recipesCategory:created': boolean;
+  'recipe:created': boolean;
 };
 
 const emitter = mitt<ApplicationEvents>();
