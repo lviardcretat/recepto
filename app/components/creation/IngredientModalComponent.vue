@@ -1,15 +1,13 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
-import {
-	ingredientCreationSchema,
-	type IngredientCreation,
-} from '~/schemas/creation/ingredient';
-import { Months } from '~/enums/data';
+import type { FormSubmitEvent } from "#ui/types";
+import { ingredientCreationSchema } from "~/schemas/creation/ingredient";
+import type { IngredientCreation } from "~/schemas/creation/ingredient";
+import { Months } from "~/enums/data";
 
 const props = defineProps<{
 	modalTitle: string;
 }>();
-const emit = defineEmits(['closeModal']);
+const emit = defineEmits(["closeModal"]);
 const toast = useToast();
 const schema = ingredientCreationSchema;
 const form = ref();
@@ -24,8 +22,8 @@ const state = ref<{
 });
 
 const flatSeasonalMonths = ref<number[]>([]);
-const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
-	method: 'GET',
+const { data: foodTypes } = await useFetch("/api/foodTypes/all", {
+	method: "GET",
 	watch: false,
 	default: () => null,
 	onResponseError({ response }) {
@@ -40,14 +38,14 @@ const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
 });
 
 async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
-	await $fetch('/api/ingredients', {
-		method: 'POST',
+	await $fetch("/api/ingredients", {
+		method: "POST",
 		watch: false,
 		body: event.data,
 		default: () => null,
 		onResponse() {
-			useEvent('ingredient:created', true);
-			emit('closeModal');
+			useEvent("ingredient:created", true);
+			emit("closeModal");
 			toast.add({
 				title: `L'ingrédient ${event.data.name} a bien été ajouté !`,
 			});
@@ -80,7 +78,7 @@ function mapFlatMonthsToSeasonalMonths(): void {
 	flatSeasonalMonths.value = flatSeasonalMonths.value.sort((n1, n2) => n1 - n2);
 	let startMonthId: number = flatSeasonalMonths.value[0] ?? 0;
 	let endMonthId = 0;
-	let mappedMonths: number[][] = [];
+	const mappedMonths: number[][] = [];
 	for (const [index, monthId] of flatSeasonalMonths.value.entries()) {
 		if (!flatSeasonalMonths.value.includes(monthId + 1)) {
 			endMonthId = monthId;
@@ -94,7 +92,7 @@ function mapFlatMonthsToSeasonalMonths(): void {
 
 <template>
 	<UForm ref="form" :schema="schema" :state="state" class="max-h-full" @submit="onSubmit">
-		<UCard :ui="{root: 'max-h-full flex flex-col', body: 'overflow-auto'}">
+		<UCard :ui="{root: 'max-h-full flex flex-col', body: 'overflow-auto grow'}">
 			<template #header>
 				<div class="flex items-center justify-between">
 					<h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
@@ -108,14 +106,16 @@ function mapFlatMonthsToSeasonalMonths(): void {
 					<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.ingredient.nameExample')" class="w-full"/>
 				</UFormField>
 				<UFormField :label="$t('formCreation.ingredient.foodType')" name="foodTypeId">
-					<USelectMenu v-model="state.foodTypeId" value-key="id" :items="foodTypes ?? []"
+					<USelectMenu
+v-model="state.foodTypeId" value-key="id" :items="foodTypes ?? []"
 						:searchable-placeholder="$t('search')" class="w-full"
 						:placeholder="$t('formCreation.ingredient.selectByFoodTypeId')"
-						option-attribute="name" value-attribute="id" @update:modelValue="state.foodTypeId = Number($event)"/>
+						option-attribute="name" value-attribute="id" @update:model-value="state.foodTypeId = Number($event)"/>
 				</UFormField>
 				<UFormField :label="$t('formCreation.ingredient.seasonalMonths')" name="seasonalMonths" :hint="$t('formCreation.recipe.optional')">
 					<div class="flex justify-evenly w-full">
-						<UButton v-for="(month, index) of Object.values(Months)" :key="month"
+						<UButton
+v-for="(month, index) of Object.values(Months)" :key="month"
 							:variant="flatSeasonalMonths.includes(index) ? 'solid' : 'ghost'"
 							@click="toggleMonth(index)">
 							{{ $t(month) }}

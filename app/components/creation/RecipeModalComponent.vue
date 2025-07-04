@@ -161,7 +161,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
 
 <template>
 	<UForm ref="form" :schema="recipeCreation" :state="state" class="max-h-full" @submit="onSubmit">
-		<UCard :ui="{root: 'max-h-full flex flex-col', body: 'overflow-auto'}">
+		<UCard :ui="{root: 'max-h-full flex flex-col', body: 'overflow-auto grow'}">
 			<template #header>
 				<div class="flex items-center justify-between">
 					<h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
