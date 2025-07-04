@@ -216,7 +216,6 @@ export async function getRecipesFiltered(
 		await createAllergenSubQuery(allergensIds, recipeCategoryId),
 		await createSeasonalRecipeSubQuery(seasonalRecipes, recipeCategoryId),
 	];
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const filters: any[] = [];
 
 	for (const subQuery of subQueries) {

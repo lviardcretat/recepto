@@ -45,7 +45,6 @@ export function useDrizzle() {
 	// Comment this for local bdd
 	return drizzle(hubDatabase(), { schema, casing: 'snake_case' });
 	/* Uncomment this for local bdd
-	// biome-ignore lint/style/noNonNullAssertion: <explanation>
 	return drizzle(process.env.DB_FILE_NAME!, { schema, casing: 'snake_case' }); */
 }
 

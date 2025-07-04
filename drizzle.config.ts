@@ -7,7 +7,6 @@ export default defineConfig({
 	casing: 'snake_case',
 	/* Uncomment it for local bdd
 	dbCredentials: {
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		url: process.env.DB_FILE_NAME!,
 	},*/
 });

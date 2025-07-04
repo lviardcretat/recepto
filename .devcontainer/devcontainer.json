@@ -1,14 +1,15 @@
 {
 	// Wiki : https://containers.dev/implementors/json_reference/
 	"name": "Recepto",
-	"forwardPorts": [
-		3000
-	],
+	"forwardPorts": [3000],
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": ".."
 	},
-	"runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/devcontainer.env"],
+	"runArgs": [
+		"--env-file",
+		"${localWorkspaceFolder}/.devcontainer/devcontainer.env"
+	],
 	//"mounts": ["type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,readonly"],
 	"customizations": {
 		"vscode": {
@@ -18,44 +19,31 @@
 				"editor.gotoLocation.multipleDefinitions": "goto",
 				"terminal.integrated.defaultProfile.linux": "JavaScript Debug Terminal",
 				"terminal.integrated.defaultProfile.windows": "JavaScript Debug Terminal",
-				"[vue]": {
-					"editor.defaultFormatter": "biomejs.biome"
-				},
-				"editor.defaultFormatter": "biomejs.biome",
-				"editor.formatOnSave": true
+				"i18n-ally.dirStructure": "dir",
+				"i18n-ally.enabledFrameworks": ["vue"],
+				"editor.formatOnSave": false,
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				}
 			},
 			"extensions": [
-				"akamud.vscode-theme-onedark",
 				"antfu.goto-alias",
-				"biomejs.biome",
 				"bradlc.vscode-tailwindcss",
 				"continue.continue",
-				"eamodio.gitlens",
-				"ecmel.vscode-html-css",
 				"editorconfig.editorconfig",
-				"formulahendry.auto-close-tag",
-				"formulahendry.auto-rename-tag",
 				"imgildev.vscode-drizzle-snippets",
 				"jacano.vscode-pnpm",
-				"jdinhlife.gruvbox",
-				"joshbolduc.commitlint",
 				"lokalise.i18n-ally",
 				"mikestead.dotenv",
 				"ms-azuretools.vscode-docker",
-				"ms-python.debugpy",
-				"ms-python.python",
-				"ms-python.vscode-pylance",
 				"ms-vscode-remote.remote-containers",
 				"ms-vscode-remote.remote-ssh",
 				"ms-vscode-remote.remote-ssh-edit",
 				"ms-vscode.remote-explorer",
-				"nicholashsiang.vscode-pinia-snippets",
 				"nuxt.mdc",
 				"nuxtr.nuxt-vscode-extentions",
 				"nuxtr.nuxtr-vscode",
-				"pkief.material-icon-theme",
 				"rphlmr.vscode-drizzle-orm",
-				"sainnhe.gruvbox-material",
 				"vue.volar"
 			]
 		}
