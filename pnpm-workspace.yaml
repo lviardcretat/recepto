@@ -1,12 +1,10 @@
 onlyBuiltDependencies:
-  - '@biomejs/biome'
   - '@parcel/watcher'
   - '@prisma/client'
   - '@prisma/engines'
   - '@tailwindcss/oxide'
   - better-sqlite3
   - esbuild
-  - lefthook
   - maplibre-gl
   - prisma
   - puppeteer
