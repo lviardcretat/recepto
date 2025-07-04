@@ -18,11 +18,6 @@ const switchStates = useFilterSwitchStates();
 const resultsStates = useFilterResults();
 const selectedItemsStates = useFilterSelectedItemsStates();
 const route = useRoute();
-const itemsSelectedNumber = ref<number>(
-	selectMenuStates.value[props.dataType].filter(
-		(item) => item.notWanted || item.wanted,
-	).length,
-);
 
 function getButtonsColor(
 	selectMenuItem: SelectMenuItem & CustomSelectMenuItem,
@@ -72,8 +67,8 @@ async function fetchFilteredItems() {
 			:searchable-placeholder="$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })"
 			:ui="{ itemTrailing: 'hidden' }">
 			<template #default>
-				<span v-if="selectMenuStates[props.dataType].length">{{
-					$t('selected', { count: itemsSelectedNumber }, itemsSelectedNumber)
+				<span v-if="selectedItemsStates[props.dataType].length">{{
+					$t('selected', { count: selectedItemsStates[dataType].length }, selectedItemsStates[dataType].length)
 				}}</span>
      			<span v-else>{{$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })}}</span>
 			</template>
@@ -81,8 +76,7 @@ async function fetchFilteredItems() {
 				<UButton
 					:padded="false" variant="link" icon="material-symbols:circle-outline"
 					:class="getButtonsColor(item, true)" @click="
-						useUpdateFilterSelectMenu(item.id, true, props.dataType);
-						useUpdateFilterSelectedMenu(item, true, props.dataType)
+						useUpdateFilterSelectMenu(item, true, props.dataType);
 						fetchFilteredItems();
 					"
 					:ui="{
@@ -91,8 +85,7 @@ async function fetchFilteredItems() {
 				<UButton
 					:padded="false" variant="link" icon="radix-icons:value-none"
 					:class="getButtonsColor(item, false)" @click="
-						useUpdateFilterSelectMenu(item.id, false, props.dataType);
-						useUpdateFilterSelectedMenu(item, false, props.dataType)
+						useUpdateFilterSelectMenu(item, false, props.dataType);
 						fetchFilteredItems();
 					"
 					:ui="{

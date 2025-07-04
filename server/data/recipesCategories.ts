@@ -168,7 +168,6 @@ export async function getRecipesCategoriesFiltered(
 			.groupBy(tables.recipesCategory.id)
 			.all();
 	}
-	console.log('recipesCategories : ' + recipesCategories);
 	return recipesCategories;
 }
 

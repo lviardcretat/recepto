@@ -148,6 +148,9 @@ export default defineI18nLocale(async () => {
 			october: 'Octobre',
 			september: 'Septembre',
 		},
+		seasonalChart: {
+			title: 'Calendrier de saison',
+		},
 		mealTypes: 'Types de repas',
 		menu: 'Menu',
 		plannedMeals: 'Repas planifiés',

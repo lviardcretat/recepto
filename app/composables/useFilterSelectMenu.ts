@@ -1,5 +1,5 @@
 import type { SelectMenuItem } from '@nuxt/ui';
-import { FilterSelectMenuStatesType } from '~/enums/filter';
+import type { FilterSelectMenuStatesType } from '~/enums/filter';
 import type {
 	FilterSelectMenuStates,
 	CustomSelectMenuItem,
@@ -36,41 +36,6 @@ export const useFilterSelectedItemsStates = () =>
  * @param dataType The type of the filter list modified.
  */
 export const useUpdateFilterSelectMenu = async (
-	id: number,
-	wanted: boolean | null,
-	dataType: FilterSelectMenuStatesType,
-): Promise<void> => {
-	const truc: SelectMenuItem & CustomSelectMenuItem = {
-		id: 1,
-		label: '',
-		notWanted: false,
-		wanted: true,
-		dataType: FilterSelectMenuStatesType.INGREDIENT,
-	};
-	truc.label;
-	if (id <= 0) {
-		return;
-	}
-	const selectMenuStates: Ref<FilterSelectMenuStates> =
-		useFilterSelectMenuStates();
-	const itemIndex: number = selectMenuStates.value[dataType].findIndex(
-		(item) => item.id === id,
-	);
-	const selectMenuItem: (SelectMenuItem & CustomSelectMenuItem) | undefined =
-		selectMenuStates.value[dataType][itemIndex];
-
-	if (selectMenuStates.value[dataType].length === 0 || !selectMenuItem) {
-		return;
-	}
-
-	selectMenuStates.value[dataType][itemIndex] =
-		FilterSelectMenuUtils.getUpdatedItemOnFilterButtonClick(
-			wanted,
-			selectMenuItem,
-		);
-};
-
-export const useUpdateFilterSelectedMenu = async (
 	item: SelectMenuItem & CustomSelectMenuItem,
 	wanted: boolean | null,
 	dataType: FilterSelectMenuStatesType,
@@ -78,21 +43,28 @@ export const useUpdateFilterSelectedMenu = async (
 	if (item.id <= 0) {
 		return;
 	}
+	const selectMenuStates: Ref<FilterSelectMenuStates> =
+		useFilterSelectMenuStates();
 	const selectedMenuStates: Ref<FilterSelectMenuStates> =
 		useFilterSelectedItemsStates();
-	const itemIndex: number = selectedMenuStates.value[dataType].findIndex(
+	const selectItemIndex: number = selectMenuStates.value[dataType].findIndex(
 		(_item) => _item.id === item.id,
 	);
-	const selectedMenuItem: (SelectMenuItem & CustomSelectMenuItem) | undefined =
-		selectedMenuStates.value[dataType][itemIndex];
 
-	if (!selectedMenuItem) {
-		selectedMenuStates.value[dataType].push(item);
-	} else {
-		selectedMenuStates.value[dataType][itemIndex] =
-			FilterSelectMenuUtils.getUpdatedItemOnFilterButtonClick(
-				wanted,
-				selectedMenuItem,
-			);
+	if (
+		selectMenuStates.value[dataType].length === 0 ||
+		!selectMenuStates.value[dataType][selectItemIndex]
+	) {
+		return;
 	}
+
+	selectMenuStates.value[dataType][selectItemIndex] =
+		FilterSelectMenuUtils.getUpdatedItemOnFilterButtonClick(
+			wanted,
+			selectMenuStates.value[dataType][selectItemIndex],
+		);
+
+	selectedMenuStates.value[dataType] = selectMenuStates.value[dataType].filter(
+		(item) => item.wanted || item.notWanted,
+	);
 };
