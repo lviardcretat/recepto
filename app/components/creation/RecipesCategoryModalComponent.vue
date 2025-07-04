@@ -5,6 +5,9 @@ import {
 	type RecipesCategoryCreation,
 } from '~/schemas/creation/recipesCategory';
 
+const props = defineProps<{
+	modalTitle: string;
+}>();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const schema = recipesCategoryCreation;
@@ -56,23 +59,37 @@ async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
 </script>
 
 <template>
-	<UForm ref="form" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-		<UFormField :label="$t('formCreation.name')" name="name">
-			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.category.nameExample')" class="w-full"/>
-		</UFormField>
-		<UFormField :label="$t('formCreation.category.dishType')" name="dishTypeId">
-			<USelectMenu v-model="state.dishTypeId" value-key="id" :items="dishTypes ?? []"
-				:placeholder="$t('formCreation.category.selectByDishType')" class="w-full"
-				option-attribute="name" value-attribute="id" @update:modelValue="state.dishTypeId = Number($event)"/>
-		</UFormField>
-		<div class="flex justify-between">
-			<UButton variant="outline" @click="form.clear()">
-				{{ $t('formCreation.clear') }}
-			</UButton>
-			<UButton type="submit">
-				{{ $t('formCreation.submit') }}
-			</UButton>
-		</div>
+	<UForm ref="form" :schema="schema" :state="state" class="max-h-full" @submit="onSubmit">
+		<UCard :ui="{root: 'max-h-full flex flex-col', body: 'overflow-auto'}">
+			<template #header>
+				<div class="flex items-center justify-between">
+					<h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
+						{{ $t(`formCreation.${props.modalTitle}.cardTitle`) }}
+					</h3>
+					<UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="emit('closeModal')" />
+				</div>
+			</template>
+			<div class="flex flex-col gap-4">
+				<UFormField :label="$t('formCreation.name')" name="name">
+					<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.category.nameExample')" class="w-full"/>
+				</UFormField>
+				<UFormField :label="$t('formCreation.category.dishType')" name="dishTypeId">
+					<USelectMenu v-model="state.dishTypeId" value-key="id" :items="dishTypes ?? []"
+						:placeholder="$t('formCreation.category.selectByDishType')" class="w-full"
+						option-attribute="name" value-attribute="id" @update:modelValue="state.dishTypeId = Number($event)"/>
+				</UFormField>
+			</div>
+			<template #footer>
+				<div class="flex justify-between">
+					<UButton variant="outline" @click="form.clear()">
+						{{ $t('formCreation.clear') }}
+					</UButton>
+					<UButton type="submit">
+						{{ $t('formCreation.submit') }}
+					</UButton>
+				</div>
+			</template>
+		</UCard>
 	</UForm>
 </template>
 

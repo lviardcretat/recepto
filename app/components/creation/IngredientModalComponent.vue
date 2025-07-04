@@ -6,6 +6,9 @@ import {
 } from '~/schemas/creation/ingredient';
 import { Months } from '~/enums/data';
 
+const props = defineProps<{
+	modalTitle: string;
+}>();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const schema = ingredientCreationSchema;
@@ -90,33 +93,47 @@ function mapFlatMonthsToSeasonalMonths(): void {
 </script>
 
 <template>
-	<UForm ref="form" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-		<UFormField :label="$t('formCreation.name')" name="name" eager-validation>
-			<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.ingredient.nameExample')" class="w-full"/>
-		</UFormField>
-		<UFormField :label="$t('formCreation.ingredient.foodType')" name="foodTypeId">
-			<USelectMenu v-model="state.foodTypeId" value-key="id" :items="foodTypes ?? []"
-				:searchable-placeholder="$t('search')" class="w-full"
-				:placeholder="$t('formCreation.ingredient.selectByFoodTypeId')"
-				option-attribute="name" value-attribute="id" @update:modelValue="state.foodTypeId = Number($event)"/>
-		</UFormField>
-		<UFormField :label="$t('formCreation.ingredient.seasonalMonths')" name="seasonalMonths" :hint="$t('formCreation.recipe.optional')">
-			<div class="flex justify-evenly w-full">
-				<UButton v-for="(month, index) of Object.values(Months)" :key="month"
-					:variant="flatSeasonalMonths.includes(index) ? 'solid' : 'ghost'"
-					@click="toggleMonth(index)">
-					{{ $t(month) }}
-				</UButton>
+	<UForm ref="form" :schema="schema" :state="state" class="max-h-full" @submit="onSubmit">
+		<UCard :ui="{root: 'max-h-full flex flex-col', body: 'overflow-auto'}">
+			<template #header>
+				<div class="flex items-center justify-between">
+					<h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
+						{{ $t(`formCreation.${props.modalTitle}.cardTitle`) }}
+					</h3>
+					<UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="emit('closeModal')" />
+				</div>
+			</template>
+			<div class="flex flex-col gap-4">
+				<UFormField :label="$t('formCreation.name')" name="name" eager-validation>
+					<UInput v-model="state.name" type="text" :placeholder="$t('formCreation.ingredient.nameExample')" class="w-full"/>
+				</UFormField>
+				<UFormField :label="$t('formCreation.ingredient.foodType')" name="foodTypeId">
+					<USelectMenu v-model="state.foodTypeId" value-key="id" :items="foodTypes ?? []"
+						:searchable-placeholder="$t('search')" class="w-full"
+						:placeholder="$t('formCreation.ingredient.selectByFoodTypeId')"
+						option-attribute="name" value-attribute="id" @update:modelValue="state.foodTypeId = Number($event)"/>
+				</UFormField>
+				<UFormField :label="$t('formCreation.ingredient.seasonalMonths')" name="seasonalMonths" :hint="$t('formCreation.recipe.optional')">
+					<div class="flex justify-evenly w-full">
+						<UButton v-for="(month, index) of Object.values(Months)" :key="month"
+							:variant="flatSeasonalMonths.includes(index) ? 'solid' : 'ghost'"
+							@click="toggleMonth(index)">
+							{{ $t(month) }}
+						</UButton>
+					</div>
+				</UFormField>
 			</div>
-		</UFormField>
-		<div class="flex justify-between">
-			<UButton variant="outline" @click="form.clear()">
-				{{ $t('formCreation.clear') }}
-			</UButton>
-			<UButton type="submit">
-				{{ $t('formCreation.submit') }}
-			</UButton>
-		</div>
+			<template #footer>
+				<div class="flex justify-between">
+					<UButton variant="outline" @click="form.clear()">
+						{{ $t('formCreation.clear') }}
+					</UButton>
+					<UButton type="submit">
+						{{ $t('formCreation.submit') }}
+					</UButton>
+				</div>
+			</template>
+		</UCard>
 	</UForm>
 </template>
 

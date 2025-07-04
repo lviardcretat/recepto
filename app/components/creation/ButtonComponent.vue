@@ -2,7 +2,7 @@
 import type { DropdownMenuItem } from '@nuxt/ui';
 
 const { t } = useI18n();
-const mainModalName: Ref<string> = ref('');
+const modalTitle: Ref<string> = ref('');
 const isModalOpen = ref(false);
 const items = computed(
 	() =>
@@ -12,7 +12,7 @@ const items = computed(
 				icon: 'fluent:food-carrot-24-filled',
 				onSelect: () => {
 					isModalOpen.value = true;
-					mainModalName.value = 'ingredient';
+					modalTitle.value = 'ingredient';
 				},
 			},
 			{
@@ -20,7 +20,7 @@ const items = computed(
 				icon: 'material-symbols:fastfood',
 				onSelect: () => {
 					isModalOpen.value = true;
-					mainModalName.value = 'recipe';
+					modalTitle.value = 'recipe';
 				},
 			},
 			{
@@ -28,7 +28,7 @@ const items = computed(
 				icon: 'tabler:category-filled',
 				onSelect: () => {
 					isModalOpen.value = true;
-					mainModalName.value = 'category';
+					modalTitle.value = 'category';
 				},
 			},
 			{
@@ -36,7 +36,7 @@ const items = computed(
 				icon: 'solar:ladle-bold',
 				onSelect: () => {
 					isModalOpen.value = true;
-					mainModalName.value = 'ustensil';
+					modalTitle.value = 'ustensil';
 				},
 			},
 		] satisfies DropdownMenuItem,
@@ -52,23 +52,16 @@ const items = computed(
     	}">
 		<UButton color="primary" size="xl" class="rounded-full"  icon="material-symbols:add" />
 	</UDropdownMenu>
-	<UModal v-model:open="isModalOpen" :dismissible="false" :class="mainModalName === 'recipe' ? 'sm:max-w-6xl' : 'sm:max-w-4xl'">
+	<UModal v-model:open="isModalOpen" :dismissible="false" :class="`max-h-10/12 ${modalTitle === 'recipe' ? 'max-w-6xl h-full' : 'max-w-4xl'}`">
 		<template #content>
-			<UCard>
-				<template #header>
-					<div class="flex items-center justify-between">
-						<h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
-							{{ $t(`formCreation.${mainModalName}.cardTitle`) }}
-						</h3>
-						<UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isModalOpen = false" />
-					</div>
-				</template>
-
-				<CreationUstensilModalComponent v-if="mainModalName === 'ustensil'" @closeModal="isModalOpen = false"/>
-				<CreationIngredientModalComponent v-if="mainModalName === 'ingredient'" @closeModal="isModalOpen = false"/>
-				<CreationRecipesCategoryModalComponent v-if="mainModalName === 'category'" @closeModal="isModalOpen = false"/>
-				<CreationRecipeModalComponent v-if="mainModalName === 'recipe'" @closeModal="isModalOpen = false"/>
-			</UCard>
+			<CreationUstensilModalComponent v-if="modalTitle === 'ustensil'"
+				@closeModal="isModalOpen = false" :modalTitle="modalTitle"/>
+			<CreationIngredientModalComponent v-if="modalTitle === 'ingredient'"
+				@closeModal="isModalOpen = false" :modalTitle="modalTitle"/>
+			<CreationRecipesCategoryModalComponent v-if="modalTitle === 'category'"
+				@closeModal="isModalOpen = false" :modalTitle="modalTitle"/>
+			<CreationRecipeModalComponent v-if="modalTitle === 'recipe'" @closeModal="isModalOpen = false"
+				:modalTitle="modalTitle"/>
 		</template>
 	</UModal>
 </template>
