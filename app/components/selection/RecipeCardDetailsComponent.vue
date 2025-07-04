@@ -10,7 +10,6 @@ const { data: recipeFetch } = await useFetch<RecipeDetail>(
 	{
 		method: 'GET',
 		watch: false,
-		default: () => null,
 		onResponseError({ response }) {
 			throw showError({
 				statusCode: response.status,
@@ -38,11 +37,13 @@ const peopleNumberModified = ref(recipe?.peopleNumber ?? 1);
 function renderIngredient(): void {
 	if (ingredients.value) {
 		for (const [index] of ingredients.value.entries()) {
-			ingredients.value[index].quantity = Number(
-				(
-					ingredients.value[index].singlePortion * peopleNumberModified.value
-				).toFixed(2),
-			);
+			if (ingredients.value[index]) {
+				ingredients.value[index].quantity = Number(
+					(
+						ingredients.value[index].singlePortion * peopleNumberModified.value
+					).toFixed(2),
+				);
+			}
 		}
 	}
 }

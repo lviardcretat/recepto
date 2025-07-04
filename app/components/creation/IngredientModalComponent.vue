@@ -75,14 +75,14 @@ function mapFlatMonthsToSeasonalMonths(): void {
 		return;
 	}
 	flatSeasonalMonths.value = flatSeasonalMonths.value.sort((n1, n2) => n1 - n2);
-	let startMonthId: number = flatSeasonalMonths.value[0];
+	let startMonthId: number = flatSeasonalMonths.value[0] ?? 0;
 	let endMonthId = 0;
 	let mappedMonths: number[][] = [];
 	for (const [index, monthId] of flatSeasonalMonths.value.entries()) {
 		if (!flatSeasonalMonths.value.includes(monthId + 1)) {
 			endMonthId = monthId;
 			mappedMonths.push([startMonthId, endMonthId + 1]);
-			startMonthId = flatSeasonalMonths.value[index + 1];
+			startMonthId = flatSeasonalMonths.value[index + 1] ?? 0;
 		}
 	}
 	state.value.seasonalMonths = mappedMonths;

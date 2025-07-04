@@ -1,9 +1,5 @@
 import type { FilterIconsGridStatesType } from '~/enums/filter';
-import type {
-	FilterIconsGridStates,
-	GeneralIconsGridData,
-	IconsGridItem,
-} from '~/types/filter';
+import type { FilterIconsGridStates } from '~/types/filter';
 
 /**
  * Allows you to recover states from the composable.
@@ -13,34 +9,6 @@ export const useFilterIconsGridStates = () =>
 	useState<FilterIconsGridStates>('filterIconsGridStates', () => ({
 		allergens: [],
 	}));
-
-/**
- * Transforms the data received by the bdd to match the type required by the component IconsGrid.
- * @param newItems The filter list to map.
- * @param dataType The icon of the filter item.
- * @param dataType The type of the filter list modified.
- * @returns The mapped filter list.
- */
-export const useMapIconsGridItems = <T extends GeneralIconsGridData>(
-	newItems: T[] | null,
-	oldItems: IconsGridItem[],
-	dataType: FilterIconsGridStatesType,
-): IconsGridItem[] => {
-	if (newItems == null || newItems.length === 0) {
-		return [];
-	}
-	const items: IconsGridItem[] = newItems.map((item: T) => {
-		const existingItem = oldItems.find((oldItem) => oldItem.id === item.id);
-		return {
-			id: item.id,
-			label: item.name,
-			icon: item.icon ?? '',
-			active: existingItem ? existingItem.active : false,
-			dataType: dataType,
-		};
-	});
-	return items;
-};
 
 /**
  * Update the corresponding state according to the filter modified by the user.
@@ -60,52 +28,17 @@ export const useUpdateFilterIconsGrid = async (
 	const itemIndex: number = iconsGridStates.value[dataType].findIndex(
 		(item) => item.id === id,
 	);
+	const iconsGridItem = iconsGridStates.value[dataType][itemIndex];
 
-	if (iconsGridStates.value[dataType].length === 0) {
+	if (iconsGridStates.value[dataType].length === 0 || !iconsGridItem) {
 		return;
 	}
 
 	if (active) {
-		iconsGridStates.value[dataType][itemIndex] = onItemSelected(
-			iconsGridStates.value[dataType][itemIndex],
-		);
+		iconsGridStates.value[dataType][itemIndex] =
+			FilterIconsGridUtils.onItemSelected(iconsGridItem);
 	} else {
-		iconsGridStates.value[dataType][itemIndex] = onItemUnselected(
-			iconsGridStates.value[dataType][itemIndex],
-		);
+		iconsGridStates.value[dataType][itemIndex] =
+			FilterIconsGridUtils.onItemUnselected(iconsGridItem);
 	}
-};
-
-/**
- * Updates the filter if the user on active item.
- * @param item The modified filter.
- * @returns The modified filter updated.
- */
-const onItemSelected = (item: IconsGridItem): IconsGridItem => {
-	item.active = true;
-	return item;
-};
-
-/**
- * Updates the filter if the user on non active item.
- * @param item The modified filter.
- * @returns The modified filter updated.
- */
-const onItemUnselected = (item: IconsGridItem): IconsGridItem => {
-	item.active = false;
-	return item;
-};
-
-/**
- * Extracts all active elements from one of the filters list.
- * @param items The list of one of the filters.
- * @returns A table of active elements of the list of one of the filters.
- */
-export const useGetActiveIconsGridItemsIds = (
-	items: IconsGridItem[],
-): number[] => {
-	return items.reduce((acc: number[], item: IconsGridItem) => {
-		if (item.active) acc.push(item.id);
-		return acc;
-	}, []);
 };

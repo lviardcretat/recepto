@@ -14,7 +14,7 @@ useListen('recipe:created', async () => {});
 
 await callOnce(
 	async () => {
-		resultsStates.value.recipes = (await useFetchFilteredItems(
+		resultsStates.value.recipes = (await FilterUtils.fetchFilteredItems(
 			selectMenuStates.value,
 			iconsGridStates.value,
 			switchStates.value,
@@ -25,7 +25,7 @@ await callOnce(
 );
 
 useListen('recipe:created', async () => {
-	resultsStates.value.recipes = (await useFetchFilteredItems(
+	resultsStates.value.recipes = (await FilterUtils.fetchFilteredItems(
 		selectMenuStates.value,
 		iconsGridStates.value,
 		switchStates.value,

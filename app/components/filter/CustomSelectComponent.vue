@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import type { SelectMenuItem } from '@nuxt/ui';
 import { type FilterSelectMenuStatesType } from '~/enums/filter';
-import type { CustomSelectMenuItem, RecipeWithLessData } from '~/types/filter';
+import type {
+	CustomSelectMenuItem,
+	RecipesCategoriesWithLessData,
+	RecipeWithLessData,
+} from '~/types/filter';
 
 const props = defineProps<{
 	placeholder: string;
@@ -14,6 +18,11 @@ const switchStates = useFilterSwitchStates();
 const resultsStates = useFilterResults();
 const selectedItemsStates = useFilterSelectedItemsStates();
 const route = useRoute();
+const itemsSelectedNumber = ref<number>(
+	selectMenuStates.value[props.dataType].filter(
+		(item) => item.notWanted || item.wanted,
+	).length,
+);
 
 function getButtonsColor(
 	selectMenuItem: SelectMenuItem & CustomSelectMenuItem,
@@ -29,7 +38,7 @@ function getButtonsColor(
 }
 
 async function fetchFilteredItems() {
-	const result = await useFetchFilteredItems(
+	const result = await FilterUtils.fetchFilteredItems(
 		selectMenuStates.value,
 		iconsGridStates.value,
 		switchStates.value,
@@ -38,7 +47,10 @@ async function fetchFilteredItems() {
 	if (route.params.id) {
 		resultsStates.value.recipes = result as RecipeWithLessData[];
 	}
-	resultsStates.value.recipesCategories = result;
+	resultsStates.value.recipesCategories =
+		result.filter<RecipesCategoriesWithLessData>(
+			TypeGuardUtils.isRecipesCategoriesWithLessData,
+		);
 }
 </script>
 
@@ -51,7 +63,6 @@ async function fetchFilteredItems() {
 		</div>
 		<USelectMenu
 			:disabled="props.disabled"
-			v-model="selectedItemsStates[props.dataType]"
 			:v-model:open="props.disabled"
 			:items="selectMenuStates[props.dataType]"
 			class="w-full"
@@ -62,7 +73,7 @@ async function fetchFilteredItems() {
 			:ui="{ itemTrailing: 'hidden' }">
 			<template #default>
 				<span v-if="selectMenuStates[props.dataType].length">{{
-					$t('selected', selectMenuStates[props.dataType].filter(item => item.notWanted || item.wanted).length, { count: selectMenuStates[props.dataType].filter(item => item.notWanted || item.wanted).length })
+					$t('selected', { count: itemsSelectedNumber }, itemsSelectedNumber)
 				}}</span>
      			<span v-else>{{$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })}}</span>
 			</template>
@@ -71,6 +82,7 @@ async function fetchFilteredItems() {
 					:padded="false" variant="link" icon="material-symbols:circle-outline"
 					:class="getButtonsColor(item, true)" @click="
 						useUpdateFilterSelectMenu(item.id, true, props.dataType);
+						useUpdateFilterSelectedMenu(item, true, props.dataType)
 						fetchFilteredItems();
 					"
 					:ui="{
@@ -80,6 +92,7 @@ async function fetchFilteredItems() {
 					:padded="false" variant="link" icon="radix-icons:value-none"
 					:class="getButtonsColor(item, false)" @click="
 						useUpdateFilterSelectMenu(item.id, false, props.dataType);
+						useUpdateFilterSelectedMenu(item, false, props.dataType)
 						fetchFilteredItems();
 					"
 					:ui="{

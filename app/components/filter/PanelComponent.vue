@@ -64,27 +64,31 @@ await callOnce(async () => {
 		},
 	});
 
-	selectMenuStates.value.ustensils = useMapFilterSelectMenuItems(
-		ustensilsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
-		FilterSelectMenuStatesType.USTENSIL,
-	);
-	selectMenuStates.value.ingredients = useMapFilterSelectMenuItems(
-		ingredientsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],
-		FilterSelectMenuStatesType.INGREDIENT,
-	);
-	selectMenuStates.value.mealTypes = useMapFilterSelectMenuItems(
-		mealTypesFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.MEAL_TYPE],
-		FilterSelectMenuStatesType.MEAL_TYPE,
-	);
-	selectMenuStates.value.dishTypes = useMapFilterSelectMenuItems(
-		dishTypesFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.DISH_TYPE],
-		FilterSelectMenuStatesType.DISH_TYPE,
-	);
-	iconsGridStates.value.allergens = useMapIconsGridItems(
+	selectMenuStates.value.ustensils =
+		FilterSelectMenuUtils.mapFilterSelectMenuItems(
+			ustensilsFetch,
+			selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
+			FilterSelectMenuStatesType.USTENSIL,
+		);
+	selectMenuStates.value.ingredients =
+		FilterSelectMenuUtils.mapFilterSelectMenuItems(
+			ingredientsFetch,
+			selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],
+			FilterSelectMenuStatesType.INGREDIENT,
+		);
+	selectMenuStates.value.mealTypes =
+		FilterSelectMenuUtils.mapFilterSelectMenuItems(
+			mealTypesFetch,
+			selectMenuStates.value[FilterSelectMenuStatesType.MEAL_TYPE],
+			FilterSelectMenuStatesType.MEAL_TYPE,
+		);
+	selectMenuStates.value.dishTypes =
+		FilterSelectMenuUtils.mapFilterSelectMenuItems(
+			dishTypesFetch,
+			selectMenuStates.value[FilterSelectMenuStatesType.DISH_TYPE],
+			FilterSelectMenuStatesType.DISH_TYPE,
+		);
+	iconsGridStates.value.allergens = FilterIconsGridUtils.mapIconsGridItems(
 		allergensFetch,
 		iconsGridStates.value[FilterIconsGridStatesType.ALLERGEN],
 		FilterIconsGridStatesType.ALLERGEN,
@@ -95,22 +99,24 @@ useListen('ustensil:created', async () => {
 	const ustensilsFetch = await $fetch('/api/ustensils/all', {
 		method: 'GET',
 	});
-	selectMenuStates.value.ustensils = useMapFilterSelectMenuItems(
-		ustensilsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
-		FilterSelectMenuStatesType.USTENSIL,
-	);
+	selectMenuStates.value.ustensils =
+		FilterSelectMenuUtils.mapFilterSelectMenuItems(
+			ustensilsFetch,
+			selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
+			FilterSelectMenuStatesType.USTENSIL,
+		);
 });
 
 useListen('ingredient:created', async () => {
 	const ingredientsFetch = await $fetch('/api/ingredients/all', {
 		method: 'GET',
 	});
-	selectMenuStates.value.ingredients = useMapFilterSelectMenuItems(
-		ingredientsFetch,
-		selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],
-		FilterSelectMenuStatesType.INGREDIENT,
-	);
+	selectMenuStates.value.ingredients =
+		FilterSelectMenuUtils.mapFilterSelectMenuItems(
+			ingredientsFetch,
+			selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],
+			FilterSelectMenuStatesType.INGREDIENT,
+		);
 });
 
 const items = computed(
@@ -205,10 +211,11 @@ const items = computed(
 		:collapsed="collapsed"
 		popover>
 		<template #item-content="{ item }">
-			<FilterCustomSelectComponent v-if="item.children![0].itemSlot === FilterAccordionsSlots.SELECT" class="w-full"
-				:placeholder="item.label!" :disabled="item.disabled ?? false" :dataType="item.children![0].dataType as unknown as FilterSelectMenuStatesType"/>
-			<FilterIconsGridComponent v-if="item.children![0].itemSlot === FilterAccordionsSlots.GRID" :dataType="item.children![0].dataType as unknown as FilterIconsGridStatesType"/>
+			<FilterCustomSelectComponent v-if="item.children![0]!.itemSlot === FilterAccordionsSlots.SELECT" class="w-full"
+				:placeholder="item.label!" :disabled="item.disabled ?? false" :dataType="item.children![0]!.dataType as unknown as FilterSelectMenuStatesType"/>
+			<FilterIconsGridComponent v-if="item.children![0]!.itemSlot === FilterAccordionsSlots.GRID" :dataType="item.children![0]!.dataType as unknown as FilterIconsGridStatesType"/>
 		</template>
+		<!-- @vue-ignore -->
 		<template #custom="{ item }">
 			<FilterCustomSelectComponent v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.SELECT" class="w-full"
 				:placeholder="(item as NavigationMenuItem & CustomAccordionItem).label!" :disabled="(item as NavigationMenuItem & CustomAccordionItem).disabled ?? false" :dataType="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterSelectMenuStatesType"/>

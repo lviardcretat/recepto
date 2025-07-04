@@ -64,8 +64,10 @@ const legendItems: BulletLegendItemInterface[] =
 	})) ?? [];
 const triggers = {
 	[Timeline.selectors.line]: (d: DataRecord) => {
-		const startMonth: string = Object.values(Months)[d.startMonth];
-		const endMonth: string = Object.values(Months)[d.endMonth - 1];
+		const startMonth: string =
+			Object.values(Months)[d.startMonth] ?? 'undefined';
+		const endMonth: string =
+			Object.values(Months)[d.endMonth - 1] ?? 'undefined';
 		if (startMonth === endMonth) {
 			return t(startMonth);
 		}

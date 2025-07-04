@@ -136,15 +136,14 @@ export async function getRecipesCategoriesFiltered(
 
 	let recipesCategories: RecipesCategoriesWithLessData[] = [];
 	const subQueries = [
-		await createMealTypeSubQuery(mealTypesIds),
-		await createDishTypeSubQuery(dishTypesIds),
-		await createIngredientSubQuery(ingredientsIds),
-		await createUstensilSubQuery(ustensilsIds),
-		await createAllergenSubQuery(allergensIds),
-		await createSeasonalRecipeSubQuery(seasonalRecipes),
+		createMealTypeSubQuery(mealTypesIds),
+		createDishTypeSubQuery(dishTypesIds),
+		createIngredientSubQuery(ingredientsIds),
+		createUstensilSubQuery(ustensilsIds),
+		createAllergenSubQuery(allergensIds),
+		createSeasonalRecipeSubQuery(seasonalRecipes),
 	];
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const filters: any[] = [];
+	const filters = [];
 
 	for (const subQuery of subQueries) {
 		if (subQuery) filters.push(subQuery);
@@ -169,16 +168,17 @@ export async function getRecipesCategoriesFiltered(
 			.groupBy(tables.recipesCategory.id)
 			.all();
 	}
+	console.log('recipesCategories : ' + recipesCategories);
 	return recipesCategories;
 }
 
-async function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
+function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
 	const conditions = createSubQueryConditions(
 		mealTypesIds,
 		tables.mealTypeToRecipeCategory.mealTypeId,
 	);
 	if (!conditions) return null;
-	return await useDrizzle()
+	return useDrizzle()
 		.select(recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(
@@ -205,10 +205,10 @@ async function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
 		);
 }
 
-async function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
+function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
 	const conditions = createSubQueryConditions(dishTypesIds, tables.dishType.id);
 	if (!conditions) return null;
-	return await useDrizzle()
+	return useDrizzle()
 		.select(recipeCategorySelectType)
 		.from(tables.recipesCategory)
 		.innerJoin(

@@ -7,7 +7,7 @@ const switchStates = useFilterSwitchStates();
 const resultsStates = useFilterResults();
 
 await callOnce(async () => {
-	resultsStates.value.recipesCategories = (await useFetchFilteredItems(
+	resultsStates.value.recipesCategories = (await FilterUtils.fetchFilteredItems(
 		selectMenuStates.value,
 		iconsGridStates.value,
 		switchStates.value,
@@ -23,7 +23,7 @@ function isData() {
 }
 
 useListen('recipesCategory:created', async () => {
-	resultsStates.value.recipesCategories = (await useFetchFilteredItems(
+	resultsStates.value.recipesCategories = (await FilterUtils.fetchFilteredItems(
 		selectMenuStates.value,
 		iconsGridStates.value,
 		switchStates.value,

@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import type { FilterIconsGridStatesType } from '~/enums/filter';
-import type { RecipeWithLessData } from '~/types/filter';
+import type {
+	RecipesCategoriesWithLessData,
+	RecipeWithLessData,
+} from '~/types/filter';
 
 defineProps<{ dataType: FilterIconsGridStatesType }>();
 
@@ -11,7 +14,7 @@ const resultsStates = useFilterResults();
 const route = useRoute();
 
 async function fetchFilteredItems() {
-	const result = await useFetchFilteredItems(
+	const result = await FilterUtils.fetchFilteredItems(
 		selectMenuStates.value,
 		iconsGridStates.value,
 		switchStates.value,
@@ -20,7 +23,10 @@ async function fetchFilteredItems() {
 	if (route.params.id) {
 		resultsStates.value.recipes = result as RecipeWithLessData[];
 	}
-	resultsStates.value.recipesCategories = result;
+	resultsStates.value.recipesCategories =
+		result.filter<RecipesCategoriesWithLessData>(
+			TypeGuardUtils.isRecipesCategoriesWithLessData,
+		);
 }
 </script>
 
