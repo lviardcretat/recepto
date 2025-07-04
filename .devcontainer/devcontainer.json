@@ -44,7 +44,8 @@
 				"nuxtr.nuxt-vscode-extentions",
 				"nuxtr.nuxtr-vscode",
 				"rphlmr.vscode-drizzle-orm",
-				"vue.volar"
+				"vue.volar",
+				"dbaeumer.vscode-eslint"
 			]
 		}
 	}
