@@ -33,6 +33,7 @@ async function fetchFilteredItems() {
   <div class="grid grid-cols-3 grid-rows-2 gap-2 justify-items-center">
     <UTooltip
       v-for="item in iconsGridStates[dataType]"
+      :key="item.id"
       :text="item.label"
       :delay-duration="0"
       :content="{ side: 'top' }"

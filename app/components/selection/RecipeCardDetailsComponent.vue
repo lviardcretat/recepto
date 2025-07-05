@@ -86,15 +86,23 @@ const active = ref(['0', '1']);
           <span class="value">{{ formatDurationUtils(recipe?.restTime) }}</span>
         </div>
       </div>
-      <div class="text-center mt-2">
+      <div
+        v-if="recipe?.allergens?.length ?? 0 > 0"
+        class="text-center mt-2"
+      >
         <UTooltip
-          v-for="allergen in recipe?.allergens"
-          v-if="recipe?.allergens?.length ?? 0 > 0"
+          v-for="(allergen, index) in recipe?.allergens"
+          :key="index"
           :text="allergen.allergen.name"
         >
           <UIcon name="vscode-icons:default-file" />
         </UTooltip>
-        <div v-else>
+      </div>
+      <div
+        v-else
+        class="text-center mt-2"
+      >
+        <div>
           {{ $t('allergenFree') }}
         </div>
       </div>
@@ -112,7 +120,10 @@ const active = ref(['0', '1']);
           {{ $t('ingredient', 2) }}
         </h1>
         <div class="flex flex-col">
-          <div v-for="ingredient in ingredients">
+          <div
+            v-for="(ingredient, index) in ingredients"
+            :key="index"
+          >
             <span class="font-bold">{{ `${ingredient.quantity}${ingredient.unit} ` }}</span>
             <span>{{ ingredient.name }}</span>
           </div>
@@ -122,7 +133,10 @@ const active = ref(['0', '1']);
           {{ $t('ustensil', 2) }}
         </h1>
         <div class="flex flex-col">
-          <div v-for="ustensil in recipe?.ustensils">
+          <div
+            v-for="(ustensil, index) in recipe?.ustensils"
+            :key="index"
+          >
             {{ ustensil.ustensil.name }}
           </div>
         </div>

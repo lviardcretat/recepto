@@ -42,7 +42,7 @@ export default defineEventHandler(async () => {
             endMonth: seasonalMonth ? seasonalMonth[1] : 12,
             typeId: foodType.id,
           });
-          seasonalMonth[0];
+          return seasonalMonth[0];
         });
         return data;
       },

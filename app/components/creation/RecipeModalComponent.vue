@@ -290,6 +290,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
           <div class="flex flex-col gap-4 w-full">
             <div
               v-for="(ingredient, index) of state.ingredients"
+              :key="ingredient.ingredientId"
               class="flex gap-2"
             >
               <UFormField

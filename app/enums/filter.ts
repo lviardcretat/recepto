@@ -25,26 +25,3 @@ export enum FilterSelectMenuStatesType {
 export enum FilterIconsGridStatesType {
   ALLERGEN = 'allergens',
 }
-
-/**
- * @description Accordions slots.
- * @enum {string}
- */
-export enum FilterAccordionsSlots {
-  SELECT = 'select',
-  SWITCH = 'switch',
-  GRID = 'grid',
-}
-
-/**
- * @description Data type of the filter
- * @enum {string}
- */
-export enum FilterAccordionsDataType {
-  USTENSIL = 'ustensils',
-  INGREDIENT = 'ingredients',
-  SEASON = 'seasons',
-  ALLERGEN = 'allergens',
-  MEAL_TYPE = 'mealTypes',
-  DISH_TYPE = 'dishTypes',
-}

@@ -9,7 +9,6 @@ import type {
 
 const props = defineProps<{
   placeholder: string;
-  disabled: boolean;
   dataType: FilterSelectMenuStatesType;
 }>();
 const selectMenuStates = useFilterSelectMenuStates();
@@ -54,6 +53,7 @@ async function fetchFilteredItems() {
       <!-- @vue-ignore -->
       <UBadge
         v-for="item of selectedItemsStates[props.dataType]"
+        :key="item.id"
         class="h-6 m-0.5"
         :color="item.wanted ? 'primary' : 'error'"
         size="md"
@@ -62,8 +62,6 @@ async function fetchFilteredItems() {
       />
     </div>
     <USelectMenu
-      :disabled="props.disabled"
-      :v-model:open="props.disabled"
       :items="selectMenuStates[props.dataType]"
       class="w-full"
       multiple

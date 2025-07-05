@@ -1,9 +1,7 @@
 import type { SelectMenuItem } from '@nuxt/ui';
 import type {
   FilterSelectMenuStatesType,
-  FilterAccordionsSlots,
   FilterIconsGridStatesType,
-  FilterAccordionsDataType,
 } from '../enums/filter';
 
 /* --------------- Fetching part --------------- */
@@ -131,6 +129,5 @@ export type FilterSwitchStates = {
 /* --------------- Accordion part --------------- */
 
 export type CustomAccordionItem = {
-  dataType?: FilterAccordionsDataType;
-  itemSlot?: FilterAccordionsSlots;
+  dataType?: FilterSelectMenuStatesType | FilterIconsGridStatesType;
 };

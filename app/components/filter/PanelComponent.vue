@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
 import {
-  FilterAccordionsDataType,
-  FilterAccordionsSlots,
   FilterIconsGridStatesType,
   FilterSelectMenuStatesType,
 } from '~/enums/filter';
@@ -13,7 +11,7 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
-const swicthStates = useFilterSwitchStates();
+// const swicthStates = useFilterSwitchStates();
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
 
@@ -113,89 +111,74 @@ useListen('ingredient:created', async () => {
   );
 });
 
-const items = computed(
+const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
   () =>
-[
-  {
-    label: t('filter'),
-    type: 'label',
-  },
-  {
-    label: t('ingredient'),
-    icon: 'fa6-solid:carrot',
-    children: [
+    [
       {
-        label: t('ingredient'),
-        itemSlot: FilterAccordionsSlots.SELECT,
-        dataType: FilterAccordionsDataType.INGREDIENT,
-        slot: 'custom',
+        label: t('filter'),
+        type: 'label',
       },
-    ],
-  },
-  {
-    label: t('ustensil'),
-    icon: 'solar:ladle-bold',
-    children: [
-      {
-        label: t('ustensil'),
-        itemSlot: FilterAccordionsSlots.SELECT,
-        dataType: FilterAccordionsDataType.USTENSIL,
-        slot: 'custom',
-      },
-    ],
-  },
-  {
-    label: t('allergens'),
-    icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
-    children: [
-      {
-        label: t('allergens'),
-        itemSlot: FilterAccordionsSlots.GRID,
-        dataType: FilterAccordionsDataType.ALLERGEN,
-        slot: 'custom',
-      },
-    ],
-  },
-  {
-    label: t('seasonalRecipes'),
-    icon: 'fa6-solid:snowflake',
-    disabled: true,
-    children: [
       {
         label: t('seasonalRecipes'),
-        disabled: true,
-        itemSlot: FilterAccordionsSlots.SWITCH,
-        dataType: FilterAccordionsDataType.SEASON,
-        slot: 'custom',
+        icon: 'fa6-solid:snowflake',
+        slot: 'switch',
       },
-    ],
-  },
-  {
-    label: t('mealTypes'),
-    icon: 'tabler:sun-moon',
-    children: [
+      {
+        label: t('ingredient'),
+        icon: 'fa6-solid:carrot',
+        children: [
+          {
+            label: t('ingredient'),
+            dataType: FilterSelectMenuStatesType.INGREDIENT,
+            slot: 'select',
+          },
+        ],
+      },
+      {
+        label: t('ustensil'),
+        icon: 'solar:ladle-bold',
+        children: [
+          {
+            label: t('ustensil'),
+            dataType: FilterSelectMenuStatesType.USTENSIL,
+            slot: 'select',
+          },
+        ],
+      },
+      {
+        label: t('allergens'),
+        icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
+        children: [
+          {
+            label: t('allergens'),
+            dataType: FilterIconsGridStatesType.ALLERGEN,
+            slot: 'grid',
+          },
+        ],
+      },
       {
         label: t('mealTypes'),
-        itemSlot: FilterAccordionsSlots.SELECT,
-        dataType: FilterAccordionsDataType.MEAL_TYPE,
-        slot: 'custom',
+        icon: 'tabler:sun-moon',
+        children: [
+          {
+            label: t('mealTypes'),
+            dataType: FilterSelectMenuStatesType.MEAL_TYPE,
+            slot: 'select',
+          },
+        ],
       },
-    ],
-  },
-  {
-    label: t('dishTypes'),
-    icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
-    children: [
       {
         label: t('dishTypes'),
-        itemSlot: FilterAccordionsSlots.SELECT,
-        dataType: FilterAccordionsDataType.DISH_TYPE,
-        slot: 'custom',
+        icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
+        children: [
+          {
+            label: t('dishTypes'),
+            dataType: FilterSelectMenuStatesType.DISH_TYPE,
+            slot: 'select',
+          },
+        ],
       },
-    ],
-  },
-] satisfies (NavigationMenuItem & CustomAccordionItem)[],
-);
+    ]);
 </script>
 
 <template>
@@ -205,32 +188,33 @@ const items = computed(
     :collapsed="collapsed"
     popover
   >
-    <template #item-content="{ item }">
+    <template #select="{ item }">
       <FilterCustomSelectComponent
-        v-if="item.children![0]!.itemSlot === FilterAccordionsSlots.SELECT"
         class="w-full"
-        :placeholder="item.label!"
-        :disabled="item.disabled ?? false"
-        :data-type="item.children![0]!.dataType as unknown as FilterSelectMenuStatesType"
-      />
-      <FilterIconsGridComponent
-        v-if="item.children![0]!.itemSlot === FilterAccordionsSlots.GRID"
-        :data-type="item.children![0]!.dataType as unknown as FilterIconsGridStatesType"
+        :placeholder="item['label']"
+        :data-type="item['dataType']"
       />
     </template>
-    <!-- @vue-ignore -->
-    <template #custom="{ item }">
-      <FilterCustomSelectComponent
-        v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.SELECT"
-        class="w-full"
-        :placeholder="(item as NavigationMenuItem & CustomAccordionItem).label!"
-        :disabled="(item as NavigationMenuItem & CustomAccordionItem).disabled ?? false"
-        :data-type="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterSelectMenuStatesType"
-      />
+    <template #grid="{ item }">
       <FilterIconsGridComponent
-        v-if="(item as NavigationMenuItem & CustomAccordionItem).itemSlot === FilterAccordionsSlots.GRID"
-        :data-type="(item as NavigationMenuItem & CustomAccordionItem).dataType as unknown as FilterIconsGridStatesType"
+        :data-type="item['dataType']"
       />
+    </template>
+    <template #switch="{ item }">
+      <div class="w-full flex justify-between items-center">
+        <div class="flex items-center gap-1.5">
+          <UIcon
+            :name="item['icon']"
+            class="size-5"
+          />
+          {{ item['label'] }}
+        </div>
+        <!--
+        <USwitch
+          unchecked-icon="i-lucide-x"
+          checked-icon="i-lucide-check"
+        /> -->
+      </div>
     </template>
   </UNavigationMenu>
 </template>

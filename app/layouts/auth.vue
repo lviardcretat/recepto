@@ -2,54 +2,37 @@
 </script>
 
 <template>
-  <UHeader>
-    <template #title>
-      <NuxtImg src="icon.dzqdzq" />
-    </template>
+  <UDashboardGroup>
+    <UDashboardPanel id="home">
+      <template #header>
+        <UDashboardNavbar
+          :title="$t('recipe', 2)"
+          :ui="{ right: 'gap-3' }"
+        >
+          <template #title>
+            <NuxtImg src="icon.dzqdzq" />
+          </template>
 
-    <template #right>
-      <TranslationSelectComponent />
-      <UColorModeButton />
-      <UButton
-        icon="i-simple-icons-github"
-        color="neutral"
-        variant="ghost"
-        to="https://github.com/lviardcretat/recepto"
-        target="_blank"
-        aria-label="GitHub"
-      />
-    </template>
-  </UHeader>
-  <slot />
-  <USeparator
-    icon="i-logos-nuxt-icon"
-    class="h-px"
-  />
-  <UFooter>
-    <template #left>
-      <p class="text-muted text-sm">
-        Copyright © {{ new Date().getFullYear() }}
-      </p>
-    </template>
-    <template #right>
-      <UButton
-        icon="i-simple-icons-nuxtdotjs"
-        color="neutral"
-        variant="ghost"
-        to="https://nuxt.com"
-        target="_blank"
-        aria-label="NuxtJS"
-      />
-      <UButton
-        icon="i-simple-icons-github"
-        color="neutral"
-        variant="ghost"
-        to="https://github.com/lviardcretat/recepto"
-        target="_blank"
-        aria-label="GitHub"
-      />
-    </template>
-  </UFooter>
+          <template #right>
+            <TranslationSelectComponent />
+            <UColorModeButton />
+            <UButton
+              icon="i-simple-icons-github"
+              color="neutral"
+              variant="ghost"
+              to="https://github.com/lviardcretat/recepto"
+              target="_blank"
+              aria-label="GitHub"
+            />
+          </template>
+        </UDashboardNavbar>
+      </template>
+
+      <template #body>
+        <slot />
+      </template>
+    </UDashboardPanel>
+  </UDashboardGroup>
 </template>
 
 <style>

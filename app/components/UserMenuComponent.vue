@@ -27,7 +27,7 @@ const items = computed(
     {
       label: t('mainSlideOver.github'),
       icon: 'i-simple-icons-github',
-      to: 'https://github.com/nuxt-ui-pro/dashboard',
+      to: 'https://github.com/lviardcretat/recepto',
       target: '_blank',
     },
   ],

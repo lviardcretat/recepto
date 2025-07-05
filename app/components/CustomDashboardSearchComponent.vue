@@ -2,7 +2,6 @@
 import type { CommandPaletteGroup, CommandPaletteItem } from '@nuxt/ui';
 import type { RecipeSearched } from '~/types/search';
 
-const toast = useToast();
 const searchValue = ref({});
 const { data, execute, refresh } = useFetch('/api/recipesCategories/search', {
   method: 'GET',

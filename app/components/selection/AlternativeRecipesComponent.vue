@@ -39,6 +39,7 @@ useListen('recipe:created', async () => {
     <UPageColumns>
       <SelectionRecipeCardComponent
         v-for="recipe in resultsStates.recipes"
+        :key="recipe.id"
         :name="recipe.name"
         :description="recipe.description"
         :people-number="recipe.peopleNumber ?? 1"

@@ -25,7 +25,7 @@ const items = computed(
 </script>
 
 <template>
-  <UPageCard class="m-auto w-1/3">
+  <UPageCard class="m-auto">
     <UTabs
       :items="items"
       class="mb-6"

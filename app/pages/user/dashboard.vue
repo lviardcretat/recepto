@@ -70,7 +70,8 @@ const cards = [
     </h1>
     <div class="gap-10 w-full flex justify-evenly flex-wrap h-3/4">
       <UCard
-        v-for="card in cards"
+        v-for="(card, index) in cards"
+        :key="index"
         class="w-1/4 h-1/3"
       >
         <template #header>
@@ -86,7 +87,7 @@ const cards = [
         </template>
         <div class="flex justify-between flex-col items-center h-full">
           <h1 class="h-full text-4xl">
-            {{ card.value[0] }}
+            {{ card.value![0] }}
           </h1>
         </div>
       </UCard>

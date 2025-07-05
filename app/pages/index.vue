@@ -65,22 +65,24 @@ const pageSectionLinks = computed(
 </script>
 
 <template>
-  <UPageHero
-    :title="$t('heroPage.title')"
-    headline="1.0.0"
-    orientation="horizontal"
-    :description="$t('heroPage.description')"
-    :links="pageHeroLinks"
-  >
-    <img
-      src="https://ui.nuxt.com/templates/dashboard1.png"
-      class="rounded-lg shadow-2xl ring ring-default"
+  <div>
+    <UPageHero
+      :title="$t('heroPage.title')"
+      headline="1.0.0"
+      orientation="horizontal"
+      :description="$t('heroPage.description')"
+      :links="pageHeroLinks"
     >
-  </UPageHero>
-  <UPageSection
-    :title="$t('heroPage.features.title')"
-    icon="i-lucide-boxes"
-    :features="pageSectionFeatures"
-    :links="pageSectionLinks"
-  />
+      <img
+        src="https://ui.nuxt.com/templates/dashboard1.png"
+        class="rounded-lg shadow-2xl ring ring-default"
+      >
+    </UPageHero>
+    <UPageSection
+      :title="$t('heroPage.features.title')"
+      icon="i-lucide-boxes"
+      :features="pageSectionFeatures"
+      :links="pageSectionLinks"
+    />
+  </div>
 </template>
