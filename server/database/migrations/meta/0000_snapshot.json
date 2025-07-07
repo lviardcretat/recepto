@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ce7ea624-1ffe-412c-a718-7386f48796f7",
+  "id": "27e6f275-ca07-47ef-aacd-8d975811196a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -1092,10 +1092,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "sequence_recipeId_user_id_fk": {
-          "name": "sequence_recipeId_user_id_fk",
+        "sequence_recipeId_recipe_id_fk": {
+          "name": "sequence_recipeId_recipe_id_fk",
           "tableFrom": "sequence",
-          "tableTo": "user",
+          "tableTo": "recipe",
           "columnsFrom": [
             "recipeId"
           ],

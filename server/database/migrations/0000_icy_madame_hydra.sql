@@ -150,7 +150,7 @@ CREATE TABLE `sequence` (
 	`createdById` integer NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	FOREIGN KEY (`recipeId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`recipeId`) REFERENCES `recipe`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`createdById`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
