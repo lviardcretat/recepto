@@ -18,31 +18,33 @@ const props = defineProps<{
     :ui="{ header: 'flex flex-col gap-4' }"
   >
     <template #header>
-      <h1 class="text-3xl text-center">
+      <h1 class="text-3xl text-center [word-break:break-word]">
         {{ props.name }}
       </h1>
-      <img src="~/assets/img/lasagnes.jpg">
+      <div class="noImage">
+        {{ $t('recipeCardDetails.noImage') }}
+      </div>
     </template>
     <div class="data">
-      <div class="icons flex justify-around items-center">
-        <div class="peopleNumber flex justify-around items-center gap-1">
+      <div class="grid grid-cols-2 gap-4 pb-2">
+        <div class="flex items-center justify-center gap-2">
           <UIcon name="ic:baseline-people-alt" />
           <span class="value">{{ props.peopleNumber }}</span>
         </div>
-        <div class="preparationTime flex justify-around items-center gap-1">
+        <div class="flex items-center justify-center gap-2">
           <UIcon name="mdi:knife" />
           <span class="value">{{ formatDurationUtils(props.preparationTime) }}</span>
         </div>
-        <div class="cookingTime flex justify-around items-center gap-1">
+        <div class="flex items-center justify-center gap-2">
           <UIcon name="material-symbols:oven-outline-rounded" />
           <span class="value">{{ formatDurationUtils(props.cookingTime) }}</span>
         </div>
-        <div class="restTime flex justify-around items-center gap-1">
+        <div class="flex items-center justify-center gap-2">
           <UIcon name="mdi:sleep" />
           <span class="value">{{ formatDurationUtils(props.restTime) }}</span>
         </div>
       </div>
-      <p class="mt-3 ellipsis h-20">
+      <p class="mt-3 ellipsis [word-break:break-word]">
         {{ props.description }}
       </p>
     </div>
@@ -59,11 +61,18 @@ const props = defineProps<{
   .recipeCard {
     .ellipsis {
       display: -webkit-box;
-      -webkit-line-clamp: 4;
-      line-clamp: 4;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      height: auto;
+    }
+
+    .noImage {
+      aspect-ratio: 3 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0.5;
     }
   }
 </style>

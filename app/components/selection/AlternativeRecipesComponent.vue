@@ -10,8 +10,6 @@ const route = useRoute();
 const isModalOpen: Ref<boolean> = ref(false);
 const recipeActive: Ref<RecipeWithLessData | undefined> = ref();
 
-useListen('recipe:created', async () => {});
-
 await callOnce(
   async () => {
     resultsStates.value.recipes = (await FilterUtils.fetchFilteredItems(

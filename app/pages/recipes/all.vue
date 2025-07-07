@@ -29,6 +29,14 @@ useListen('recipesCategory:created', async () => {
     switchStates.value,
   )) as RecipesCategoriesWithLessData[];
 });
+
+useListen('recipe:created', async () => {
+  resultsStates.value.recipesCategories = (await FilterUtils.fetchFilteredItems(
+    selectMenuStates.value,
+    iconsGridStates.value,
+    switchStates.value,
+  )) as RecipesCategoriesWithLessData[];
+});
 </script>
 
 <template>

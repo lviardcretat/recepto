@@ -56,7 +56,7 @@ function renderIngredient(): void {
       <div class="noImage">
         {{ $t('recipeCardDetails.noImage') }}
       </div>
-      <div class="text-center text-4xl m-4 font-bold text-green-500">
+      <div class="text-center text-4xl m-4 font-bold text-green-500 [word-break:break-word]">
         {{ recipe?.name }}
       </div>
       <div class="icons flex justify-center items-center gap-4">
@@ -109,7 +109,7 @@ function renderIngredient(): void {
     </template>
     <UContainer class="info mb-6">
       <div>{{ recipe?.description }}</div>
-      <div class="mt-4 italic text-center">
+      <div class="mt-4 italic text-center opacity-60">
         {{ `❝ ${recipe?.tips} ❞` }}
       </div>
     </UContainer>
@@ -153,6 +153,7 @@ function renderIngredient(): void {
           type="multiple"
           :items="sequences"
           :default-value="['0']"
+          :ui="{ label: '[word-break:break-word]' }"
         >
           <template #leading="{ index }">
             <span class="truncate">{{ index + 1 }}.</span>

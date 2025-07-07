@@ -16,11 +16,13 @@ const items = computed(
     {
       label: t('mainSlideOver.settings'),
       icon: 'material-symbols:settings',
+      disabled: true,
     },
     {
       label: t('mainSlideOver.dashboard'),
       icon: 'material-symbols:space-dashboard-outline',
       to: '/user/dashboard',
+      disabled: true,
     },
   ],
   [
