@@ -4,7 +4,7 @@ import {
   recipeCreation,
 
 } from '~/schemas/creation/recipe';
-import type { RecipeCreation, RecipeIngredientsCreation, RecipeSequenceCreation } from '~/schemas/creation/recipe';
+import type { RecipeCreation } from '~/schemas/creation/recipe';
 
 const props = defineProps<{
   modalTitle: string;
@@ -12,21 +12,7 @@ const props = defineProps<{
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const form = ref();
-const state = ref<{
-  name?: string;
-  description?: string;
-  tips?: string;
-  peopleNumber?: number;
-  preparationTime?: number;
-  cookingTime?: number;
-  restTime?: number;
-  seasonId?: number;
-  allergens?: number[];
-  sequences: RecipeSequenceCreation;
-  ingredients: RecipeIngredientsCreation;
-  ustensils?: [number, ...number[]];
-  recipesCategoryId?: number;
-}>({
+const state = ref<Partial<RecipeCreation>>({
   name: undefined,
   description: undefined,
   tips: undefined,
@@ -38,7 +24,7 @@ const state = ref<{
   ingredients: [{ ingredientId: 0, quantity: 0, unitId: 0 }],
   sequences: [{ title: '', description: '' }],
   allergens: [],
-  ustensils: [0],
+  ustensils: undefined,
   recipesCategoryId: undefined,
 });
 
@@ -218,12 +204,12 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             :placeholder="$t('formCreation.recipe.tipsExample')"
           />
         </UFormField>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap justify-between">
           <UFormField
             :label="$t('formCreation.recipe.peopleNumber')"
             name="peopleNumber"
             eager-validation
-            :ui="{ root: 'w-root', container: 'w-container' }"
+            :ui="{ root: 'w-auto grow', container: 'w-container' }"
           >
             <UInput
               v-model="state.peopleNumber"
@@ -236,7 +222,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             name="preparationTime"
             hint="(en heures)"
             eager-validation
-            :ui="{ root: 'w-root', container: 'w-container' }"
+            :ui="{ root: 'w-auto grow', container: 'w-container' }"
           >
             <UInput
               v-model="state.preparationTime"
@@ -249,7 +235,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             name="cookingTime"
             hint="(en heures)"
             eager-validation
-            :ui="{ root: 'w-root', container: 'w-container' }"
+            :ui="{ root: 'w-auto grow', container: 'w-container' }"
           >
             <UInput
               v-model="state.cookingTime"
@@ -262,7 +248,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             name="restTime"
             hint="(en heures)"
             eager-validation
-            :ui="{ root: 'w-root', container: 'w-container' }"
+            :ui="{ root: 'w-auto grow', container: 'w-container' }"
           >
             <UInput
               v-model="state.restTime"
@@ -271,7 +257,10 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             />
           </UFormField>
         </div>
+
         <USeparator />
+        <!-- ------------ Ingredients ------------ -->
+
         <UFormField
           :label="$t('ingredient')"
           name="ingredients"
@@ -287,67 +276,67 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
               {{ $t('add') }}
             </UButton>
           </template>
-          <div class="flex flex-col gap-4 w-full">
-            <div
-              v-for="(ingredient, index) of state.ingredients"
-              :key="ingredient.ingredientId"
-              class="flex gap-2"
+          <div
+            v-for="(ingredient, index) of state.ingredients"
+            :key="ingredient.ingredientId"
+            class="flex gap-2 w-full flex-wrap items-center"
+          >
+            <UFormField
+              :label="$t('formCreation.recipe.name')"
+              :name="`ingredients.${index}.ingredientId`"
+              :ui="{ root: 'w-auto grow', container: 'w-container' }"
             >
-              <UFormField
-                :label="$t('name')"
-                :name="`ingredients.${index}.ingredientId`"
-                :ui="{ root: 'w-root', container: 'w-container' }"
-              >
-                <USelectMenu
-                  v-model="ingredient.ingredientId"
-                  value-key="id"
-                  :items="ingredients ?? []"
-                  :searchable-placeholder="$t('search')"
-                  class="w-full"
-                  :placeholder="$t('formCreation.recipe.selectBy_male', { selectName: $t('ingredient').toLowerCase() })"
-                  searchable
-                />
-              </UFormField>
-              <UFormField
-                :label="$t('formCreation.recipe.quantity')"
-                :name="`ingredients.${index}.quantity`"
-                eager-validation
-                :ui="{ root: 'w-root', container: 'w-container' }"
-              >
-                <UInput
-                  v-model="ingredient.quantity"
-                  type="number"
-                  placeholder="2.6"
-                />
-              </UFormField>
-              <UFormField
-                :label="$t('formCreation.recipe.unit')"
-                :name="`ingredients.${index}.unitId`"
-                :ui="{ root: 'w-root', container: 'w-container' }"
-              >
-                <USelectMenu
-                  v-model="ingredient.unitId"
-                  value-key="id"
-                  :items="units ?? []"
-                  :searchable-placeholder="$t('search')"
-                  class="w-full"
-                  :placeholder="$t('formCreation.recipe.selectBy_female', { selectName: $t('formCreation.recipe.unit').toLowerCase() })"
-                  searchable
-                />
-              </UFormField>
-              <UButton
-                :disabled="!((state.ingredients?.length ?? 0) > 1 && index > 0)"
-                class="w-fit h-fit self-center"
-                icon="material-symbols:remove"
-                variant="ghost"
-                @click="state.ingredients?.splice(index, 1)"
-              >
-                {{ $t('delete') }}
-              </UButton>
-            </div>
+              <USelectMenu
+                v-model="ingredient.ingredientId"
+                value-key="id"
+                :items="ingredients ?? []"
+                :searchable-placeholder="$t('search')"
+                :placeholder="$t('formCreation.recipe.selectBy_male', { selectName: $t('ingredient').toLowerCase() })"
+                :ui="{ base: 'w-full' }"
+              />
+            </UFormField>
+            <UFormField
+              :label="$t('formCreation.recipe.quantity')"
+              :name="`ingredients.${index}.quantity`"
+              eager-validation
+              :ui="{ root: 'w-auto grow', container: 'w-container' }"
+            >
+              <UInput
+                v-model="ingredient.quantity"
+                type="number"
+                placeholder="2.6"
+                class="w-min"
+              />
+            </UFormField>
+            <UFormField
+              :label="$t('formCreation.recipe.unit')"
+              :name="`ingredients.${index}.unitId`"
+              :ui="{ root: 'w-auto grow', container: 'w-container' }"
+            >
+              <USelectMenu
+                v-model="ingredient.unitId"
+                value-key="id"
+                :items="units ?? []"
+                :searchable-placeholder="$t('search')"
+                :placeholder="$t('formCreation.recipe.selectBy_female', { selectName: $t('formCreation.recipe.unit').toLowerCase() })"
+                :ui="{ base: 'w-full' }"
+              />
+            </UFormField>
+            <UButton
+              :disabled="!((state.ingredients?.length ?? 0) > 1 && index > 0)"
+              class="w-fit h-fit align-middle"
+              icon="material-symbols:remove"
+              variant="ghost"
+              @click="state.ingredients?.splice(index, 1)"
+            >
+              {{ $t('delete') }}
+            </UButton>
           </div>
         </UFormField>
+
         <USeparator />
+        <!-- ------------ Sequence ------------ -->
+
         <UFormField
           :label="$t('formCreation.recipe.sequences')"
           name="sequences"
@@ -405,12 +394,15 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             </div>
           </div>
         </UFormField>
+
         <USeparator />
-        <div class="flex gap-2">
+        <!-- ------------ Ustensils, Categories, allergens ------------ -->
+
+        <div class="flex gap-2 flex-wrap">
           <UFormField
             :label="$t('ustensil', 2)"
             name="ustensils"
-            :ui="{ root: 'w-root', container: 'w-container' }"
+            :ui="{ root: 'w-fit grow', container: 'w-container' }"
           >
             <USelectMenu
               v-model="state.ustensils"
@@ -420,13 +412,12 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
               :searchable-placeholder="$t('search')"
               class="w-full"
               :placeholder="$t('formCreation.recipe.selectBy_plural', { selectName: $t('ustensil', 2).toLowerCase() })"
-              searchable
             />
           </UFormField>
           <UFormField
             :label="$t('category')"
             name="recipesCategoryId"
-            :ui="{ root: 'w-root', container: 'w-container' }"
+            :ui="{ root: 'w-fit grow', container: 'w-container' }"
           >
             <USelectMenu
               v-model="state.recipesCategoryId"
@@ -435,14 +426,13 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
               :searchable-placeholder="$t('search')"
               class="w-full"
               :placeholder="$t('formCreation.recipe.selectBy_female', { selectName: $t('formCreation.recipe.category').toLowerCase() })"
-              searchable
               @update:model-value="state.recipesCategoryId = Number($event)"
             />
           </UFormField>
           <UFormField
             :label="$t('formCreation.recipe.season')"
             name="seasonId"
-            :ui="{ root: 'w-root', container: 'w-container' }"
+            :ui="{ root: 'w-fit grow', container: 'w-container' }"
           >
             <USelectMenu
               v-model="state.seasonId"
@@ -462,7 +452,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
           <USelectMenu
             v-model="state.allergens"
             value-key="id"
-            :items="allergens as any ?? []"
+            :items="allergens ?? []"
             multiple
             :searchable-placeholder="$t('search')"
             class="w-full"
@@ -479,7 +469,9 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
           >
             {{ $t('formCreation.clear') }}
           </UButton>
-          <UButton type="submit">
+          <UButton
+            type="submit"
+          >
             {{ $t('formCreation.submit') }}
           </UButton>
         </div>

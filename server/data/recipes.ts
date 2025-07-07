@@ -30,10 +30,10 @@ export async function postRecipe(
   restTime: number,
   seasonId: number,
   recipesCategoryId: number,
-  allergensIds: number[],
+  allergensIds: number[] | undefined,
   ustensilIds: number[],
   createdById: number,
-): Promise<Recipe> {
+): Promise<number> {
   const recipeInsert: RecipeInsert = {
     name: name,
     description: description,
@@ -46,7 +46,7 @@ export async function postRecipe(
     recipesCategoryId: recipesCategoryId,
     createdById: createdById,
   };
-  const recipe: Recipe = await useDrizzle()
+  const recipe = await useDrizzle()
     .insert(tables.recipe)
     .values(recipeInsert)
     .returning()
@@ -55,26 +55,24 @@ export async function postRecipe(
   for (const ustensilId of ustensilIds) {
     const recipeToUstensil: RecipeToUstensil = {
       recipeId: recipe.id,
-      ustensilId: ustensilIds[ustensilId],
+      ustensilId: ustensilId,
     };
     await useDrizzle()
       .insert(tables.recipeToUstensil)
-      .values(recipeToUstensil)
-      .returning()
-      .get();
+      .values(recipeToUstensil);
   }
-  for (const allergensId of allergensIds) {
-    const allergenToRecipe: AllergenToRecipe = {
-      recipeId: recipe.id,
-      allergenId: allergensIds[allergensId],
-    };
-    await useDrizzle()
-      .insert(tables.allergenToRecipe)
-      .values(allergenToRecipe)
-      .returning()
-      .get();
+  if (allergensIds) {
+    for (const allergensId of allergensIds) {
+      const allergenToRecipe: AllergenToRecipe = {
+        recipeId: recipe.id,
+        allergenId: allergensId,
+      };
+      await useDrizzle()
+        .insert(tables.allergenToRecipe)
+        .values(allergenToRecipe);
+    }
   }
-  return recipe;
+  return recipe.id;
 }
 
 export async function getRecipes(): Promise<Recipe[]> {
@@ -215,6 +213,7 @@ export async function getRecipesFiltered(
     await createAllergenSubQuery(allergensIds, recipeCategoryId),
     await createSeasonalRecipeSubQuery(seasonalRecipes, recipeCategoryId),
   ];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filters: any[] = [];
 
   for (const subQuery of subQueries) {

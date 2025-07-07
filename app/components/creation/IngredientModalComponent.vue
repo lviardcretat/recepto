@@ -148,7 +148,7 @@ function mapFlatMonthsToSeasonalMonths(): void {
           name="seasonalMonths"
           :hint="$t('formCreation.recipe.optional')"
         >
-          <div class="flex justify-evenly w-full">
+          <div class="flex justify-start flex-wrap w-full">
             <UButton
               v-for="(month, index) of Object.values(Months)"
               :key="month"

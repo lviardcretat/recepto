@@ -16,19 +16,16 @@ export async function postRecipeIngredient(
   quantity: number,
   unitId: number,
   recipeId: number,
-): Promise<RecipeIngredient> {
+): Promise<void> {
   const recipeIngredientInsert: RecipeIngredientInsert = {
     ingredientId: ingredientId,
     quantity: quantity,
     unitId: unitId,
     recipeId: recipeId,
   };
-  const recipeIngredient: RecipeIngredient = await useDrizzle()
+  await useDrizzle()
     .insert(tables.recipeIngredient)
-    .values(recipeIngredientInsert)
-    .returning()
-    .get();
-  return recipeIngredient;
+    .values(recipeIngredientInsert);
 }
 
 export async function getRecipeIngredient(

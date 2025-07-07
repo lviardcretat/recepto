@@ -12,15 +12,20 @@ export default defineI18nLocale(async () => {
     filter: 'Filtres',
     filterBy: 'Filtrez par {filterName}...',
     findRecipe: 'Cherchez une recette...',
+    recipeCardDetails: {
+      noImage: 'Aucune image trouvée',
+    },
     formCreation: {
       clear: 'Effacer les erreurs',
       name: 'Nom',
       submit: 'Créer',
       recipe: {
         cardTitle: 'Créer une nouvelle recette',
+        category: 'Catégorie',
         cookingTime: 'Temps de cuisson',
         description: 'Description',
         descriptionExample: 'Une superbe recette pour l\'été et les amateurs de légumes, à consommer sans modération !',
+        name: 'Nom',
         nameExample: 'Lasagnes végétariennes',
         optional: 'Optionnel',
         peopleNumber: 'Nombre de couverts',

@@ -13,19 +13,16 @@ export async function postSequence(
   description: string,
   recipeId: number,
   createdById: number,
-): Promise<Sequence> {
+): Promise<void> {
   const sequenceInsert: SequenceInsert = {
     title: title,
     description: description,
     recipeId: recipeId,
     createdById: createdById,
   };
-  const sequence: Sequence = await useDrizzle()
+  await useDrizzle()
     .insert(tables.sequence)
-    .values(sequenceInsert)
-    .returning()
-    .get();
-  return sequence;
+    .values(sequenceInsert);
 }
 
 export async function getSequence(id: number): Promise<Sequence | undefined> {

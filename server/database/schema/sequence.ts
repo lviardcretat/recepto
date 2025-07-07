@@ -10,7 +10,7 @@ export const sequence = sqliteTable('sequence', {
   description: text('description').notNull(),
   recipeId: integer('recipeId')
     .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
+    .references(() => recipe.id, { onDelete: 'cascade' }),
   createdById: integer('createdById')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),

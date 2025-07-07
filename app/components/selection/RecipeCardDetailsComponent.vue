@@ -47,15 +47,15 @@ function renderIngredient(): void {
     }
   }
 }
-
-// TODO : make it work
-const active = ref(['0', '1']);
 </script>
 
 <template>
   <UCard class="w-full card">
     <template #header>
-      <div class="layer" />
+      <!-- <div class="layer"/> -->
+      <div class="noImage">
+        {{ $t('recipeCardDetails.noImage') }}
+      </div>
       <div class="text-center text-4xl m-4 font-bold text-green-500">
         {{ recipe?.name }}
       </div>
@@ -152,7 +152,7 @@ const active = ref(['0', '1']);
         <UAccordion
           type="multiple"
           :items="sequences"
-          :v-model="active"
+          :default-value="['0']"
         >
           <template #leading="{ index }">
             <span class="truncate">{{ index + 1 }}.</span>
@@ -177,11 +177,19 @@ const active = ref(['0', '1']);
   .layer {
     aspect-ratio: 3 / 1;
     background:
-    linear-gradient(180deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
-    linear-gradient(90deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
-    url('../assets/img/lasagnes.jpg');
+      linear-gradient(180deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
+      linear-gradient(90deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
+      url('~/assets/img/lasagnes.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+  }
+
+  .noImage {
+    aspect-ratio: 3 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5;
   }
 </style>

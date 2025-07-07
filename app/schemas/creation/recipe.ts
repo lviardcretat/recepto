@@ -49,7 +49,7 @@ export const recipeCreation = z.object({
       },
     },
   ),
-  allergens: z.array(z.number().int().positive()),
+  allergens: z.array(z.number().int().positive()).optional(),
   ustensils: z.array(z.number().int().positive()).nonempty(),
   recipesCategoryId: z.number().int().positive(),
 });
