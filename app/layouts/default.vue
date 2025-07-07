@@ -58,7 +58,10 @@ const links = computed(
       :ui="{ footer: 'lg:border-t lg:border-default' }"
     >
       <template #header>
-        <NuxtImg src="image" />
+        <NuxtImg
+          class="h-full pt-4 pb-4"
+          src="/logo_full.png"
+        />
       </template>
 
       <template #default="{ collapsed }">
