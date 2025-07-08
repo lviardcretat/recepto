@@ -179,8 +179,7 @@ function renderIngredient(): void {
     aspect-ratio: 3 / 1;
     background:
       linear-gradient(180deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
-      linear-gradient(90deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%),
-      url('~/assets/img/lasagnes.jpg');
+      linear-gradient(90deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0) 20%, rgba(17,24,39,0) 50%, rgba(17,24,39,0) 80%, rgba(17,24,39,1) 100%);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
