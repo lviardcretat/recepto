@@ -73,10 +73,10 @@ const pageSectionLinks = computed(
       :description="$t('heroPage.description')"
       :links="pageHeroLinks"
     >
-      <img
-        src="https://ui.nuxt.com/templates/dashboard1.png"
+      <NuxtImg
         class="rounded-lg shadow-2xl ring ring-default"
-      >
+        src="/sample.png"
+      />
     </UPageHero>
     <UPageSection
       :title="$t('heroPage.features.title')"
