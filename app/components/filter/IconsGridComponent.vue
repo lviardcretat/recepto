@@ -30,7 +30,7 @@ async function fetchFilteredItems() {
 </script>
 
 <template>
-  <div class="grid grid-cols-3 grid-rows-2 gap-2 justify-items-center">
+  <div class="grid grid-cols-3 grid-rows-2 gap-2 justify-items-center w-full">
     <UTooltip
       v-for="item in iconsGridStates[dataType]"
       :key="item.id"
@@ -40,10 +40,11 @@ async function fetchFilteredItems() {
       class="w-6 h-6 ml-4 mr-4 mt-2 mb-2 flex items-center justify-center"
     >
       <UButton
-        :icon="item.icon"
-        color="neutral"
+        :icon="`allergens-icons:${item.icon}`"
         variant="ghost"
-        :class="item.active ? 'opacity-100' : 'opacity-20'"
+        color="primary"
+        size="xl"
+        :class="item.active ? 'opacity-100' : 'opacity-100'"
         @click="
           item.active = !item.active;
           useUpdateFilterIconsGrid(item.id, item.active, item.dataType);

@@ -74,6 +74,14 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
     vueI18n: './i18n.config.ts',
   },
+  icon: {
+    customCollections: [
+      {
+        prefix: 'allergens-icons',
+        dir: './app/assets/icons/allergens',
+      },
+    ],
+  },
   zodI18n: {
     localeCodesMapping: {
       'en-GB': 'en',
