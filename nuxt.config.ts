@@ -25,7 +25,7 @@ export default defineNuxtConfig({
       title: 'Recepto',
       charset: 'utf-8',
       meta: [],
-      link: [],
+      link: [{ rel: 'icon', href: '/logo.png' }],
     },
   },
   css: ['~/assets/css/main.css'],

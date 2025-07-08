@@ -6,12 +6,13 @@
     <UDashboardPanel id="home">
       <template #header>
         <UDashboardNavbar
+          :toggle="false"
           :title="$t('recipe', 2)"
           :ui="{ right: 'gap-3' }"
         >
-          <template #title>
+          <template #left>
             <NuxtImg
-              class="h-full pt-4 pb-4"
+              class="h-auto w-8 pt-4 pb-4"
               src="/logo.png"
             />
           </template>

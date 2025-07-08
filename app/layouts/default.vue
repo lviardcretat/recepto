@@ -59,7 +59,7 @@ const links = computed(
     >
       <template #header>
         <NuxtImg
-          class="h-full pt-4 pb-4"
+          class="h-auto w-8 pt-4 pb-4"
           src="/logo.png"
         />
       </template>
