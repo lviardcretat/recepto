@@ -59,7 +59,7 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
           <UButton
             color="neutral"
             variant="ghost"
-            icon="i-heroicons-x-mark-20-solid"
+            icon="i-lucide-x"
             class="-my-1"
             @click="emit('closeModal')"
           />

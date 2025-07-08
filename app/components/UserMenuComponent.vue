@@ -15,12 +15,12 @@ const items = computed(
   [
     {
       label: t('mainSlideOver.settings'),
-      icon: 'material-symbols:settings',
+      icon: 'i-lucide-settings',
       disabled: true,
     },
     {
       label: t('mainSlideOver.dashboard'),
-      icon: 'material-symbols:space-dashboard-outline',
+      icon: 'i-lucide-layout-dashboard',
       to: '/user/dashboard',
       disabled: true,
     },
@@ -28,15 +28,21 @@ const items = computed(
   [
     {
       label: t('mainSlideOver.github'),
-      icon: 'i-simple-icons-github',
+      icon: 'i-lucide-github',
       to: 'https://github.com/lviardcretat/recepto',
+      target: '_blank',
+    },
+    {
+      label: t('mainSlideOver.discord'),
+      icon: 'ic:baseline-discord',
+      to: 'https://discord.gg/vF7FbDpDwt',
       target: '_blank',
     },
   ],
   [
     {
       label: t('mainSlideOver.logout'),
-      icon: 'material-symbols:logout',
+      icon: 'i-lucide-log-out',
       onSelect: (_event: Event) => signout(),
     },
   ],

@@ -120,12 +120,12 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
       },
       {
         label: t('seasonalRecipes'),
-        icon: 'fa6-solid:snowflake',
+        icon: 'i-lucide-sun-snow',
         slot: 'switch',
       },
       {
         label: t('ingredient'),
-        icon: 'fa6-solid:carrot',
+        icon: 'i-lucide-carrot',
         children: [
           {
             label: t('ingredient'),
@@ -136,7 +136,7 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
       },
       {
         label: t('ustensil'),
-        icon: 'solar:ladle-bold',
+        icon: 'i-lucide-lab-whisk',
         children: [
           {
             label: t('ustensil'),
@@ -147,7 +147,7 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
       },
       {
         label: t('allergens'),
-        icon: 'streamline:food-wheat-cook-plant-bread-gluten-grain-cooking-nutrition-food-wheat',
+        icon: 'i-lucide-wheat',
         children: [
           {
             label: t('allergens'),
@@ -158,7 +158,7 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
       },
       {
         label: t('mealTypes'),
-        icon: 'tabler:sun-moon',
+        icon: 'i-lucide-clock-fading',
         children: [
           {
             label: t('mealTypes'),
@@ -169,7 +169,7 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
       },
       {
         label: t('dishTypes'),
-        icon: 'streamline:food-kitchenware-serving-dome-cook-tool-dome-kitchen-serving-paltter-dish-tools-food',
+        icon: 'i-lucide-cooking-pot',
         children: [
           {
             label: t('dishTypes'),

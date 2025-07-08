@@ -80,7 +80,7 @@ async function fetchFilteredItems() {
         <UButton
           :padded="false"
           variant="link"
-          icon="material-symbols:circle-outline"
+          icon="i-lucide-circle"
           :class="getButtonsColor(item, true)"
           :ui="{
             base: 'p-0',
@@ -93,7 +93,7 @@ async function fetchFilteredItems() {
         <UButton
           :padded="false"
           variant="link"
-          icon="radix-icons:value-none"
+          icon="i-lucide-circle-slash-2"
           :class="getButtonsColor(item, false)"
           :ui="{
             base: 'p-0 pr-1.5',

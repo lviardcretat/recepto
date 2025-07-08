@@ -24,7 +24,7 @@ const links = computed(
     },
     {
       label: t('mainSlideOver.recipes'),
-      icon: 'material-symbols:fastfood',
+      icon: 'i-lucide-cooking-pot',
       to: '/recipes/all',
     },
     {
@@ -37,7 +37,7 @@ const links = computed(
     },
     {
       label: t('mainSlideOver.calendar'),
-      icon: 'material-symbols:calendar-today',
+      icon: 'i-lucide-calendar',
       disabled: true,
     },
   ],
@@ -60,7 +60,7 @@ const links = computed(
       <template #header>
         <NuxtImg
           class="h-full pt-4 pb-4"
-          src="/logo_full.png"
+          src="/logo.png"
         />
       </template>
 

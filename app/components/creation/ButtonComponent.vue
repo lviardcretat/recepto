@@ -9,7 +9,7 @@ const items = computed(
 [
   {
     label: t('ingredient'),
-    icon: 'fluent:food-carrot-24-filled',
+    icon: 'i-lucide-carrot',
     onSelect: () => {
       isModalOpen.value = true;
       modalTitle.value = 'ingredient';
@@ -17,7 +17,7 @@ const items = computed(
   },
   {
     label: t('recipe'),
-    icon: 'material-symbols:fastfood',
+    icon: 'i-lucide-cooking-pot',
     onSelect: () => {
       isModalOpen.value = true;
       modalTitle.value = 'recipe';
@@ -25,7 +25,7 @@ const items = computed(
   },
   {
     label: t('category'),
-    icon: 'tabler:category-filled',
+    icon: 'i-lucide-box',
     onSelect: () => {
       isModalOpen.value = true;
       modalTitle.value = 'category';
@@ -33,7 +33,7 @@ const items = computed(
   },
   {
     label: t('ustensil'),
-    icon: 'solar:ladle-bold',
+    icon: 'i-lucide-lab-whisk',
     onSelect: () => {
       isModalOpen.value = true;
       modalTitle.value = 'ustensil';
@@ -58,7 +58,7 @@ const items = computed(
       color="primary"
       size="xl"
       class="rounded-full"
-      icon="material-symbols:add"
+      icon="i-lucide-plus"
     />
   </UDropdownMenu>
   <UModal

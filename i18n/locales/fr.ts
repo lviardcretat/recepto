@@ -129,6 +129,7 @@ export default defineI18nLocale(async () => {
       calendar: 'Calendrier',
       logout: 'Se déconnecter',
       github: 'Github',
+      discord: 'Discord',
       seasonalRecipes: 'Recettes de saison',
     },
     months: {

@@ -161,7 +161,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
           <UButton
             color="neutral"
             variant="ghost"
-            icon="i-heroicons-x-mark-20-solid"
+            icon="i-lucide-x"
             class="-my-1"
             @click="emit('closeModal')"
           />
@@ -269,7 +269,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
         >
           <template #hint>
             <UButton
-              icon="material-symbols:add"
+              icon="i-lucide-plus"
               variant="ghost"
               @click="state.ingredients?.push({ ingredientId: 0, quantity: 0, unitId: 0 })"
             >
@@ -325,7 +325,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             <UButton
               :disabled="!((state.ingredients?.length ?? 0) > 1 && index > 0)"
               class="w-fit h-fit align-middle"
-              icon="material-symbols:remove"
+              icon="i-lucide-minus"
               variant="ghost"
               @click="state.ingredients?.splice(index, 1)"
             >
@@ -345,7 +345,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
         >
           <template #hint>
             <UButton
-              icon="material-symbols:add"
+              icon="i-lucide-plus"
               variant="ghost"
               @click="state.sequences?.push({ title: '', description: '' })"
             >
@@ -385,7 +385,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
               <UButton
                 :disabled="!((state.sequences?.length ?? 0) > 1 && index > 0)"
                 class="w-fit h-fit self-center"
-                icon="material-symbols:remove"
+                icon="i-lucide-minus"
                 variant="ghost"
                 @click="state.sequences?.splice(index, 1)"
               >
