@@ -2,12 +2,12 @@ import type { UserInsert } from '~~/server/utils/drizzleUtils';
 
 export const usersSeed: UserInsert[] = [
   {
-    id: 999,
+    id: 1,
     username: 'admin',
     displayUsername: 'admin',
-    email: 'test@test.com',
+    email: 'admin@admin.com',
     emailVerified: true,
     name: 'Admin admin',
-    image: 'https://example.com/avatar/john.png',
+    image: 'image',
   },
 ];

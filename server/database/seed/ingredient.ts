@@ -2,60 +2,70 @@ import type { IngredientInsert } from '~~/server/utils/drizzleUtils';
 
 export const ingredientsSeed: IngredientInsert[] = [
   {
+    id: 1,
     name: 'Ail',
     foodTypeId: 1,
     seasonalMonths: [[0, 12]],
     createdById: 1,
   },
   {
+    id: 2,
     name: 'Artichaut',
     foodTypeId: 1,
     seasonalMonths: [[3, 9]],
     createdById: 1,
   },
   {
+    id: 3,
     name: 'Asperge',
     foodTypeId: 1,
     seasonalMonths: [[2, 7]],
     createdById: 1,
   },
   {
+    id: 4,
     name: 'Aubergine',
     foodTypeId: 1,
     seasonalMonths: [[4, 10]],
     createdById: 1,
   },
   {
+    id: 5,
     name: 'Betterave',
     foodTypeId: 1,
     seasonalMonths: [[0, 12]],
     createdById: 1,
   },
   {
+    id: 6,
     name: 'Blette',
     foodTypeId: 1,
     seasonalMonths: [[2, 10]],
     createdById: 1,
   },
   {
+    id: 7,
     name: 'Brocoli',
     foodTypeId: 1,
     seasonalMonths: [[5, 11]],
     createdById: 1,
   },
   {
+    id: 8,
     name: 'Carotte',
     foodTypeId: 1,
     seasonalMonths: [[1, 12]],
     createdById: 1,
   },
   {
+    id: 9,
     name: 'Brocoli',
     foodTypeId: 1,
     seasonalMonths: [[5, 11]],
     createdById: 1,
   },
   {
+    id: 10,
     name: 'Céleri-branche',
     foodTypeId: 1,
     seasonalMonths: [
@@ -65,6 +75,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 11,
     name: 'Céleri-rave',
     foodTypeId: 1,
     seasonalMonths: [
@@ -74,6 +85,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 12,
     name: 'Chou',
     foodTypeId: 1,
     seasonalMonths: [
@@ -83,6 +95,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 13,
     name: 'Chou blanc',
     foodTypeId: 1,
     seasonalMonths: [
@@ -92,6 +105,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 14,
     name: 'Chou de Bruxelles',
     foodTypeId: 1,
     seasonalMonths: [
@@ -101,6 +115,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 15,
     name: 'Chou-fleur',
     foodTypeId: 1,
     seasonalMonths: [
@@ -110,6 +125,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 16,
     name: 'Chou frisé',
     foodTypeId: 1,
     seasonalMonths: [
@@ -119,6 +135,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 17,
     name: 'Chou rouge',
     foodTypeId: 1,
     seasonalMonths: [
@@ -128,24 +145,28 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 18,
     name: 'Chou romanesco',
     foodTypeId: 1,
     seasonalMonths: [[5, 9]],
     createdById: 1,
   },
   {
+    id: 19,
     name: 'Citrouille',
     foodTypeId: 1,
     seasonalMonths: [[10, 11]],
     createdById: 1,
   },
   {
+    id: 20,
     name: 'Concombre',
     foodTypeId: 1,
     seasonalMonths: [[3, 10]],
     createdById: 1,
   },
   {
+    id: 21,
     name: 'Courge',
     foodTypeId: 1,
     seasonalMonths: [
@@ -155,12 +176,14 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 22,
     name: 'Courgette',
     foodTypeId: 1,
     seasonalMonths: [[4, 10]],
     createdById: 1,
   },
   {
+    id: 23,
     name: 'Crosne',
     foodTypeId: 1,
     seasonalMonths: [
@@ -170,6 +193,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 24,
     name: 'Endive',
     foodTypeId: 1,
     seasonalMonths: [
@@ -179,18 +203,21 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 25,
     name: 'Epinard',
     foodTypeId: 1,
     seasonalMonths: [[0, 12]],
     createdById: 1,
   },
   {
+    id: 26,
     name: 'Fenouil',
     foodTypeId: 1,
     seasonalMonths: [[5, 11]],
     createdById: 1,
   },
   {
+    id: 27,
     name: 'Frisée',
     foodTypeId: 1,
     seasonalMonths: [
@@ -200,18 +227,21 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 28,
     name: 'Haricot vert',
     foodTypeId: 1,
     seasonalMonths: [[5, 10]],
     createdById: 1,
   },
   {
+    id: 29,
     name: 'Laitue',
     foodTypeId: 1,
     seasonalMonths: [[3, 10]],
     createdById: 1,
   },
   {
+    id: 30,
     name: 'Mâche',
     foodTypeId: 1,
     seasonalMonths: [
@@ -221,6 +251,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 31,
     name: 'Navet',
     foodTypeId: 1,
     seasonalMonths: [
@@ -230,12 +261,14 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 32,
     name: 'Oignon',
     foodTypeId: 1,
     seasonalMonths: [[0, 12]],
     createdById: 1,
   },
   {
+    id: 33,
     name: 'Panais',
     foodTypeId: 1,
     seasonalMonths: [
@@ -245,18 +278,21 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 34,
     name: 'Patate douce',
     foodTypeId: 1,
     seasonalMonths: [[8, 10]],
     createdById: 1,
   },
   {
+    id: 35,
     name: 'Petit pois',
     foodTypeId: 1,
     seasonalMonths: [[3, 7]],
     createdById: 1,
   },
   {
+    id: 36,
     name: 'Poireau',
     foodTypeId: 1,
     seasonalMonths: [
@@ -266,12 +302,14 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 37,
     name: 'Poivron',
     foodTypeId: 1,
     seasonalMonths: [[5, 9]],
     createdById: 1,
   },
   {
+    id: 38,
     name: 'Pomme de terre de conservation',
     foodTypeId: 1,
     seasonalMonths: [
@@ -281,30 +319,35 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 39,
     name: 'Pomme de terre primeur',
     foodTypeId: 1,
     seasonalMonths: [[3, 8]],
     createdById: 1,
   },
   {
+    id: 40,
     name: 'Potiron',
     foodTypeId: 1,
     seasonalMonths: [[8, 12]],
     createdById: 1,
   },
   {
+    id: 41,
     name: 'Radis',
     foodTypeId: 1,
     seasonalMonths: [[1, 12]],
     createdById: 1,
   },
   {
+    id: 42,
     name: 'Rutabaga',
     foodTypeId: 1,
     seasonalMonths: [[9, 12]],
     createdById: 1,
   },
   {
+    id: 43,
     name: 'Salsifi',
     foodTypeId: 1,
     seasonalMonths: [
@@ -314,6 +357,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 44,
     name: 'Topinambour',
     foodTypeId: 1,
     seasonalMonths: [
@@ -323,54 +367,63 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 45,
     name: 'Amande fraiche',
     foodTypeId: 1,
     seasonalMonths: [[6, 8]],
     createdById: 1,
   },
   {
+    id: 46,
     name: 'Amande sèche',
     foodTypeId: 1,
     seasonalMonths: [[0, 12]],
     createdById: 1,
   },
   {
+    id: 47,
     name: 'Abricot',
     foodTypeId: 1,
     seasonalMonths: [[5, 8]],
     createdById: 1,
   },
   {
+    id: 48,
     name: 'Baie de goji',
     foodTypeId: 1,
     seasonalMonths: [[7, 10]],
     createdById: 1,
   },
   {
+    id: 49,
     name: 'Brugnon',
     foodTypeId: 1,
     seasonalMonths: [[5, 8]],
     createdById: 1,
   },
   {
+    id: 50,
     name: 'Cassis',
     foodTypeId: 1,
     seasonalMonths: [[5, 8]],
     createdById: 1,
   },
   {
+    id: 51,
     name: 'Cerise',
     foodTypeId: 1,
     seasonalMonths: [[4, 7]],
     createdById: 1,
   },
   {
+    id: 52,
     name: 'Châtaigne',
     foodTypeId: 1,
     seasonalMonths: [[9, 12]],
     createdById: 1,
   },
   {
+    id: 53,
     name: 'Citron',
     foodTypeId: 1,
     seasonalMonths: [
@@ -381,6 +434,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 54,
     name: 'Clémentine',
     foodTypeId: 1,
     seasonalMonths: [
@@ -390,36 +444,42 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 55,
     name: 'Coing',
     foodTypeId: 1,
     seasonalMonths: [[8, 11]],
     createdById: 1,
   },
   {
+    id: 56,
     name: 'Figue',
     foodTypeId: 1,
     seasonalMonths: [[6, 10]],
     createdById: 1,
   },
   {
+    id: 57,
     name: 'Fraise',
     foodTypeId: 1,
     seasonalMonths: [[4, 8]],
     createdById: 1,
   },
   {
+    id: 58,
     name: 'Framboise',
     foodTypeId: 1,
     seasonalMonths: [[5, 10]],
     createdById: 1,
   },
   {
+    id: 59,
     name: 'Groseille',
     foodTypeId: 1,
     seasonalMonths: [[5, 8]],
     createdById: 1,
   },
   {
+    id: 60,
     name: 'Kiwi',
     foodTypeId: 1,
     seasonalMonths: [
@@ -429,6 +489,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 61,
     name: 'Mandarine',
     foodTypeId: 1,
     seasonalMonths: [
@@ -438,48 +499,56 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 62,
     name: 'Melon',
     foodTypeId: 1,
     seasonalMonths: [[5, 9]],
     createdById: 1,
   },
   {
+    id: 63,
     name: 'Mirabelle',
     foodTypeId: 1,
     seasonalMonths: [[7, 9]],
     createdById: 1,
   },
   {
+    id: 64,
     name: 'Mûre',
     foodTypeId: 1,
     seasonalMonths: [[7, 9]],
     createdById: 1,
   },
   {
+    id: 65,
     name: 'Myrtille',
     foodTypeId: 1,
     seasonalMonths: [[6, 10]],
     createdById: 1,
   },
   {
+    id: 66,
     name: 'Nectarine',
     foodTypeId: 1,
     seasonalMonths: [[6, 8]],
     createdById: 1,
   },
   {
+    id: 67,
     name: 'Noisette',
     foodTypeId: 1,
     seasonalMonths: [[7, 10]],
     createdById: 1,
   },
   {
+    id: 68,
     name: 'Noix',
     foodTypeId: 1,
     seasonalMonths: [[8, 10]],
     createdById: 1,
   },
   {
+    id: 69,
     name: 'Orange',
     foodTypeId: 1,
     seasonalMonths: [
@@ -489,24 +558,28 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 70,
     name: 'Pamplemousse',
     foodTypeId: 1,
     seasonalMonths: [[0, 6]],
     createdById: 1,
   },
   {
+    id: 71,
     name: 'Pastèque',
     foodTypeId: 1,
     seasonalMonths: [[5, 9]],
     createdById: 1,
   },
   {
+    id: 72,
     name: 'Pêche',
     foodTypeId: 1,
     seasonalMonths: [[5, 9]],
     createdById: 1,
   },
   {
+    id: 73,
     name: 'Poire',
     foodTypeId: 1,
     seasonalMonths: [
@@ -516,6 +589,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 74,
     name: 'Pomme',
     foodTypeId: 1,
     seasonalMonths: [
@@ -526,54 +600,63 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 75,
     name: 'Prune',
     foodTypeId: 1,
     seasonalMonths: [[5, 9]],
     createdById: 1,
   },
   {
+    id: 76,
     name: 'Pruneau',
     foodTypeId: 1,
     seasonalMonths: [[7, 9]],
     createdById: 1,
   },
   {
+    id: 77,
     name: 'Raisin',
     foodTypeId: 1,
     seasonalMonths: [[7, 10]],
     createdById: 1,
   },
   {
+    id: 78,
     name: 'Rhubarbe',
     foodTypeId: 1,
     seasonalMonths: [[4, 7]],
     createdById: 1,
   },
   {
+    id: 79,
     name: 'Tomate',
     foodTypeId: 1,
     seasonalMonths: [[4, 10]],
     createdById: 1,
   },
   {
+    id: 80,
     name: 'Quinoa',
     foodTypeId: 1,
     seasonalMonths: [[7, 10]],
     createdById: 1,
   },
   {
+    id: 81,
     name: 'Soja',
     foodTypeId: 1,
     seasonalMonths: [[9, 10]],
     createdById: 1,
   },
   {
+    id: 82,
     name: 'Tournesol',
     foodTypeId: 1,
     seasonalMonths: [[8, 9]],
     createdById: 1,
   },
   {
+    id: 83,
     name: 'Avoine d\'hiver',
     foodTypeId: 2,
     seasonalMonths: [
@@ -583,6 +666,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 84,
     name: 'Avoine de printemps',
     foodTypeId: 2,
     seasonalMonths: [
@@ -593,6 +677,7 @@ export const ingredientsSeed: IngredientInsert[] = [
   },
 
   {
+    id: 85,
     name: 'Blé dur d\'hiver et de printemps',
     foodTypeId: 2,
     seasonalMonths: [
@@ -603,6 +688,7 @@ export const ingredientsSeed: IngredientInsert[] = [
   },
 
   {
+    id: 86,
     name: 'Blé tendre d\'hiver et de printemp',
     foodTypeId: 2,
     seasonalMonths: [
@@ -612,6 +698,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 87,
     name: 'Féveroles et fèves',
     foodTypeId: 2,
     seasonalMonths: [
@@ -621,12 +708,14 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 88,
     name: 'Haricot blanc',
     foodTypeId: 2,
     seasonalMonths: [[6, 10]],
     createdById: 1,
   },
   {
+    id: 89,
     name: 'Lentille',
     foodTypeId: 2,
     seasonalMonths: [
@@ -636,12 +725,14 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 90,
     name: 'Maïs',
     foodTypeId: 2,
     seasonalMonths: [[6, 11]],
     createdById: 1,
   },
   {
+    id: 91,
     name: 'Orge d\'hiver',
     foodTypeId: 2,
     seasonalMonths: [
@@ -651,6 +742,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 92,
     name: 'Orge de printemps',
     foodTypeId: 2,
     seasonalMonths: [
@@ -660,6 +752,7 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 93,
     name: 'Pois',
     foodTypeId: 2,
     seasonalMonths: [
@@ -669,18 +762,21 @@ export const ingredientsSeed: IngredientInsert[] = [
     createdById: 1,
   },
   {
+    id: 94,
     name: 'Riz',
     foodTypeId: 2,
     seasonalMonths: [[8, 10]],
     createdById: 1,
   },
   {
+    id: 95,
     name: 'Sarrasin',
     foodTypeId: 2,
     seasonalMonths: [[8, 10]],
     createdById: 1,
   },
   {
+    id: 96,
     name: 'Seigle',
     foodTypeId: 2,
     seasonalMonths: [
