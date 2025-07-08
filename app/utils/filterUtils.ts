@@ -37,9 +37,6 @@ const fetchFilteredRecipes = async (
       method: 'GET',
       watch: false,
       default: () => [],
-      headers: {
-        'Content-Type': 'application/json',
-      },
       query: query,
       onResponseError({ response }) {
         throw showError({
@@ -84,9 +81,6 @@ const fetchFilteredRecipesCategories = async (
       method: 'GET',
       watch: false,
       default: () => [],
-      headers: {
-        'Content-Type': 'application/json',
-      },
       query: query,
       onResponseError({ response }) {
         throw showError({

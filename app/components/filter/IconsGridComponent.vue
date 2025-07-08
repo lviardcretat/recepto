@@ -44,7 +44,7 @@ async function fetchFilteredItems() {
         variant="ghost"
         color="primary"
         size="xl"
-        :class="item.active ? 'opacity-100' : 'opacity-100'"
+        :class="item.active ? 'opacity-100' : 'opacity-30'"
         @click="
           item.active = !item.active;
           useUpdateFilterIconsGrid(item.id, item.active, item.dataType);

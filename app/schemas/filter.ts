@@ -20,7 +20,17 @@ export const recipesCategoriesFilterSchema = z.object({
   mealTypes: wantedList.optional(),
   dishTypes: wantedList.optional(),
   seasonalRecipes: z.enum(['true', 'false']).transform(str => str === 'true'),
-  allergens: z.array(z.number().int().positive()).default([]),
+  allergens: z.union([z.string().default('[]'), z.array(z.string()).default([])])
+    .transform((str: string | string[]) => {
+      if (Array.isArray(str)) {
+        return str.map(Number);
+      }
+      const truc: string[] | number = JSON.parse(str.replace(/'/g, '"'));
+      if (Array.isArray(truc)) {
+        return truc.map(Number);
+      }
+      return [truc];
+    }).pipe(z.array(z.number().int().positive())),
 });
 
 export const recipesFilterSchema = z.object({

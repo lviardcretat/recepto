@@ -28,10 +28,12 @@ const FilterIconsGridUtils = {
  * @returns A table of active elements of the list of one of the filters.
  */
   getActiveIconsGridItemsIds: (items: IconsGridItem[]): number[] => {
-    return items.reduce((acc: number[], item: IconsGridItem) => {
-      if (item.active) acc.push(item.id);
-      return acc;
-    }, []);
+    const truc = items.filter((item: IconsGridItem) => {
+      return item.active;
+    }).map((item: IconsGridItem) => {
+      return item.id;
+    });
+    return truc;
   },
 
   /**
