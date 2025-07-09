@@ -7,6 +7,7 @@ export type DataRecord = {
   startMonth: number;
   endMonth: number;
   typeId: number;
+  inactive: boolean;
 };
 
 export default defineEventHandler(async () => {
@@ -41,6 +42,7 @@ export default defineEventHandler(async () => {
             startMonth: seasonalMonth ? seasonalMonth[0] : 0,
             endMonth: seasonalMonth ? seasonalMonth[1] : 12,
             typeId: foodType.id,
+            inactive: false,
           });
           return seasonalMonth[0];
         });

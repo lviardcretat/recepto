@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DataRecord } from '~~/server/api/ingredients/seasonals.get';
+import type { FoodType } from '~~/server/utils/drizzleUtils';
 import {
   VisXYContainer,
   VisAxis,
@@ -10,6 +10,7 @@ import {
 import { colors, Timeline } from '@unovis/ts';
 import type { BulletLegendItemInterface } from '@unovis/ts';
 import { Months } from '~/enums/data';
+import type { DataRecord } from '~~/server/api/ingredients/seasonals.get';
 
 const { t } = useI18n();
 
@@ -32,14 +33,14 @@ const {
     });
   },
 });
+const datasetsFetchFiltered = ref<DataRecord[]>([...datasetsFetch.value ?? []]);
 
-const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFetch(
+const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFetch<FoodType[]>(
   '/api/foodTypes/all',
   {
     method: 'GET',
     immediate: false,
     watch: false,
-    default: () => null,
     onResponseError({ response }) {
       throw showError({
         statusCode: response.status,
@@ -58,16 +59,17 @@ const length = (d: DataRecord) => {
 };
 const type = (d: DataRecord) => d.name;
 const color = (d: DataRecord) => colors[d.typeId];
-const legendItems: BulletLegendItemInterface[] = foodTypesFetch.value?.slice(0, 2).map(foodType => ({
+const legendItems = ref<BulletLegendItemInterface[]>(foodTypesFetch.value?.slice(0, 2).map(foodType => ({
   name: foodType.name,
+  inactive: false,
   color: colors[foodType.id],
-})) ?? [];
+})) ?? []);
 const triggers = {
   [Timeline.selectors.line]: (d: DataRecord) => {
     const startMonth: string = Object.values(Months)[d.startMonth] ?? 'undefined';
     const endMonth: string = Object.values(Months)[d.endMonth - 1] ?? 'undefined';
     if (startMonth === endMonth) {
-      return t(startMonth);
+      return t(`months.${startMonth}`);
     }
     return t('fromTo', {
       from: t(`months.${startMonth}`),
@@ -78,9 +80,34 @@ const triggers = {
 const tickFormat = (tick: number) => {
   return t(`months.${Object.values(Months)[tick]}`);
 };
+
+function filterItems(item: BulletLegendItemInterface, i: number): void {
+  let inactive = false;
+  let foodTypesId = undefined;
+  if (legendItems.value[i]) {
+    inactive = !legendItems.value[i].inactive;
+  }
+  if (foodTypesFetch.value && foodTypesFetch.value[i]) {
+    foodTypesId = foodTypesFetch.value[i].id;
+  }
+  if (legendItems.value[i] && datasetsFetch.value) {
+    legendItems.value[i].inactive = inactive;
+    datasetsFetch.value = datasetsFetch.value.map((data) => {
+      if (data && data.typeId === foodTypesId) {
+        return {
+          ...data,
+          inactive: inactive,
+        };
+      }
+      return data;
+    });
+    datasetsFetchFiltered.value = datasetsFetch.value.filter(item => !item.inactive);
+  }
+}
 </script>
 
 <template>
+  <!-- eslint-disable vue/attribute-hyphenation -->
   <UModal
     :title="$t('seasonalChart.title')"
     class="z-10 max-w-7xl"
@@ -88,27 +115,28 @@ const tickFormat = (tick: number) => {
     <template #body>
       <div class="m-9 customTimeline">
         <VisXYContainer
-          :data="datasetsFetch"
+          :data="datasetsFetchFiltered"
           :height="500"
-          :x-domain="[0, 12]"
+          :xDomain="[0, 12]"
         >
           <VisBulletLegend
             :items="legendItems"
             class="flex! justify-center mb-6"
+            :onLegendItemClick="filterItems"
           />
           <VisTimeline
             :x="x"
             :length="length"
             :type="type"
-            :show-labels="true"
+            :showLabels="true"
             :color="color"
-            :line-cap="true"
+            :lineCap="true"
           />
           <VisAxis
             type="x"
-            :tick-values="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
-            :tick-format="tickFormat"
-            :domain-line="false"
+            :tickValues="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+            :tickFormat="tickFormat"
+            :domainLine="false"
           />
           <VisTooltip :triggers="triggers" />
         </VisXYContainer>
