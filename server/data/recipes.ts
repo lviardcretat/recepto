@@ -111,6 +111,7 @@ export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
           allergen: {
             columns: {
               name: true,
+              icon: true,
             },
           },
         },

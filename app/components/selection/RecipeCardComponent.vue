@@ -28,19 +28,31 @@ const props = defineProps<{
     <div class="data">
       <div class="grid grid-cols-2 gap-4 pb-2">
         <div class="flex items-center justify-center gap-2">
-          <UIcon name="ic:baseline-people-alt" />
+          <UIcon
+            name="i-lucide-users"
+            class="text-primary"
+          />
           <span class="value">{{ props.peopleNumber }}</span>
         </div>
         <div class="flex items-center justify-center gap-2">
-          <UIcon name="mdi:knife" />
+          <UIcon
+            name="i-lucide-lab-mortar-pestle"
+            class="text-primary"
+          />
           <span class="value">{{ formatDurationUtils(props.preparationTime) }}</span>
         </div>
         <div class="flex items-center justify-center gap-2">
-          <UIcon name="material-symbols:oven-outline-rounded" />
+          <UIcon
+            name="i-lucide-microwave"
+            class="text-primary"
+          />
           <span class="value">{{ formatDurationUtils(props.cookingTime) }}</span>
         </div>
         <div class="flex items-center justify-center gap-2">
-          <UIcon name="mdi:sleep" />
+          <UIcon
+            name="i-streamline-sleep"
+            class="text-primary"
+          />
           <span class="value">{{ formatDurationUtils(props.restTime) }}</span>
         </div>
       </div>

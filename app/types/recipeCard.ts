@@ -13,7 +13,7 @@ export type RecipeDetail = {
   tips: string | null;
   seasonId: number;
   createdAt: string;
-  allergens: { allergen: { name: string } }[];
+  allergens: { allergen: { name: string; icon: string | null } }[];
   ingredients: {
     quantity: number;
     ingredient: { name: string };

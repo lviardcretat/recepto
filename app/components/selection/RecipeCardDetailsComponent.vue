@@ -56,12 +56,12 @@ function renderIngredient(): void {
       <div class="noImage">
         {{ $t('recipeCardDetails.noImage') }}
       </div>
-      <div class="text-center text-4xl m-4 font-bold text-green-500 [word-break:break-word]">
+      <div class="text-center text-4xl m-4 font-bold text-primary [word-break:break-word]">
         {{ recipe?.name }}
       </div>
       <div class="icons flex justify-center items-center gap-4">
         <div class="peopleNumber flex justify-center items-center gap-1 w-20">
-          <UIcon name="ic:baseline-people-alt" />
+          <UIcon name="i-lucide-users" />
           <UInputNumber
             v-model="peopleNumberModified"
             :min="1"
@@ -74,28 +74,31 @@ function renderIngredient(): void {
           />
         </div>
         <div class="preparationTime flex justify-center items-center gap-1 w-20">
-          <UIcon name="mdi:knife" />
+          <UIcon name="i-lucide-lab-mortar-pestle" />
           <span class="value">{{ formatDurationUtils(recipe?.preparationTime) }}</span>
         </div>
         <div class="cookingTime flex justify-center items-center gap-1 w-20">
-          <UIcon name="material-symbols:oven-outline-rounded" />
+          <UIcon name="i-lucide-microwave" />
           <span class="value">{{ formatDurationUtils(recipe?.cookingTime) }}</span>
         </div>
         <div class="restTime flex justify-center items-center gap-1 w-20">
-          <UIcon name="mdi:sleep" />
+          <UIcon name="i-streamline-sleep" />
           <span class="value">{{ formatDurationUtils(recipe?.restTime) }}</span>
         </div>
       </div>
       <div
         v-if="recipe?.allergens?.length ?? 0 > 0"
-        class="text-center mt-2"
+        class="text-center mt-2 flex gap-3 justify-center"
       >
         <UTooltip
           v-for="(allergen, index) in recipe?.allergens"
           :key="index"
           :text="allergen.allergen.name"
         >
-          <UIcon name="vscode-icons:default-file" />
+          <UIcon
+            class="size-5"
+            :name="`allergens-icons:${allergen.allergen.icon}`"
+          />
         </UTooltip>
       </div>
       <div
@@ -116,7 +119,7 @@ function renderIngredient(): void {
     <USeparator />
     <UContainer class="base flex pb-6 pt-6">
       <div class="ingredientsUstensils w-1/4">
-        <h1 class="text-3xl mb-4 font-semibold text-green-500">
+        <h1 class="text-3xl mb-4 font-semibold text-primary">
           {{ $t('ingredient', 2) }}
         </h1>
         <div class="flex flex-col">
@@ -129,7 +132,7 @@ function renderIngredient(): void {
           </div>
         </div>
         <USeparator class="pb-6 pt-6" />
-        <h1 class="text-3xl mb-4 font-semibold text-green-500">
+        <h1 class="text-3xl mb-4 font-semibold text-primary">
           {{ $t('ustensil', 2) }}
         </h1>
         <div class="flex flex-col">
@@ -146,7 +149,7 @@ function renderIngredient(): void {
         orientation="vertical"
       />
       <div class="sequences w-3/4 flex flex-col">
-        <h1 class="text-3xl mb-4 font-semibold text-green-500">
+        <h1 class="text-3xl mb-4 font-semibold text-primary">
           {{ $t('preparationSteps') }}
         </h1>
         <UAccordion

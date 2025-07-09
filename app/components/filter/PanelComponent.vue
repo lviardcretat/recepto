@@ -122,6 +122,7 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
         label: t('seasonalRecipes'),
         icon: 'i-lucide-sun-snow',
         slot: 'switch',
+        disabled: false,
       },
       {
         label: t('ingredient'),
