@@ -11,18 +11,15 @@ export async function getUstensils(): Promise<Ustensil[]> {
 export async function postUstensil(
   name: string,
   createdById: number,
-): Promise<Ustensil> {
+): Promise<void> {
   const ustensilInsert: UstensilInsert = {
     name: name,
     createdById: createdById,
     createdAt: new Date(),
   };
-  const ustensil: Ustensil = await useDrizzle()
+  await useDrizzle()
     .insert(tables.ustensil)
-    .values(ustensilInsert)
-    .returning()
-    .get();
-  return ustensil;
+    .values(ustensilInsert);
 }
 
 export async function getUstensil(id: number): Promise<Ustensil | undefined> {

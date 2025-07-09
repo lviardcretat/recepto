@@ -45,7 +45,7 @@ useListen('recipe:created', async () => {
         :cooking-time="recipe.cookingTime ?? 0"
         :rest-time="recipe.restTime ?? 0"
         :created-at="new Date(recipe.createdAt)"
-        full-name="dzqdzqdzqqzd"
+        :full-name="recipe.createdBy ?? 'Nom inconnu'"
         @click="recipeActive = recipe; isModalOpen = true"
       />
     </UPageColumns>

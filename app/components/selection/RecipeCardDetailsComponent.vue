@@ -166,7 +166,7 @@ function renderIngredient(): void {
     </UContainer>
     <template #footer>
       <div class="footer flex justify-between items-center">
-        <p>{{ $t('createdBy', { username: recipe?.name }) }}</p>
+        <p>{{ $t('createdBy', { username: recipe?.createdBy.displayUsername }) }}</p>
         <p>{{ $d(new Date(recipe?.createdAt ?? ''), 'short') }}</p>
       </div>
     </template>

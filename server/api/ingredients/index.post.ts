@@ -1,14 +1,17 @@
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
 import { postIngredient } from '~~/server/data/ingredients';
-import type { Ingredient } from '~~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async (event) => {
-  const body = await readValidatedBody(event, ingredientCreationSchema.parse);
-  const ingredient: Ingredient = await postIngredient(
-    body.name,
-    body.foodTypeId,
-    body.seasonalMonths,
-    1,
-  );
-  return ingredient;
+  const session = await serverAuth().api.getSession({
+    headers: event.headers,
+  });
+  if (session) {
+    const body = await readValidatedBody(event, ingredientCreationSchema.parse);
+    await postIngredient(
+      body.name,
+      body.foodTypeId,
+      body.seasonalMonths,
+      +session.user.id,
+    );
+  }
 });

@@ -23,18 +23,15 @@ export async function postRecipesCategory(
   name: string,
   dishTypeId: number,
   createdById: number,
-) {
+): Promise<void> {
   const recipesCategoryInsert: RecipesCategoryInsert = {
     name: name,
     dishTypeId: dishTypeId,
     createdById: createdById,
   };
-  const recipesCategory: RecipesCategory = await useDrizzle()
+  await useDrizzle()
     .insert(tables.recipesCategory)
-    .values(recipesCategoryInsert)
-    .returning()
-    .get();
-  return recipesCategory;
+    .values(recipesCategoryInsert);
 }
 
 export async function getRecipesCategories(): Promise<RecipesCategory[]> {

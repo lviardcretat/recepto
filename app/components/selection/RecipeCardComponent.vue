@@ -62,8 +62,7 @@ const props = defineProps<{
     </div>
     <template #footer>
       <div class="footer flex justify-between items-center">
-        <p>{{ $t('createdBy', { username: props.fullName }) }}</p>
-        <p>{{ $d(props.createdAt, 'short') }}</p>
+        <p>{{ `${$t('createdBy', { username: props.fullName })} le ${$d(props.createdAt, 'short')}` }}</p>
       </div>
     </template>
   </UCard>

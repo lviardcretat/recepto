@@ -148,7 +148,7 @@ export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
       },
       createdBy: {
         columns: {
-          name: true,
+          displayUsername: true,
         },
       },
     },
@@ -161,7 +161,7 @@ export async function getRecipesWithoutFilter(
   recipeCategoryId: number,
 ): Promise<RecipeWithLessData[]> {
   const recipes = await useDrizzle()
-    .select(recipeSelectType)
+    .select({ ...recipeSelectType, ...{ createdBy: tables.user.displayUsername } })
     .from(tables.recipe)
     .leftJoin(
       tables.recipesCategory,

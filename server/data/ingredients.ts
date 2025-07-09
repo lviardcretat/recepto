@@ -13,19 +13,16 @@ export async function postIngredient(
   foodTypeId: number,
   seasonalMonths: number[][] | undefined,
   createdById: number,
-): Promise<Ingredient> {
+): Promise<void> {
   const ingredientInsert: IngredientInsert = {
     name: name,
     foodTypeId: foodTypeId,
     seasonalMonths: seasonalMonths,
     createdById: createdById,
   };
-  const ingredient: Ingredient = await useDrizzle()
+  await useDrizzle()
     .insert(tables.ingredient)
-    .values(ingredientInsert)
-    .returning()
-    .get();
-  return ingredient;
+    .values(ingredientInsert);
 }
 
 export async function getIngredientsSeasonalMonths(foodTypeId: number) {

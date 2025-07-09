@@ -25,6 +25,7 @@ export type RecipeWithLessData = {
   description: string | null | undefined;
   seasonId: number;
   createdAt: string;
+  createdBy: string | null;
 };
 
 /**
