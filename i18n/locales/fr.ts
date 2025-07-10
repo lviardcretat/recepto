@@ -86,7 +86,7 @@ export default defineI18nLocale(async () => {
     },
     heroPage: {
       title: 'Recepto',
-      description: 'Recepto est une collection collaborative de recettes et d\'ingrédients pour un usage quotidien et accessible par tous.',
+      description: 'Recepto est une collection collaborative de recettes et d\'ingrédients pour un usage quotidien et accessible à tous.',
       loginButton: 'Connectez-vous',
       features: {
         title: 'Une solution complète',

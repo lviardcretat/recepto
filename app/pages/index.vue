@@ -41,13 +41,13 @@ const pageSectionFeatures = computed(
     icon: 'i-lucide-layout-dashboard',
   },
   {
-    title: t('heroPage.features.dashboard.title'),
-    description: t('heroPage.features.dashboard.description'),
+    title: t('heroPage.features.privacy.title'),
+    description: t('heroPage.features.privacy.description'),
     icon: 'i-lucide-lock',
   },
   {
-    title: t('heroPage.features.privacy.title'),
-    description: t('heroPage.features.privacy.description'),
+    title: t('heroPage.features.collaborative.title'),
+    description: t('heroPage.features.collaborative.description'),
     icon: 'i-lucide-users',
   },
 ] satisfies PageFeatureProps[],

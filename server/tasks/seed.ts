@@ -22,16 +22,16 @@ export default defineTask({
   },
   async run() {
     console.log('Running DB seed task...');
-    await useDrizzle().insert(tables.user).values(usersSeed);
+    // await useDrizzle().insert(tables.user).values(usersSeed);
     await useDrizzle().insert(tables.mealType).values(mealTypesSeed);
     await useDrizzle().insert(tables.dishType).values(dishTypesSeed);
     await useDrizzle().insert(tables.allergen).values(allergensSeed);
     await useDrizzle().insert(tables.season).values(seasonsSeed);
     await useDrizzle().insert(tables.foodType).values(foodTypesSeed);
     await useDrizzle().insert(tables.ustensil).values(ustensilsSeed);
-    await useDrizzle()
+    /* await useDrizzle()
       .insert(tables.recipesCategory)
-      .values(recipesCategorySeed);
+      .values(recipesCategorySeed); */
     await autoChunkUtils(
       {
         items: ingredientsSeed,
@@ -39,20 +39,20 @@ export default defineTask({
       chunk => useDrizzle().insert(tables.ingredient).values(chunk),
     );
     await useDrizzle().insert(tables.unit).values(unitsSeed);
-    await useDrizzle().insert(tables.recipe).values(recipesSeed);
-    await useDrizzle()
+    // await useDrizzle().insert(tables.recipe).values(recipesSeed);
+    /* await useDrizzle()
       .insert(tables.recipeToUstensil)
       .values(recipeToUstensilsSeed);
     await useDrizzle().insert(tables.sequence).values(sequencesSeed);
     await useDrizzle()
       .insert(tables.mealTypeToRecipeCategory)
-      .values(mealTypeToRecipeCategoriesSeed);
+      .values(mealTypeToRecipeCategoriesSeed)
     await useDrizzle()
       .insert(tables.allergenToRecipe)
       .values(allergenToRecipesSeed);
     await useDrizzle()
       .insert(tables.recipeIngredient)
-      .values(recipeIngredientsSeed);
+      .values(recipeIngredientsSeed); */
     return { result: 'success' };
   },
 });

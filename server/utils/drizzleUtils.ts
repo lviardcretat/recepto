@@ -14,6 +14,9 @@ import * as allergenSchema from '../database/schema/allergen';
 import * as allergenToRecipeSchema from '../database/schema/allergenToRecipe';
 import * as mealTypeToRecipeCategorySchema from '../database/schema/mealTypeToRecipeCategory';
 import * as recipeToUstensilSchema from '../database/schema/recipeToUstensil';
+import * as accountSchema from '../database/schema/account';
+import * as verificationSchema from '../database/schema/verification';
+import * as sessionSchema from '../database/schema/session';
 import 'dotenv/config';
 /* Uncomment this for local bdd
 import { drizzle } from 'drizzle-orm/libsql'; */
@@ -38,6 +41,9 @@ export const schema = {
   ...allergenToRecipeSchema,
   ...mealTypeToRecipeCategorySchema,
   ...recipeToUstensilSchema,
+  ...accountSchema,
+  ...verificationSchema,
+  ...sessionSchema,
 };
 
 export const tables = schema;
