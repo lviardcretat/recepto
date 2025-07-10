@@ -68,7 +68,7 @@ const pageSectionLinks = computed(
   <div>
     <UPageHero
       :title="$t('heroPage.title')"
-      headline="1.0.0"
+      headline="0.1.0-alpha"
       orientation="horizontal"
       :description="$t('heroPage.description')"
       :links="pageHeroLinks"
