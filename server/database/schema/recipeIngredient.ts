@@ -14,7 +14,6 @@ export const recipeIngredient = sqliteTable('recipeIngredient', {
     .references(() => recipe.id, { onDelete: 'cascade' }),
   quantity: integer('quantity').notNull(),
   unitId: integer('unitId')
-    .notNull()
     .references(() => unit.id, { onDelete: 'cascade' }),
 });
 

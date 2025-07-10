@@ -21,7 +21,7 @@ const state = ref<Partial<RecipeCreation>>({
   cookingTime: undefined,
   restTime: undefined,
   seasonId: undefined,
-  ingredients: [{ ingredientId: 0, quantity: 0, unitId: 0 }],
+  ingredients: [{ ingredientId: 0, quantity: 0 }],
   sequences: [{ title: '', description: '' }],
   allergens: [],
   ustensils: undefined,

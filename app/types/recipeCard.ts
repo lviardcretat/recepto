@@ -17,7 +17,7 @@ export type RecipeDetail = {
   ingredients: {
     quantity: number;
     ingredient: { name: string };
-    unit: { shortForm: string };
+    unit: { shortForm: string } | null;
   }[];
   sequences: { id: number; description: string; title: string }[];
   ustensils: { ustensil: { name: string } }[];

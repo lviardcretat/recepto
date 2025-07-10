@@ -14,8 +14,8 @@ export async function getRecipeIngredients(): Promise<RecipeIngredient[]> {
 export async function postRecipeIngredient(
   ingredientId: number,
   quantity: number,
-  unitId: number,
   recipeId: number,
+  unitId?: number,
 ): Promise<void> {
   const recipeIngredientInsert: RecipeIngredientInsert = {
     ingredientId: ingredientId,

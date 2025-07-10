@@ -11,7 +11,7 @@ export const ingredient = sqliteTable('ingredient', {
   foodTypeId: integer('foodTypeId')
     .notNull()
     .references(() => foodType.id, { onDelete: 'cascade' }),
-  seasonalMonths: text('seasonalMonths', { mode: 'json' }).notNull(),
+  seasonalMonths: text('seasonalMonths', { mode: 'json' }),
   createdById: integer('createdById')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),

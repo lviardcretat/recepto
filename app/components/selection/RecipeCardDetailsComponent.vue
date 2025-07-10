@@ -24,7 +24,7 @@ const ingredients = ref(
   recipe?.ingredients.map(ingredient => ({
     name: ingredient.ingredient.name,
     quantity: ingredient.quantity,
-    unit: ingredient.unit.shortForm,
+    unit: ingredient.unit?.shortForm,
     singlePortion: ingredient.quantity / (recipe.peopleNumber ?? 1),
   })),
 );
@@ -127,7 +127,7 @@ function renderIngredient(): void {
             v-for="(ingredient, index) in ingredients"
             :key="index"
           >
-            <span class="font-bold">{{ `${ingredient.quantity}${ingredient.unit} ` }}</span>
+            <span class="font-bold">{{ `${ingredient.quantity}${ingredient.unit ?? ''} ` }}</span>
             <span>{{ ingredient.name }}</span>
           </div>
         </div>

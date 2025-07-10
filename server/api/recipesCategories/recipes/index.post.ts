@@ -24,14 +24,14 @@ export default defineEventHandler(async (event) => {
       +session.user.id,
     );
     for (const sequence of body.sequences) {
-      await postSequence(sequence.title, sequence.description, recipeId, 1);
+      await postSequence(sequence.title, sequence.description, recipeId, +session.user.id);
     }
     for (const ingredient of body.ingredients) {
       await postRecipeIngredient(
         ingredient.ingredientId,
         ingredient.quantity,
-        ingredient.unitId,
         recipeId,
+        ingredient.unitId,
       );
     }
   }

@@ -34,19 +34,23 @@ export default defineEventHandler(async () => {
 
     const dataRecords: DataRecord[] = ingredients.flatMap<DataRecord>(
       (ingredient) => {
-        const data: DataRecord[] = [];
-        const seasonalMonths = ingredient.seasonalMonths as number[][];
-        seasonalMonths.map((seasonalMonth) => {
-          data.push({
-            name: ingredient.name,
-            startMonth: seasonalMonth ? seasonalMonth[0] : 0,
-            endMonth: seasonalMonth ? seasonalMonth[1] : 12,
-            typeId: foodType.id,
-            inactive: false,
+        if (ingredient.seasonalMonths) {
+          const data: DataRecord[] = [];
+          // TODO à fixer
+          const seasonalMonths = ingredient.seasonalMonths as number[][];
+          seasonalMonths.map((seasonalMonth) => {
+            data.push({
+              name: ingredient.name,
+              startMonth: seasonalMonth ? seasonalMonth[0] : 0,
+              endMonth: seasonalMonth ? seasonalMonth[1] : 12,
+              typeId: foodType.id,
+              inactive: false,
+            });
+            return seasonalMonth[0];
           });
-          return seasonalMonth[0];
-        });
-        return data;
+          return data;
+        }
+        return [];
       },
     );
 
