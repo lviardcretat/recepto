@@ -6,7 +6,6 @@ export default defineI18nLocale(async () => {
     category: 'Category | Categories',
     categoriesCreated: 'Categories created',
     createdBy: 'Created by {username}',
-    dashboard: 'Dashboard',
     delete: 'Delete',
     dishTypes: 'Dish types',
     filter: 'Filters',
@@ -112,12 +111,31 @@ export default defineI18nLocale(async () => {
         },
       },
     },
+    dashboard: {
+      name: 'Name',
+      createdAt: 'Created on',
+      updatedAt: 'Modified on',
+      actions: 'Actions',
+      ingredientsTableComponent: {
+        foodType: 'Food category',
+        seasonalMonths: 'Ideal consumption period',
+        recipesCount: 'Used in',
+        recipes: 'recipe | recipes',
+      },
+      recipesTableComponent: {
+        recipes: 'recipe | recipes',
+      },
+      ustensilsTableComponent: {
+        recipesCount: 'Used in',
+        recipes: 'recipe | recipes',
+      },
+    },
     heroPage: {
       title: 'Recepto',
-      description: 'Recepto is a collaborative collection of recipes and ingredients for everyday use and accessible to all.',
+      description: 'Recepto is a collaborative collection of recipes and ingredients for everyday use and accessible to everyone.',
       loginButton: 'Log in',
       features: {
-        title: 'A complete solution',
+        title: 'A comprehensive solution',
         recipe: {
           title: 'Recipe Library',
           description: 'Store your favorite recipes and explore variations for each dish. Never forget a recipe again.',

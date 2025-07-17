@@ -1,3 +1,4 @@
+import { count } from 'drizzle-orm';
 import type { Ustensil, UstensilInsert } from '../utils/drizzleUtils';
 
 export async function getUstensils(): Promise<Ustensil[]> {
@@ -6,6 +7,24 @@ export async function getUstensils(): Promise<Ustensil[]> {
     .from(tables.ustensil)
     .orderBy(tables.ustensil.name)
     .all();
+  return ustensils;
+}
+
+export async function getUstensilsDashboard(userId: number): Promise<Partial<Ustensil>[]> {
+  const ustensils = await useDrizzle().query.ustensil.findMany({
+    columns: {
+      name: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    extras: (ustensil, { sql }) => ({
+      recipesCount: sql<number>`(
+      select count(*) from ${tables.recipeToUstensil}
+      where ${tables.recipeToUstensil.ustensilId} = ${ustensil.id}
+    )`.as('recipes_count'),
+    }),
+    where: (ustensil, { eq }) => eq(ustensil.createdById, userId),
+  });
   return ustensils;
 }
 

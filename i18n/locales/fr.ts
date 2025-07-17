@@ -6,7 +6,6 @@ export default defineI18nLocale(async () => {
     category: 'Catégorie | Catégories',
     categoriesCreated: 'Catégories créés',
     createdBy: 'Créé par {username}',
-    dashboard: 'Dashboard',
     delete: 'Supprimer',
     dishTypes: 'Types de plat',
     filter: 'Filtres',
@@ -110,6 +109,25 @@ export default defineI18nLocale(async () => {
           loginButton: 'Se connecter / s\'inscrire',
           cancelButton: 'Annuler',
         },
+      },
+    },
+    dashboard: {
+      name: 'Nom',
+      createdAt: 'Créé le',
+      updatedAt: 'Modifié le',
+      actions: 'Actions',
+      ingredientsTableComponent: {
+        foodType: 'Catégorie d\'aliment',
+        seasonalMonths: 'Période de consommation idéale',
+        recipesCount: 'Utilisé dans',
+        recipes: 'recette | recette | recettes',
+      },
+      recipesTableComponent: {
+        recipes: 'recette | recette | recettes',
+      },
+      ustensilsTableComponent: {
+        recipesCount: 'Utilisé dans',
+        recipes: 'recette | recette | recettes',
       },
     },
     heroPage: {

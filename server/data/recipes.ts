@@ -19,6 +19,7 @@ import type {
   RecipesCategoriesWithLessData,
 } from '~/types/filter';
 import type { RecipeDetail } from '~/types/recipeCard';
+import type { RecipesDashboard } from '~/types/recipesDashboard';
 
 export async function postRecipe(
   name: string,
@@ -80,6 +81,29 @@ export async function getRecipes(): Promise<Recipe[]> {
     .select()
     .from(tables.recipe)
     .all();
+  return recipes;
+}
+
+export async function getRecipesWithRecipesCategoriesDashboard(userId: number): Promise<RecipesDashboard[]> {
+  const recipes: RecipesDashboard[] = await useDrizzle().query.recipe.findMany({
+    columns: {
+      name: true,
+      recipesCategoryId: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    with: {
+      recipesCategory: {
+        columns: {
+          id: true,
+          name: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+    where: (recipes, { eq }) => eq(recipes.createdById, userId),
+  });
   return recipes;
 }
 
