@@ -3,7 +3,7 @@ import type { DropdownMenuItem } from '@nuxt/ui';
 import { authClient } from '~/utils/auth-client';
 
 defineProps<{
-  collapsed?: boolean;
+  collapsed?: boolean    ;
 }>();
 
 const { t } = useI18n();
@@ -22,7 +22,6 @@ const items = computed(
       label: t('mainSlideOver.dashboard'),
       icon: 'i-lucide-layout-dashboard',
       to: '/user/dashboard',
-      disabled: true,
     },
   ],
   [

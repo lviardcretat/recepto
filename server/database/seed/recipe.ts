@@ -12,7 +12,7 @@ export const recipesSeed: RecipeInsert[] = [
     tips: 'dqzdzqqzddzq',
     seasonId: 1,
     recipesCategoryId: 1,
-    createdById: 4,
+    createdById: 1,
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const recipesSeed: RecipeInsert[] = [
     tips: 'dqzdzqqzddzq',
     seasonId: 1,
     recipesCategoryId: 2,
-    createdById: 4,
+    createdById: 1,
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ export const recipesSeed: RecipeInsert[] = [
     tips: 'dqzdzqqzddzq',
     seasonId: 1,
     recipesCategoryId: 2,
-    createdById: 4,
+    createdById: 1,
   },
   {
     id: 4,
@@ -51,7 +51,7 @@ export const recipesSeed: RecipeInsert[] = [
     tips: 'dqzdzqqzddzq',
     seasonId: 1,
     recipesCategoryId: 2,
-    createdById: 4,
+    createdById: 1,
   },
   {
     id: 5,
@@ -64,6 +64,6 @@ export const recipesSeed: RecipeInsert[] = [
     tips: 'dqzdzqqzddzq',
     seasonId: 1,
     recipesCategoryId: 3,
-    createdById: 4,
+    createdById: 1,
   },
 ];

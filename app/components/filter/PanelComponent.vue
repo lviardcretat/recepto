@@ -203,7 +203,7 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
       />
     </template>
     <!-- <template #switch="{ item }">
-       <div class="w-full flex justify-between items-center">
+      <div class="w-full flex justify-between items-center">
         <div class="flex items-center gap-1.5">
           <UIcon
             :name="item['icon']"
