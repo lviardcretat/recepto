@@ -25,14 +25,16 @@ const items = computed(
 </script>
 
 <template>
-  <UPageCard class="m-auto">
+  <UPageCard class="m-auto w-full max-w-md min-h-[550px] max-h-md">
     <UTabs
       :items="items"
       class="mb-6"
     >
       <template #content="{ item }">
-        <AuthLoginComponent v-if="item.type === LoginType.LOGIN" />
-        <AuthRegisterComponent v-if="item.type === LoginType.REGISTER" />
+        <div class="w-full h-full">
+          <AuthLoginComponent v-if="item.type === LoginType.LOGIN" />
+          <AuthRegisterComponent v-if="item.type === LoginType.REGISTER" />
+        </div>
       </template>
     </UTabs>
   </UPageCard>

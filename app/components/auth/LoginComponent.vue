@@ -55,7 +55,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div class="w-full mt-10">
+  <div class="w-full h-full mt-10">
     <UAuthForm
       :schema="schema"
       :title="$t('auth.login.title')"
