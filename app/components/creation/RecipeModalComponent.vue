@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { CreationUstensilModalComponent } from '#components';
 import type { FormSubmitEvent } from '#ui/types';
 import {
   recipeCreation,
@@ -10,6 +11,11 @@ const props = defineProps<{
   modalTitle: string;
 }>();
 const emit = defineEmits(['closeModal']);
+
+const isIngredientCreationModalOpen = ref(false);
+const isRecipeCategoryCreationModalOpen = ref(false);
+const isUstensilCreationModalOpen = ref(false);
+const isIngredientSelectMenuOpen = ref(false);
 const toast = useToast();
 const form = ref();
 const state = ref<Partial<RecipeCreation>>({
@@ -43,7 +49,10 @@ const { data: seasons } = await useFetch('/api/seasons/all', {
   },
 });
 
-const { data: recipesCategories } = await useFetch(
+const {
+  data: recipesCategories,
+  refresh: refreshRecipesCategoriesFetch,
+} = await useFetch(
   '/api/recipesCategories/all',
   {
     method: 'GET',
@@ -61,7 +70,10 @@ const { data: recipesCategories } = await useFetch(
   },
 );
 
-const { data: ingredients } = await useFetch('/api/ingredients/all', {
+const {
+  data: ingredients,
+  refresh: refreshIngredientsFetch,
+} = await useFetch('/api/ingredients/all', {
   method: 'GET',
   watch: false,
   default: () => null,
@@ -91,7 +103,10 @@ const { data: allergens } = await useFetch('/api/allergens/all', {
   },
 });
 
-const { data: ustensils } = await useFetch('/api/ustensils/all', {
+const {
+  data: ustensils,
+  refresh: refreshUstensilsFetch,
+} = await useFetch('/api/ustensils/all', {
   method: 'GET',
   watch: false,
   default: () => null,
@@ -142,9 +157,58 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
     },
   });
 }
+
+useListen('ingredient:created', async () => {
+  await refreshIngredientsFetch();
+  isIngredientSelectMenuOpen.value = true;
+});
+useListen('recipesCategory:created', async () => {
+  await refreshRecipesCategoriesFetch();
+  isRecipeCategoryCreationModalOpen.value = true;
+});
+useListen('ustensil:created', async () => {
+  await refreshUstensilsFetch();
+  isUstensilCreationModalOpen.value = true;
+});
 </script>
 
 <template>
+  <UModal
+    v-model:open="isUstensilCreationModalOpen"
+    :dismissible="false"
+    class="max-h-10/12 max-w-4xl"
+  >
+    <template #content>
+      <CreationUstensilModalComponent
+        :modal-title="$t('formCreation.ustensil.cardTitle')"
+        @close-modal="isUstensilCreationModalOpen = false"
+      />
+    </template>
+  </UModal>
+  <UModal
+    v-model:open="isIngredientCreationModalOpen"
+    :dismissible="false"
+    class="max-h-10/12 max-w-4xl"
+  >
+    <template #content>
+      <CreationIngredientModalComponent
+        :modal-title="$t('formCreation.ingredient.cardTitle')"
+        @close-modal="isIngredientCreationModalOpen = false"
+      />
+    </template>
+  </UModal>
+  <UModal
+    v-model:open="isRecipeCategoryCreationModalOpen"
+    :dismissible="false"
+    class="max-h-10/12 max-w-4xl"
+  >
+    <template #content>
+      <CreationRecipesCategoryModalComponent
+        :modal-title="$t('formCreation.category.cardTitle')"
+        @close-modal="isRecipeCategoryCreationModalOpen = false"
+      />
+    </template>
+  </UModal>
   <UForm
     ref="form"
     :schema="recipeCreation"
@@ -259,6 +323,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
         </div>
 
         <USeparator />
+
         <!-- ------------ Ingredients ------------ -->
 
         <UFormField
@@ -279,7 +344,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
           <div
             v-for="(ingredient, index) of state.ingredients"
             :key="ingredient.ingredientId"
-            class="flex gap-2 w-full flex-wrap items-center"
+            class="flex gap-2 w-full flex-wrap"
           >
             <UFormField
               :label="$t('formCreation.recipe.name')"
@@ -288,12 +353,26 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             >
               <USelectMenu
                 v-model="ingredient.ingredientId"
+                v-model:open="isIngredientSelectMenuOpen"
                 value-key="id"
-                :items="ingredients ?? []"
+                :items="[...[{ slot: 'test' }], ...ingredients ?? []]"
                 :searchable-placeholder="$t('search')"
                 :placeholder="$t('formCreation.recipe.selectBy_male', { selectName: $t('ingredient').toLowerCase() })"
                 :ui="{ base: 'w-full' }"
-              />
+              >
+                <template #item="{ item }">
+                  <UButton
+                    v-if="item?.slot === 'test'"
+                    variant="ghost"
+                    icon="i-lucide-plus"
+                    class="w-full h-full"
+                    :ui="{ base: 'hover:bg-inherit!' }"
+                    @click="(_event) => { isIngredientCreationModalOpen = true }"
+                  >
+                    Ajouter un ingrédient
+                  </UButton>
+                </template>
+              </USelectMenu>
             </UFormField>
             <UFormField
               :label="$t('formCreation.recipe.quantity')"
@@ -312,6 +391,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
               :label="$t('formCreation.recipe.unit')"
               :name="`ingredients.${index}.unitId`"
               :ui="{ root: 'w-auto grow', container: 'w-container' }"
+              :hint="$t('formCreation.recipe.optional')"
             >
               <USelectMenu
                 v-model="ingredient.unitId"
@@ -396,6 +476,7 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
         </UFormField>
 
         <USeparator />
+
         <!-- ------------ Ustensils, Categories, allergens ------------ -->
 
         <div class="flex gap-2 flex-wrap">
@@ -407,12 +488,25 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             <USelectMenu
               v-model="state.ustensils"
               value-key="id"
-              :items="ustensils ?? []"
+              :items="[...[{ slot: 'test' }], ...ustensils ?? []]"
               multiple
               :searchable-placeholder="$t('search')"
               class="w-full"
               :placeholder="$t('formCreation.recipe.selectBy_plural', { selectName: $t('ustensil', 2).toLowerCase() })"
-            />
+            >
+              <template #item="{ item }">
+                <UButton
+                  v-if="item?.slot === 'test'"
+                  variant="ghost"
+                  icon="i-lucide-plus"
+                  class="w-full h-full"
+                  :ui="{ base: 'hover:bg-inherit!' }"
+                  @click="(_event) => { isUstensilCreationModalOpen = true }"
+                >
+                  Ajouter un ingrédient
+                </UButton>
+              </template>
+            </USelectMenu>
           </UFormField>
           <UFormField
             :label="$t('category')"
@@ -422,12 +516,25 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
             <USelectMenu
               v-model="state.recipesCategoryId"
               value-key="id"
-              :items="recipesCategories ?? []"
+              :items="[...[{ slot: 'test' }], ...recipesCategories ?? []]"
               :searchable-placeholder="$t('search')"
               class="w-full"
               :placeholder="$t('formCreation.recipe.selectBy_female', { selectName: $t('formCreation.recipe.category').toLowerCase() })"
               @update:model-value="state.recipesCategoryId = Number($event)"
-            />
+            >
+              <template #item="{ item }">
+                <UButton
+                  v-if="item?.slot === 'test'"
+                  variant="ghost"
+                  icon="i-lucide-plus"
+                  class="w-full h-full"
+                  :ui="{ base: 'hover:bg-inherit!' }"
+                  @click="(_event) => { isRecipeCategoryCreationModalOpen = true }"
+                >
+                  Ajouter un ingrédient
+                </UButton>
+              </template>
+            </USelectMenu>
           </UFormField>
           <UFormField
             :label="$t('formCreation.recipe.season')"
