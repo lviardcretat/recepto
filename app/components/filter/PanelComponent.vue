@@ -118,12 +118,12 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
         label: t('filter'),
         type: 'label',
       },
-      {
+      /* {
         label: t('seasonalRecipes'),
         icon: 'i-lucide-sun-snow',
         slot: 'switch',
         disabled: false,
-      },
+      }, */
       {
         label: t('ingredient'),
         icon: 'i-lucide-carrot',
@@ -201,8 +201,8 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
         :data-type="item['dataType']"
       />
     </template>
-    <template #switch="{ item }">
-      <div class="w-full flex justify-between items-center">
+    <!-- <template #switch="{ item }">
+       <div class="w-full flex justify-between items-center">
         <div class="flex items-center gap-1.5">
           <UIcon
             :name="item['icon']"
@@ -210,13 +210,12 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
           />
           {{ item['label'] }}
         </div>
-        <!--
         <USwitch
           unchecked-icon="i-lucide-x"
           checked-icon="i-lucide-check"
-        /> -->
+        />
       </div>
-    </template>
+    </template> -->
   </UNavigationMenu>
 </template>
 
