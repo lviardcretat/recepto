@@ -15,6 +15,7 @@ const emit = defineEmits(['closeModal']);
 const nuxtApp = useNuxtApp();
 const isIngredientCreationModalOpen = ref(false);
 const ingredientNameToCreate = ref<string | undefined>(undefined);
+const selectMenuIngredientIdConcerned = ref(0);
 const isRecipeCategoryCreationModalOpen = ref(false);
 const recipeCategoryNameToCreate = ref<string | undefined>(undefined);
 const isUstensilCreationModalOpen = ref(false);
@@ -178,8 +179,8 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
 nuxtApp.hook('ingredient:created', async (payload) => {
   await refreshIngredientsFetch();
   ingredientNameToCreate.value = undefined;
-  if (state.value.ingredients[0]) {
-    state.value.ingredients[0].ingredientId = payload.id;
+  if (state.value.ingredients[selectMenuIngredientIdConcerned.value]) {
+    state.value.ingredients[selectMenuIngredientIdConcerned.value].ingredientId = payload.id;
   }
 });
 nuxtApp.hook('recipesCategory:created', async (payload) => {
@@ -387,7 +388,7 @@ nuxtApp.hook('ustensil:created', async (payload) => {
                 :searchable-placeholder="$t('search')"
                 :placeholder="$t('formCreation.recipe.selectBy_male', { selectName: $t('ingredient').toLowerCase() })"
                 :ui="{ base: 'w-full' }"
-                @create="(name) => { ingredientNameToCreate = name; isIngredientCreationModalOpen = true }"
+                @create="(name) => { ingredientNameToCreate = name; selectMenuIngredientIdConcerned = index; isIngredientCreationModalOpen = true }"
               />
             </UFormField>
             <UFormField
