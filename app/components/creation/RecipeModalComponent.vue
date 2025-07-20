@@ -16,6 +16,8 @@ const isIngredientCreationModalOpen = ref(false);
 const isRecipeCategoryCreationModalOpen = ref(false);
 const isUstensilCreationModalOpen = ref(false);
 const isIngredientSelectMenuOpen = ref(false);
+const isRecipeCategorySelectMenuOpen = ref(false);
+const isUstensilSelectMenuOpen = ref(false);
 const toast = useToast();
 const form = ref();
 const state = ref<Partial<RecipeCreation>>({
@@ -164,11 +166,11 @@ useListen('ingredient:created', async () => {
 });
 useListen('recipesCategory:created', async () => {
   await refreshRecipesCategoriesFetch();
-  isRecipeCategoryCreationModalOpen.value = true;
+  isRecipeCategorySelectMenuOpen.value = true;
 });
 useListen('ustensil:created', async () => {
   await refreshUstensilsFetch();
-  isUstensilCreationModalOpen.value = true;
+  isUstensilSelectMenuOpen.value = true;
 });
 </script>
 
@@ -487,6 +489,7 @@ useListen('ustensil:created', async () => {
           >
             <USelectMenu
               v-model="state.ustensils"
+              v-model:open="isUstensilSelectMenuOpen"
               value-key="id"
               :items="[...[{ slot: 'test' }], ...ustensils ?? []]"
               multiple
@@ -515,6 +518,7 @@ useListen('ustensil:created', async () => {
           >
             <USelectMenu
               v-model="state.recipesCategoryId"
+              v-model:open="isRecipeCategorySelectMenuOpen"
               value-key="id"
               :items="[...[{ slot: 'test' }], ...recipesCategories ?? []]"
               :searchable-placeholder="$t('search')"
