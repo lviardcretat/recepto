@@ -12,9 +12,10 @@ import type { BulletLegendItemInterface } from '@unovis/ts';
 import { Months } from '~/enums/data';
 import type { DataRecord } from '~~/server/api/ingredients/seasonals.get';
 
+const nuxtApp = useNuxtApp();
 const { t } = useI18n();
 
-useListen('ingredient:created', async () => {
+nuxtApp.hook('ingredient:created', async () => {
   await refreshDatasetsFetch();
 });
 

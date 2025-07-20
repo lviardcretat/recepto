@@ -2,6 +2,7 @@
 import type { CommandPaletteGroup, CommandPaletteItem } from '@nuxt/ui';
 import type { RecipeSearched } from '~/types/search';
 
+const nuxtApp = useNuxtApp();
 const searchValue = ref({});
 const { data, execute, refresh } = useFetch('/api/recipesCategories/search', {
   method: 'GET',
@@ -35,7 +36,7 @@ const { data, execute, refresh } = useFetch('/api/recipesCategories/search', {
 
 await execute();
 
-useListen('recipe:created', async () => {
+nuxtApp.hook('recipe:created', async () => {
   await refresh();
 });
 

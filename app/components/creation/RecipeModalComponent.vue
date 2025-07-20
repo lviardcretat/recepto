@@ -12,15 +12,30 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['closeModal']);
 
+const nuxtApp = useNuxtApp();
 const isIngredientCreationModalOpen = ref(false);
+const ingredientNameToCreate = ref<string | undefined>(undefined);
 const isRecipeCategoryCreationModalOpen = ref(false);
+const recipeCategoryNameToCreate = ref<string | undefined>(undefined);
 const isUstensilCreationModalOpen = ref(false);
-const isIngredientSelectMenuOpen = ref(false);
-const isRecipeCategorySelectMenuOpen = ref(false);
-const isUstensilSelectMenuOpen = ref(false);
+const ustensilNameToCreate = ref<string | undefined>(undefined);
 const toast = useToast();
 const form = ref();
-const state = ref<Partial<RecipeCreation>>({
+const state = ref<{
+  name?: string;
+  description?: string;
+  tips?: string;
+  peopleNumber?: number;
+  preparationTime?: number;
+  cookingTime?: number;
+  restTime?: number;
+  seasonId?: number;
+  ingredients: { ingredientId?: number; quantity?: number; unitId?: number }[];
+  sequences: { title?: string; description?: string }[];
+  allergens?: number[];
+  ustensils?: number[];
+  recipesCategoryId?: number;
+}>({
   name: undefined,
   description: undefined,
   tips: undefined,
@@ -29,8 +44,8 @@ const state = ref<Partial<RecipeCreation>>({
   cookingTime: undefined,
   restTime: undefined,
   seasonId: undefined,
-  ingredients: [{ ingredientId: 0, quantity: 0 }],
-  sequences: [{ title: '', description: '' }],
+  ingredients: [{ quantity: 0 }],
+  sequences: [{ title: undefined, description: undefined }],
   allergens: [],
   ustensils: undefined,
   recipesCategoryId: undefined,
@@ -144,8 +159,8 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
     body: event.data,
     immediate: false,
     watch: false,
-    onResponse() {
-      useEvent('recipe:created', true);
+    async onResponse() {
+      await nuxtApp.callHook('recipe:created', {});
       emit('closeModal');
       toast.add({
         title: `La recette ${event.data.name} a bien été ajouté !`,
@@ -160,17 +175,24 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
   });
 }
 
-useListen('ingredient:created', async () => {
+nuxtApp.hook('ingredient:created', async (payload) => {
   await refreshIngredientsFetch();
-  isIngredientSelectMenuOpen.value = true;
+  ingredientNameToCreate.value = undefined;
+  if (state.value.ingredients[0]) {
+    state.value.ingredients[0].ingredientId = payload.id;
+  }
 });
-useListen('recipesCategory:created', async () => {
+nuxtApp.hook('recipesCategory:created', async (payload) => {
   await refreshRecipesCategoriesFetch();
-  isRecipeCategorySelectMenuOpen.value = true;
+  recipeCategoryNameToCreate.value = undefined;
+  state.value.recipesCategoryId = payload.id;
 });
-useListen('ustensil:created', async () => {
+nuxtApp.hook('ustensil:created', async (payload) => {
   await refreshUstensilsFetch();
-  isUstensilSelectMenuOpen.value = true;
+  ustensilNameToCreate.value = undefined;
+  if (state.value.ustensils) {
+    state.value.ustensils.push(payload.id);
+  }
 });
 </script>
 
@@ -183,6 +205,7 @@ useListen('ustensil:created', async () => {
     <template #content>
       <CreationUstensilModalComponent
         modal-title="ustensil"
+        :ustensil-name="ustensilNameToCreate"
         @close-modal="isUstensilCreationModalOpen = false"
       />
     </template>
@@ -195,6 +218,7 @@ useListen('ustensil:created', async () => {
     <template #content>
       <CreationIngredientModalComponent
         modal-title="ingredient"
+        :ingredient-name="ingredientNameToCreate"
         @close-modal="isIngredientCreationModalOpen = false"
       />
     </template>
@@ -207,6 +231,7 @@ useListen('ustensil:created', async () => {
     <template #content>
       <CreationRecipesCategoryModalComponent
         modal-title="category"
+        :recipe-category-name="recipeCategoryNameToCreate"
         @close-modal="isRecipeCategoryCreationModalOpen = false"
       />
     </template>
@@ -333,12 +358,13 @@ useListen('ustensil:created', async () => {
           name="ingredients"
           class="flex flex-col gap-4"
           size="xl"
+          :ui="{ container: 'flex flex-col gap-4' }"
         >
           <template #hint>
             <UButton
               icon="i-lucide-plus"
               variant="ghost"
-              @click="state.ingredients?.push({ ingredientId: 0, quantity: 0, unitId: 0 })"
+              @click="state.ingredients?.push({ ingredientId: 0, quantity: 0 })"
             >
               {{ $t('add') }}
             </UButton>
@@ -355,26 +381,14 @@ useListen('ustensil:created', async () => {
             >
               <USelectMenu
                 v-model="ingredient.ingredientId"
-                v-model:open="isIngredientSelectMenuOpen"
                 value-key="id"
-                :items="[...[{ slot: 'test' }], ...ingredients ?? []]"
+                :items="ingredients ?? []"
+                create-item
                 :searchable-placeholder="$t('search')"
                 :placeholder="$t('formCreation.recipe.selectBy_male', { selectName: $t('ingredient').toLowerCase() })"
                 :ui="{ base: 'w-full' }"
-              >
-                <template #item="{ item }">
-                  <UButton
-                    v-if="item?.slot === 'test'"
-                    variant="ghost"
-                    icon="i-lucide-plus"
-                    class="w-full h-full"
-                    :ui="{ base: 'hover:bg-inherit!' }"
-                    @click="(_event) => { isIngredientCreationModalOpen = true }"
-                  >
-                    Ajouter un ingrédient
-                  </UButton>
-                </template>
-              </USelectMenu>
+                @create="(name) => { ingredientNameToCreate = name; isIngredientCreationModalOpen = true }"
+              />
             </UFormField>
             <UFormField
               :label="$t('formCreation.recipe.quantity')"
@@ -489,27 +503,15 @@ useListen('ustensil:created', async () => {
           >
             <USelectMenu
               v-model="state.ustensils"
-              v-model:open="isUstensilSelectMenuOpen"
               value-key="id"
-              :items="[...[{ slot: 'test' }], ...ustensils ?? []]"
+              :items="ustensils ?? []"
               multiple
+              create-item
               :searchable-placeholder="$t('search')"
               class="w-full"
               :placeholder="$t('formCreation.recipe.selectBy_plural', { selectName: $t('ustensil', 2).toLowerCase() })"
-            >
-              <template #item="{ item }">
-                <UButton
-                  v-if="item?.slot === 'test'"
-                  variant="ghost"
-                  icon="i-lucide-plus"
-                  class="w-full h-full"
-                  :ui="{ base: 'hover:bg-inherit!' }"
-                  @click="(_event) => { isUstensilCreationModalOpen = true }"
-                >
-                  Ajouter un ingrédient
-                </UButton>
-              </template>
-            </USelectMenu>
+              @create="(name) => { ustensilNameToCreate = name; isUstensilCreationModalOpen = true }"
+            />
           </UFormField>
           <UFormField
             :label="$t('category')"
@@ -518,27 +520,14 @@ useListen('ustensil:created', async () => {
           >
             <USelectMenu
               v-model="state.recipesCategoryId"
-              v-model:open="isRecipeCategorySelectMenuOpen"
               value-key="id"
-              :items="[...[{ slot: 'test' }], ...recipesCategories ?? []]"
+              :items="recipesCategories ?? []"
               :searchable-placeholder="$t('search')"
+              create-item
               class="w-full"
               :placeholder="$t('formCreation.recipe.selectBy_female', { selectName: $t('formCreation.recipe.category').toLowerCase() })"
-              @update:model-value="state.recipesCategoryId = Number($event)"
-            >
-              <template #item="{ item }">
-                <UButton
-                  v-if="item?.slot === 'test'"
-                  variant="ghost"
-                  icon="i-lucide-plus"
-                  class="w-full h-full"
-                  :ui="{ base: 'hover:bg-inherit!' }"
-                  @click="(_event) => { isRecipeCategoryCreationModalOpen = true }"
-                >
-                  Ajouter un ingrédient
-                </UButton>
-              </template>
-            </USelectMenu>
+              @create="(name) => { recipeCategoryNameToCreate = name; isRecipeCategoryCreationModalOpen = true }"
+            />
           </UFormField>
           <UFormField
             :label="$t('formCreation.recipe.season')"
@@ -551,7 +540,6 @@ useListen('ustensil:created', async () => {
               :items="seasons ?? []"
               :placeholder="$t('formCreation.recipe.selectBy_female', { selectName: $t('formCreation.recipe.season').toLowerCase() })"
               class="w-full"
-              @update:model-value="state.seasonId = Number($event)"
             />
           </UFormField>
         </div>
@@ -568,7 +556,6 @@ useListen('ustensil:created', async () => {
             :searchable-placeholder="$t('search')"
             class="w-full"
             :placeholder="$t('formCreation.recipe.selectBy_plural', { selectName: $t('allergens').toLowerCase() })"
-            searchable
           />
         </UFormField>
       </div>

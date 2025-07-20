@@ -1,5 +1,5 @@
 import { betterAuth } from 'better-auth';
-import { admin, username } from 'better-auth/plugins';
+import { admin, anonymous, username } from 'better-auth/plugins';
 import { D1Dialect } from '@atinux/kysely-d1';
 
 function createAuth() {
@@ -13,7 +13,7 @@ function createAuth() {
     emailAndPassword: {
       enabled: true,
     },
-    plugins: [username(), admin()],
+    plugins: [username(), admin(), anonymous()],
     trustedOrigins: ['https://recepto.net'],
     advanced: {
       database: {

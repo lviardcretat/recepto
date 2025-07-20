@@ -1,5 +1,6 @@
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
 import { postIngredient } from '~~/server/data/ingredients';
+import { FirstLetterUppercase } from '~~/server/utils/stringUtils';
 
 export default defineEventHandler(async (event) => {
   const session = await serverAuth().api.getSession({
@@ -7,11 +8,12 @@ export default defineEventHandler(async (event) => {
   });
   if (session) {
     const body = await readValidatedBody(event, ingredientCreationSchema.parse);
-    await postIngredient(
-      body.name,
+    const ingredientCreated: Ingredient = await postIngredient(
+      FirstLetterUppercase(body.name),
       body.foodTypeId,
       body.seasonalMonths,
       +session.user.id,
     );
+    return ingredientCreated;
   }
 });

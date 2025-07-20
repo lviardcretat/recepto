@@ -6,17 +6,19 @@ import {
 } from '~/schemas/creation/ustensil';
 import type { UstensilCreationSchema } from '~/schemas/creation/ustensil';
 
-const form = ref();
 const props = defineProps<{
   modalTitle: string;
+  ustensilName?: string;
 }>();
+const form = ref();
+const nuxtApp = useNuxtApp();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const schema = ustensilCreationSchema;
 const state = ref<{
   name?: string;
 }>({
-  name: undefined,
+  name: props.ustensilName,
 });
 
 async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
@@ -25,8 +27,10 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
     body: event.data,
     immediate: false,
     watch: false,
-    onResponse() {
-      useEvent('ustensil:created', true);
+    async onResponse(response) {
+      await nuxtApp.callHook('ustensil:created', {
+        id: response.response._data.id,
+      });
       emit('closeModal');
       toast.add({
         title: `L'ustensile ${event.data.name} a bien été ajouté !`,

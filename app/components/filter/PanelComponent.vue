@@ -11,6 +11,7 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
+const nuxtApp = useNuxtApp();
 // const swicthStates = useFilterSwitchStates();
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
@@ -89,7 +90,7 @@ await callOnce(async () => {
   );
 });
 
-useListen('ustensil:created', async () => {
+nuxtApp.hook('ustensil:created', async () => {
   const ustensilsFetch = await $fetch('/api/ustensils/all', {
     method: 'GET',
   });
@@ -100,7 +101,7 @@ useListen('ustensil:created', async () => {
   );
 });
 
-useListen('ingredient:created', async () => {
+nuxtApp.hook('ingredient:created', async () => {
   const ingredientsFetch = await $fetch('/api/ingredients/all', {
     method: 'GET',
   });

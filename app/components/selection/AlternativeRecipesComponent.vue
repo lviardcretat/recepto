@@ -7,6 +7,7 @@ const switchStates = useFilterSwitchStates();
 const resultsStates = useFilterResults();
 const route = useRoute();
 
+const nuxtApp = useNuxtApp();
 const isModalOpen: Ref<boolean> = ref(false);
 const recipeActive: Ref<RecipeWithLessData | undefined> = ref();
 
@@ -22,7 +23,7 @@ await callOnce(
   { mode: 'navigation' },
 );
 
-useListen('recipe:created', async () => {
+nuxtApp.hook('recipe:created', async () => {
   resultsStates.value.recipes = (await FilterUtils.fetchFilteredItems(
     selectMenuStates.value,
     iconsGridStates.value,

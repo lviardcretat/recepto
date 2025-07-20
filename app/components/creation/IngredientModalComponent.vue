@@ -4,8 +4,10 @@ import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
 import type { IngredientCreation } from '~/schemas/creation/ingredient';
 import { Months } from '~/enums/data';
 
+const nuxtApp = useNuxtApp();
 const props = defineProps<{
   modalTitle: string;
+  ingredientName?: string;
 }>();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
@@ -16,7 +18,7 @@ const state = ref<{
   foodTypeId?: number;
   seasonalMonths?: number[][];
 }>({
-  name: undefined,
+  name: props.ingredientName,
   foodTypeId: undefined,
   seasonalMonths: undefined,
 });
@@ -43,8 +45,10 @@ async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
     watch: false,
     body: event.data,
     default: () => null,
-    onResponse() {
-      useEvent('ingredient:created', true);
+    async onResponse(response) {
+      await nuxtApp.callHook('ingredient:created', {
+        id: response.response._data.id,
+      });
       emit('closeModal');
       toast.add({
         title: `L'ingrédient ${event.data.name} a bien été ajouté !`,

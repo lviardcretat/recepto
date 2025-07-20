@@ -4,6 +4,7 @@ export async function getIngredients(): Promise<Ingredient[]> {
   const ingredients: Ingredient[] = await useDrizzle()
     .select()
     .from(tables.ingredient)
+    .orderBy(tables.ingredient.name)
     .all();
   return ingredients;
 }
@@ -13,16 +14,19 @@ export async function postIngredient(
   foodTypeId: number,
   seasonalMonths: number[][] | undefined,
   createdById: number,
-): Promise<void> {
+): Promise<Ingredient> {
   const ingredientInsert: IngredientInsert = {
     name: name,
     foodTypeId: foodTypeId,
     seasonalMonths: seasonalMonths,
     createdById: createdById,
   };
-  await useDrizzle()
+  const ingredientCreated = await useDrizzle()
     .insert(tables.ingredient)
-    .values(ingredientInsert);
+    .values(ingredientInsert)
+    .returning()
+    .get();
+  return ingredientCreated;
 }
 
 export async function getIngredientsSeasonalMonths(foodTypeId: number) {

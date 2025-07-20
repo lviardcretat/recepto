@@ -8,7 +8,9 @@ import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory
 
 const props = defineProps<{
   modalTitle: string;
+  recipeCategoryName?: string;
 }>();
+const nuxtApp = useNuxtApp();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const schema = recipesCategoryCreation;
@@ -17,7 +19,7 @@ const state = ref<{
   name?: string;
   dishTypeId?: number;
 }>({
-  name: undefined,
+  name: props.recipeCategoryName,
   dishTypeId: undefined,
 });
 
@@ -42,8 +44,10 @@ async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
     body: event.data,
     immediate: false,
     watch: false,
-    onResponse() {
-      useEvent('recipesCategory:created', true);
+    async onResponse(response) {
+      await nuxtApp.callHook('recipesCategory:created', {
+        id: response.response._data.id,
+      });
       emit('closeModal');
       toast.add({
         title: `La catégorie ${event.data.name} a bien été ajouté !`,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { RecipesCategoriesWithLessData } from '~/types/filter';
 
+const nuxtApp = useNuxtApp();
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
 const switchStates = useFilterSwitchStates();
@@ -22,7 +23,7 @@ function isData() {
   );
 }
 
-useListen('recipesCategory:created', async () => {
+nuxtApp.hook('recipesCategory:created', async () => {
   resultsStates.value.recipesCategories = (await FilterUtils.fetchFilteredItems(
     selectMenuStates.value,
     iconsGridStates.value,
@@ -30,7 +31,7 @@ useListen('recipesCategory:created', async () => {
   )) as RecipesCategoriesWithLessData[];
 });
 
-useListen('recipe:created', async () => {
+nuxtApp.hook('recipe:created', async () => {
   resultsStates.value.recipesCategories = (await FilterUtils.fetchFilteredItems(
     selectMenuStates.value,
     iconsGridStates.value,
