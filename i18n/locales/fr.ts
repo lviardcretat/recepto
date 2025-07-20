@@ -43,6 +43,7 @@ export default defineI18nLocale(async () => {
         tipsExample: 'Lavez-vous bien les mains !',
         title: 'Titre',
         unit: 'Unité de mesure',
+        timeHint: '(en minutes)',
       },
       ingredient: {
         cardTitle: 'Créer un nouvel ingrédient',

@@ -286,33 +286,33 @@ useListen('ustensil:created', async () => {
           <UFormField
             :label="$t('formCreation.recipe.preparationTime')"
             name="preparationTime"
-            hint="(en heures)"
+            :hint="$t('formCreation.recipe.timeHint')"
             eager-validation
             :ui="{ root: 'w-auto grow', container: 'w-container' }"
           >
             <UInput
               v-model="state.preparationTime"
               type="number"
-              placeholder="0.25"
+              placeholder="25"
             />
           </UFormField>
           <UFormField
             :label="$t('formCreation.recipe.cookingTime')"
             name="cookingTime"
-            hint="(en heures)"
+            :hint="$t('formCreation.recipe.timeHint')"
             eager-validation
             :ui="{ root: 'w-auto grow', container: 'w-container' }"
           >
             <UInput
               v-model="state.cookingTime"
               type="number"
-              placeholder="2"
+              placeholder="122"
             />
           </UFormField>
           <UFormField
             :label="$t('formCreation.recipe.restTime')"
             name="restTime"
-            hint="(en heures)"
+            :hint="$t('formCreation.recipe.timeHint')"
             eager-validation
             :ui="{ root: 'w-auto grow', container: 'w-container' }"
           >
