@@ -182,7 +182,7 @@ useListen('ustensil:created', async () => {
   >
     <template #content>
       <CreationUstensilModalComponent
-        :modal-title="$t('formCreation.ustensil.cardTitle')"
+        modal-title="ustensil"
         @close-modal="isUstensilCreationModalOpen = false"
       />
     </template>
@@ -194,7 +194,7 @@ useListen('ustensil:created', async () => {
   >
     <template #content>
       <CreationIngredientModalComponent
-        :modal-title="$t('formCreation.ingredient.cardTitle')"
+        modal-title="ingredient"
         @close-modal="isIngredientCreationModalOpen = false"
       />
     </template>
@@ -206,7 +206,7 @@ useListen('ustensil:created', async () => {
   >
     <template #content>
       <CreationRecipesCategoryModalComponent
-        :modal-title="$t('formCreation.category.cardTitle')"
+        modal-title="category"
         @close-modal="isRecipeCategoryCreationModalOpen = false"
       />
     </template>
