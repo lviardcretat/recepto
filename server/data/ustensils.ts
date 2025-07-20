@@ -15,7 +15,6 @@ export async function postUstensil(
   const ustensilInsert: UstensilInsert = {
     name: name,
     createdById: createdById,
-    createdAt: new Date(),
   };
   await useDrizzle()
     .insert(tables.ustensil)
