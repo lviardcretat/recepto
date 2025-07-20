@@ -6,7 +6,7 @@ const overlay = useOverlay();
 const modal = overlay.create(SeasonalChartComponent);
 defineShortcuts({
   shift_s: {
-    usingInput: true,
+    usingInput: false,
     handler: () => {
       modal.open();
     },
