@@ -9,14 +9,14 @@ export async function getSequences(): Promise<Sequence[]> {
 }
 
 export async function postSequence(
-  title: string,
-  description: string,
+  name: string,
+  extra: string | undefined,
   recipeId: number,
   createdById: number,
 ): Promise<void> {
   const sequenceInsert: SequenceInsert = {
-    title: title,
-    description: description,
+    name: name,
+    extra: extra,
     recipeId: recipeId,
     createdById: createdById,
   };

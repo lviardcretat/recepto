@@ -128,8 +128,8 @@ export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
         orderBy: sequence => sequence.id,
         columns: {
           id: true,
-          title: true,
-          description: true,
+          name: true,
+          extra: true,
         },
       },
       ustensils: {

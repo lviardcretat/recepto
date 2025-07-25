@@ -29,8 +29,8 @@ const ingredients = ref(
   })),
 );
 const sequences = recipe?.sequences.map(sequence => ({
-  label: sequence.title,
-  content: sequence.description,
+  label: sequence.name,
+  content: sequence.extra ?? undefined,
 }));
 const peopleNumberModified = ref(recipe?.peopleNumber ?? 1);
 

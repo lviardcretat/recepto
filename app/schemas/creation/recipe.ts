@@ -7,8 +7,8 @@ export type RecipeIngredientsCreation = z.infer<typeof recipeIngredientsCreation
 const recipeSequenceCreation = z
   .array(
     z.object({
-      title: z.string().min(3).max(100),
-      description: z.string().min(3).max(200),
+      name: z.string().min(3).max(100),
+      extra: z.string().min(3).max(200).optional(),
     }),
   )
   .nonempty();

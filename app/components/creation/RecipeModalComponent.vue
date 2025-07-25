@@ -32,7 +32,7 @@ const state = ref<{
   restTime?: number;
   seasonId?: number;
   ingredients: { ingredientId?: number; quantity?: number; unitId?: number }[];
-  sequences: { title?: string; description?: string }[];
+  sequences: { name?: string; extra?: string }[];
   allergens?: number[];
   ustensils?: number[];
   recipesCategoryId?: number;
@@ -46,7 +46,7 @@ const state = ref<{
   restTime: undefined,
   seasonId: undefined,
   ingredients: [{ quantity: 0 }],
-  sequences: [{ title: undefined, description: undefined }],
+  sequences: [{ name: undefined, extra: undefined }],
   allergens: [],
   ustensils: undefined,
   recipesCategoryId: undefined,
@@ -180,6 +180,7 @@ nuxtApp.hook('ingredient:created', async (payload) => {
   await refreshIngredientsFetch();
   ingredientNameToCreate.value = undefined;
   if (state.value.ingredients[selectMenuIngredientIdConcerned.value]) {
+    // @ts-expect-error : I checked if this isn't null or undefined...
     state.value.ingredients[selectMenuIngredientIdConcerned.value].ingredientId = payload.id;
   }
 });
@@ -444,7 +445,7 @@ nuxtApp.hook('ustensil:created', async (payload) => {
             <UButton
               icon="i-lucide-plus"
               variant="ghost"
-              @click="state.sequences?.push({ title: '', description: '' })"
+              @click="state.sequences?.push({ name: '', extra: '' })"
             >
               {{ $t('add') }}
             </UButton>
@@ -456,27 +457,28 @@ nuxtApp.hook('ustensil:created', async (payload) => {
               class="flex gap-4 w-full"
             >
               <UFormField
-                :label="$t('formCreation.recipe.title')"
-                :name="`sequences.${index}.title`"
+                :label="$t('formCreation.recipe.sequenceDescription')"
+                :name="`sequences.${index}.name`"
                 eager-validation
                 :ui="{ root: 'w-root', container: 'w-container' }"
               >
                 <UInput
-                  v-model="sequence.title"
+                  v-model="sequence.name"
                   type="string"
-                  :placeholder="$t('formCreation.recipe.sequenceTitleExample')"
+                  :placeholder="$t('formCreation.recipe.sequenceDescriptionExample')"
                 />
               </UFormField>
               <UFormField
-                :label="$t('formCreation.recipe.description')"
-                :name="`sequences.${index}.description`"
+                :label="$t('formCreation.recipe.sequenceExtra')"
+                :name="`sequences.${index}.extra`"
                 eager-validation
                 :ui="{ root: 'w-root', container: 'w-container' }"
+                :hint="$t('formCreation.recipe.optional')"
               >
                 <UInput
-                  v-model="sequence.description"
+                  v-model="sequence.extra"
                   type="string"
-                  :placeholder="$t('formCreation.recipe.sequenceDescriptionExample')"
+                  :placeholder="$t('formCreation.recipe.sequenceExtraExample')"
                 />
               </UFormField>
               <UButton

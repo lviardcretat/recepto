@@ -8,8 +8,8 @@ export default defineEventHandler(async (event) => {
   if (session) {
     const body = await readValidatedBody(event, sequenceCreation.parse);
     await postSequence(
-      body.title,
-      body.description,
+      body.name,
+      body.extra,
       body.recipeId,
       +session.user.id,
     );

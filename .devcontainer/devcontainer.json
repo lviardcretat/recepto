@@ -10,7 +10,11 @@
 		"--env-file",
 		"${localWorkspaceFolder}/.devcontainer/devcontainer.env"
 	],
-	//"mounts": ["type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,readonly"],
+	"features": {
+		"ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {
+			"version": "latest"
+		}
+	},
 	"customizations": {
 		"vscode": {
 			"settings": {

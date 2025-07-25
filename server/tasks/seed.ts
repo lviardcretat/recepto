@@ -1,18 +1,10 @@
 import { allergensSeed } from '../database/seed/allergen';
-import { allergenToRecipesSeed } from '../database/seed/allergenToRecipe';
 import { dishTypesSeed } from '../database/seed/dishType';
 import { foodTypesSeed } from '../database/seed/foodType';
 import { ingredientsSeed } from '../database/seed/ingredient';
 import { mealTypesSeed } from '../database/seed/mealType';
-import { mealTypeToRecipeCategoriesSeed } from '../database/seed/mealTypeToRecipeCategory';
-import { recipesSeed } from '../database/seed/recipe';
-import { recipeIngredientsSeed } from '../database/seed/recipeIngredient';
-import { recipesCategorySeed } from '../database/seed/recipesCategory';
-import { recipeToUstensilsSeed } from '../database/seed/recipeToUstensil';
 import { seasonsSeed } from '../database/seed/season';
-import { sequencesSeed } from '../database/seed/sequence';
 import { unitsSeed } from '../database/seed/unit';
-import { usersSeed } from '../database/seed/user';
 import { ustensilsSeed } from '../database/seed/ustensil';
 
 export default defineTask({

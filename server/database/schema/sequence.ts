@@ -6,8 +6,8 @@ import { user } from './user';
 
 export const sequence = sqliteTable('sequence', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  title: text('title').notNull(),
-  description: text('description').notNull(),
+  name: text('name').notNull(),
+  extra: text('extra'),
   recipeId: integer('recipeId')
     .notNull()
     .references(() => recipe.id, { onDelete: 'cascade' }),

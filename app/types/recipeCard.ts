@@ -19,7 +19,7 @@ export type RecipeDetail = {
     ingredient: { name: string };
     unit: { shortForm: string } | null;
   }[];
-  sequences: { id: number; description: string; title: string }[];
+  sequences: { id: number; name: string; extra: string | null }[];
   ustensils: { ustensil: { name: string } }[];
   createdBy: { displayUsername: string };
 };
