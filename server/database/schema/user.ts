@@ -27,7 +27,7 @@ export const user = sqliteTable('user', {
   banExpires: integer('banExpires', { mode: 'timestamp_ms' }),
   username: text('username').notNull(),
   displayUsername: text('displayUsername').notNull(),
-  isAnonymous: integer('banned', { mode: 'boolean' }).default(false).notNull(),
+  isAnonymous: integer('isAnonymous', { mode: 'boolean' }).default(false).notNull(),
   ...timestamps,
 });
 

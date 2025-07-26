@@ -5,7 +5,8 @@ import { relations } from 'drizzle-orm';
 
 export const account = sqliteTable('account', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: text('userId')
+  // Changer en integer pour correspondre au type de user.id
+  userId: integer('userId')
     .notNull()
     .references(() => user.id),
   accountId: text('accountId').notNull(),

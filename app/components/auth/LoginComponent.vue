@@ -1,10 +1,20 @@
 <script setup lang="ts">
 import * as z from 'zod';
-import type { FormSubmitEvent } from '@nuxt/ui';
+import type { ButtonProps, FormSubmitEvent } from '@nuxt/ui';
 import { authClient } from '~/utils/auth-client';
 
 const { t } = useI18n();
 const toast = useToast();
+
+// Provider anonyme
+const providers = computed<ButtonProps[]>(() => [
+  {
+    label: t('auth.login.anonymousProvider'),
+    icon: 'i-lucide-user-x',
+    variant: 'outline' as const,
+    onClick: async () => await handleAnonymousLogin(),
+  },
+]);
 
 const fields = computed(() => [
   {
@@ -52,6 +62,38 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 
   return await navigateTo('/recipes/all');
 }
+
+// Fonction pour la connexion anonyme
+async function handleAnonymousLogin() {
+  try {
+    const response = await authClient.signIn.anonymous();
+
+    if (response.error) {
+      toast.add({
+        title: t('auth.login.anonymousFailedToastTitle'),
+        description: response.error.message,
+        color: 'error',
+      });
+      return;
+    }
+
+    toast.add({
+      title: t('auth.login.anonymousSuccessToastTitle'),
+      description: t('auth.login.anonymousSuccessToastDescription'),
+      color: 'success',
+    });
+
+    await navigateTo('/recipes/all');
+  }
+  catch (error) {
+    console.error('Erreur lors de la connexion anonyme:', error);
+    toast.add({
+      title: t('auth.login.anonymousFailedToastTitle'),
+      description: t('auth.login.anonymousFailedToastDescription'),
+      color: 'error',
+    });
+  }
+}
 </script>
 
 <template>
@@ -62,6 +104,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
       :description="$t('auth.login.description')"
       icon="i-lucide-lock"
       :fields="fields"
+      :providers="providers"
       :submit="{ label: $t('auth.login.button') }"
       @submit="onSubmit"
     />
