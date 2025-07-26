@@ -81,7 +81,7 @@ export default defineI18nLocale(async () => {
         anonymousProvider: 'Continuer en mode invité',
         anonymousSuccessToastTitle: 'Mode invité activé',
         anonymousSuccessToastDescription: 'Vous naviguez maintenant en mode invité. Certaines fonctionnalités sont limitées.',
-        anonymousFailedToastTitle: 'Erreur mode invité',
+        anonymousFailedToastTitle: 'Erreur mode invité ',
         anonymousFailedToastDescription: 'Impossible d\'activer le mode invité. Veuillez réessayer.',
       },
       anonymous: {
