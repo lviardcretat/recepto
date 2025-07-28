@@ -76,17 +76,6 @@ export default defineI18nLocale(async () => {
         button: 'Log in',
         failedToastTitle: 'Error during login',
         rememberMe: 'Remember me',
-        anonymousProvider: 'Continue as guest',
-        anonymousSuccessToastTitle: 'Guest mode enabled',
-        anonymousSuccessToastDescription: 'You are now browsing in guest mode. Some features are limited.',
-        anonymousFailedToastTitle: 'Guest mode error',
-        anonymousFailedToastDescription: 'Unable to enable guest mode. Please try again.',
-      },
-      anonymous: {
-        limitationTitle: 'Limited feature',
-        limitationDescription: 'You must log in to {action}.',
-        guestLabel: 'Guest',
-        createTooltip: 'Log in to create content',
       },
       register: {
         tab: 'Register',

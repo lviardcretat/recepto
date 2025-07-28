@@ -78,17 +78,6 @@ export default defineI18nLocale(async () => {
         button: 'Se connecter',
         failedToastTitle: 'Erreur lors de la connexion',
         rememberMe: 'Se souvenir de moi',
-        anonymousProvider: 'Continuer en mode invité',
-        anonymousSuccessToastTitle: 'Mode invité activé',
-        anonymousSuccessToastDescription: 'Vous naviguez maintenant en mode invité. Certaines fonctionnalités sont limitées.',
-        anonymousFailedToastTitle: 'Erreur mode invité ',
-        anonymousFailedToastDescription: 'Impossible d\'activer le mode invité. Veuillez réessayer.',
-      },
-      anonymous: {
-        limitationTitle: 'Fonctionnalité limitée',
-        limitationDescription: 'Vous devez vous connecter pour {action}.',
-        guestLabel: 'Invité',
-        createTooltip: 'Connectez-vous pour créer du contenu',
       },
       register: {
         tab: 'Inscription',

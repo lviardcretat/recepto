@@ -6,8 +6,7 @@ import { relations } from 'drizzle-orm';
 
 export const session = sqliteTable('session', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  // Changer en integer pour correspondre au type de user.id
-  userId: integer('userId')
+  userId: text('userId')
     .notNull()
     .references(() => user.id),
   token: text('token').notNull().unique(),
