@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b8342b7d-cf60-4947-95c3-d6c4b1dfe0e0",
-  "prevId": "da441e87-9e79-41cd-b272-763c073cba80",
+  "id": "affb6b5e-8a91-4db4-bbe7-eba15e2e1c3e",
+  "prevId": "27e6f275-ca07-47ef-aacd-8d975811196a",
   "tables": {
     "account": {
       "name": "account",
@@ -1045,18 +1045,18 @@
           "notNull": true,
           "autoincrement": true
         },
-        "name": {
-          "name": "name",
+        "title": {
+          "name": "title",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "extra": {
-          "name": "extra",
+        "description": {
+          "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "recipeId": {
@@ -1363,14 +1363,6 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        },
-        "isAnonymous": {
-          "name": "isAnonymous",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
         },
         "createdAt": {
           "name": "createdAt",

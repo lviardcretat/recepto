@@ -10,6 +10,13 @@ function createAuth() {
       }),
       type: 'sqlite',
     },
+    secondaryStorage: {
+      get: key => hubKV().getItemRaw(`_auth:${key}`),
+      set: (key, value, ttl) => {
+        return hubKV().set(`_auth:${key}`, value, { ttl });
+      },
+      delete: key => hubKV().del(`_auth:${key}`),
+    },
     emailAndPassword: {
       enabled: true,
     },

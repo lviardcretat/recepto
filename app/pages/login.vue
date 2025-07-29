@@ -20,6 +20,11 @@ const items = computed(
     icon: 'i-lucide-user',
     type: LoginType.REGISTER,
   },
+  {
+    label: t('auth.anonymous.tab'),
+    icon: 'i-lucide-eye',
+    type: LoginType.ANONYMOUS,
+  },
 ] satisfies TabsItem[],
 );
 </script>
@@ -34,6 +39,7 @@ const items = computed(
         <div class="w-full h-full">
           <AuthLoginComponent v-if="item.type === LoginType.LOGIN" />
           <AuthRegisterComponent v-if="item.type === LoginType.REGISTER" />
+          <AuthAnonymousComponent v-if="item.type === LoginType.ANONYMOUS" />
         </div>
       </template>
     </UTabs>

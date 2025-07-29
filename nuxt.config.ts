@@ -49,6 +49,12 @@ export default defineNuxtConfig({
     // Comment it for local bdd
     database: true,
     blob: true,
+    kv: true,
+  },
+  vite: {
+    ssr: {
+      noExternal: ['to-px'],
+    },
   },
   eslint: {
     config: {

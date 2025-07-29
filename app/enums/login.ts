@@ -4,4 +4,5 @@
 export enum LoginType {
   LOGIN = 'login',
   REGISTER = 'register',
+  ANONYMOUS = 'anonymous',
 }

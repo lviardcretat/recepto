@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD `isAnonymous` integer DEFAULT false NOT NULL;

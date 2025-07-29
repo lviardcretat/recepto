@@ -15,6 +15,7 @@
 			"version": "latest"
 		}
 	},
+	"postStartCommand": "brew install --cask claude-code",
 	"customizations": {
 		"vscode": {
 			"settings": {
@@ -33,7 +34,7 @@
 			"extensions": [
 				"antfu.goto-alias",
 				"bradlc.vscode-tailwindcss",
-				"continue.continue",
+				"anthropic.claude-code",
 				"editorconfig.editorconfig",
 				"imgildev.vscode-drizzle-snippets",
 				"jacano.vscode-pnpm",

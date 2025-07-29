@@ -2,6 +2,7 @@
 import type { DropdownMenuItem } from '@nuxt/ui';
 
 const { t } = useI18n();
+const { canCreate } = useAnonymousRestrictions();
 const modalTitle: Ref<string> = ref('');
 const isModalOpen = ref(false);
 const items = computed(
@@ -44,7 +45,8 @@ const items = computed(
 </script>
 
 <template>
-  <UDropdownMenu
+  <div v-if="canCreate">
+    <UDropdownMenu
     class="absolute bottom-10 right-10 z-20"
     :items="items"
     size="xl"
@@ -89,6 +91,7 @@ const items = computed(
       />
     </template>
   </UModal>
+  </div>
 </template>
 
 <style lang="scss" scoped>

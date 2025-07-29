@@ -9,45 +9,78 @@ defineProps<{
 const { t } = useI18n();
 const { data: session } = await authClient.useSession(useFetch);
 const user = session.value?.user;
-const items = computed(
-  () =>
-[
-  [
-    {
-      label: t('mainSlideOver.settings'),
-      icon: 'i-lucide-settings',
-      disabled: true,
-    },
-    {
-      label: t('mainSlideOver.dashboard'),
-      icon: 'i-lucide-layout-dashboard',
-      to: '/user/dashboard',
-      disabled: true,
-    },
-  ],
-  [
-    {
-      label: t('mainSlideOver.github'),
-      icon: 'i-lucide-github',
-      to: 'https://github.com/lviardcretat/recepto',
-      target: '_blank',
-    },
-    {
-      label: t('mainSlideOver.discord'),
-      icon: 'ic:baseline-discord',
-      to: 'https://discord.gg/vF7FbDpDwt',
-      target: '_blank',
-    },
-  ],
-  [
-    {
-      label: t('mainSlideOver.logout'),
-      icon: 'i-lucide-log-out',
-      onSelect: (_event: Event) => signout(),
-    },
-  ],
-] satisfies DropdownMenuItem[][],
-);
+const { isAnonymous } = useAnonymousRestrictions();
+const items = computed(() => {
+  if (isAnonymous.value) {
+    return [
+      [
+        {
+          label: t('mainSlideOver.loginToAccess'),
+          icon: 'i-lucide-log-in',
+          onSelect: (_event: Event) => navigateTo('/login'),
+        },
+      ],
+      [
+        {
+          label: t('mainSlideOver.github'),
+          icon: 'i-lucide-github',
+          to: 'https://github.com/lviardcretat/recepto',
+          target: '_blank',
+        },
+        {
+          label: t('mainSlideOver.discord'),
+          icon: 'ic:baseline-discord',
+          to: 'https://discord.gg/vF7FbDpDwt',
+          target: '_blank',
+        },
+      ],
+      [
+        {
+          label: t('mainSlideOver.logout'),
+          icon: 'i-lucide-log-out',
+          onSelect: (_event: Event) => signout(),
+        },
+      ],
+    ] satisfies DropdownMenuItem[][];
+  }
+
+  return [
+    [
+      {
+        label: t('mainSlideOver.settings'),
+        icon: 'i-lucide-settings',
+        disabled: true,
+      },
+      {
+        label: t('mainSlideOver.dashboard'),
+        icon: 'i-lucide-layout-dashboard',
+        to: '/user/dashboard',
+        disabled: true,
+      },
+    ],
+    [
+      {
+        label: t('mainSlideOver.github'),
+        icon: 'i-lucide-github',
+        to: 'https://github.com/lviardcretat/recepto',
+        target: '_blank',
+      },
+      {
+        label: t('mainSlideOver.discord'),
+        icon: 'ic:baseline-discord',
+        to: 'https://discord.gg/vF7FbDpDwt',
+        target: '_blank',
+      },
+    ],
+    [
+      {
+        label: t('mainSlideOver.logout'),
+        icon: 'i-lucide-log-out',
+        onSelect: (_event: Event) => signout(),
+      },
+    ],
+  ] satisfies DropdownMenuItem[][];
+});
 
 async function signout() {
   await authClient.signOut({
@@ -69,10 +102,12 @@ async function signout() {
     <UButton
       v-bind="{
         ...user,
-        label: collapsed ? undefined : user?.name,
+        label: collapsed ? 
+          undefined : 
+          isAnonymous ? t('mainSlideOver.anonymous') : user?.name,
         trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
       }"
-      icon="i-lucide-user"
+      :icon="isAnonymous ? 'i-lucide-eye' : 'i-lucide-user'"
       color="neutral"
       variant="ghost"
       block

@@ -84,6 +84,19 @@ export default defineI18nLocale(async () => {
         button: 'Create an account',
         failedToastTitle: 'Error during registration',
       },
+      anonymous: {
+        tab: 'Anonymous access',
+        title: 'Browse recipes',
+        description: 'Access recipes without creating an account. Limited features.',
+        button: 'Continue without account',
+        failedToastTitle: 'Error during anonymous login',
+        limitations: {
+          title: 'With anonymous access:',
+          noCreation: 'You cannot create recipes or ingredients',
+          noUserPages: 'No access to dashboard or settings',
+          viewOnly: 'Recipe viewing only',
+        },
+      },
     },
     heroPage: {
       title: 'Recepto',
@@ -132,6 +145,8 @@ export default defineI18nLocale(async () => {
       github: 'Github',
       discord: 'Discord',
       seasonalRecipes: 'Seasonal recipes',
+      anonymous: 'Anonymous user',
+      loginToAccess: 'Log in for more features',
     },
     months: {
       april: 'April',
