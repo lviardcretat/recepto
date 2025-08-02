@@ -28,7 +28,7 @@ const links = computed(
       to: '/recipes/all',
     },
     {
-      label: t('mainSlideOver.seasonalRecipes'),
+      label: t('mainSlideOver.seasonalIngredients'),
       icon: 'i-lucide-sun-snow',
       slot: 'shortcut',
       onSelect: (_event: Event) => {

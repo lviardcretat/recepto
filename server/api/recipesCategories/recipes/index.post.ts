@@ -4,9 +4,7 @@ import { postRecipe } from '~~/server/data/recipes';
 import { postSequence } from '~~/server/data/sequences';
 
 export default defineEventHandler(async (event) => {
-  const session = await serverAuth().api.getSession({
-    headers: event.headers,
-  });
+  const session = await requireUserSession(event);
   if (session) {
     const body = await readValidatedBody(event, recipeCreation.parse);
     const recipeId: number = await postRecipe(

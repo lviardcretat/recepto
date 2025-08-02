@@ -8,7 +8,7 @@ const recipeSequenceCreation = z
   .array(
     z.object({
       name: z.string().min(3).max(100),
-      extra: z.string().min(3).max(200).optional(),
+      extra: z.preprocess((value) => { return value || undefined; }, z.string().min(3).max(200).optional()),
     }),
   )
   .nonempty();
@@ -26,7 +26,7 @@ const recipeIngredientsCreation = z
 export const recipeCreation = z.object({
   name: z.string().min(3).max(50),
   description: z.string().min(3).max(1000),
-  tips: z.string().min(3).max(200).optional(),
+  tips: z.preprocess((value) => { return value || undefined; }, z.string().min(3).max(200).optional()),
   peopleNumber: z.number().int().positive(),
   preparationTime: z.number().nonnegative(),
   cookingTime: z.number().nonnegative(),

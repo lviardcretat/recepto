@@ -21,9 +21,6 @@ export default defineTask({
     await useDrizzle().delete(tables.ingredient);
     await useDrizzle().delete(tables.recipe);
     await useDrizzle().delete(tables.recipesCategory);
-    await useDrizzle().delete(tables.account);
-    await useDrizzle().delete(tables.verification);
-    await useDrizzle().delete(tables.session);
     await useDrizzle().delete(tables.user);
     return { result: 'success' };
   },

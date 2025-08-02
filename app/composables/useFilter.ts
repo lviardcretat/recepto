@@ -14,13 +14,8 @@ export const useFilterResults = () =>
  * Reset all filters states.
  */
 export const useResetAllFilters = (): void => {
-  const swicthStates = useFilterSwitchStates();
-  const selectMenuStates = useFilterSelectMenuStates();
-  const iconsGridStates = useFilterIconsGridStates();
-  swicthStates.value.seasonalRecipes = false;
-  selectMenuStates.value.dishTypes = [];
-  selectMenuStates.value.mealTypes = [];
-  selectMenuStates.value.ingredients = [];
-  selectMenuStates.value.ustensils = [];
-  iconsGridStates.value.allergens = [];
+  useResetFilterSelectMenuStates();
+  useResetFilterSelectedMenuStates();
+  useResetFilterIconsGridStates();
+  useResetFilterSwitchStates();
 };

@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/ui-pro', // Comment it for local bdd
     '@nuxthub/core',
     '@nuxt/eslint',
+    'nuxt-auth-utils',
   ],
   $development: {
     // Comment it for local bdd
@@ -49,7 +50,6 @@ export default defineNuxtConfig({
     // Comment it for local bdd
     database: true,
     blob: true,
-    kv: true,
   },
   vite: {
     ssr: {
@@ -79,6 +79,11 @@ export default defineNuxtConfig({
     lazy: true,
     strategy: 'no_prefix',
     vueI18n: './i18n.config.ts',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
   },
   icon: {
     customCollections: [

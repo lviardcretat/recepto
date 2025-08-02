@@ -118,6 +118,8 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
       {
         label: t('filter'),
         type: 'label',
+        trailingIcon: 'i-lucide-filter-x',
+        slot: 'filter',
       },
       /* {
         label: t('seasonalRecipes'),
@@ -180,7 +182,12 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
           },
         ],
       },
-    ]);
+    ],
+);
+
+function resetAllFilters() {
+  useResetAllFilters();
+}
 </script>
 
 <template>
@@ -189,7 +196,16 @@ const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
     orientation="vertical"
     :collapsed="collapsed"
     popover
+    :ui="{ linkLabel: 'px-2.5', label: 'px-0' }"
   >
+    <template #filter-trailing="{ item }">
+      <UButton
+        class="px-2.5"
+        :icon="item.trailingIcon"
+        variant="ghost"
+        @click="resetAllFilters()"
+      />
+    </template>
     <template #select="{ item }">
       <FilterCustomSelectComponent
         class="w-full"

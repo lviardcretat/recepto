@@ -65,3 +65,19 @@ export const useUpdateFilterSelectMenu = async (
     item => item.wanted || item.notWanted,
   );
 };
+
+export const useResetFilterSelectMenuStates = (): void => {
+  const selectMenuStates: Ref<FilterSelectMenuStates> = useFilterSelectMenuStates();
+  selectMenuStates.value.dishTypes = [];
+  selectMenuStates.value.ingredients = [];
+  selectMenuStates.value.mealTypes = [];
+  selectMenuStates.value.ustensils = [];
+};
+
+export const useResetFilterSelectedMenuStates = (): void => {
+  const selectedMenuStates: Ref<FilterSelectMenuStates> = useFilterSelectedItemsStates();
+  selectedMenuStates.value.dishTypes = [];
+  selectedMenuStates.value.ingredients = [];
+  selectedMenuStates.value.mealTypes = [];
+  selectedMenuStates.value.ustensils = [];
+};

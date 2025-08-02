@@ -112,7 +112,10 @@ function renderIngredient(): void {
     </template>
     <UContainer class="info mb-6">
       <div>{{ recipe?.description }}</div>
-      <div class="mt-4 italic text-center opacity-60">
+      <div
+        v-if="recipe?.tips"
+        class="mt-4 italic text-center opacity-60"
+      >
         {{ `❝ ${recipe?.tips} ❞` }}
       </div>
     </UContainer>
@@ -161,12 +164,19 @@ function renderIngredient(): void {
           <template #leading="{ index }">
             <span class="truncate">{{ index + 1 }}.</span>
           </template>
+          <template
+            #trailing="{
+              item,
+            }"
+          >
+            <span v-if="!item.content" />
+          </template>
         </UAccordion>
       </div>
     </UContainer>
     <template #footer>
       <div class="footer flex justify-between items-center">
-        <p>{{ $t('createdBy', { username: recipe?.createdBy.displayUsername }) }}</p>
+        <p>{{ $t('createdBy', { username: recipe?.createdBy.username }) }}</p>
         <p>{{ $d(new Date(recipe?.createdAt ?? ''), 'short') }}</p>
       </div>
     </template>

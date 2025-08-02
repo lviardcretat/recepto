@@ -110,7 +110,7 @@ function filterItems(item: BulletLegendItemInterface, i: number): void {
 <template>
   <!-- eslint-disable vue/attribute-hyphenation -->
   <UModal
-    :title="$t('seasonalChart.title')"
+    :title="$t('mainSlideOver.seasonalIngredients')"
     class="z-10 max-w-7xl"
   >
     <template #body>

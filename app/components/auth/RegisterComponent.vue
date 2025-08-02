@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import * as z from 'zod';
 import type { FormSubmitEvent } from '@nuxt/ui';
-import { authClient } from '~/utils/auth-client';
+import { registerSchema } from '~/schemas/auth/register';
+import type { RegisterSchema } from '~/schemas/auth/register';
 
 const { t } = useI18n();
 const toast = useToast();
+const nuxtApp = useNuxtApp();
+const { fetch: refreshSession } = useUserSession();
+const { start, finish } = useLoadingIndicator();
+
 const fields = computed(() => [
   {
     name: 'username',
@@ -20,38 +24,48 @@ const fields = computed(() => [
   },
 ]);
 
-const schema = z.object({
-  username: z.string().min(3),
-  password: z.string().min(8, 'Must be at least 8 characters'),
-});
-
-type Schema = z.output<typeof schema>;
-
-async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  const response = await authClient.signUp.email({
-    username: payload.data.username,
-    name: payload.data.username,
-    email: `recepto-prod-${payload.data.username}@email.com`,
-    password: payload.data.password,
-  });
-
-  if (response.error != null) {
-    toast.add({
-      title: t('auth.register.failedToastTitle'),
-      description: response.error.message,
-      color: 'error',
+async function onSubmit(event: FormSubmitEvent<RegisterSchema>) {
+  start();
+  try {
+    await $fetch('/api/auth/register', {
+      method: 'POST',
+      body: event.data,
+      watch: false,
+      async onResponse({ response }) {
+        if (response._data.success) {
+          await refreshSession();
+          await nuxtApp.runWithContext(() =>
+            navigateTo('/recipes/all'),
+          );
+          toast.add({
+            title: t('auth.register.toast', { username: event.data.username }),
+          });
+        }
+        else {
+          toast.add({
+            title: t(response._data.error),
+            color: 'error',
+          });
+        }
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response._data.message,
+        });
+      },
     });
-    return null;
   }
-
-  return await navigateTo('/recipes/all');
+  finally {
+    finish();
+  }
 }
 </script>
 
 <template>
   <div class="w-full h-full mt-10">
     <UAuthForm
-      :schema="schema"
+      :schema="registerSchema"
       :title="$t('auth.register.title')"
       :description="$t('auth.register.description')"
       icon="i-lucide-user"

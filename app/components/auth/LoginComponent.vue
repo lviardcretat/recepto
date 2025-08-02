@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import * as z from 'zod';
-import type { FormSubmitEvent } from '@nuxt/ui';
-import { authClient } from '~/utils/auth-client';
+import type { ButtonProps, FormSubmitEvent } from '@nuxt/ui';
+import { loginSchema } from '~/schemas/auth/login';
+import type { LoginSchema } from '~/schemas/auth/login';
 
 const { t } = useI18n();
 const toast = useToast();
+const nuxtApp = useNuxtApp();
+const { fetch: refreshSession } = useUserSession();
+const { start, finish } = useLoadingIndicator();
 
 const fields = computed(() => [
   {
@@ -19,47 +22,95 @@ const fields = computed(() => [
     type: 'password' as const,
     required: true,
   },
-  {
-    name: 'remember',
-    label: t('auth.login.rememberMe'),
-    type: 'checkbox' as const,
-  },
 ]);
 
-const schema = z.object({
-  username: z.string().min(3, 'Trop court !'),
-  password: z.string().min(8, 'Must be at least 8 characters'),
-  rememberMe: z.boolean().optional(),
-});
+const providers = computed<ButtonProps[]>(() => [{
+  label: t('auth.anonymous.title'),
+  icon: 'i-lucide-eye',
+  onClick: async () => {
+    start();
+    try {
+      await onAnonymousConnect();
+    }
+    finally {
+      finish();
+    }
+  },
+}]);
 
-type Schema = z.output<typeof schema>;
-
-async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  const response = await authClient.signIn.username({
-    username: payload.data.username,
-    password: payload.data.password,
-    rememberMe: payload.data.rememberMe,
-  });
-
-  if (response.error != null) {
-    toast.add({
-      title: t('auth.login.failedToastTitle'),
-      description: response.error.message,
-      color: 'error',
+async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
+  start();
+  try {
+    await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: event.data,
+      watch: false,
+      async onResponse({ response }) {
+        if (response._data.success) {
+          await refreshSession();
+          await nuxtApp.runWithContext(() =>
+            navigateTo('/recipes/all'),
+          );
+          toast.add({
+            title: t('auth.login.toast', { username: event.data.username }),
+          });
+        }
+        else {
+          toast.add({
+            title: t(response._data.error),
+            color: 'error',
+          });
+        }
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response._data.message,
+        });
+      },
     });
-    return null;
   }
+  finally {
+    finish();
+  }
+}
 
-  return await navigateTo('/recipes/all');
+async function onAnonymousConnect() {
+  start();
+  try {
+    await $fetch('/api/auth/guest', {
+      method: 'POST',
+      watch: false,
+      async onResponse() {
+        await refreshSession();
+        await nuxtApp.runWithContext(() =>
+          navigateTo('/recipes/all'),
+        );
+        toast.add({
+          title: t('auth.anonymous.toast'),
+        });
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response._data.message,
+        });
+      },
+    });
+  }
+  finally {
+    finish();
+  }
 }
 </script>
 
 <template>
   <div class="w-full h-full mt-10">
     <UAuthForm
-      :schema="schema"
+      :schema="loginSchema"
       :title="$t('auth.login.title')"
       :description="$t('auth.login.description')"
+      :providers="providers"
       icon="i-lucide-lock"
       :fields="fields"
       :submit="{ label: $t('auth.login.button') }"

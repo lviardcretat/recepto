@@ -1,41 +1,28 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
-// import { authClient } from '~/utils/auth-client';
 
 export default defineNuxtRouteMiddleware(
   async (
     to: RouteLocationNormalizedGeneric,
-    _from: RouteLocationNormalizedGeneric,
+    from: RouteLocationNormalizedGeneric,
   ) => {
-    const { data: session } = await authClient.useSession(useFetch);
+    if (from.path === to.path) {
+      return;
+    };
+
+    const { loggedIn, user, fetch } = useUserSession();
     const isNavigatingToLoginOrRegister = to.path === '/' || to.path === '/login';
 
-    if (!isNavigatingToLoginOrRegister && !session.value) {
-      return await navigateTo('/login');
+    // Rafraîchir la session si nécessaire
+    if (!user.value) {
+      await fetch();
     }
 
-    if (isNavigatingToLoginOrRegister && session.value) {
-      return await navigateTo('/recipes/all');
+    if (!isNavigatingToLoginOrRegister && !loggedIn.value) {
+      return navigateTo('/login');
     }
 
-    // Restrict access for anonymous users
-    /* if (session.value?.user.role === 'anonymous') {
-      const restrictedPaths = [
-        '/dashboard',
-        '/settings',
-        '/user',
-        '/recipes/create',
-        '/ingredients/create',
-        '/utensils/create',
-        '/categories/create',
-      ];
-
-      const isRestrictedPath = restrictedPaths.some(path =>
-        to.path.startsWith(path)
-      );
-
-      if (isRestrictedPath) {
-        return await navigateTo('/recipes/all');
-      }
-    } */
+    if (isNavigatingToLoginOrRegister && loggedIn.value) {
+      return navigateTo('/recipes/all');
+    }
   },
 );

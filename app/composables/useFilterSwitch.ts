@@ -8,3 +8,8 @@ export const useFilterSwitchStates = () =>
   useState<FilterSwitchStates>('filterSwitchStates', () => ({
     seasonalRecipes: false,
   }));
+
+export const useResetFilterSwitchStates = (): void => {
+  const switchStates: Ref<FilterSwitchStates> = useFilterSwitchStates();
+  switchStates.value.seasonalRecipes = false;
+};

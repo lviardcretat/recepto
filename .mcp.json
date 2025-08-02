@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "nuxt": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://mcp.nuxt.com/sse"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}

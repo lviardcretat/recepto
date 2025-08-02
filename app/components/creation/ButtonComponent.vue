@@ -1,52 +1,58 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem } from '@nuxt/ui';
+import AnonymousRestrictionModalComponent from '../auth/AnonymousRestrictionModalComponent.vue';
 
 const { t } = useI18n();
-const { canCreate } = useAnonymousRestrictions();
-const modalTitle: Ref<string> = ref('');
+const modalTitle = ref<string>('');
+const isDropdownMenuOpen = ref<boolean>(false);
+const { user } = useUserSession();
 const isModalOpen = ref(false);
+const overlay = useOverlay();
+const anonymousRestrictionModal = overlay.create(AnonymousRestrictionModalComponent);
+
+function handleButtonClick() {
+  if (user.value?.isAnonymous) {
+    anonymousRestrictionModal.open();
+    isDropdownMenuOpen.value = false;
+  }
+  return;
+}
+
+function handleItemSelect(itemType: string) {
+  isModalOpen.value = true;
+  modalTitle.value = itemType;
+}
+
 const items = computed(
   () =>
 [
   {
     label: t('ingredient'),
     icon: 'i-lucide-carrot',
-    onSelect: () => {
-      isModalOpen.value = true;
-      modalTitle.value = 'ingredient';
-    },
+    onSelect: () => handleItemSelect('ingredient'),
   },
   {
     label: t('recipe'),
     icon: 'i-lucide-cooking-pot',
-    onSelect: () => {
-      isModalOpen.value = true;
-      modalTitle.value = 'recipe';
-    },
+    onSelect: () => handleItemSelect('recipe'),
   },
   {
     label: t('category'),
     icon: 'i-lucide-box',
-    onSelect: () => {
-      isModalOpen.value = true;
-      modalTitle.value = 'category';
-    },
+    onSelect: () => handleItemSelect('category'),
   },
   {
     label: t('ustensil'),
     icon: 'i-lucide-lab-whisk',
-    onSelect: () => {
-      isModalOpen.value = true;
-      modalTitle.value = 'ustensil';
-    },
+    onSelect: () => handleItemSelect('ustensil'),
   },
 ] satisfies DropdownMenuItem,
 );
 </script>
 
 <template>
-  <div v-if="canCreate">
-    <UDropdownMenu
+  <UDropdownMenu
+    v-model:open="isDropdownMenuOpen"
     class="absolute bottom-10 right-10 z-20"
     :items="items"
     size="xl"
@@ -61,6 +67,7 @@ const items = computed(
       size="xl"
       class="rounded-full"
       icon="i-lucide-plus"
+      @click="handleButtonClick"
     />
   </UDropdownMenu>
   <UModal
@@ -91,7 +98,6 @@ const items = computed(
       />
     </template>
   </UModal>
-  </div>
 </template>
 
 <style lang="scss" scoped>

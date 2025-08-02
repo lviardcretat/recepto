@@ -24,7 +24,7 @@ export const useUpdateFilterIconsGrid = async (
   if (id <= 0) {
     return;
   }
-  const iconsGridStates = useFilterIconsGridStates();
+  const iconsGridStates: Ref<FilterIconsGridStates> = useFilterIconsGridStates();
   const itemIndex: number = iconsGridStates.value[dataType].findIndex(
     item => item.id === id,
   );
@@ -40,4 +40,9 @@ export const useUpdateFilterIconsGrid = async (
   else {
     iconsGridStates.value[dataType][itemIndex] = FilterIconsGridUtils.onItemUnselected(iconsGridItem);
   }
+};
+
+export const useResetFilterIconsGridStates = (): void => {
+  const iconsGridStates: Ref<FilterIconsGridStates> = useFilterIconsGridStates();
+  iconsGridStates.value.allergens = [];
 };

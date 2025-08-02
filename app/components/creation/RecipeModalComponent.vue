@@ -12,6 +12,9 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['closeModal']);
 
+const toast = useToast();
+const { start, finish } = useLoadingIndicator();
+const { t } = useI18n();
 const nuxtApp = useNuxtApp();
 const isIngredientCreationModalOpen = ref(false);
 const ingredientNameToCreate = ref<string | undefined>(undefined);
@@ -20,8 +23,8 @@ const isRecipeCategoryCreationModalOpen = ref(false);
 const recipeCategoryNameToCreate = ref<string | undefined>(undefined);
 const isUstensilCreationModalOpen = ref(false);
 const ustensilNameToCreate = ref<string | undefined>(undefined);
-const toast = useToast();
 const form = ref();
+const disabledSubmit = ref(false);
 const state = ref<{
   name?: string;
   description?: string;
@@ -155,25 +158,33 @@ const { data: units } = await useFetch('/api/units/all', {
 });
 
 async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
-  await $fetch('/api/recipesCategories/recipes', {
-    method: 'POST',
-    body: event.data,
-    immediate: false,
-    watch: false,
-    async onResponse() {
-      await nuxtApp.callHook('recipe:created', {});
-      emit('closeModal');
-      toast.add({
-        title: `La recette ${event.data.name} a bien été ajouté !`,
-      });
-    },
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response._data.message,
-      });
-    },
-  });
+  disabledSubmit.value = true;
+  start();
+  try {
+    await $fetch('/api/recipesCategories/recipes', {
+      method: 'POST',
+      body: event.data,
+      immediate: false,
+      watch: false,
+      async onResponse() {
+        await nuxtApp.callHook('recipe:created', {});
+        emit('closeModal');
+        toast.add({
+          title: t('formCreation.recipe.createdToast', { recipeName: event.data.name }),
+        });
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response._data.message,
+        });
+      },
+    });
+  }
+  finally {
+    disabledSubmit.value = false;
+    finish();
+  }
 }
 
 nuxtApp.hook('ingredient:created', async (payload) => {
@@ -445,7 +456,7 @@ nuxtApp.hook('ustensil:created', async (payload) => {
             <UButton
               icon="i-lucide-plus"
               variant="ghost"
-              @click="state.sequences?.push({ name: '', extra: '' })"
+              @click="state.sequences?.push({ name: '', extra: undefined })"
             >
               {{ $t('add') }}
             </UButton>
@@ -572,6 +583,7 @@ nuxtApp.hook('ustensil:created', async (payload) => {
           </UButton>
           <UButton
             type="submit"
+            :disabled="disabledSubmit"
           >
             {{ $t('formCreation.submit') }}
           </UButton>

@@ -10,11 +10,14 @@ const props = defineProps<{
   modalTitle: string;
   recipeCategoryName?: string;
 }>();
+const { t } = useI18n();
 const nuxtApp = useNuxtApp();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
+const { start, finish } = useLoadingIndicator();
 const schema = recipesCategoryCreation;
 const form = ref();
+const disabledSubmit = ref(false);
 const state = ref<{
   name?: string;
   dishTypeId?: number;
@@ -39,27 +42,35 @@ const { data: dishTypes } = await useFetch('/api/dishTypes/all', {
 });
 
 async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
-  await $fetch('/api/recipesCategories', {
-    method: 'POST',
-    body: event.data,
-    immediate: false,
-    watch: false,
-    async onResponse(response) {
-      await nuxtApp.callHook('recipesCategory:created', {
-        id: response.response._data.id,
-      });
-      emit('closeModal');
-      toast.add({
-        title: `La catégorie ${event.data.name} a bien été ajouté !`,
-      });
-    },
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response._data.message,
-      });
-    },
-  });
+  disabledSubmit.value = true;
+  start();
+  try {
+    await $fetch('/api/recipesCategories', {
+      method: 'POST',
+      body: event.data,
+      immediate: false,
+      watch: false,
+      async onResponse(response) {
+        await nuxtApp.callHook('recipesCategory:created', {
+          id: response.response._data.id,
+        });
+        emit('closeModal');
+        toast.add({
+          title: t('formCreation.category.createdToast', { categoryName: event.data.name }),
+        });
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response._data.message,
+        });
+      },
+    });
+  }
+  finally {
+    disabledSubmit.value = false;
+    finish();
+  }
 }
 </script>
 
@@ -122,7 +133,10 @@ async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
           >
             {{ $t('formCreation.clear') }}
           </UButton>
-          <UButton type="submit">
+          <UButton
+            type="submit"
+            :disabled="disabledSubmit"
+          >
             {{ $t('formCreation.submit') }}
           </UButton>
         </div>

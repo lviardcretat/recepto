@@ -50,6 +50,3 @@
     </UDashboardPanel>
   </UDashboardGroup>
 </template>
-
-<style>
-</style>

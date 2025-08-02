@@ -15,18 +15,8 @@ import { ustensil } from './ustensil';
 
 export const user = sqliteTable('user', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  email: text('email').notNull().unique(),
-  emailVerified: integer('emailVerified', { mode: 'boolean' })
-    .default(false)
-    .notNull(),
-  image: text('image'),
-  role: text('role').notNull().default('user'),
-  banned: integer('banned', { mode: 'boolean' }).default(false).notNull(),
-  name: text('name').notNull(),
-  banReason: text('banReason'),
-  banExpires: integer('banExpires', { mode: 'timestamp_ms' }),
-  username: text('username').notNull(),
-  displayUsername: text('displayUsername').notNull(),
+  username: text('username').notNull().unique(),
+  password: text('password'),
   isAnonymous: integer('isAnonymous', { mode: 'boolean' }).default(false).notNull(),
   ...timestamps,
 });

@@ -9,10 +9,13 @@ const props = defineProps<{
   modalTitle: string;
   ingredientName?: string;
 }>();
+const { t } = useI18n();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
+const { start, finish } = useLoadingIndicator();
 const schema = ingredientCreationSchema;
 const form = ref();
+const disabledSubmit = ref(false);
 const state = ref<{
   name?: string;
   foodTypeId?: number;
@@ -40,27 +43,35 @@ const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
 });
 
 async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
-  await $fetch('/api/ingredients', {
-    method: 'POST',
-    watch: false,
-    body: event.data,
-    default: () => null,
-    async onResponse(response) {
-      await nuxtApp.callHook('ingredient:created', {
-        id: response.response._data.id,
-      });
-      emit('closeModal');
-      toast.add({
-        title: `L'ingrédient ${event.data.name} a bien été ajouté !`,
-      });
-    },
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
+  disabledSubmit.value = true;
+  start();
+  try {
+    await $fetch('/api/ingredients', {
+      method: 'POST',
+      watch: false,
+      body: event.data,
+      default: () => null,
+      async onResponse(response) {
+        await nuxtApp.callHook('ingredient:created', {
+          id: response.response._data.id,
+        });
+        emit('closeModal');
+        toast.add({
+          title: t('formCreation.ingredient.createdToast', { ingredientName: event.data.name }),
+        });
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response.statusText,
+        });
+      },
+    });
+  }
+  finally {
+    disabledSubmit.value = false;
+    finish();
+  }
 }
 
 function toggleMonth(monthId: number): void {
@@ -172,7 +183,10 @@ function mapFlatMonthsToSeasonalMonths(): void {
           >
             {{ $t('formCreation.clear') }}
           </UButton>
-          <UButton type="submit">
+          <UButton
+            type="submit"
+            :disabled="disabledSubmit"
+          >
             {{ $t('formCreation.submit') }}
           </UButton>
         </div>
