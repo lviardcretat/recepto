@@ -3,7 +3,7 @@ import { postSequence } from '~~/server/data/sequences';
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event);
-  if (session) {
+  if (session && !session.user.isAnonymous) {
     const body = await readValidatedBody(event, sequenceCreation.parse);
     await postSequence(
       body.name,

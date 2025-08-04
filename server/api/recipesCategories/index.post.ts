@@ -5,7 +5,7 @@ import { FirstLetterUppercase } from '~~/server/utils/stringUtils';
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event);
-  if (session) {
+  if (session && !session.user.isAnonymous) {
     const body = await readValidatedBody(event, recipesCategoryCreation.parse);
     const recipeCategoryCreated: RecipesCategory = await postRecipesCategory(FirstLetterUppercase(body.name), body.dishTypeId, +session.user.id);
     return recipeCategoryCreated;
