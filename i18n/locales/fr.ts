@@ -41,6 +41,7 @@ export default defineI18nLocale(async () => {
         sequenceExtra: 'Informations supplémentaires',
         sequenceExtraExample: 'Pensez à bien refroidir le saladier !',
         sequenceDescriptionExample: 'Versez la farine dans un saladier avec...',
+        sequenceTitleExample: 'Préparer la pâte',
         tips: 'Astuces',
         tipsExample: 'Lavez-vous bien les mains !',
         title: 'Titre',
@@ -144,8 +145,8 @@ export default defineI18nLocale(async () => {
       },
     },
     errorPage: {
-      title: 'Page not found',
-      description: 'We are sorry but this page could not be found.',
+      title: 'Page non trouvée',
+      description: 'Nous sommes désolés mais cette page n\'a pas pu être trouvée.',
     },
     mainSlideOver: {
       pages: 'Pages',

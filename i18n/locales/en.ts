@@ -82,6 +82,7 @@ export default defineI18nLocale(async () => {
         title: 'Login',
         description: 'Enter your information to log in.',
         button: 'Log in',
+        anonymousConnection: 'Anonymous login',
         failedToastTitle: 'Error during login',
         toast: 'Hi {username} !',
         errors: {
@@ -104,7 +105,10 @@ export default defineI18nLocale(async () => {
         title: 'Anonymous login',
         toast: 'Hi Mr. Anonymous !',
         warnings: {
+          title: 'Feature blocked',
           description: 'You cannot use this feature because you are logged in anonymously.',
+          loginButton: 'Log in / Sign up',
+          cancelButton: 'Cancel',
         },
       },
     },
@@ -182,8 +186,8 @@ export default defineI18nLocale(async () => {
     recipesCreated: 'Recipes created',
     recipesFound: 'No recipe found | {n} recipe found | {n} recipes found',
     registeredMembersThanks: 'Members registered thanks to you',
-    search: 'Search...',
     seasonalRecipes: 'Seasonal recipes',
+    search: 'Search...',
     selected: 'None selected | {n} selected | {n} selected',
     settings: 'Settings',
     shoppingList: 'Shopping list',
