@@ -1,9 +1,13 @@
 <script lang="ts" setup>
-const { d, t } = useI18n();
+import type { Row } from '@tanstack/vue-table';
+import { getIngredientsTableConfig } from '~/config/dashboard/IngredientsTableConfig';
+import type { IngredientsDashboard, IngredientsRecipesDashboard } from '~/types/ingredientsDashboard';
+
+const { d, t, locale } = useI18n();
 const UButton = resolveComponent('UButton');
 const UDropdownMenu = resolveComponent('UDropdownMenu');
 
-const { data: ingredients, execute: executeIngredientsFetch } = await useFetch<Partial<Ingredient>[]>(
+const { data: ingredients, execute: executeIngredientsFetch } = await useFetch<IngredientsDashboard[]>(
   '/api/ingredients/dashboard',
   {
     method: 'GET',
@@ -36,95 +40,15 @@ const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFetch<
 await executeFoodTypesFetch();
 await executeIngredientsFetch();
 
-const columns = [
-  {
-    accessorKey: 'name',
-    header: t('dashboard.name'),
-  },
-  {
-    accessorKey: 'recipes',
-    header: t('dashboard.ingredientsTableComponent.recipesCount'),
-    cell: ({ row }) => {
-      return `${row.getValue('recipes').length} ${t('dashboard.ingredientsTableComponent.recipes', row.getValue('recipes').length)}`;
-    },
-  },
-  {
-    accessorKey: 'foodTypeId',
-    header: t('dashboard.ingredientsTableComponent.foodType'),
-    cell: ({ row }) => {
-      return foodTypesFetch.value?.find(foodType => foodType.id === row.getValue('foodTypeId'))?.name ?? '/';
-    },
-  },
-  {
-    accessorKey: 'seasonalMonths',
-    header: t('dashboard.ingredientsTableComponent.seasonalMonths'),
-  },
-  {
-    accessorKey: 'createdAt',
-    header: t('dashboard.createdAt'),
-    cell: ({ row }) => {
-      return d(row.getValue('createdAt'), 'short');
-    },
-    aggregationFn: 'max',
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: t('dashboard.updatedAt'),
-    cell: ({ row }) => {
-      return d(row.getValue('updatedAt'), 'short');
-    },
-    aggregationFn: 'max',
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => {
-      return h(
-        'div',
-        { class: 'text-right' },
-        h(
-          UDropdownMenu,
-          {
-            'content': {
-              align: 'end',
-            },
-            'items': getRowItems(row),
-            'aria-label': 'Actions dropdown',
-          },
-          () =>
-            h(UButton, {
-              'icon': 'i-lucide-ellipsis-vertical',
-              'color': 'neutral',
-              'variant': 'ghost',
-              'class': 'ml-auto',
-              'aria-label': 'Actions dropdown',
-            }),
-        ),
-      );
-    },
-  },
-];
-
-function getRowItems(row) {
-  return [
-    {
-      label: 'Editer',
-      icon: 'i-lucide-square-pen',
-      color: 'primary',
-    },
-    {
-      label: 'Supprimer',
-      icon: 'i-lucide-trash',
-      color: 'error',
-      disabled: row.getValue('recipes').length > 0,
-    },
-  ];
-}
+const recipeTableConfig = getIngredientsTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu, foodTypes: foodTypesFetch.value ?? [] });
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <UTable
+    :key="locale"
     :data="ingredients"
-    :columns="columns"
+    :columns="recipeTableConfig"
   >
     <template #name-cell="{ row }">
       <div

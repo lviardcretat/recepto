@@ -1,0 +1,216 @@
+{
+  "add": "Ajouter",
+  "allergenFree": "Aucun allergène",
+  "allergens": "Allergènes",
+  "category": "Catégorie | Catégories",
+  "categoriesCreated": "Catégories créés",
+  "createdBy": "Créé par {username}",
+  "delete": "Supprimer",
+  "dishTypes": "Types de plat",
+  "filter": "Filtres",
+  "filterBy": "Filtrez par {filterName}...",
+  "findRecipe": "Cherchez une recette...",
+  "recipeCardDetails": {
+    "noImage": "Aucune image trouvée"
+  },
+  "formCreation": {
+    "clear": "Effacer les erreurs",
+    "name": "Nom",
+    "submit": "Créer",
+    "recipe": {
+      "cardTitle": "Créer une nouvelle recette",
+      "category": "Catégorie",
+      "cookingTime": "Temps de cuisson",
+      "description": "Description",
+      "descriptionExample": "Une superbe recette pour l'été et les amateurs de légumes, à consommer sans modération !",
+      "name": "Nom",
+      "nameExample": "Lasagnes végétariennes",
+      "optional": "Optionnel",
+      "peopleNumber": "Nombre de couverts",
+      "preparationTime": "Temps de préparation",
+      "quantity": "Quantité",
+      "restTime": "Temps de repos",
+      "season": "Saison",
+      "selectBy_female": "Sélectionnez une {selectName}...",
+      "selectBy_male": "Sélectionnez un {selectName}...",
+      "selectBy_plural": "Sélectionnez des {selectName}...",
+      "sequences": "Étapes de préparation",
+      "sequenceDescription": "Description de l'étape",
+      "sequenceExtra": "Informations supplémentaires",
+      "sequenceExtraExample": "Pensez à bien refroidir le saladier !",
+      "sequenceDescriptionExample": "Versez la farine dans un saladier avec...",
+      "sequenceTitleExample": "Préparer la pâte",
+      "tips": "Astuces",
+      "tipsExample": "Lavez-vous bien les mains !",
+      "title": "Titre",
+      "unit": "Unité de mesure",
+      "timeHint": "(en minutes)",
+      "createdToast": "La recette {recipeName} a bien été créée !"
+    },
+    "ingredient": {
+      "cardTitle": "Créer un nouvel ingrédient",
+      "nameExample": "Pomme",
+      "foodType": "Catégorie d'aliment",
+      "seasonalMonths": "Période de consommation idéale",
+      "selectByFoodTypeId": "Sélectionnez une catégorie...",
+      "createdToast": "L'ingrédient {ingredientName} a bien été créé !"
+    },
+    "category": {
+      "cardTitle": "Créer une nouvelle catégorie",
+      "dishType": "Type de repas",
+      "selectByDishType": "Sélectionnez un type de repas...",
+      "nameExample": "Lasagnes",
+      "createdToast": "La catégorie {categoryName} a bien été créée !"
+    },
+    "ustensil": {
+      "cardTitle": "Créer un nouvel ustensile",
+      "nameExample": "Marmite",
+      "createdToast": "L'ustensile {ustensilName} a bien été créé !"
+    }
+  },
+  "fromTo": "De {from} à {to}",
+  "ingredient": "Ingrédient | Ingrédients",
+  "loading": "Chargement...",
+  "auth": {
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "name": "Nom complet",
+    "login": {
+      "tab": "Connexion",
+      "title": "Connexion",
+      "description": "Entrez vos informations pour vous connecter.",
+      "button": "Se connecter",
+      "failedToastTitle": "Erreur lors de la connexion",
+      "anonymousConnection": "Connexion anonyme",
+      "toast": "Bonjour {username} !",
+      "errors": {
+        "default": "Nom d'utilisateur ou mot de passe incorrect"
+      }
+    },
+    "register": {
+      "tab": "Inscription",
+      "title": "Inscription",
+      "description": "Entrez vos informations pour créer votre compte.",
+      "button": "Créer un compte",
+      "failedToastTitle": "Erreur lors de l'inscription",
+      "toast": "Bienvenu {username} !",
+      "errors": {
+        "usernameAlreadyExist": "Un compte avec ce nom d'utilisateur existe déjà",
+        "unknown": "Impossible de créer ce compte, veuillez contacter le support"
+      }
+    },
+    "anonymous": {
+      "title": "Connexion anonyme",
+      "toast": "Bonjour Mr. Anonyme !",
+      "warnings": {
+        "title": "Fonctionnalité bloquée",
+        "description": "Vous ne pouvez pas utiliser cette fonctionalité car vous êtes connecté en mode anonyme.",
+        "loginButton": "Se connecter / s'inscrire",
+        "cancelButton": "Annuler"
+      }
+    }
+  },
+  "dashboard": {
+    "name": "Nom",
+    "createdAt": "Créé le",
+    "updatedAt": "Modifié le",
+    "actions": "Actions",
+    "ingredientsTableComponent": {
+      "foodType": "Catégorie d'aliment",
+      "seasonalMonths": "Période de consommation idéale",
+      "recipesCount": "Utilisé dans",
+      "recipes": "recette | recette | recettes"
+    },
+    "recipesTableComponent": {
+      "recipes": "recette | recette | recettes"
+    },
+    "ustensilsTableComponent": {
+      "recipesCount": "Utilisé dans",
+      "recipes": "recette | recette | recettes"
+    }
+  },
+  "heroPage": {
+    "title": "Recepto",
+    "description": "Recepto est une collection collaborative de recettes et d'ingrédients pour un usage quotidien et accessible à tous.",
+    "loginButton": "Connectez-vous",
+    "features": {
+      "title": "Une solution complète",
+      "recipe": {
+        "title": "Bibliothèque de Recettes",
+        "description": "Stockez vos recettes préférées et explorez des variantes pour chaque plat. Plus jamais vous n'oublierez une recette."
+      },
+      "filter": {
+        "title": "Filtres Intelligents",
+        "description": "Trouvez la recette parfaite en utilisant une multitude de filtres pour affiner vos recherches selon vos besoins."
+      },
+      "planner": {
+        "title": "Planification Hebdomadaire",
+        "description": "Organisez vos repas pour toute la semaine et gérez votre liste de courses directement depuis un calendrier hebdomadaire."
+      },
+      "dashboard": {
+        "title": "Tableau de Bord",
+        "description": "Accédez à toutes vos recettes créées, consultez vos statistiques et partagez-les avec vos amis."
+      },
+      "privacy": {
+        "title": "Sécurité et vie privée",
+        "description": "Cuisinez en toute tranquillité, aucune de vos données n'est stockée ou partagée avec des tiers."
+      },
+      "collaborative": {
+        "title": "Collaboratif",
+        "description": "Notre site grandit avec vos recettes. Participez et faites partie de la communauté."
+      }
+    }
+  },
+  "errorPage": {
+    "title": "Page non trouvée",
+    "description": "Nous sommes désolés mais cette page n'a pas pu être trouvée."
+  },
+  "mainSlideOver": {
+    "pages": "Pages",
+    "search": "Recherche",
+    "recipes": "Recettes",
+    "dashboard": "Tableau de bord",
+    "settings": "Paramètres",
+    "calendar": "Calendrier",
+    "logout": "Se déconnecter",
+    "github": "Github",
+    "discord": "Discord",
+    "seasonalIngredients": "Calendrier des saisons",
+    "anonymous": "Utilisateur anonyme",
+    "loginToAccess": "Se connecter pour plus de fonctionnalités"
+  },
+  "months": {
+    "april": "Avril",
+    "february": "Février",
+    "january": "Janvier",
+    "july": "Juillet",
+    "june": "Juin",
+    "august": "Août",
+    "december": "Décembre",
+    "march": "Mars",
+    "may": "Mai",
+    "november": "Novembre",
+    "october": "Octobre",
+    "september": "Septembre"
+  },
+  "mealTypes": "Types de repas",
+  "menu": "Menu",
+  "plannedMeals": "Repas planifiés",
+  "preparationSteps": "Étapes de préparation",
+  "schedule": "Planning",
+  "recipe": "Recette | Recettes",
+  "recipeAll": "Toutes les recettes",
+  "recipesCreated": "Recettes créés",
+  "recipesFound": "Aucune recette trouvée | {n} recette trouvée | {n} recettes trouvées",
+  "registeredMembersThanks": "Membres inscrits grâce à vous",
+  "search": "Recherchez...",
+  "selected": "Aucun sélectionné | {n} sélectionné | {n} sélectionnés",
+  "settings": "Paramètres",
+  "shoppingList": "Liste de courses",
+  "strokesPerformed": "Courses effectués",
+  "ustensil": "Ustensile | Ustensiles",
+  "zodErrors": {
+    "duplicateIngredients": "Il ne peut pas y avoir deux fois le même ingrédient.",
+    "iPositiveInteger": "L'id doit être un entier positif."
+  }
+}

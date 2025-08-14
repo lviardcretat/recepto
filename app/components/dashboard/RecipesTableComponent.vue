@@ -1,11 +1,16 @@
 <script lang="ts" setup>
+import { ModalDelete } from '#components';
 import { getGroupedRowModel } from '@tanstack/vue-table';
-import type { GroupingOptions } from '@tanstack/vue-table';
+import type { GroupingOptions, Row } from '@tanstack/vue-table';
+import { getRecipesTableConfig } from '~/config/dashboard/RecipesTableConfig';
 import type { RecipesDashboard } from '~/types/recipesDashboard';
 
-const { d, t } = useI18n();
+const { d, t, locale } = useI18n();
+const overlay = useOverlay();
 const UButton = resolveComponent('UButton');
 const UDropdownMenu = resolveComponent('UDropdownMenu');
+const deleteModal = overlay.create(ModalDelete, { props: { itemName: 'blabla', onCancel: () => {}, onConfirm: () => {} } });
+const recipeTableConfig = getRecipesTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu, onDeleteButtonOpen: deleteModal.open });
 
 const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = await useFetch<RecipesDashboard[]>(
   '/api/recipesCategories/recipes/dashboard',
@@ -24,83 +29,6 @@ const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = awai
 
 await executeRecipesCategoriesFetch();
 
-const columns = [
-  {
-    id: 'name',
-    header: t('dashboard.name'),
-  },
-  {
-    id: 'id',
-    accessorKey: 'recipesCategory.id',
-  },
-  {
-    accessorKey: 'count',
-    header: '',
-    cell: ({ row }) =>
-      row.getIsGrouped() ? `${row.getValue('id')} ${t('dashboard.recipesTableComponent.recipes', row.getValue('id'))}` : ``,
-    aggregationFn: 'count',
-  },
-  {
-    accessorKey: 'createdAt',
-    header: t('dashboard.createdAt'),
-    cell: ({ row }) => {
-      return d(row.getValue('createdAt'), 'short');
-    },
-    aggregationFn: 'max',
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: t('dashboard.updatedAt'),
-    cell: ({ row }) => {
-      return d(row.getValue('updatedAt'), 'short');
-    },
-    aggregationFn: 'max',
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => {
-      return h(
-        'div',
-        { class: 'text-right' },
-        h(
-          UDropdownMenu,
-          {
-            'content': {
-              align: 'end',
-            },
-            'items': getRowItems(row),
-            'aria-label': 'Actions dropdown',
-          },
-          () =>
-            h(UButton, {
-              'icon': 'i-lucide-ellipsis-vertical',
-              'color': 'neutral',
-              'variant': 'ghost',
-              'class': 'ml-auto',
-              'aria-label': 'Actions dropdown',
-            }),
-        ),
-      );
-    },
-  },
-];
-
-function getRowItems(row) {
-  return [
-    {
-      label: 'Editer',
-      icon: 'i-lucide-square-pen',
-      color: 'primary',
-    },
-    {
-      label: 'Supprimer',
-      icon: 'i-lucide-trash',
-      color: 'error',
-      disabled: row.subRows.length > 0,
-    },
-  ];
-}
-
 const grouping_options = ref<GroupingOptions>({
   groupedColumnMode: 'remove',
   getGroupedRowModel: getGroupedRowModel(),
@@ -108,9 +36,11 @@ const grouping_options = ref<GroupingOptions>({
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <UTable
+    :key="locale"
     :data="recipesCategories"
-    :columns="columns"
+    :columns="recipeTableConfig"
     :grouping="['id']"
     :grouping-options="grouping_options"
     :ui="{

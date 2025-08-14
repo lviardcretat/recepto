@@ -1,0 +1,101 @@
+import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
+import type { Row } from '@tanstack/vue-table';
+import type { Composer } from 'vue-i18n';
+import type { ConcreteComponent, ComputedOptions, MethodOptions } from 'vue';
+import type { CustomAccordionItem } from '~/types/filter';
+import type { RecipesDashboard } from '~/types/recipesDashboard';
+
+interface RecipesTableConfigProps {
+  buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
+  dropdownMenuComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
+  onDeleteButtonOpen: () => void;
+};
+
+function getRowItems(row: Row<RecipesDashboard>, onDeleteButtonOpen: () => void) {
+  return [
+    {
+      label: 'Editer',
+      icon: 'i-lucide-square-pen',
+      color: 'primary',
+      onSelect() {
+        onDeleteButtonOpen();
+      },
+    },
+    {
+      label: 'Supprimer',
+      icon: 'i-lucide-trash',
+      color: 'error',
+      disabled: row.subRows.length > 0,
+    },
+  ] satisfies DropdownMenuItem[];
+}
+
+export function getRecipesTableConfig(
+  d: Composer['d'],
+  t: Composer['t'],
+  props: RecipesTableConfigProps
+): Ref<(NavigationMenuItem & CustomAccordionItem)[]> {
+  return computed(() =>
+    [
+      {
+        id: 'name',
+        header: t('dashboard.name'),
+      },
+      {
+        id: 'id',
+        accessorKey: 'recipesCategory.id',
+      },
+      {
+        accessorKey: 'count',
+        header: '',
+        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+          return row.getIsGrouped() ? `${row.subRows.length} ${t('dashboard.recipesTableComponent.recipes', row.subRows.length)}` : ``;
+        },
+        aggregationFn: 'count',
+      },
+      {
+        accessorKey: 'createdAt',
+        header: t('dashboard.createdAt'),
+        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+          return d(row.getValue<string>('createdAt'), 'short');
+        },
+        aggregationFn: 'max',
+      },
+      {
+        accessorKey: 'updatedAt',
+        header: t('dashboard.updatedAt'),
+        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+          return d(row.getValue<string>('updatedAt'), 'short');
+        },
+        aggregationFn: 'max',
+      },
+      {
+        id: 'actions',
+        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+          return h(
+            'div',
+            { class: 'text-right' },
+            h(
+              props.dropdownMenuComponent,
+              {
+                'content': {
+                  align: 'end',
+                },
+                'items': getRowItems(row, props.onDeleteButtonOpen),
+                'aria-label': 'Actions dropdown',
+              },
+              () =>
+                h(props.buttonComponent, {
+                  'icon': 'i-lucide-ellipsis-vertical',
+                  'color': 'neutral',
+                  'variant': 'ghost',
+                  'class': 'ml-auto',
+                  'aria-label': 'Actions dropdown',
+                }),
+            ),
+          );
+        },
+      },
+    ]
+  )
+}

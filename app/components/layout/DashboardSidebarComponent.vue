@@ -1,44 +1,31 @@
 <script lang="ts" setup>
-import type { NavigationMenuItem } from '@nuxt/ui';
+import { SeasonalChartComponent } from '#components';
+import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
+import { getDashboardSidebarConfig } from '~/config/layout/DashboardSidebarConfig';
 
-const open = ref(false);
-const { t } = useI18n();
-const links = computed(
-  () =>
-[
-  [
-    {
-      label: t('mainSlideOver.pages'),
-      type: 'label',
-    },
-    {
-      label: t('mainSlideOver.recipes'),
-      icon: 'i-lucide-cooking-pot',
-      to: '/recipes/all',
-    },
-    {
-      label: t('mainSlideOver.seasonalRecipes'),
-      icon: 'i-lucide-sun-snow',
-      slot: 'shortcut',
-      onSelect: (_event: Event) => {
+defineShortcuts({
+  shift_s: {
+    usingInput: false,
+    handler: () => {
+      if (modal.isOpen) {
+        modal.close();
+      }
+      else {
         modal.open();
-      },
+      }
     },
-    {
-      label: t('mainSlideOver.calendar'),
-      icon: 'i-lucide-calendar',
-      disabled: true,
-    },
-  ],
-  [],
-] satisfies NavigationMenuItem[][],
-);
+  },
+});
+
+const { t } = useI18n();
+const overlay = useOverlay();
+const modal = overlay.create(SeasonalChartComponent);
+const dashboardSidebarConfig = getDashboardSidebarConfig(t, { onSeasonalIngredientsSelected: modal.open });
 </script>
 
 <template>
   <UDashboardSidebar
     id="default"
-    v-model:open="open"
     :default-size="40"
     collapsible
     resizable
@@ -60,15 +47,15 @@ const links = computed(
 
       <UNavigationMenu
         :collapsed="collapsed"
-        :items="links"
+        :items="dashboardSidebarConfig"
         orientation="vertical"
         tooltip
         popover
         :ui="{ linkLabel: 'inherit' }"
       >
-        <template #shortcut-label="{ item }">
+        <template #shortcut-label="{ item }: {item: DropdownMenuItem}">
           <div class="flex items-center justify-between">
-            {{ $t(item.label ?? "") }}
+            {{ item.label }}
             <div class="flex items-center gap-1">
               <UKbd value="shift" />
               <UKbd value="S" />

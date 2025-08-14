@@ -1,7 +1,3 @@
-/**
- * @description Recipes and recipes categories type return
- * @type RecipesDashboard
- */
 export type RecipesDashboard = {
   name: string;
   createdAt: string;

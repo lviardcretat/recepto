@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "editorconfig.editorconfig",
+    "imgildev.vscode-drizzle-snippets",
+    "lokalise.i18n-ally",
+    "mikestead.dotenv",
+    "nuxt.mdc",
+    "nuxtr.nuxt-vscode-extentions",
+    "nuxtr.nuxtr-vscode",
+    "rphlmr.vscode-drizzle-orm",
+    "vue.volar",
+    "dbaeumer.vscode-eslint"
+  ]
+}

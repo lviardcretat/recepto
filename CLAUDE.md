@@ -1,96 +1,87 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository
+# Recepto - Recipe Management Application
 
 ## Project Overview
+Recepto is a comprehensive recipe management application built with Nuxt 3, featuring recipe creation, advanced filtering, ingredient management, and multi-language support.
 
-Recepto is an open source project that creates, filters, and hosts recipes
-The project is community-based, meaning that recipes are created solely by users
+## Major Features
 
-## Key concepts:
+### [Authentication System](./AUTHENTICATION_SYSTEM.md)
+Complete user authentication with login, registration, and guest access. Includes session management and multilingual auth forms.
 
-- A recipe category is a category that groups together several recipes of the same type.
-For example, the lasagna category will group together the “vegetarian lasagna” recipe and the “beef lasagna” recipe
-- Recepto aims to be as simple as possible: logging in and registering only requires a username and password
+### [Recipe Management](./RECIPE_MANAGEMENT.md) 
+Core recipe and category management system with CRUD operations, detailed recipe views, and relationship tracking with ingredients/utensils.
 
-## Existing features:
+### [Advanced Filtering System](./ADVANCED_FILTERING_SYSTEM.md)
+Comprehensive filtering with dropdown menus, icon grids, and toggle switches. Supports allergen filtering, seasonal ingredients, and multiple filter combinations.
 
-- Creation of ingredients, utensils, recipe categories, and recipes
-- Filtering recipes by: ingredients, utensils, allergens, meal types, and dish types
-- Visualization of seasonal ingredients
-- Login and registration
-- Dark/Light mode
-- Language selection system
+### [Ingredient Management](./INGREDIENT_MANAGEMENT.md)
+Complete ingredient system with seasonal tracking, food type classification, and measurement unit management. Includes seasonal visualization charts.
 
-## Features not yet implemented but planned:
+### [Utensil Management](./UTENSIL_MANAGEMENT.md)
+Kitchen utensil management for tracking cooking tools and equipment used in recipes with dashboard administration.
 
-- Guest login
-- A dashboard page for managing recipes (editing, deleting, etc.)
-- A planning page for planning recipes for a week and generating an automatic shopping list based on that
-- A settings page for managing user data (changing password, username, etc.)
+### [User Dashboard](./USER_DASHBOARD.md)
+Administrative interface for users to manage their created content with accordion layout and specialized management tables.
 
-## Common Commands
+### [Search Functionality](./SEARCH_FUNCTIONALITY.md)
+Advanced search system for recipes and content with blob storage integration and context-aware search capabilities.
 
-### Development
+### [Internationalization](./INTERNATIONALIZATION.md)
+Multi-language support (French/English) with browser detection, lazy loading, and Zod form validation translations.
 
-- `pnpm run dev` - Start development server
+### [Database Management](./DATABASE_MANAGEMENT.md)
+Comprehensive database system using Drizzle ORM with SQLite/D1, including migrations, seeding, and NuxtHub cloud integration.
 
-### Database Operations
+### [UI Components System](./UI_COMPONENTS_SYSTEM.md)
+Component library built on Nuxt UI with custom modals, tables, filters, and visualization components. Includes Tailwind CSS styling and Iconify icon system.
 
-- `pnpm run db:migrate` - Run database migrations
-- `pnpm db:visualizer` - Launch Drizzle Lab visualizer
+## Tech Stack
+- **Framework**: Nuxt 3 with SSR
+- **Database**: Drizzle ORM with SQLite/Cloudflare D1
+- **UI**: Nuxt UI, Tailwind CSS v4
+- **Authentication**: nuxt-auth-utils
+- **Internationalization**: @nuxtjs/i18n
+- **Deployment**: NuxtHub/Cloudflare
+- **Icons**: Iconify with custom allergen SVGs
+- **Charts**: Unovis for data visualization
 
-### Package Management
+## Development Commands
+```bash
+# Development
+pnpm dev
 
-- Uses `pnpm` (version 10.12.4) as package manager
+# Database
+pnpm db:generate    # Generate migrations
+pnpm db:push        # Push to database
+pnpm db:visualizer  # View schema
 
-## Architecture Overview
+# Build
+pnpm build
+```
 
-### Tech Stack
+## Architecture Highlights
+- Modular component architecture
+- Server-side filtering and search
+- Real-time updates via Nuxt app hooks  
+- Type-safe development with TypeScript
+- Responsive design with mobile support
+- Cloud-native with Cloudflare integration
 
-- **Framework**: Nuxt.js 3 (with Nuxt 4 compatibility. (Based on Nuxt 4 documentation)) with TypeScript
-- **Database**: SQLite with Drizzle ORM
-- **Styling**: Tailwind CSS 4 + Nuxt UI PRO
-- **Authentication**: Nuxt auth utils
-- **Deployment**: NuxtHub (Cloudflare)
-- **Internationalization**: Nuxt i18n (French default, English support)
-
-### Documentation
-
-- Nuxt auth utils : https://nuxt.com/modules/auth-utils
-- Drizzle : https://orm.drizzle.team/docs/overview
-- Nuxt hub : https://hub.nuxt.com/docs/getting-started
-- Nuxt ui / pro : https://ui.nuxt.com/getting-started
-- Tailwind : https://tailwindcss.com/docs/installation/using-vite
-- NuxtJS : https://nuxt.com/docs/4.x/getting-started/introduction
-- Git project repository : https://github.com/lviardcretat/recepto
-
-### Directory Structure
-
-- **`app/`** - Main application code
-  - `components/` - Vue components organized by feature (auth, creation, filter, selection)
-  - `composables/` - Reusable Vue composition functions for filtering and UI logic
-  - `pages/` - File-based routing (recipes, search, user dashboard)
-  - `schemas/` - Zod validation schemas for business objects and forms
-  - `types/` - TypeScript type definitions
-  - `utils/` - Client-side utilities and helpers
-
-- **`server/`** - Server-side code
-  - `api/` - API routes following RESTful conventions
-  - `database/` - Database schema, migrations, and seed data
-  - `data/` - Files used to query the database
-  - `tasks/` - Background tasks (clear, seed)
-  - `utils/` - Server-side utilities
-
-- **`i18n/`** - Internationalization configuration and locale files
-
-### Be sure to follow this
-
+### Critical Rules - DO NOT VIOLATE
+- **NEVER create mock data or simplified components** unless explicitly told to do so
+- **NEVER replace existing complex components with simplified versions** - always fix the actual problem
+- **ALWAYS work with the existing codebase** - do not create new simplified alternatives
+- **ALWAYS find and fix the root cause** of issues instead of creating workarounds
+- When debugging issues, focus on fixing the existing implementation, not replacing it
+- When something doesn't work, debug and fix it - don't start over with a simple version
+- ALWAYS add explicit types to all function parameters, variables, and return types
+- Fix all linter and TypeScript errors immediately - don't leave them for the user to fix
+- When making changes to multiple files, check each one for type errors
 - Uses ESLint with stylistic rules (2-space indent, single quotes, no arrow parens)
 - Database schema uses snake_case convention
 - Always read the documentation, on any subject. If I haven't provided it, look for it on the internet
 - Ask me as many questions as possible to help you better understand my needs
-- Respect the location of the files, don't put code in a folder that has nothing to do with it, follow the structure established above
+- Respect the location of the files, don't put code in a folder that has nothing to do with it
 - Respect naming conventions, make the code readable and clean
 - Development mode uses remote database connection by default
 - Code in English, even for comments

@@ -73,8 +73,8 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false,
     },
     locales: [
-      { code: 'fr', name: 'Français', file: 'fr.ts' },
-      { code: 'en', name: 'English', file: 'en.ts' },
+      { code: 'fr', name: 'Français', file: 'fr.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
     ],
     lazy: true,
     strategy: 'no_prefix',
