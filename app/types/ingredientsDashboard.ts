@@ -1,9 +1,10 @@
 export type IngredientsDashboard = {
+  id: number;
   name: string;
   createdAt: string;
   updatedAt: string;
   foodTypeId: number;
-  seasonalMonths: unknown;
+  seasonalMonths: number[][] | null;
   recipes: {
     id: number;
     recipeId: number;

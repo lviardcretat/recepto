@@ -13,6 +13,7 @@ export async function getUstensils(): Promise<Ustensil[]> {
 export async function getUstensilsDashboard(userId: number): Promise<Partial<Ustensil>[]> {
   const ustensils = await useDrizzle().query.ustensil.findMany({
     columns: {
+      id: true,
       name: true,
       createdAt: true,
       updatedAt: true,
@@ -49,4 +50,23 @@ export async function getUstensil(id: number): Promise<Ustensil | undefined> {
     .where(eq(tables.ustensil.id, id))
     .get();
   return ustensil;
+}
+
+export async function updateUstensil(
+  id: number,
+  data: Partial<UstensilInsert>,
+): Promise<Ustensil> {
+  const updatedUstensil: Ustensil = await useDrizzle()
+    .update(tables.ustensil)
+    .set(data)
+    .where(eq(tables.ustensil.id, id))
+    .returning()
+    .get();
+  return updatedUstensil;
+}
+
+export async function deleteUstensil(id: number): Promise<void> {
+  await useDrizzle()
+    .delete(tables.ustensil)
+    .where(eq(tables.ustensil.id, id));
 }

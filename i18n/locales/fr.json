@@ -68,6 +68,49 @@
       "createdToast": "L'ustensile {ustensilName} a bien été créé !"
     }
   },
+  "formEdition": {
+    "cancel": "Annuler",
+    "update": "Mettre à jour",
+    "recipe": {
+      "cardTitle": "Modifier la recette",
+      "updatedToast": "La recette {recipeName} a bien été modifiée !"
+    },
+    "ingredient": {
+      "cardTitle": "Modifier l'ingrédient",
+      "updatedToast": "L'ingrédient {ingredientName} a bien été modifié !"
+    },
+    "category": {
+      "cardTitle": "Modifier la catégorie",
+      "updatedToast": "La catégorie {categoryName} a bien été modifiée !"
+    },
+    "ustensil": {
+      "cardTitle": "Modifier l'ustensile",
+      "updatedToast": "L'ustensile {ustensilName} a bien été modifié !"
+    }
+  },
+  "formDeletion": {
+    "error": "Erreur lors de la suppression",
+    "recipe": {
+      "deletedToast": "La recette {recipeName} a bien été supprimée !"
+    },
+    "ingredient": {
+      "deletedToast": "L'ingrédient {ingredientName} a bien été supprimé !"
+    },
+    "category": {
+      "deletedToast": "La catégorie {categoryName} a bien été supprimée !"
+    },
+    "ustensil": {
+      "deletedToast": "L'ustensile {ustensilName} a bien été supprimé !"
+    }
+  },
+  "modal": {
+    "delete": {
+      "title": "Confirmer la suppression",
+      "message": "Êtes-vous sûr de vouloir supprimer {item} ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirm": "Supprimer"
+    }
+  },
   "fromTo": "De {from} à {to}",
   "ingredient": "Ingrédient | Ingrédients",
   "loading": "Chargement...",
@@ -127,6 +170,12 @@
     "ustensilsTableComponent": {
       "recipesCount": "Utilisé dans",
       "recipes": "recette | recette | recettes"
+    },
+    "deletion": {
+      "title": "Confirmer la suppression",
+      "message": "Êtes-vous sûr de vouloir supprimer {item} ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirm": "Supprimer"
     }
   },
   "heroPage": {

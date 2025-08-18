@@ -8,21 +8,25 @@ import type { IngredientsDashboard, IngredientsRecipesDashboard } from '~/types/
 interface IngredientsTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
   dropdownMenuComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
-  foodTypes: FoodType[]
+  foodTypes: FoodType[];
+  onEditButtonOpen: (ingredient: IngredientsDashboard) => void;
+  onDeleteButtonOpen: (ingredient: IngredientsDashboard) => void;
 };
 
-function getRowItems(row: Row<IngredientsDashboard>) {
+function getRowItems(row: Row<IngredientsDashboard>, props: IngredientsTableConfigProps) {
   return [
     {
       label: 'Editer',
       icon: 'i-lucide-square-pen',
       color: 'primary',
+      onClick: () => props.onEditButtonOpen(row.original),
     },
     {
       label: 'Supprimer',
       icon: 'i-lucide-trash',
       color: 'error',
       disabled: row.getValue<IngredientsRecipesDashboard[]>('recipes').length > 0,
+      onClick: () => props.onDeleteButtonOpen(row.original),
     },
   ];
 }
@@ -84,7 +88,7 @@ export function getIngredientsTableConfig(
                 'content': {
                   align: 'end',
                 },
-                'items': getRowItems(row),
+                'items': getRowItems(row, props),
                 'aria-label': 'Actions dropdown',
               },
               () =>

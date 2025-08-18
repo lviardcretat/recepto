@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import type { Row } from '@tanstack/vue-table';
 import { getIngredientsTableConfig } from '~/config/dashboard/IngredientsTableConfig';
-import type { IngredientsDashboard, IngredientsRecipesDashboard } from '~/types/ingredientsDashboard';
+import type { IngredientsDashboard } from '~/types/ingredientsDashboard';
 
 const { d, t, locale } = useI18n();
 const UButton = resolveComponent('UButton');
@@ -40,7 +39,7 @@ const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFetch<
 await executeFoodTypesFetch();
 await executeIngredientsFetch();
 
-const recipeTableConfig = getIngredientsTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu, foodTypes: foodTypesFetch.value ?? [] });
+const recipeTableConfig = getIngredientsTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu, foodTypes: foodTypesFetch.value ?? [], onEditButtonOpen: () => {},onDeleteButtonOpen: () => {}, });
 </script>
 
 <template>

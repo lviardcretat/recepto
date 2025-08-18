@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SeasonalChartComponent } from '#components';
-import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
+import type { DropdownMenuItem, } from '@nuxt/ui';
 import { getDashboardSidebarConfig } from '~/config/layout/DashboardSidebarConfig';
 
 defineShortcuts({
@@ -63,7 +63,7 @@ const dashboardSidebarConfig = getDashboardSidebarConfig(t, { onSeasonalIngredie
           </div>
         </template>
       </UNavigationMenu>
-      <FilterPanelComponent :collapsed="collapsed" />
+      <LayoutDynamicSidebarSection :collapsed="collapsed" />
     </template>
 
     <template #footer="{ collapsed }">

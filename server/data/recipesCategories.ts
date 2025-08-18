@@ -89,7 +89,7 @@ export async function getRecipesCategoryName(
       name: tables.recipesCategory.name,
     })
     .from(tables.recipesCategory)
-    .where(eq(tables.ingredient.id, id))
+    .where(eq(tables.recipesCategory.id, id))
     .get();
   return recipesCategory;
 }
@@ -100,9 +100,28 @@ export async function getRecipesCategory(
   const recipesCategory: RecipesCategory | undefined = await useDrizzle()
     .select()
     .from(tables.recipesCategory)
-    .where(eq(tables.ingredient.id, id))
+    .where(eq(tables.recipesCategory.id, id))
     .get();
   return recipesCategory;
+}
+
+export async function updateRecipesCategory(
+  id: number,
+  data: Partial<RecipesCategoryInsert>,
+): Promise<RecipesCategory> {
+  const updatedRecipesCategory: RecipesCategory = await useDrizzle()
+    .update(tables.recipesCategory)
+    .set(data)
+    .where(eq(tables.recipesCategory.id, id))
+    .returning()
+    .get();
+  return updatedRecipesCategory;
+}
+
+export async function deleteRecipesCategory(id: number): Promise<void> {
+  await useDrizzle()
+    .delete(tables.recipesCategory)
+    .where(eq(tables.recipesCategory.id, id));
 }
 
 export async function getRecipesCategoriesFiltered(

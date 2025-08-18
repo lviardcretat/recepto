@@ -68,6 +68,49 @@
       "createdToast": "The utensil {utensilName} has been successfully created!"
     }
   },
+  "formEdition": {
+    "cancel": "Cancel",
+    "update": "Update",
+    "recipe": {
+      "cardTitle": "Edit recipe",
+      "updatedToast": "The recipe {recipeName} has been successfully updated!"
+    },
+    "ingredient": {
+      "cardTitle": "Edit ingredient",
+      "updatedToast": "The ingredient {ingredientName} has been successfully updated!"
+    },
+    "category": {
+      "cardTitle": "Edit category",
+      "updatedToast": "The category {categoryName} has been successfully updated!"
+    },
+    "ustensil": {
+      "cardTitle": "Edit utensil",
+      "updatedToast": "The utensil {ustensilName} has been successfully updated!"
+    }
+  },
+  "formDeletion": {
+    "error": "Error during deletion",
+    "recipe": {
+      "deletedToast": "The recipe {recipeName} has been successfully deleted!"
+    },
+    "ingredient": {
+      "deletedToast": "The ingredient {ingredientName} has been successfully deleted!"
+    },
+    "category": {
+      "deletedToast": "The category {categoryName} has been successfully deleted!"
+    },
+    "ustensil": {
+      "deletedToast": "The utensil {ustensilName} has been successfully deleted!"
+    }
+  },
+  "modal": {
+    "delete": {
+      "title": "Confirm deletion",
+      "message": "Are you sure you want to delete {item}? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
+  },
   "fromTo": "From {from} to {to}",
   "ingredient": "Ingredient | Ingredients",
   "loading": "Loading...",
@@ -127,6 +170,12 @@
     "ustensilsTableComponent": {
       "recipesCount": "Used in",
       "recipes": "recipe | recipes"
+    },
+    "deletion": {
+      "title": "Confirm deletion",
+      "message": "Are you sure you want to delete {item}? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
     }
   },
   "heroPage": {

@@ -5,7 +5,7 @@ import type { UstensilsDashboard } from '~/types/ustensilsDashboard';
 const { d, t, locale } = useI18n();
 const UButton = resolveComponent('UButton');
 const UDropdownMenu = resolveComponent('UDropdownMenu');
-const ustensilTableConfig = getUstensilsTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu });
+const ustensilTableConfig = getUstensilsTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu,onEditButtonOpen: () => {},onDeleteButtonOpen: () => {}, });
 
 const { data: ustensils, execute: executeUstensilsFetch } = await useFetch<UstensilsDashboard[]>(
   '/api/ustensils/dashboard',

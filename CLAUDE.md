@@ -1,90 +1,138 @@
-# Recepto - Recipe Management Application
+# CLAUDE.md
 
-## Project Overview
-Recepto is a comprehensive recipe management application built with Nuxt 3, featuring recipe creation, advanced filtering, ingredient management, and multi-language support.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository
 
-## Major Features
+## 📋 Project Overview
 
-### [Authentication System](./AUTHENTICATION_SYSTEM.md)
-Complete user authentication with login, registration, and guest access. Includes session management and multilingual auth forms.
+Recepto is an open source project that creates, filters, and hosts recipes
+The project is community-based, meaning that recipes are created solely by users
 
-### [Recipe Management](./RECIPE_MANAGEMENT.md) 
-Core recipe and category management system with CRUD operations, detailed recipe views, and relationship tracking with ingredients/utensils.
+### Key concepts:
 
-### [Advanced Filtering System](./ADVANCED_FILTERING_SYSTEM.md)
-Comprehensive filtering with dropdown menus, icon grids, and toggle switches. Supports allergen filtering, seasonal ingredients, and multiple filter combinations.
+- A recipe category is a category that groups together several recipes of the same type.
+For example, the lasagna category will group together the “vegetarian lasagna” recipe and the “beef lasagna” recipe
+- Recepto aims to be as simple as possible: logging in and registering only requires a username and password
 
-### [Ingredient Management](./INGREDIENT_MANAGEMENT.md)
-Complete ingredient system with seasonal tracking, food type classification, and measurement unit management. Includes seasonal visualization charts.
+### Existing features:
 
-### [Utensil Management](./UTENSIL_MANAGEMENT.md)
-Kitchen utensil management for tracking cooking tools and equipment used in recipes with dashboard administration.
+- Creation of ingredients, utensils, recipe categories, and recipes
+- Filtering recipes by: ingredients, utensils, allergens, meal types, and dish types
+- Visualization of seasonal ingredients
+- Login and registration
+- Dark/Light mode
+- Language selection system
+- Guest login
 
-### [User Dashboard](./USER_DASHBOARD.md)
-Administrative interface for users to manage their created content with accordion layout and specialized management tables.
+### Features in progress:
 
-### [Search Functionality](./SEARCH_FUNCTIONALITY.md)
-Advanced search system for recipes and content with blob storage integration and context-aware search capabilities.
+- A dashboard page for managing recipes (editing, deleting, etc.)
 
-### [Internationalization](./INTERNATIONALIZATION.md)
-Multi-language support (French/English) with browser detection, lazy loading, and Zod form validation translations.
+### Features not yet implemented but planned:
 
-### [Database Management](./DATABASE_MANAGEMENT.md)
-Comprehensive database system using Drizzle ORM with SQLite/D1, including migrations, seeding, and NuxtHub cloud integration.
+- A planning page for planning recipes for a week and generating an automatic shopping list based on that
+- A settings page for managing user data (changing password, username, etc.)
 
-### [UI Components System](./UI_COMPONENTS_SYSTEM.md)
-Component library built on Nuxt UI with custom modals, tables, filters, and visualization components. Includes Tailwind CSS styling and Iconify icon system.
+## 🏗️ Project Architecture
 
-## Tech Stack
-- **Framework**: Nuxt 3 with SSR
-- **Database**: Drizzle ORM with SQLite/Cloudflare D1
-- **UI**: Nuxt UI, Tailwind CSS v4
-- **Authentication**: nuxt-auth-utils
-- **Internationalization**: @nuxtjs/i18n
-- **Deployment**: NuxtHub/Cloudflare
-- **Icons**: Iconify with custom allergen SVGs
-- **Charts**: Unovis for data visualization
+```
+recepto/
+├── app/                     # Main Nuxt folder (app directory)
+│   ├── components/          # Vue components organized by feature
+│   ├── pages/               # File-based routing
+│   ├── layouts/             # Application layouts
+│   ├── composables/         # Reusable Vue composition functions for filtering and UI logic
+│   ├── middleware/          # Route middleware (auth, etc.)
+│   ├── schemas/             # Zod validation schemas for business objects and forms
+│   ├── types/               # TypeScript type definitions
+│   └── utils/               # Client-side utilities and helpers
+├── server/                  # Nitro Backend
+│   ├── api/                 # API routes following RESTful conventions
+│   ├── database/            # Database schema, migrations, and seed data
+│   ├── data/                # Files used to query the database
+│   ├── tasks/               # Background tasks (clear, seed)
+│   └── utils/               # Server utilities
+└── i18n/                    # Internationalization configuration and locale files
 
-## Development Commands
-```bash
-# Development
-pnpm dev
-
-# Database
-pnpm db:generate    # Generate migrations
-pnpm db:push        # Push to database
-pnpm db:visualizer  # View schema
-
-# Build
-pnpm build
 ```
 
-## Architecture Highlights
-- Modular component architecture
-- Server-side filtering and search
-- Real-time updates via Nuxt app hooks  
-- Type-safe development with TypeScript
-- Responsive design with mobile support
-- Cloud-native with Cloudflare integration
+## 📝 Main Commands
 
-### Critical Rules - DO NOT VIOLATE
-- **NEVER create mock data or simplified components** unless explicitly told to do so
-- **NEVER replace existing complex components with simplified versions** - always fix the actual problem
-- **ALWAYS work with the existing codebase** - do not create new simplified alternatives
-- **ALWAYS find and fix the root cause** of issues instead of creating workarounds
-- When debugging issues, focus on fixing the existing implementation, not replacing it
-- When something doesn't work, debug and fix it - don't start over with a simple version
-- ALWAYS add explicit types to all function parameters, variables, and return types
-- Fix all linter and TypeScript errors immediately - don't leave them for the user to fix
-- When making changes to multiple files, check each one for type errors
-- Uses ESLint with stylistic rules (2-space indent, single quotes, no arrow parens)
-- Database schema uses snake_case convention
-- Always read the documentation, on any subject. If I haven't provided it, look for it on the internet
-- Ask me as many questions as possible to help you better understand my needs
-- Respect the location of the files, don't put code in a folder that has nothing to do with it
-- Respect naming conventions, make the code readable and clean
-- Development mode uses remote database connection by default
-- Code in English, even for comments
-- Only use imports for external libraries; Nuxt automatically imports all files, components, interfaces, etc
-- Use TypeScript strictly - all schemas are defined with Zod validation
-- Database changes require migration generation: `pnpm db:migrate`
+```bash
+# Development
+pnpm run dev            # Development server
+
+# Build & Production
+pnpm run build          # Production build
+pnpm run preview        # Preview build
+pnpm run start          # Start in production
+
+# Code quality
+pnpm run lint           # ESLint linting
+pnpm run lint:fix       # Automatic fix
+pnpm run typecheck      # TypeScript verification
+
+# Database
+pnpm run db:migrate     # Supabase migrations
+pnpm run db:seed        # Test data seed
+pnpm run db:reset       # Complete reset
+```
+
+## 🚨 Points of Attention
+### To do systematically
+
+* ✅ Handle loading and error states
+* ✅ Document complex functions with JSDoc
+* ✅ Check the use of ClientOnly if necessary for hydration mismatch issues
+* ✅ Uses ESLint with stylistic rules (2-space indent, single quotes, no arrow parens)
+* ✅ use snake_case convention for database names
+* ✅ Always read the documentation, on any subject. If I haven't provided it, and if it's not provided above, look for it on the internet
+* ✅ Respect the location of the files, don't put code in a folder that has nothing to do with it, follow the structure established above
+* ✅ Development mode uses remote database connection by default
+* ✅ Code in English, even for comments
+* ✅ Only use imports for external libraries; Nuxt automatically imports all files, components, interfaces, etc
+* ✅ Use TypeScript strictly - all schemas are defined with Zod validation
+* ✅ Database changes require migration generation: pnpm db:migrate
+* ✅ Always work with the existing codebase - do not create new simplified alternatives
+* ✅ Always find and fix the root cause of issues instead of creating workarounds
+* ✅ When debugging issues, focus on fixing the existing implementation, not replacing it
+* ✅ When something doesn't work, debug and fix it - don't start over with a simple version
+* ✅ Always add explicit types to all function parameters, variables, and return types
+* ✅ Fix all linter and TypeScript errors immediately - don't leave them for the user to fix
+* ✅ When making changes to multiple files, check each one for type errors
+* ✅ Update this file if things have changed, keep this file as up to date as possible
+* ✅ Always use the path '~~/server' instead of '~/server' to import files from the server
+* ✅ Always use the schemas in the file '/server/utils/drizzleUtils.ts'
+
+### To avoid
+
+* ❌ Store sensitive data on the client side
+* ❌ Make API requests without error handling
+* ❌ Directly manipulate the DOM (use Vue refs)
+* ❌ Forget to clean up event listeners and watchers
+* ❌ Never replace existing complex components with simplified versions - 
+
+## 📚 Resources and Documentation
+
+- [Documentation Nuxt 4](https://nuxt.com/docs)
+- [Drizzle](https://orm.drizzle.team/docs/overview)
+- [Vue 4 Documentation](https://vuejs.org)
+- [Nuxt hub](https://hub.nuxt.com/docs/getting-started)
+- [Nuxt ui / pro](https://ui.nuxt.com/getting-started)
+- [TailwindCSS](https://tailwindcss.com/docs)
+- [Nuxt auth utils](https://nuxt.com/modules/auth-utils)
+
+## 🔄 Git Workflow
+
+### Branches
+- `master` : Production
+- `dev` : Development
+
+### Commit convention (Conventional Commits)
+
+```
+[feat | fix | docs | style | refactor | test | chore | version]: COMMIT_DESCRIPTION
+```
+
+---
+
+*Dernière mise à jour: 14 août 2025*

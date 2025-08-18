@@ -12,6 +12,7 @@ export async function getIngredients(): Promise<Ingredient[]> {
 export async function getIngredientsDashboard(userId: number): Promise<Partial<Ingredient>[]> {
   const ingredients = await useDrizzle().query.ingredient.findMany({
     columns: {
+      id: true,
       name: true,
       foodTypeId: true,
       seasonalMonths: true,
@@ -73,4 +74,23 @@ export async function getIngredient(
     .where(eq(tables.ingredient.id, id))
     .get();
   return ingredient;
+}
+
+export async function updateIngredient(
+  id: number,
+  data: Partial<IngredientInsert>,
+): Promise<Ingredient> {
+  const updatedIngredient: Ingredient = await useDrizzle()
+    .update(tables.ingredient)
+    .set(data)
+    .where(eq(tables.ingredient.id, id))
+    .returning()
+    .get();
+  return updatedIngredient;
+}
+
+export async function deleteIngredient(id: number): Promise<void> {
+  await useDrizzle()
+    .delete(tables.ingredient)
+    .where(eq(tables.ingredient.id, id));
 }

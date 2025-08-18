@@ -8,26 +8,48 @@ import type { RecipesDashboard } from '~/types/recipesDashboard';
 interface RecipesTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
   dropdownMenuComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
-  onDeleteButtonOpen: () => void;
+  onEditButtonOpen: (recipe: RecipesDashboard) => void;
+  onDeleteButtonOpen: (recipe: RecipesDashboard) => void;
+  onEditCategoryButtonOpen: (category: RecipesDashboard) => void;
+  onDeleteCategoryButtonOpen: (category: RecipesDashboard) => void;
 };
 
-function getRowItems(row: Row<RecipesDashboard>, onDeleteButtonOpen: () => void) {
-  return [
-    {
-      label: 'Editer',
-      icon: 'i-lucide-square-pen',
-      color: 'primary',
-      onSelect() {
-        onDeleteButtonOpen();
+function getRowItems(row: Row<RecipesDashboard>, props: RecipesTableConfigProps) {
+  const isCategory = row.getIsGrouped();
+  
+  if (isCategory) {
+    return [
+      {
+        label: 'Editer',
+        icon: 'i-lucide-square-pen',
+        color: 'primary',
+        onClick: () => props.onEditCategoryButtonOpen(row.original),
       },
-    },
-    {
-      label: 'Supprimer',
-      icon: 'i-lucide-trash',
-      color: 'error',
-      disabled: row.subRows.length > 0,
-    },
-  ] satisfies DropdownMenuItem[];
+      {
+        label: 'Supprimer',
+        icon: 'i-lucide-trash',
+        color: 'error',
+        disabled: row.subRows.length > 0,
+        onClick: () => props.onDeleteCategoryButtonOpen(row.original),
+      },
+    ] satisfies DropdownMenuItem[];
+  } else {
+    const parentRow = row.getParentRow();
+    return [
+      {
+        label: 'Editer',
+        icon: 'i-lucide-square-pen',
+        color: 'primary',
+        onClick: () => props.onEditButtonOpen(row.original),
+      },
+      {
+        label: 'Supprimer',
+        icon: 'i-lucide-trash',
+        color: 'error',
+        onClick: () => props.onDeleteButtonOpen(row.original),
+      },
+    ] satisfies DropdownMenuItem[];
+  }
 }
 
 export function getRecipesTableConfig(
@@ -81,7 +103,7 @@ export function getRecipesTableConfig(
                 'content': {
                   align: 'end',
                 },
-                'items': getRowItems(row, props.onDeleteButtonOpen),
+                'items': getRowItems(row, props),
                 'aria-label': 'Actions dropdown',
               },
               () =>

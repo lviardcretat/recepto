@@ -87,6 +87,7 @@ export async function getRecipes(): Promise<Recipe[]> {
 export async function getRecipesWithRecipesCategoriesDashboard(userId: number): Promise<RecipesDashboard[]> {
   const recipes: RecipesDashboard[] = await useDrizzle().query.recipe.findMany({
     columns: {
+      id: true,
       name: true,
       recipesCategoryId: true,
       createdAt: true,
@@ -96,6 +97,7 @@ export async function getRecipesWithRecipesCategoriesDashboard(userId: number): 
       recipesCategory: {
         columns: {
           id: true,
+          dishTypeId: true,
           name: true,
           createdAt: true,
           updatedAt: true,
@@ -267,4 +269,111 @@ export async function getRecipesFiltered(
       .all();
   }
   return recipes;
+}
+
+export async function updateRecipe(
+  id: number,
+  data: Partial<RecipeInsert>,
+): Promise<Recipe> {
+  const updatedRecipe: Recipe = await useDrizzle()
+    .update(tables.recipe)
+    .set(data)
+    .where(eq(tables.recipe.id, id))
+    .returning()
+    .get();
+  return updatedRecipe;
+}
+
+export async function deleteRecipe(id: number): Promise<void> {
+  // Delete related data first
+  await useDrizzle()
+    .delete(tables.recipeIngredient)
+    .where(eq(tables.recipeIngredient.recipeId, id));
+    
+  await useDrizzle()
+    .delete(tables.recipeToUstensil)
+    .where(eq(tables.recipeToUstensil.recipeId, id));
+    
+  await useDrizzle()
+    .delete(tables.allergenToRecipe)
+    .where(eq(tables.allergenToRecipe.recipeId, id));
+    
+  await useDrizzle()
+    .delete(tables.sequence)
+    .where(eq(tables.sequence.recipeId, id));
+    
+  // Finally delete the recipe
+  await useDrizzle()
+    .delete(tables.recipe)
+    .where(eq(tables.recipe.id, id));
+}
+
+export async function getRecipeBasic(id: number): Promise<Recipe | undefined> {
+  const recipe: Recipe | undefined = await useDrizzle()
+    .select()
+    .from(tables.recipe)
+    .where(eq(tables.recipe.id, id))
+    .get();
+  return recipe;
+}
+
+export async function getRecipeWithAllData(id: number): Promise<any> {
+  const recipe = await useDrizzle().query.recipe.findFirst({
+    columns: {
+      id: true,
+      name: true,
+      description: true,
+      tips: true,
+      peopleNumber: true,
+      preparationTime: true,
+      cookingTime: true,
+      restTime: true,
+      seasonId: true,
+      recipesCategoryId: true,
+      createdById: true,
+    },
+    with: {
+      ingredients: {
+        columns: {
+          ingredientId: true,
+          quantity: true,
+          unitId: true,
+        },
+      },
+      sequences: {
+        columns: {
+          id: true,
+          name: true,
+          extra: true,
+        },
+        orderBy: (sequence) => sequence.id,
+      },
+      allergens: {
+        columns: {
+          allergenId: true,
+        },
+      },
+      ustensils: {
+        columns: {
+          ustensilId: true,
+        },
+      },
+    },
+    where: (recipe, { eq }) => eq(recipe.id, id),
+  });
+
+  if (!recipe) {
+    return undefined;
+  }
+
+  // Transform the data to match the expected format
+  return {
+    ...recipe,
+    allergens: recipe.allergens.map(a => a.allergenId),
+    ustensils: recipe.ustensils.map(u => u.ustensilId),
+    sequences: recipe.sequences.map(s => ({
+      name: s.name,
+      extra: s.extra,
+    })),
+  };
 }

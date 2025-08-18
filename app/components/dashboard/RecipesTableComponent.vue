@@ -1,16 +1,13 @@
 <script lang="ts" setup>
-import { ModalDelete } from '#components';
 import { getGroupedRowModel } from '@tanstack/vue-table';
 import type { GroupingOptions, Row } from '@tanstack/vue-table';
 import { getRecipesTableConfig } from '~/config/dashboard/RecipesTableConfig';
 import type { RecipesDashboard } from '~/types/recipesDashboard';
 
 const { d, t, locale } = useI18n();
-const overlay = useOverlay();
 const UButton = resolveComponent('UButton');
 const UDropdownMenu = resolveComponent('UDropdownMenu');
-const deleteModal = overlay.create(ModalDelete, { props: { itemName: 'blabla', onCancel: () => {}, onConfirm: () => {} } });
-const recipeTableConfig = getRecipesTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu, onDeleteButtonOpen: deleteModal.open });
+const recipeTableConfig = getRecipesTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu, onEditButtonOpen: () => {},onDeleteButtonOpen: () => {}, onEditCategoryButtonOpen: () => {}, onDeleteCategoryButtonOpen: () => {},  });
 
 const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = await useFetch<RecipesDashboard[]>(
   '/api/recipesCategories/recipes/dashboard',

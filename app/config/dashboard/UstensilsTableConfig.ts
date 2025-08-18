@@ -8,20 +8,24 @@ import type { UstensilsDashboard } from '~/types/ustensilsDashboard';
 interface UstensilsTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
   dropdownMenuComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
+  onEditButtonOpen: (ustensil: UstensilsDashboard) => void;
+  onDeleteButtonOpen: (ustensil: UstensilsDashboard) => void;
 };
 
-function getRowItems(row: Row<UstensilsDashboard>) {
+function getRowItems(row: Row<UstensilsDashboard>, props: UstensilsTableConfigProps) {
   return [
     {
       label: 'Editer',
       icon: 'i-lucide-square-pen',
       color: 'primary',
+      onClick: () => props.onEditButtonOpen(row.original),
     },
     {
       label: 'Supprimer',
       icon: 'i-lucide-trash',
       color: 'error',
       disabled: row.getValue<number>('recipesCount') > 0,
+      onClick: () => props.onDeleteButtonOpen(row.original),
     },
   ];
 }
@@ -72,7 +76,7 @@ export function getUstensilsTableConfig(
                 'content': {
                   align: 'end',
                 },
-                'items': getRowItems(row),
+                'items': getRowItems(row, props),
                 'aria-label': 'Actions dropdown',
               },
               () =>
