@@ -1,20 +1,25 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
-import {
-  recipeCreation,
-
-} from '~/schemas/creation/recipe';
+import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
+import { recipeCreation } from '~/schemas/creation/recipe';
 import type { RecipeCreation } from '~/schemas/creation/recipe';
 
 const props = defineProps<{
-  modalTitle: string;
+  recipeId: number;
 }>();
-const emit = defineEmits(['closeModal']);
 
+const emit = defineEmits<{
+  close: [success: boolean];
+}>();
+
+const { t } = useI18n();
+const form = ref();
+const nuxtApp = useNuxtApp();
 const toast = useToast();
 const { start, finish } = useLoadingIndicator();
-const { t } = useI18n();
-const nuxtApp = useNuxtApp();
+const schema = recipeCreation;
+const disabledSubmit = ref(false);
+
+// States for creation modals
 const isIngredientCreationModalOpen = ref(false);
 const ingredientNameToCreate = ref<string | undefined>(undefined);
 const selectMenuIngredientIdConcerned = ref(0);
@@ -22,42 +27,28 @@ const isRecipeCategoryCreationModalOpen = ref(false);
 const recipeCategoryNameToCreate = ref<string | undefined>(undefined);
 const isUstensilCreationModalOpen = ref(false);
 const ustensilNameToCreate = ref<string | undefined>(undefined);
-const form = ref();
-const disabledSubmit = ref(false);
-const state = ref<{
-  name?: string;
-  description?: string;
-  tips?: string;
-  peopleNumber?: number;
-  preparationTime?: number;
-  cookingTime?: number;
-  restTime?: number;
-  seasonId?: number;
-  ingredients: { ingredientId?: number; quantity?: number; unitId?: number }[];
-  sequences: { name?: string; extra?: string }[];
-  allergens?: number[];
-  ustensils?: number[];
-  recipesCategoryId?: number;
-}>({
-  name: undefined,
-  description: undefined,
-  tips: undefined,
-  peopleNumber: undefined,
-  preparationTime: undefined,
-  cookingTime: undefined,
-  restTime: undefined,
-  seasonId: undefined,
-  ingredients: [{ quantity: 0 }],
-  sequences: [{ name: undefined, extra: undefined }],
-  allergens: [],
-  ustensils: undefined,
-  recipesCategoryId: undefined,
+
+// Fetch recipe data
+const { data: recipe, error } = await useFetch(`/api/recipesCategories/recipes/${props.recipeId}`, {
+  method: 'GET',
+  watch: false,
+  onResponseError({ response }) {
+    throw showError({
+      statusCode: response.status,
+      statusMessage: response.statusText,
+    });
+  },
 });
 
+if (error.value || !recipe.value) {
+  emit('close', false);
+}
+
+// Fetch all necessary data
 const { data: seasons } = await useFetch('/api/seasons/all', {
   method: 'GET',
   watch: false,
-  default: () => null,
+  default: () => [] satisfies SelectMenuItem[],
   onResponseError({ response }) {
     throw showError({
       statusCode: response.status,
@@ -72,23 +63,20 @@ const { data: seasons } = await useFetch('/api/seasons/all', {
 const {
   data: recipesCategories,
   refresh: refreshRecipesCategoriesFetch,
-} = await useFetch(
-  '/api/recipesCategories/all',
-  {
-    method: 'GET',
-    watch: false,
-    default: () => null,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-    transform: (recipesCategories) => {
-      return mapSelectMenuItemsUtils(recipesCategories);
-    },
+} = await useFetch('/api/recipesCategories/all', {
+  method: 'GET',
+  watch: false,
+  default: () => [] satisfies SelectMenuItem[],
+  onResponseError({ response }) {
+    throw showError({
+      statusCode: response.status,
+      statusMessage: response.statusText,
+    });
   },
-);
+  transform: (recipesCategories) => {
+    return mapSelectMenuItemsUtils(recipesCategories);
+  },
+});
 
 const {
   data: ingredients,
@@ -96,7 +84,7 @@ const {
 } = await useFetch('/api/ingredients/all', {
   method: 'GET',
   watch: false,
-  default: () => null,
+  default: () => [] satisfies SelectMenuItem[],
   onResponseError({ response }) {
     throw showError({
       statusCode: response.status,
@@ -111,7 +99,7 @@ const {
 const { data: allergens } = await useFetch('/api/allergens/all', {
   method: 'GET',
   watch: false,
-  default: () => null,
+  default: () => [] satisfies SelectMenuItem[],
   onResponseError({ response }) {
     throw showError({
       statusCode: response.status,
@@ -129,7 +117,7 @@ const {
 } = await useFetch('/api/ustensils/all', {
   method: 'GET',
   watch: false,
-  default: () => null,
+  default: () => [] satisfies SelectMenuItem[],
   onResponseError({ response }) {
     throw showError({
       statusCode: response.status,
@@ -144,7 +132,7 @@ const {
 const { data: units } = await useFetch('/api/units/all', {
   method: 'GET',
   watch: false,
-  default: () => null,
+  default: () => [] satisfies SelectMenuItem[],
   onResponseError({ response }) {
     throw showError({
       statusCode: response.status,
@@ -156,21 +144,48 @@ const { data: units } = await useFetch('/api/units/all', {
   },
 });
 
+// Initialize form state with fetched data
+const state = ref<RecipeCreation>({
+  name: recipe.value?.name || '',
+  description: recipe.value?.description || '',
+  tips: recipe.value?.tips,
+  peopleNumber: recipe.value?.peopleNumber || 1,
+  preparationTime: recipe.value?.preparationTime || 0,
+  cookingTime: recipe.value?.cookingTime || 0,
+  restTime: recipe.value?.restTime || 0,
+  seasonId: recipe.value?.seasonId || 1,
+  ingredients: recipe.value?.ingredients?.length
+    ? recipe.value.ingredients.map((ing: any) => ({
+        ingredientId: ing.ingredientId,
+        quantity: ing.quantity,
+        unitId: ing.unitId,
+      }))
+    : [{ ingredientId: 1, quantity: 0 }],
+  sequences: recipe.value?.sequences?.length
+    ? recipe.value.sequences
+    : [{ name: '', extra: undefined }],
+  allergens: recipe.value?.allergens?.map((a: any) => a.id) || [],
+  ustensils: recipe.value?.ustensils?.map((u: any) => u.id) || [1],
+  recipesCategoryId: recipe.value?.recipesCategoryId || 1,
+});
+
 async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch('/api/recipesCategories/recipes', {
-      method: 'POST',
+    await $fetch(`/api/recipesCategories/recipes/${props.recipeId}`, {
+      method: 'PUT',
       body: event.data,
       immediate: false,
       watch: false,
       async onResponse() {
-        await nuxtApp.callHook('recipe:created', {});
-        emit('closeModal');
-        toast.add({
-          title: t('formCreation.recipe.createdToast', { recipeName: event.data.name }),
+        await nuxtApp.callHook('recipe:updated', {
+          id: props.recipeId,
         });
+        toast.add({
+          title: t('formEdition.recipe.updatedToast', { recipeName: event.data.name }),
+        });
+        emit('close', true);
       },
       onResponseError({ response }) {
         throw showError({
@@ -186,26 +201,9 @@ async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
   }
 }
 
-nuxtApp.hook('ingredient:created', async (payload) => {
-  await refreshIngredientsFetch();
-  ingredientNameToCreate.value = undefined;
-  if (state.value.ingredients[selectMenuIngredientIdConcerned.value]) {
-    // @ts-expect-error : I checked if this isn't null or undefined...
-    state.value.ingredients[selectMenuIngredientIdConcerned.value].ingredientId = payload.id;
-  }
-});
-nuxtApp.hook('recipesCategory:created', async (payload) => {
-  await refreshRecipesCategoriesFetch();
-  recipeCategoryNameToCreate.value = undefined;
-  state.value.recipesCategoryId = payload.id;
-});
-nuxtApp.hook('ustensil:created', async (payload) => {
-  await refreshUstensilsFetch();
-  ustensilNameToCreate.value = undefined;
-  if (state.value.ustensils) {
-    state.value.ustensils.push(payload.id);
-  }
-});
+function handleClose() {
+  emit('close', false);
+}
 
 // Handlers for creating new items
 function handleCreateIngredient(name: string, index: number) {
@@ -223,63 +221,78 @@ function handleCreateUstensil(name: string) {
   ustensilNameToCreate.value = name;
   isUstensilCreationModalOpen.value = true;
 }
+
+// Hooks for created items
+nuxtApp.hook('ingredient:created', async (payload) => {
+  await refreshIngredientsFetch();
+  ingredientNameToCreate.value = undefined;
+  const ingredient = state.value.ingredients[selectMenuIngredientIdConcerned.value];
+  if (ingredient) {
+    ingredient.ingredientId = payload.id;
+  }
+});
+
+nuxtApp.hook('recipesCategory:created', async (payload) => {
+  await refreshRecipesCategoriesFetch();
+  recipeCategoryNameToCreate.value = undefined;
+  state.value.recipesCategoryId = payload.id;
+});
+
+nuxtApp.hook('ustensil:created', async (payload) => {
+  await refreshUstensilsFetch();
+  ustensilNameToCreate.value = undefined;
+  if (state.value.ustensils) {
+    state.value.ustensils.push(payload.id);
+  }
+});
 </script>
 
 <template>
-  <div>
-    <UForm
-      ref="form"
-      :schema="recipeCreation"
-      :state="state"
-      class="max-h-full"
-      @submit="onSubmit"
-    >
-      <UCard :ui="{ root: 'max-h-full flex flex-col', body: 'overflow-auto grow' }">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
-              {{ $t(`formCreation.${props.modalTitle}.cardTitle`) }}
-            </h3>
-            <UButton
-              color="neutral"
-              variant="ghost"
-              icon="i-lucide-x"
-              class="-my-1"
-              @click="emit('closeModal')"
-            />
-          </div>
-        </template>
+  <UModal
+    :title="t('formEdition.recipe.cardTitle')"
+    :close="{ onClick: handleClose }"
+    prevent-close
+    class="max-w-6xl max-h-[90vh]"
+  >
+    <template #body>
+      <UForm
+        ref="form"
+        :schema="schema"
+        :state="state"
+        class="max-h-full"
+        @submit="onSubmit"
+      >
         <FormRecipeFields
           v-model="state"
-          :seasons="seasons ?? []"
-          :recipes-categories="recipesCategories ?? []"
-          :ingredients="ingredients ?? []"
-          :allergens="allergens ?? []"
-          :ustensils="ustensils ?? []"
-          :units="units ?? []"
+          :seasons="seasons"
+          :recipes-categories="recipesCategories"
+          :ingredients="ingredients"
+          :allergens="allergens"
+          :ustensils="ustensils"
+          :units="units"
           :disabled="disabledSubmit"
           @create-ingredient="handleCreateIngredient"
           @create-recipe-category="handleCreateRecipeCategory"
           @create-ustensil="handleCreateUstensil"
         />
-        <template #footer>
-          <div class="flex justify-between">
-            <UButton
-              variant="outline"
-              @click="form.clear()"
-            >
-              {{ $t('formCreation.clear') }}
-            </UButton>
-            <UButton
-              type="submit"
-              :disabled="disabledSubmit"
-            >
-              {{ $t('formCreation.submit') }}
-            </UButton>
-          </div>
-        </template>
-      </UCard>
-    </UForm>
+      </UForm>
+    </template>
+    <template #footer>
+      <div class="flex justify-between w-full">
+        <UButton
+          variant="outline"
+          @click="handleClose"
+        >
+          {{ t('formEdition.cancel') }}
+        </UButton>
+        <UButton
+          :disabled="disabledSubmit"
+          @click="form?.submit()"
+        >
+          {{ t('formEdition.save') }}
+        </UButton>
+      </div>
+    </template>
 
     <!-- Creation modals -->
     <UModal
@@ -321,9 +334,5 @@ function handleCreateUstensil(name: string) {
         />
       </template>
     </UModal>
-  </div>
+  </UModal>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

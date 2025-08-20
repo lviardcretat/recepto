@@ -70,6 +70,7 @@
   },
   "formEdition": {
     "cancel": "Annuler",
+    "save": "Enregistrer",
     "update": "Mettre à jour",
     "recipe": {
       "cardTitle": "Modifier la recette",

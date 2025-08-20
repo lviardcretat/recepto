@@ -3,11 +3,18 @@ import { getGroupedRowModel } from '@tanstack/vue-table';
 import type { GroupingOptions, Row } from '@tanstack/vue-table';
 import { getRecipesTableConfig } from '~/config/dashboard/RecipesTableConfig';
 import type { RecipesDashboard } from '~/types/recipesDashboard';
+import { LazyDashboardDeletionDeleteModalComponent, LazyEditionRecipeEditModalComponent, LazyEditionRecipeCategoryEditModalComponent } from '#components';
 
 const { d, t, locale } = useI18n();
 const UButton = resolveComponent('UButton');
 const UDropdownMenu = resolveComponent('UDropdownMenu');
-const recipeTableConfig = getRecipesTableConfig(d, t, { buttonComponent: UButton, dropdownMenuComponent: UDropdownMenu, onEditButtonOpen: () => {},onDeleteButtonOpen: () => {}, onEditCategoryButtonOpen: () => {}, onDeleteCategoryButtonOpen: () => {},  });
+const overlay = useOverlay();
+const nuxtApp = useNuxtApp();
+
+// Create modals
+const editRecipeModal = overlay.create(LazyEditionRecipeEditModalComponent);
+const deleteModal = overlay.create(LazyDashboardDeletionDeleteModalComponent);
+const editCategoryModal = overlay.create(LazyEditionRecipeCategoryEditModalComponent);
 
 const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = await useFetch<RecipesDashboard[]>(
   '/api/recipesCategories/recipes/dashboard',
@@ -25,6 +32,80 @@ const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = awai
 );
 
 await executeRecipesCategoriesFetch();
+
+// Handlers for edit and delete
+async function handleEditButtonOpen(recipe: RecipesDashboard) {
+  const instance = editRecipeModal.open({ recipeId: recipe.id });
+  const result = await instance.result;
+  if (result) {
+    await executeRecipesCategoriesFetch();
+  }
+}
+
+async function handleDeleteButtonOpen(recipe: RecipesDashboard) {
+  const instance = deleteModal.open({
+    itemName: recipe.name,
+    itemType: t('recipe')
+  });
+  const result = await instance.result;
+  if (result) {
+    // Perform delete operation
+    await $fetch(`/api/recipesCategories/recipes/${recipe.id}`, {
+      method: 'DELETE',
+      async onResponse() {
+        await nuxtApp.callHook('recipe:deleted', { id: recipe.id });
+        await executeRecipesCategoriesFetch();
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response.statusText,
+        });
+      },
+    });
+  }
+}
+
+async function handleEditCategoryButtonOpen(recipe: RecipesDashboard) {
+  const instance = editCategoryModal.open({ recipeCategoryId: recipe.recipesCategory.id });
+  const result = await instance.result;
+  if (result) {
+    await executeRecipesCategoriesFetch();
+  }
+}
+
+async function handleDeleteCategoryButtonOpen(recipe: RecipesDashboard) {
+  const instance = deleteModal.open({
+    itemName: recipe.recipesCategory.name,
+    itemType: t('category')
+  });
+  const result = await instance.result;
+  if (result) {
+    // Perform delete operation
+    await $fetch(`/api/recipesCategories/${recipe.recipesCategory.id}`, {
+      method: 'DELETE',
+      async onResponse() {
+        await nuxtApp.callHook('recipesCategory:deleted', { id: recipe.recipesCategory.id });
+        await executeRecipesCategoriesFetch();
+      },
+      onResponseError({ response }) {
+        throw showError({
+          statusCode: response.status,
+          statusMessage: response.statusText,
+        });
+      },
+    });
+  }
+}
+
+const recipeTableConfig = getRecipesTableConfig(d, t, {
+  buttonComponent: UButton,
+  dropdownMenuComponent: UDropdownMenu,
+  onEditButtonOpen: handleEditButtonOpen,
+  onDeleteButtonOpen: handleDeleteButtonOpen,
+  onEditCategoryButtonOpen: handleEditCategoryButtonOpen,
+  onDeleteCategoryButtonOpen: handleDeleteCategoryButtonOpen,
+});
 
 const grouping_options = ref<GroupingOptions>({
   groupedColumnMode: 'remove',

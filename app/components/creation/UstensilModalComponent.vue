@@ -80,19 +80,10 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
           />
         </div>
       </template>
-      <div class="flex flex-col gap-4">
-        <UFormField
-          :label="$t('formCreation.name')"
-          name="name"
-        >
-          <UInput
-            v-model="state.name"
-            type="text"
-            :placeholder="$t('formCreation.ustensil.nameExample')"
-            class="w-full"
-          />
-        </UFormField>
-      </div>
+      <FormUstensilFields
+        v-model="state"
+        :disabled="disabledSubmit"
+      />
       <template #footer>
         <div class="flex justify-between">
           <UButton
