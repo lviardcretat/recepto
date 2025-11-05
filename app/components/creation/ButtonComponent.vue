@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { DropdownMenuItem } from '@nuxt/ui';
 import AnonymousRestrictionModalComponent from '../auth/AnonymousRestrictionModalComponent.vue';
 
 const { t } = useI18n();
@@ -46,7 +45,7 @@ const items = computed(
     icon: 'i-lucide-lab-whisk',
     onSelect: () => handleItemSelect('ustensil'),
   },
-] satisfies DropdownMenuItem,
+]
 );
 </script>
 

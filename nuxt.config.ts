@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     'nuxt-zod-i18n',
     '@nuxt/image',
     '@nuxtjs/i18n',
-    '@nuxt/ui-pro', // Comment it for local bdd
+    '@nuxt/ui',
     '@nuxthub/core',
     '@nuxt/eslint',
     'nuxt-auth-utils',

@@ -20,7 +20,9 @@ const items = ref([
 
 <template>
   <UPage>
-    <UPageAccordion :items="items">
+    <UAccordion :items="items"
+      :unmount-on-hide="false"
+  +   :ui="{ trigger: 'text-base', body: 'text-base text-muted' }">
       <template #recipes>
         <UCard variant="soft">
           <DashboardRecipesTableComponent />
@@ -36,6 +38,6 @@ const items = ref([
           <DashboardUstensilsTableComponent />
         </UCard>
       </template>
-    </UPageAccordion>
+    </UAccordion>
   </UPage>
 </template>
