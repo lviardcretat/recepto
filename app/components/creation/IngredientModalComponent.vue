@@ -8,6 +8,7 @@ const props = defineProps<{
   modalTitle: string;
   ingredientName?: string;
 }>();
+const flatSeasonalMonths = ref<number[]>([]);
 const { t } = useI18n();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
@@ -100,6 +101,7 @@ async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
         v-model="state"
         :food-types="foodTypes"
         :disabled="disabledSubmit"
+        :flat-seasonal-months="flatSeasonalMonths"
       />
       <template #footer>
         <div class="flex justify-between">

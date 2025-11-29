@@ -6,10 +6,12 @@ import type { IngredientFormData } from '~/types/form/IIngredientFields';
 const props = defineProps<{
   modelValue: IngredientFormData;
   foodTypes: SelectMenuItem[];
+  flatSeasonalMonths: number[];
 }>();
 
 const emit = defineEmits<{
   'update:modelValue': [value: IngredientFormData];
+  'update:flatSeasonalMonths': [value: number[]];
 }>();
 
 const { t } = useI18n();
@@ -18,15 +20,7 @@ const localValue = computed({
   get: () => props.modelValue,
   set: value => emit('update:modelValue', value),
 });
-
-const flatSeasonalMonths = ref<number[]>([]);
-
-// Initialize flatSeasonalMonths from modelValue
-watchEffect(() => {
-  if (props.modelValue.seasonalMonths) {
-    flatSeasonalMonths.value = props.modelValue.seasonalMonths.flat();
-  }
-});
+const flatSeasonalMonths = ref<number[]>(props.flatSeasonalMonths);
 
 function updateField<K extends keyof IngredientFormData>(field: K, value: IngredientFormData[K]) {
   emit('update:modelValue', {
@@ -44,6 +38,7 @@ function toggleMonth(monthId: number): void {
   else {
     flatSeasonalMonths.value.push(monthId);
   }
+  emit('update:flatSeasonalMonths', flatSeasonalMonths.value);
   mapFlatMonthsToSeasonalMonths();
 }
 
