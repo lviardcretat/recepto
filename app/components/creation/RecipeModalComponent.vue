@@ -226,102 +226,100 @@ function handleCreateUstensil(name: string) {
 </script>
 
 <template>
-  <div>
-    <UForm
-      ref="form"
-      :schema="recipeCreation"
-      :state="state"
-      class="max-h-full"
-      @submit="onSubmit"
-    >
-      <UCard :ui="{ root: 'max-h-full flex flex-col', body: 'overflow-auto grow' }">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
-              {{ $t(`formCreation.${props.modalTitle}.cardTitle`) }}
-            </h3>
-            <UButton
-              color="neutral"
-              variant="ghost"
-              icon="i-lucide-x"
-              class="-my-1"
-              @click="emit('closeModal')"
-            />
-          </div>
-        </template>
-        <FormRecipeFields
-          v-model="state"
-          :seasons="seasons ?? []"
-          :recipes-categories="recipesCategories ?? []"
-          :ingredients="ingredients ?? []"
-          :allergens="allergens ?? []"
-          :ustensils="ustensils ?? []"
-          :units="units ?? []"
-          :disabled="disabledSubmit"
-          @create-ingredient="handleCreateIngredient"
-          @create-recipe-category="handleCreateRecipeCategory"
-          @create-ustensil="handleCreateUstensil"
-        />
-        <template #footer>
-          <div class="flex justify-between">
-            <UButton
-              variant="outline"
-              @click="form.clear()"
-            >
-              {{ $t('formCreation.clear') }}
-            </UButton>
-            <UButton
-              type="submit"
-              :disabled="disabledSubmit"
-            >
-              {{ $t('formCreation.submit') }}
-            </UButton>
-          </div>
-        </template>
-      </UCard>
-    </UForm>
+  <UForm
+    ref="form"
+    :schema="recipeCreation"
+    :state="state"
+    class="max-h-full"
+    @submit="onSubmit"
+  >
+    <UCard :ui="{ root: 'max-h-full flex flex-col', body: 'overflow-auto grow' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
+            {{ $t(`formCreation.${props.modalTitle}.cardTitle`) }}
+          </h3>
+          <UButton
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-x"
+            class="-my-1"
+            @click="emit('closeModal')"
+          />
+        </div>
+      </template>
+      <FormRecipeFields
+        v-model="state"
+        :seasons="seasons ?? []"
+        :recipes-categories="recipesCategories ?? []"
+        :ingredients="ingredients ?? []"
+        :allergens="allergens ?? []"
+        :ustensils="ustensils ?? []"
+        :units="units ?? []"
+        :disabled="disabledSubmit"
+        @create-ingredient="handleCreateIngredient"
+        @create-recipe-category="handleCreateRecipeCategory"
+        @create-ustensil="handleCreateUstensil"
+      />
+      <template #footer>
+        <div class="flex justify-between">
+          <UButton
+            variant="outline"
+            @click="form.clear()"
+          >
+            {{ $t('formCreation.clear') }}
+          </UButton>
+          <UButton
+            type="submit"
+            :disabled="disabledSubmit"
+          >
+            {{ $t('formCreation.submit') }}
+          </UButton>
+        </div>
+      </template>
+    </UCard>
+  </UForm>
 
-    <!-- Creation modals -->
-    <UModal
-      v-model:open="isUstensilCreationModalOpen"
-      :dismissible="false"
-      class="max-h-10/12 max-w-4xl"
-    >
-      <template #content>
-        <CreationUstensilModalComponent
-          modal-title="ustensil"
-          :ustensil-name="ustensilNameToCreate"
-          @close-modal="isUstensilCreationModalOpen = false"
-        />
-      </template>
-    </UModal>
-    <UModal
-      v-model:open="isIngredientCreationModalOpen"
-      :dismissible="false"
-      class="max-h-10/12 max-w-4xl"
-    >
-      <template #content>
-        <CreationIngredientModalComponent
-          modal-title="ingredient"
-          :ingredient-name="ingredientNameToCreate"
-          @close-modal="isIngredientCreationModalOpen = false"
-        />
-      </template>
-    </UModal>
-    <UModal
-      v-model:open="isRecipeCategoryCreationModalOpen"
-      :dismissible="false"
-      class="max-h-10/12 max-w-4xl"
-    >
-      <template #content>
-        <CreationRecipesCategoryModalComponent
-          modal-title="category"
-          :recipe-category-name="recipeCategoryNameToCreate"
-          @close-modal="isRecipeCategoryCreationModalOpen = false"
-        />
-      </template>
-    </UModal>
-  </div>
+  <!-- Creation modals -->
+  <UModal
+    v-model:open="isUstensilCreationModalOpen"
+    :dismissible="false"
+    class="max-h-10/12 max-w-4xl"
+  >
+    <template #content>
+      <CreationUstensilModalComponent
+        modal-title="ustensil"
+        :ustensil-name="ustensilNameToCreate"
+        @close-modal="isUstensilCreationModalOpen = false"
+      />
+    </template>
+  </UModal>
+  <UModal
+    v-model:open="isIngredientCreationModalOpen"
+    :dismissible="false"
+    class="max-h-10/12 max-w-4xl"
+  >
+    <template #content>
+      <CreationIngredientModalComponent
+        modal-title="ingredient"
+        :ingredient-name="ingredientNameToCreate"
+        @close-modal="isIngredientCreationModalOpen = false"
+      />
+    </template>
+  </UModal>
+  <UModal
+    v-model:open="isRecipeCategoryCreationModalOpen"
+    :dismissible="false"
+    class="max-h-10/12 max-w-4xl"
+  >
+    <template #content>
+      <CreationRecipesCategoryModalComponent
+        modal-title="category"
+        :recipe-category-name="recipeCategoryNameToCreate"
+        @close-modal="isRecipeCategoryCreationModalOpen = false"
+      />
+    </template>
+  </UModal>
 </template>
 
 <style lang="scss" scoped>
