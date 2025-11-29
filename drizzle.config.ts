@@ -5,8 +5,8 @@ export default defineConfig({
   schema: './server/database/schema',
   dialect: 'sqlite',
   casing: 'snake_case',
-  /* Uncomment it for local bdd
-  dbCredentials: {
-    url: process.env.DB_FILE_NAME!,
-  }, */
+  // DB : Uncomment it for local db
+  // dbCredentials: {
+  //   url: process.env.DB_FILE_NAME!,
+  // },
 });

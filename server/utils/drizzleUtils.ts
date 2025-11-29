@@ -15,11 +15,12 @@ import * as allergenToRecipeSchema from '../database/schema/allergenToRecipe';
 import * as mealTypeToRecipeCategorySchema from '../database/schema/mealTypeToRecipeCategory';
 import * as recipeToUstensilSchema from '../database/schema/recipeToUstensil';
 import 'dotenv/config';
-/* Uncomment this for local bdd
-import { drizzle } from 'drizzle-orm/libsql'; */
+// DB : Uncomment this for local db
+// import { drizzle } from 'drizzle-orm/libsql';
+// DB : Comment this for local db
 import { drizzle } from 'drizzle-orm/d1';
 
-export { sql, eq, and, or } from 'drizzle-orm'; // Comment this for local bdd
+export { sql, eq, and, or } from 'drizzle-orm';
 
 export const schema = {
   ...userSchema,
@@ -43,10 +44,10 @@ export const schema = {
 export const tables = schema;
 
 export function useDrizzle() {
-  // Comment this for local bdd
+  // DB : Comment this for local db
   return drizzle(hubDatabase(), { schema, casing: 'snake_case' });
-  /* Uncomment this for local bdd
-  return drizzle(process.env.DB_FILE_NAME!, { schema, casing: 'snake_case' }); */
+  // DB : Uncomment this for local db
+  // return drizzle(process.env.DB_FILE_NAME!, { schema, casing: 'snake_case' });
 }
 
 export type User = typeof schema.user.$inferSelect;

@@ -2,10 +2,10 @@
 export default defineNuxtConfig({
   modules: [
     // Must be loaded before @nuxtjs/i18n
-    //'nuxt-zod-i18n',
+    // 'nuxt-zod-i18n',
     '@nuxt/image', '@nuxtjs/i18n', '@nuxt/ui', '@nuxthub/core', '@nuxt/eslint', 'nuxt-auth-utils'],
   $development: {
-    // Comment it for local bdd
+    // DB : Comment it for local db
     hub: {
       remote: true,
     },
@@ -41,7 +41,7 @@ export default defineNuxtConfig({
     },
   },
   hub: {
-    // Comment it for local bdd
+    // DB : Comment it for local db
     database: true,
     blob: true,
   },
@@ -93,5 +93,5 @@ export default defineNuxtConfig({
       'en-GB': 'en',
       'fr-FR': 'fr',
     },
-  },*/
+  }, */
 });
