@@ -2,14 +2,8 @@
 export default defineNuxtConfig({
   modules: [
     // Must be loaded before @nuxtjs/i18n
-    'nuxt-zod-i18n',
-    '@nuxt/image',
-    '@nuxtjs/i18n',
-    '@nuxt/ui',
-    '@nuxthub/core',
-    '@nuxt/eslint',
-    'nuxt-auth-utils',
-  ],
+    //'nuxt-zod-i18n',
+    '@nuxt/image', '@nuxtjs/i18n', '@nuxt/ui', '@nuxthub/core', '@nuxt/eslint', 'nuxt-auth-utils'],
   $development: {
     // Comment it for local bdd
     hub: {
@@ -93,10 +87,11 @@ export default defineNuxtConfig({
       },
     ],
   },
+  /*
   zodI18n: {
     localeCodesMapping: {
       'en-GB': 'en',
       'fr-FR': 'fr',
     },
-  },
+  },*/
 });

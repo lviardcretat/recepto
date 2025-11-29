@@ -34,7 +34,7 @@ function getRowItems(row: Row<IngredientsDashboard>, props: IngredientsTableConf
 export function getIngredientsTableConfig(
   d: Composer['d'],
   t: Composer['t'],
-  props: IngredientsTableConfigProps
+  props: IngredientsTableConfigProps,
 ): Ref<(NavigationMenuItem & CustomAccordionItem)[]> {
   return computed(() =>
     [
@@ -103,6 +103,6 @@ export function getIngredientsTableConfig(
           );
         },
       },
-    ]
-  )
+    ],
+  );
 }

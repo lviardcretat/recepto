@@ -24,28 +24,28 @@ function handleItemSelect(itemType: string) {
 
 const items = computed(
   () =>
-[
-  {
-    label: t('ingredient'),
-    icon: 'i-lucide-carrot',
-    onSelect: () => handleItemSelect('ingredient'),
-  },
-  {
-    label: t('recipe'),
-    icon: 'i-lucide-cooking-pot',
-    onSelect: () => handleItemSelect('recipe'),
-  },
-  {
-    label: t('category'),
-    icon: 'i-lucide-box',
-    onSelect: () => handleItemSelect('category'),
-  },
-  {
-    label: t('ustensil'),
-    icon: 'i-lucide-lab-whisk',
-    onSelect: () => handleItemSelect('ustensil'),
-  },
-]
+    [
+      {
+        label: t('ingredient'),
+        icon: 'i-lucide-carrot',
+        onSelect: () => handleItemSelect('ingredient'),
+      },
+      {
+        label: t('recipe'),
+        icon: 'i-lucide-cooking-pot',
+        onSelect: () => handleItemSelect('recipe'),
+      },
+      {
+        label: t('category'),
+        icon: 'i-lucide-box',
+        onSelect: () => handleItemSelect('category'),
+      },
+      {
+        label: t('ustensil'),
+        icon: 'i-lucide-lab-whisk',
+        onSelect: () => handleItemSelect('ustensil'),
+      },
+    ],
 );
 </script>
 

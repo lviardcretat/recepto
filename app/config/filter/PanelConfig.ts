@@ -5,9 +5,9 @@ import type { CustomAccordionItem } from '~/types/filter';
 
 interface PanelConfigProps {};
 
-export function getPanelConfig (
+export function getPanelConfig(
   t: Composer['t'],
-  props: PanelConfigProps
+  _props: PanelConfigProps,
 ): ComputedRef<(NavigationMenuItem & CustomAccordionItem)[]> {
   return computed(() =>
     [
@@ -78,6 +78,6 @@ export function getPanelConfig (
           },
         ],
       },
-    ]
-  )
+    ],
+  );
 }

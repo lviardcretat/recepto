@@ -5,9 +5,9 @@ interface DashboardSidebarConfigProps {
   onSeasonalIngredientsSelected: () => void;
 };
 
-export function getDashboardSidebarConfig (
+export function getDashboardSidebarConfig(
   t: Composer['t'],
-  props: DashboardSidebarConfigProps
+  props: DashboardSidebarConfigProps,
 ): ComputedRef<DropdownMenuItem[][]> {
   return computed(() => [
     [
@@ -24,7 +24,7 @@ export function getDashboardSidebarConfig (
         label: t('mainSlideOver.seasonalIngredients'),
         icon: 'i-lucide-sun-snow',
         slot: 'shortcut',
-        onSelect: () => { props.onSeasonalIngredientsSelected() },
+        onSelect: () => { props.onSeasonalIngredientsSelected(); },
       },
       {
         label: t('mainSlideOver.calendar'),
@@ -33,5 +33,5 @@ export function getDashboardSidebarConfig (
       },
     ],
     [],
-  ] satisfies NavigationMenuItem[][])
+  ] satisfies NavigationMenuItem[][]);
 }

@@ -45,7 +45,7 @@ async function handleEditButtonOpen(recipe: RecipesDashboard) {
 async function handleDeleteButtonOpen(recipe: RecipesDashboard) {
   const instance = deleteModal.open({
     itemName: recipe.name,
-    itemType: t('recipe')
+    itemType: t('recipe'),
   });
   const result = await instance.result;
   if (result) {
@@ -77,7 +77,7 @@ async function handleEditCategoryButtonOpen(recipe: RecipesDashboard) {
 async function handleDeleteCategoryButtonOpen(recipe: RecipesDashboard) {
   const instance = deleteModal.open({
     itemName: recipe.recipesCategory.name,
-    itemType: t('category')
+    itemType: t('category'),
   });
   const result = await instance.result;
   if (result) {

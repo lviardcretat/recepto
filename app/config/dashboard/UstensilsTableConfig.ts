@@ -33,7 +33,7 @@ function getRowItems(row: Row<UstensilsDashboard>, props: UstensilsTableConfigPr
 export function getUstensilsTableConfig(
   d: Composer['d'],
   t: Composer['t'],
-  props: UstensilsTableConfigProps
+  props: UstensilsTableConfigProps,
 ): Ref<(NavigationMenuItem & CustomAccordionItem)[]> {
   return computed(() =>
     [
@@ -91,6 +91,6 @@ export function getUstensilsTableConfig(
           );
         },
       },
-    ]
-  )
+    ],
+  );
 }

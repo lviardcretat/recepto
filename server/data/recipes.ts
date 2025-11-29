@@ -240,7 +240,7 @@ export async function getRecipesFiltered(
     await createAllergenSubQuery(allergensIds, recipeCategoryId),
     await createSeasonalRecipeSubQuery(seasonalRecipes, recipeCategoryId),
   ];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const filters: any[] = [];
 
   for (const subQuery of subQueries) {
@@ -289,19 +289,19 @@ export async function deleteRecipe(id: number): Promise<void> {
   await useDrizzle()
     .delete(tables.recipeIngredient)
     .where(eq(tables.recipeIngredient.recipeId, id));
-    
+
   await useDrizzle()
     .delete(tables.recipeToUstensil)
     .where(eq(tables.recipeToUstensil.recipeId, id));
-    
+
   await useDrizzle()
     .delete(tables.allergenToRecipe)
     .where(eq(tables.allergenToRecipe.recipeId, id));
-    
+
   await useDrizzle()
     .delete(tables.sequence)
     .where(eq(tables.sequence.recipeId, id));
-    
+
   // Finally delete the recipe
   await useDrizzle()
     .delete(tables.recipe)
@@ -346,7 +346,7 @@ export async function getRecipeWithAllData(id: number): Promise<any> {
           name: true,
           extra: true,
         },
-        orderBy: (sequence) => sequence.id,
+        orderBy: sequence => sequence.id,
       },
       allergens: {
         columns: {

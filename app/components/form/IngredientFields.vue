@@ -16,7 +16,7 @@ const { t } = useI18n();
 
 const localValue = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
+  set: value => emit('update:modelValue', value),
 });
 
 const flatSeasonalMonths = ref<number[]>([]);

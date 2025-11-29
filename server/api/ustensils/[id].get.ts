@@ -1,5 +1,5 @@
 import { idSchema } from '~/schemas/businessObjects';
-import { Ustensil } from '~~/server/utils/drizzleUtils';
+import type { Ustensil } from '~~/server/utils/drizzleUtils';
 import { getUstensil } from '~~/server/data/ustensils';
 
 export default defineEventHandler(async (event) => {

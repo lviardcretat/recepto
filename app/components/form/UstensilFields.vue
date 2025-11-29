@@ -20,7 +20,7 @@ const { t } = useI18n();
 
 const localValue = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
+  set: value => emit('update:modelValue', value),
 });
 
 function updateField<K extends keyof UstensilFormData>(field: K, value: UstensilFormData[K]) {

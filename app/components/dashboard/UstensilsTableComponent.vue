@@ -42,7 +42,7 @@ async function handleEditButtonOpen(ustensil: UstensilsDashboard) {
 async function handleDeleteButtonOpen(ustensil: UstensilsDashboard) {
   const instance = deleteModal.open({
     itemName: ustensil.name,
-    itemType: t('ustensil')
+    itemType: t('ustensil'),
   });
   const result = await instance.result;
   if (result) {

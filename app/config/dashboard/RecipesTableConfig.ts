@@ -16,7 +16,7 @@ interface RecipesTableConfigProps {
 
 function getRowItems(row: Row<RecipesDashboard>, props: RecipesTableConfigProps) {
   const isCategory = row.getIsGrouped();
-  
+
   if (isCategory) {
     return [
       {
@@ -33,7 +33,8 @@ function getRowItems(row: Row<RecipesDashboard>, props: RecipesTableConfigProps)
         onClick: () => props.onDeleteCategoryButtonOpen(row.original),
       },
     ] satisfies DropdownMenuItem[];
-  } else {
+  }
+  else {
     const parentRow = row.getParentRow();
     return [
       {
@@ -55,7 +56,7 @@ function getRowItems(row: Row<RecipesDashboard>, props: RecipesTableConfigProps)
 export function getRecipesTableConfig(
   d: Composer['d'],
   t: Composer['t'],
-  props: RecipesTableConfigProps
+  props: RecipesTableConfigProps,
 ): Ref<(NavigationMenuItem & CustomAccordionItem)[]> {
   return computed(() =>
     [
@@ -118,6 +119,6 @@ export function getRecipesTableConfig(
           );
         },
       },
-    ]
-  )
+    ],
+  );
 }

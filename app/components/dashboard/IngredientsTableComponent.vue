@@ -58,7 +58,7 @@ async function handleEditButtonOpen(ingredient: IngredientsDashboard) {
 async function handleDeleteButtonOpen(ingredient: IngredientsDashboard) {
   const instance = deleteModal.open({
     itemName: ingredient.name,
-    itemType: t('ingredient')
+    itemType: t('ingredient'),
   });
   const result = await instance.result;
   if (result) {

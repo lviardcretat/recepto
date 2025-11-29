@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SeasonalChartComponent } from '#components';
-import type { DropdownMenuItem, } from '@nuxt/ui';
+import type { DropdownMenuItem } from '@nuxt/ui';
 import { getDashboardSidebarConfig } from '~/config/layout/DashboardSidebarConfig';
 
 defineShortcuts({

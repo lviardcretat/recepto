@@ -12,7 +12,7 @@ const { user, clear } = useUserSession();
 const items = createUserMenuConfig(t, {
   isAnonymous: user.value?.isAnonymous ?? false,
   redirectToLoginPage,
-  signout
+  signout,
 });
 
 async function signout() {
