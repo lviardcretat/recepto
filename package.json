@@ -13,8 +13,8 @@
 		"generate": "nuxt generate",
 		"postinstall": "nuxt prepare",
 		"preview": "nuxt preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"@atinux/kysely-d1": "^0.3.1",
@@ -72,6 +72,8 @@
 		"tsx": "^4.20.6",
 		"typescript": "^5.9.3",
 		"v-calendar": "^3.1.2",
+		"vue-mess-detector": "^0.67.0",
+		"vue-mess-detector-nuxt-devtools": "^0.1.2",
 		"wrangler": "^4.42.2"
 	},
 	"packageManager": "pnpm@10.12.4"
