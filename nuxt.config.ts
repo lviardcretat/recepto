@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   modules: [
     // Must be loaded before @nuxtjs/i18n
     // 'nuxt-zod-i18n',
-    '@nuxt/image', '@nuxtjs/i18n', '@nuxt/ui', '@nuxthub/core', '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/hints'],
+    'vue-mess-detector-nuxt-devtools', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/ui', '@nuxthub/core', '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/hints'],
   $development: {
     // DB : Comment it for local db
     hub: {
@@ -11,6 +11,11 @@ export default defineNuxtConfig({
     },
   },
   ssr: true,
+  imports: {
+    dirs: [
+      '~/composables/**',
+    ],
+  },
   devtools: { enabled: true },
   app: {
     head: {
