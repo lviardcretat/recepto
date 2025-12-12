@@ -16,8 +16,9 @@
         v-if="success"
         controls
         autoplay
+        preload="auto"
         class="w-full h-full object-contain"
-        src="~/assets/secret.mp4"
+        :src="videoUrl"
       />
     </template>
 
@@ -36,6 +37,7 @@ definePageMeta({
 
 const password = ref('');
 const showError = ref(false);
+const videoUrl = '/api/blob/secret.mp4';
 
 const targetDate = new Date('2025-12-26T10:00:00');
 const now = ref(new Date());
