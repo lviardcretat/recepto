@@ -1,25 +1,48 @@
 <template>
-  <div class="min-h-screen bg-gray-900 py-12">
-    <h1 class="text-6xl font-bold text-center text-white mb-4">
-      Joyeux anniversaire !
-    </h1>
-    <p class="text-4xl font-bold text-center text-pink-400 mb-12">
-      Pour tes
-      <Transition
-        name="fade"
-        mode="out-in"
-      >
-        <span :key="currentCalculation">{{ calculations[currentCalculation] }}</span>
-      </Transition>
-      ans !
-    </p>
-    <UPageColumns>
-      <NuxtImg
-        v-for="i in 52"
-        :key="i"
-        :src="`/flo/image${i}.jpeg`"
+  <div>
+    <div
+      v-if="!success"
+      class="secret-page flex flex-col items-center justify-center min-h-screen gap-6"
+    >
+      <UInput
+        v-model="password"
+        type="password"
+        placeholder="Mot de passe"
+        size="xl"
+        @keyup.enter="checkPassword"
       />
-    </UPageColumns>
+      <p
+        v-if="showError"
+        class="text-[red]"
+      >
+        Le mot de passe est incorrect
+      </p>
+    </div>
+    <div
+      v-if="success"
+      class="min-h-screen py-12"
+    >
+      <h1 class="text-6xl font-bold text-center text-white mb-4">
+        Joyeux anniversaire !
+      </h1>
+      <p class="text-4xl font-bold text-center text-pink-400 mb-12">
+        Pour tes
+        <Transition
+          name="fade"
+          mode="out-in"
+        >
+          <span :key="currentCalculation">{{ calculations[currentCalculation] }}</span>
+        </Transition>
+        ans !
+      </p>
+      <UPageColumns>
+        <NuxtImg
+          v-for="i in 52"
+          :key="i"
+          :src="`/flo/image${i}.jpeg`"
+        />
+      </UPageColumns>
+    </div>
   </div>
 </template>
 
@@ -27,6 +50,19 @@
 definePageMeta({
   layout: false,
 });
+
+const password = ref('');
+const success = ref(false);
+const showError = ref(false);
+
+async function checkPassword() {
+  if (password.value === '2D4O4V6C') {
+    success.value = true;
+  }
+  else {
+    showError.value = true;
+  }
+}
 
 const calculations = [
   '100 / 4',

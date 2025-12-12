@@ -76,9 +76,6 @@ async function checkPassword() {
   if (password.value === 'temporel') {
     success.value = true;
   }
-  else if (password.value === 'ca12') {
-    await navigateTo('/secret/hints');
-  }
   else {
     showError.value = true;
   }
