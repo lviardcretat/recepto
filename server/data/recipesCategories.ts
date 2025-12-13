@@ -29,8 +29,8 @@ export async function postRecipesCategory(
     dishTypeId: dishTypeId,
     createdById: createdById,
   };
-  const recipeCategoryCreated: RecipesCategory = await useDrizzle()
-    .insert(tables.recipesCategory)
+  const recipeCategoryCreated: RecipesCategory = await db
+    .insert(schema.recipesCategory)
     .values(recipesCategoryInsert)
     .returning()
     .get();
@@ -38,33 +38,33 @@ export async function postRecipesCategory(
 }
 
 export async function getRecipesCategories(): Promise<RecipesCategory[]> {
-  const recipesCategories: RecipesCategory[] = await useDrizzle()
+  const recipesCategories: RecipesCategory[] = await db
     .select()
-    .from(tables.recipesCategory)
-    .orderBy(tables.recipesCategory.name)
+    .from(schema.recipesCategory)
+    .orderBy(schema.recipesCategory.name)
     .all();
   return recipesCategories;
 }
 
 export async function getRecipesCategoriesWithRecipeCount(): Promise<RecipesCategoriesWithLessData[]> {
-  const recipesCategories: RecipesCategoriesWithLessData[] = await useDrizzle()
+  const recipesCategories: RecipesCategoriesWithLessData[] = await db
     .select({
-      id: tables.recipesCategory.id,
-      name: tables.recipesCategory.name,
-      count: count(tables.recipe.id),
+      id: schema.recipesCategory.id,
+      name: schema.recipesCategory.name,
+      count: count(schema.recipe.id),
     })
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
-    .groupBy(tables.recipesCategory.id)
+    .groupBy(schema.recipesCategory.id)
     .all();
   return recipesCategories;
 }
 
 export async function getRecipesCategoriesAndRecipesNames(): Promise<RecipeSearched[]> {
-  const recipesCategoriesRecipes: RecipeSearched[] = await useDrizzle().query.recipesCategory.findMany({
+  const recipesCategoriesRecipes: RecipeSearched[] = await db.query.recipesCategory.findMany({
     columns: {
       id: true,
       name: true,
@@ -84,12 +84,12 @@ export async function getRecipesCategoriesAndRecipesNames(): Promise<RecipeSearc
 export async function getRecipesCategoryName(
   id: number,
 ): Promise<{ name: string } | undefined> {
-  const recipesCategory: { name: string } | undefined = await useDrizzle()
+  const recipesCategory: { name: string } | undefined = await db
     .select({
-      name: tables.recipesCategory.name,
+      name: schema.recipesCategory.name,
     })
-    .from(tables.recipesCategory)
-    .where(eq(tables.ingredient.id, id))
+    .from(schema.recipesCategory)
+    .where(eq(schema.ingredient.id, id))
     .get();
   return recipesCategory;
 }
@@ -97,10 +97,10 @@ export async function getRecipesCategoryName(
 export async function getRecipesCategory(
   id: number,
 ): Promise<RecipesCategory | undefined> {
-  const recipesCategory: RecipesCategory | undefined = await useDrizzle()
+  const recipesCategory: RecipesCategory | undefined = await db
     .select()
-    .from(tables.recipesCategory)
-    .where(eq(tables.ingredient.id, id))
+    .from(schema.recipesCategory)
+    .where(eq(schema.ingredient.id, id))
     .get();
   return recipesCategory;
 }
@@ -163,7 +163,7 @@ export async function getRecipesCategoriesFiltered(
     recipesCategories = await filters[0]
     // Dynamic query building to instantiate several where in a single query
       .$dynamic()
-      .groupBy(tables.recipesCategory.id)
+      .groupBy(schema.recipesCategory.id)
       .all();
   }
   return recipesCategories;
@@ -172,50 +172,50 @@ export async function getRecipesCategoriesFiltered(
 function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
   const conditions = createSubQueryConditions(
     mealTypesIds,
-    tables.mealTypeToRecipeCategory.mealTypeId,
+    schema.mealTypeToRecipeCategory.mealTypeId,
   );
   if (!conditions) return null;
-  return useDrizzle()
+  return db
     .select(recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.mealTypeToRecipeCategory,
+      schema.mealTypeToRecipeCategory,
       eq(
-        tables.mealTypeToRecipeCategory.recipeCategoryId,
-        tables.recipesCategory.id,
+        schema.mealTypeToRecipeCategory.recipeCategoryId,
+        schema.recipesCategory.id,
       ),
     )
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
     .innerJoin(
-      tables.mealType,
-      eq(tables.mealType.id, tables.mealTypeToRecipeCategory.mealTypeId),
+      schema.mealType,
+      eq(schema.mealType.id, schema.mealTypeToRecipeCategory.mealTypeId),
     )
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id, tables.mealType.id)
+    .groupBy(schema.recipesCategory.id, schema.mealType.id)
     .having(
       mealTypesIds.wanted.length > 0
-        ? sql`count(distinct ${tables.mealTypeToRecipeCategory.mealTypeId}) > ${mealTypesIds.wanted.length - 1}`
+        ? sql`count(distinct ${schema.mealTypeToRecipeCategory.mealTypeId}) > ${mealTypesIds.wanted.length - 1}`
         : undefined,
     );
 }
 
 function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
-  const conditions = createSubQueryConditions(dishTypesIds, tables.dishType.id);
+  const conditions = createSubQueryConditions(dishTypesIds, schema.dishType.id);
   if (!conditions) return null;
-  return useDrizzle()
+  return db
     .select(recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
     .innerJoin(
-      tables.dishType,
-      eq(tables.dishType.id, tables.recipesCategory.dishTypeId),
+      schema.dishType,
+      eq(schema.dishType.id, schema.recipesCategory.dishTypeId),
     )
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id);
+    .groupBy(schema.recipesCategory.id);
 }

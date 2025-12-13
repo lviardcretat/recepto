@@ -46,8 +46,8 @@ export async function postRecipe(
     recipesCategoryId: recipesCategoryId,
     createdById: createdById,
   };
-  const recipe = await useDrizzle()
-    .insert(tables.recipe)
+  const recipe = await db
+    .insert(schema.recipe)
     .values(recipeInsert)
     .returning()
     .get();
@@ -57,8 +57,8 @@ export async function postRecipe(
       recipeId: recipe.id,
       ustensilId: ustensilId,
     };
-    await useDrizzle()
-      .insert(tables.recipeToUstensil)
+    await db
+      .insert(schema.recipeToUstensil)
       .values(recipeToUstensil);
   }
   if (allergensIds) {
@@ -67,8 +67,8 @@ export async function postRecipe(
         recipeId: recipe.id,
         allergenId: allergensId,
       };
-      await useDrizzle()
-        .insert(tables.allergenToRecipe)
+      await db
+        .insert(schema.allergenToRecipe)
         .values(allergenToRecipe);
     }
   }
@@ -76,15 +76,15 @@ export async function postRecipe(
 }
 
 export async function getRecipes(): Promise<Recipe[]> {
-  const recipes: Recipe[] = await useDrizzle()
+  const recipes: Recipe[] = await db
     .select()
-    .from(tables.recipe)
+    .from(schema.recipe)
     .all();
   return recipes;
 }
 
 export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
-  const recipe: RecipeDetail | undefined = await useDrizzle().query.recipe.findFirst({
+  const recipe: RecipeDetail | undefined = await db.query.recipe.findFirst({
     columns: {
       id: true,
       name: true,
@@ -160,15 +160,15 @@ export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
 export async function getRecipesWithoutFilter(
   recipeCategoryId: number,
 ): Promise<RecipeWithLessData[]> {
-  const recipes = await useDrizzle()
-    .select({ ...recipeSelectType, ...{ createdBy: tables.user.username } })
-    .from(tables.recipe)
+  const recipes = await db
+    .select({ ...recipeSelectType, ...{ createdBy: schema.user.username } })
+    .from(schema.recipe)
     .leftJoin(
-      tables.recipesCategory,
-      eq(tables.recipesCategory.id, tables.recipe.recipesCategoryId),
+      schema.recipesCategory,
+      eq(schema.recipesCategory.id, schema.recipe.recipesCategoryId),
     )
-    .leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
-    .where(eq(tables.recipesCategory.id, recipeCategoryId))
+    .leftJoin(schema.user, eq(schema.user.id, schema.recipe.createdById))
+    .where(eq(schema.recipesCategory.id, recipeCategoryId))
     .all();
   return recipes;
 }
@@ -239,7 +239,7 @@ export async function getRecipesFiltered(
     recipes = await filters[0]
     // Dynamic query building to instantiate several where in a single query
       .$dynamic()
-      .groupBy(tables.recipe.id)
+      .groupBy(schema.recipe.id)
       .all();
   }
   return recipes;

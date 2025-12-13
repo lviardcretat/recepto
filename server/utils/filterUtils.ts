@@ -1,7 +1,6 @@
 import {
   lte,
   gte,
-
   inArray,
   notInArray,
   eq,
@@ -13,20 +12,20 @@ import type { ItemsIdsWantedOrNot } from '~/types/filter';
 import type { FilterSelectItem } from '~/schemas/filter';
 
 export const recipeCategorySelectType = {
-  id: tables.recipesCategory.id,
-  name: tables.recipesCategory.name,
-  count: count(tables.recipe.id),
+  id: schema.recipesCategory.id,
+  name: schema.recipesCategory.name,
+  count: count(schema.recipe.id),
 };
 export const recipeSelectType = {
-  id: tables.recipe.id,
-  name: tables.recipe.name,
-  peopleNumber: tables.recipe.peopleNumber,
-  cookingTime: tables.recipe.cookingTime,
-  preparationTime: tables.recipe.preparationTime,
-  restTime: tables.recipe.restTime,
-  description: tables.recipe.description,
-  seasonId: tables.recipe.seasonId,
-  createdAt: tables.recipe.createdAt,
+  id: schema.recipe.id,
+  name: schema.recipe.name,
+  peopleNumber: schema.recipe.peopleNumber,
+  cookingTime: schema.recipe.cookingTime,
+  preparationTime: schema.recipe.preparationTime,
+  restTime: schema.recipe.restTime,
+  description: schema.recipe.description,
+  seasonId: schema.recipe.seasonId,
+  createdAt: schema.recipe.createdAt,
 };
 
 /**
@@ -50,27 +49,27 @@ export function createIngredientSubQuery(
 ) {
   const conditions = createSubQueryConditions(
     ingredientsIds,
-    tables.recipeIngredient.ingredientId,
+    schema.recipeIngredient.ingredientId,
   );
   if (!conditions) return null;
   if (recipeCategoryId)
-    conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
-  return useDrizzle()
+    conditions.push(eq(schema.recipesCategory.id, recipeCategoryId));
+  return db
     .select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
     .innerJoin(
-      tables.recipeIngredient,
-      eq(tables.recipeIngredient.recipeId, tables.recipe.id),
+      schema.recipeIngredient,
+      eq(schema.recipeIngredient.recipeId, schema.recipe.id),
     )
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id, tables.recipe.id)
+    .groupBy(schema.recipesCategory.id, schema.recipe.id)
     .having(
       ingredientsIds.wanted.length > 0
-        ? sql`count(distinct ${tables.recipeIngredient.ingredientId}) > ${ingredientsIds.wanted.length - 1}`
+        ? sql`count(distinct ${schema.recipeIngredient.ingredientId}) > ${ingredientsIds.wanted.length - 1}`
         : undefined,
     );
 }
@@ -81,27 +80,27 @@ export function createUstensilSubQuery(
 ) {
   const conditions = createSubQueryConditions(
     ustensilsIds,
-    tables.recipeToUstensil.ustensilId,
+    schema.recipeToUstensil.ustensilId,
   );
   if (!conditions) return null;
   if (recipeCategoryId)
-    conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
-  return useDrizzle()
+    conditions.push(eq(schema.recipesCategory.id, recipeCategoryId));
+  return db
     .select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
     .innerJoin(
-      tables.recipeToUstensil,
-      eq(tables.recipeToUstensil.recipeId, tables.recipe.id),
+      schema.recipeToUstensil,
+      eq(schema.recipeToUstensil.recipeId, schema.recipe.id),
     )
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id, tables.recipe.id)
+    .groupBy(schema.recipesCategory.id, schema.recipe.id)
     .having(
       ustensilsIds.wanted.length > 0
-        ? sql`count(distinct ${tables.recipeToUstensil.ustensilId}) > ${ustensilsIds.wanted.length - 1}`
+        ? sql`count(distinct ${schema.recipeToUstensil.ustensilId}) > ${ustensilsIds.wanted.length - 1}`
         : undefined,
     );
 }
@@ -112,27 +111,27 @@ export function createAllergenSubQuery(
 ) {
   const conditions = createSubQueryConditions(
     allergensIds,
-    tables.allergenToRecipe.allergenId,
+    schema.allergenToRecipe.allergenId,
   );
   if (!conditions) return null;
   if (recipeCategoryId)
-    conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
-  return useDrizzle()
+    conditions.push(eq(schema.recipesCategory.id, recipeCategoryId));
+  return db
     .select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
     .innerJoin(
-      tables.allergenToRecipe,
-      eq(tables.allergenToRecipe.recipeId, tables.recipe.id),
+      schema.allergenToRecipe,
+      eq(schema.allergenToRecipe.recipeId, schema.recipe.id),
     )
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id, tables.recipe.id)
+    .groupBy(schema.recipesCategory.id, schema.recipe.id)
     .having(
       allergensIds.length > 0
-        ? sql`count(distinct ${tables.allergenToRecipe.allergenId}) > ${allergensIds.length - 1}`
+        ? sql`count(distinct ${schema.allergenToRecipe.allergenId}) > ${allergensIds.length - 1}`
         : undefined,
     );
 }
@@ -144,19 +143,19 @@ export function createSeasonalRecipeSubQuery(
   if (!seasonalRecipes) return null;
   const conditions = [];
   if (recipeCategoryId)
-    conditions.push(eq(tables.recipesCategory.id, recipeCategoryId));
-  conditions.push(lte(tables.season.start, dateIntoDayNumber()));
-  conditions.push(gte(tables.season.end, dateIntoDayNumber()));
-  return useDrizzle()
+    conditions.push(eq(schema.recipesCategory.id, recipeCategoryId));
+  conditions.push(lte(schema.season.start, dateIntoDayNumber()));
+  conditions.push(gte(schema.season.end, dateIntoDayNumber()));
+  return db
     .select(recipeCategoryId ? recipeSelectType : recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
-    .innerJoin(tables.season, eq(tables.season.id, tables.recipe.seasonId))
+    .innerJoin(schema.season, eq(schema.season.id, schema.recipe.seasonId))
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id, tables.recipe.id);
+    .groupBy(schema.recipesCategory.id, schema.recipe.id);
 }
 
 export function createSubQueryConditions<T extends SQLiteColumn>(

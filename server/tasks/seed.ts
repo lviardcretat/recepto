@@ -1,11 +1,11 @@
-import { allergensSeed } from '../database/seed/allergen';
-import { dishTypesSeed } from '../database/seed/dishType';
-import { foodTypesSeed } from '../database/seed/foodType';
-import { ingredientsSeed } from '../database/seed/ingredient';
-import { mealTypesSeed } from '../database/seed/mealType';
-import { seasonsSeed } from '../database/seed/season';
-import { unitsSeed } from '../database/seed/unit';
-import { ustensilsSeed } from '../database/seed/ustensil';
+import { allergensSeed } from '../db/seed/allergen';
+import { dishTypesSeed } from '../db/seed/dishType';
+import { foodTypesSeed } from '../db/seed/foodType';
+import { ingredientsSeed } from '../db/seed/ingredient';
+import { mealTypesSeed } from '../db/seed/mealType';
+import { seasonsSeed } from '../db/seed/season';
+import { unitsSeed } from '../db/seed/unit';
+import { ustensilsSeed } from '../db/seed/ustensil';
 
 export default defineTask({
   meta: {
@@ -14,36 +14,36 @@ export default defineTask({
   },
   async run() {
     console.log('Running DB seed task...');
-    // await useDrizzle().insert(tables.user).values(usersSeed);
-    await useDrizzle().insert(tables.mealType).values(mealTypesSeed);
-    await useDrizzle().insert(tables.dishType).values(dishTypesSeed);
-    await useDrizzle().insert(tables.allergen).values(allergensSeed);
-    await useDrizzle().insert(tables.season).values(seasonsSeed);
-    await useDrizzle().insert(tables.foodType).values(foodTypesSeed);
-    await useDrizzle().insert(tables.ustensil).values(ustensilsSeed);
-    /* await useDrizzle()
-      .insert(tables.recipesCategory)
+    // await db.insert(schema.user).values(usersSeed);
+    await db.insert(schema.mealType).values(mealTypesSeed);
+    await db.insert(schema.dishType).values(dishTypesSeed);
+    await db.insert(schema.allergen).values(allergensSeed);
+    await db.insert(schema.season).values(seasonsSeed);
+    await db.insert(schema.foodType).values(foodTypesSeed);
+    await db.insert(schema.ustensil).values(ustensilsSeed);
+    /* await db
+      .insert(schema.recipesCategory)
       .values(recipesCategorySeed); */
     await autoChunkUtils(
       {
         items: ingredientsSeed,
       },
-      chunk => useDrizzle().insert(tables.ingredient).values(chunk),
+      chunk => db.insert(schema.ingredient).values(chunk),
     );
-    await useDrizzle().insert(tables.unit).values(unitsSeed);
-    // await useDrizzle().insert(tables.recipe).values(recipesSeed);
-    /* await useDrizzle()
-      .insert(tables.recipeToUstensil)
+    await db.insert(schema.unit).values(unitsSeed);
+    // await db.insert(schema.recipe).values(recipesSeed);
+    /* await db
+      .insert(schema.recipeToUstensil)
       .values(recipeToUstensilsSeed);
-    await useDrizzle().insert(tables.sequence).values(sequencesSeed);
-    await useDrizzle()
-      .insert(tables.mealTypeToRecipeCategory)
+    await db.insert(schema.sequence).values(sequencesSeed);
+    await db
+      .insert(schema.mealTypeToRecipeCategory)
       .values(mealTypeToRecipeCategoriesSeed)
-    await useDrizzle()
-      .insert(tables.allergenToRecipe)
+    await db
+      .insert(schema.allergenToRecipe)
       .values(allergenToRecipesSeed);
-    await useDrizzle()
-      .insert(tables.recipeIngredient)
+    await db
+      .insert(schema.recipeIngredient)
       .values(recipeIngredientsSeed); */
     return { result: 'success' };
   },

@@ -1,18 +1,18 @@
 import type { Season } from '../utils/drizzleUtils';
 
 export async function getSeasons(): Promise<Season[]> {
-  const seasons: Season[] = await useDrizzle()
+  const seasons: Season[] = await db
     .select()
-    .from(tables.season)
+    .from(schema.season)
     .all();
   return seasons;
 }
 
 export async function getSeason(id: number): Promise<Season | undefined> {
-  const season: Season | undefined = await useDrizzle()
+  const season: Season | undefined = await db
     .select()
-    .from(tables.season)
-    .where(eq(tables.season.id, id))
+    .from(schema.season)
+    .where(eq(schema.season.id, id))
     .get();
   return season;
 }

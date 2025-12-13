@@ -1,10 +1,10 @@
 import type { Ingredient, IngredientInsert } from '../utils/drizzleUtils';
 
 export async function getIngredients(): Promise<Ingredient[]> {
-  const ingredients: Ingredient[] = await useDrizzle()
+  const ingredients: Ingredient[] = await db
     .select()
-    .from(tables.ingredient)
-    .orderBy(tables.ingredient.name)
+    .from(schema.ingredient)
+    .orderBy(schema.ingredient.name)
     .all();
   return ingredients;
 }
@@ -21,8 +21,8 @@ export async function postIngredient(
     seasonalMonths: seasonalMonths,
     createdById: createdById,
   };
-  const ingredientCreated = await useDrizzle()
-    .insert(tables.ingredient)
+  const ingredientCreated = await db
+    .insert(schema.ingredient)
     .values(ingredientInsert)
     .returning()
     .get();
@@ -30,19 +30,19 @@ export async function postIngredient(
 }
 
 export async function getIngredientsSeasonalMonths(foodTypeId: number) {
-  const ingredients = await useDrizzle()
+  const ingredients = await db
     .select({
-      name: tables.ingredient.name,
-      seasonalMonths: tables.ingredient.seasonalMonths,
-      foodType: tables.foodType.name,
+      name: schema.ingredient.name,
+      seasonalMonths: schema.ingredient.seasonalMonths,
+      foodType: schema.foodType.name,
     })
-    .from(tables.ingredient)
+    .from(schema.ingredient)
     .leftJoin(
-      tables.foodType,
-      eq(tables.ingredient.foodTypeId, tables.foodType.id),
+      schema.foodType,
+      eq(schema.ingredient.foodTypeId, schema.foodType.id),
     )
-    .where(eq(tables.ingredient.foodTypeId, foodTypeId))
-    .orderBy(tables.ingredient.name)
+    .where(eq(schema.ingredient.foodTypeId, foodTypeId))
+    .orderBy(schema.ingredient.name)
     .all();
   return ingredients;
 }
@@ -50,10 +50,10 @@ export async function getIngredientsSeasonalMonths(foodTypeId: number) {
 export async function getIngredient(
   id: number,
 ): Promise<Ingredient | undefined> {
-  const ingredient: Ingredient | undefined = await useDrizzle()
+  const ingredient: Ingredient | undefined = await db
     .select()
-    .from(tables.ingredient)
-    .where(eq(tables.ingredient.id, id))
+    .from(schema.ingredient)
+    .where(eq(schema.ingredient.id, id))
     .get();
   return ingredient;
 }

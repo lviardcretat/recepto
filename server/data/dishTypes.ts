@@ -1,18 +1,18 @@
 import type { DishType } from '../utils/drizzleUtils';
 
 export async function getDishTypes(): Promise<DishType[]> {
-  const dishTypes: DishType[] = await useDrizzle()
+  const dishTypes: DishType[] = await db
     .select()
-    .from(tables.dishType)
+    .from(schema.dishType)
     .all();
   return dishTypes;
 }
 
 export async function getDishType(id: number): Promise<DishType | undefined> {
-  const dishType: DishType | undefined = await useDrizzle()
+  const dishType: DishType | undefined = await db
     .select()
-    .from(tables.dishType)
-    .where(eq(tables.dishType.id, id))
+    .from(schema.dishType)
+    .where(eq(schema.dishType.id, id))
     .get();
   return dishType;
 }
