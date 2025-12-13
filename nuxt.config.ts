@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   modules: [
     // Must be loaded before @nuxtjs/i18n
     // 'nuxt-zod-i18n',
-    'vue-mess-detector-nuxt-devtools', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/ui', '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/hints'],
+    'vue-mess-detector-nuxt-devtools', '@nuxt/image', '@nuxthub/core', '@nuxtjs/i18n', '@nuxt/ui', '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/hints'],
   ssr: true,
   imports: {
     dirs: [
@@ -38,6 +38,10 @@ export default defineNuxtConfig({
       tasks: true,
       openAPI: true,
     },
+  },
+  hub: {
+    blob: true,
+    db: 'sqlite',
   },
   vite: {
     ssr: {
