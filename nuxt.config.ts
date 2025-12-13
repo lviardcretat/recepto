@@ -38,6 +38,10 @@ export default defineNuxtConfig({
       tasks: true,
       openAPI: true,
     },
+    // Fix @iconify/utils not found in production (serverless)
+    externals: {
+      inline: ['@iconify/utils'],
+    },
   },
   hub: {
     blob: true,
