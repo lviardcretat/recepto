@@ -10,12 +10,6 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-auth-utils',
   ],
-  $development: {
-    // Comment it for local bdd
-    hub: {
-      remote: true,
-    },
-  },
   ssr: true,
   devtools: { enabled: true },
   app: {
@@ -50,6 +44,7 @@ export default defineNuxtConfig({
     // Comment it for local bdd
     database: true,
     blob: true,
+    db: 'sqlite',
   },
   vite: {
     ssr: {
