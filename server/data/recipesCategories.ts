@@ -89,7 +89,7 @@ export async function getRecipesCategoryName(
       name: schema.recipesCategory.name,
     })
     .from(schema.recipesCategory)
-    .where(eq(schema.ingredient.id, id))
+    .where(eq(schema.recipesCategory.id, id))
     .get();
   return recipesCategory;
 }
@@ -100,9 +100,28 @@ export async function getRecipesCategory(
   const recipesCategory: RecipesCategory | undefined = await db
     .select()
     .from(schema.recipesCategory)
-    .where(eq(schema.ingredient.id, id))
+    .where(eq(schema.recipesCategory.id, id))
     .get();
   return recipesCategory;
+}
+
+export async function updateRecipesCategory(
+  id: number,
+  data: Partial<RecipesCategoryInsert>,
+): Promise<RecipesCategory> {
+  const updatedRecipesCategory: RecipesCategory = await db
+    .update(schema.recipesCategory)
+    .set(data)
+    .where(eq(schema.recipesCategory.id, id))
+    .returning()
+    .get();
+  return updatedRecipesCategory;
+}
+
+export async function deleteRecipesCategory(id: number): Promise<void> {
+  await db
+    .delete(schema.recipesCategory)
+    .where(eq(schema.recipesCategory.id, id));
 }
 
 export async function getRecipesCategoriesFiltered(

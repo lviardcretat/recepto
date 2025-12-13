@@ -19,6 +19,7 @@ import type {
   RecipesCategoriesWithLessData,
 } from '~/types/filter';
 import type { RecipeDetail } from '~/types/recipeCard';
+import type { RecipesDashboard } from '~/types/recipesDashboard';
 
 export async function postRecipe(
   name: string,
@@ -80,6 +81,31 @@ export async function getRecipes(): Promise<Recipe[]> {
     .select()
     .from(schema.recipe)
     .all();
+  return recipes;
+}
+
+export async function getRecipesWithRecipesCategoriesDashboard(userId: number): Promise<RecipesDashboard[]> {
+  const recipes: RecipesDashboard[] = await db.query.recipe.findMany({
+    columns: {
+      id: true,
+      name: true,
+      recipesCategoryId: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    with: {
+      recipesCategory: {
+        columns: {
+          id: true,
+          dishTypeId: true,
+          name: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+    where: (recipes, { eq }) => eq(recipes.createdById, userId),
+  });
   return recipes;
 }
 
@@ -214,7 +240,7 @@ export async function getRecipesFiltered(
     await createAllergenSubQuery(allergensIds, recipeCategoryId),
     await createSeasonalRecipeSubQuery(seasonalRecipes, recipeCategoryId),
   ];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const filters: any[] = [];
 
   for (const subQuery of subQueries) {
@@ -243,4 +269,111 @@ export async function getRecipesFiltered(
       .all();
   }
   return recipes;
+}
+
+export async function updateRecipe(
+  id: number,
+  data: Partial<RecipeInsert>,
+): Promise<Recipe> {
+  const updatedRecipe: Recipe = await db
+    .update(schema.recipe)
+    .set(data)
+    .where(eq(schema.recipe.id, id))
+    .returning()
+    .get();
+  return updatedRecipe;
+}
+
+export async function deleteRecipe(id: number): Promise<void> {
+  // Delete related data first
+  await db
+    .delete(schema.recipeIngredient)
+    .where(eq(schema.recipeIngredient.recipeId, id));
+
+  await db
+    .delete(schema.recipeToUstensil)
+    .where(eq(schema.recipeToUstensil.recipeId, id));
+
+  await db
+    .delete(schema.allergenToRecipe)
+    .where(eq(schema.allergenToRecipe.recipeId, id));
+
+  await db
+    .delete(schema.sequence)
+    .where(eq(schema.sequence.recipeId, id));
+
+  // Finally delete the recipe
+  await db
+    .delete(schema.recipe)
+    .where(eq(schema.recipe.id, id));
+}
+
+export async function getRecipeBasic(id: number): Promise<Recipe | undefined> {
+  const recipe: Recipe | undefined = await db
+    .select()
+    .from(schema.recipe)
+    .where(eq(schema.recipe.id, id))
+    .get();
+  return recipe;
+}
+
+export async function getRecipeWithAllData(id: number): Promise<any> {
+  const recipe = await db.query.recipe.findFirst({
+    columns: {
+      id: true,
+      name: true,
+      description: true,
+      tips: true,
+      peopleNumber: true,
+      preparationTime: true,
+      cookingTime: true,
+      restTime: true,
+      seasonId: true,
+      recipesCategoryId: true,
+      createdById: true,
+    },
+    with: {
+      ingredients: {
+        columns: {
+          ingredientId: true,
+          quantity: true,
+          unitId: true,
+        },
+      },
+      sequences: {
+        columns: {
+          id: true,
+          name: true,
+          extra: true,
+        },
+        orderBy: sequence => sequence.id,
+      },
+      allergens: {
+        columns: {
+          allergenId: true,
+        },
+      },
+      ustensils: {
+        columns: {
+          ustensilId: true,
+        },
+      },
+    },
+    where: (recipe, { eq }) => eq(recipe.id, id),
+  });
+
+  if (!recipe) {
+    return undefined;
+  }
+
+  // Transform the data to match the expected format
+  return {
+    ...recipe,
+    allergens: recipe.allergens.map(a => a.allergenId),
+    ustensils: recipe.ustensils.map(u => u.ustensilId),
+    sequences: recipe.sequences.map(s => ({
+      name: s.name,
+      extra: s.extra,
+    })),
+  };
 }

@@ -9,6 +9,24 @@ export async function getIngredients(): Promise<Ingredient[]> {
   return ingredients;
 }
 
+export async function getIngredientsDashboard(userId: number): Promise<Partial<Ingredient>[]> {
+  const ingredients = await db.query.ingredient.findMany({
+    columns: {
+      id: true,
+      name: true,
+      foodTypeId: true,
+      seasonalMonths: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    with: {
+      recipes: true,
+    },
+    where: (ustensil, { eq }) => eq(ustensil.createdById, userId),
+  });
+  return ingredients;
+}
+
 export async function postIngredient(
   name: string,
   foodTypeId: number,
@@ -56,4 +74,23 @@ export async function getIngredient(
     .where(eq(schema.ingredient.id, id))
     .get();
   return ingredient;
+}
+
+export async function updateIngredient(
+  id: number,
+  data: Partial<IngredientInsert>,
+): Promise<Ingredient> {
+  const updatedIngredient: Ingredient = await db
+    .update(schema.ingredient)
+    .set(data)
+    .where(eq(schema.ingredient.id, id))
+    .returning()
+    .get();
+  return updatedIngredient;
+}
+
+export async function deleteIngredient(id: number): Promise<void> {
+  await db
+    .delete(schema.ingredient)
+    .where(eq(schema.ingredient.id, id));
 }

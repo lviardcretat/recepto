@@ -2,7 +2,7 @@
 import * as schema from 'hub:db:schema';
 import 'dotenv/config';
 
-export { sql, eq, and, or } from 'drizzle-orm'; // Comment this for local bdd
+export { sql, eq, and, or } from 'drizzle-orm';
 
 export type User = typeof schema.user.$inferSelect;
 export type UserInsert = typeof schema.user.$inferInsert;

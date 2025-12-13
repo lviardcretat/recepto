@@ -2,15 +2,14 @@
 export default defineNuxtConfig({
   modules: [
     // Must be loaded before @nuxtjs/i18n
-    'nuxt-zod-i18n',
-    '@nuxt/image',
-    '@nuxtjs/i18n',
-    '@nuxt/ui-pro', // Comment it for local bdd
-    '@nuxthub/core',
-    '@nuxt/eslint',
-    'nuxt-auth-utils',
-  ],
+    // 'nuxt-zod-i18n',
+    'vue-mess-detector-nuxt-devtools', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/ui', '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/hints'],
   ssr: true,
+  imports: {
+    dirs: [
+      '~/composables/**',
+    ],
+  },
   devtools: { enabled: true },
   app: {
     head: {
@@ -40,15 +39,12 @@ export default defineNuxtConfig({
       openAPI: true,
     },
   },
-  hub: {
-    // Comment it for local bdd
-    database: true,
-    blob: true,
-    db: 'sqlite',
-  },
   vite: {
     ssr: {
       noExternal: ['to-px'],
+    },
+    optimizeDeps: {
+      exclude: ['@nuxt/hints'],
     },
   },
   eslint: {
@@ -68,8 +64,8 @@ export default defineNuxtConfig({
       optimizeTranslationDirective: false,
     },
     locales: [
-      { code: 'fr', name: 'Français', file: 'fr.ts' },
-      { code: 'en', name: 'English', file: 'en.ts' },
+      { code: 'fr', name: 'Français', file: 'fr.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
     ],
     lazy: true,
     strategy: 'no_prefix',
@@ -88,10 +84,11 @@ export default defineNuxtConfig({
       },
     ],
   },
+  /*
   zodI18n: {
     localeCodesMapping: {
       'en-GB': 'en',
       'fr-FR': 'fr',
     },
-  },
+  }, */
 });
