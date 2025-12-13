@@ -81,6 +81,10 @@ export default defineNuxtConfig({
     },
   },
   icon: {
+    clientBundle: {
+      scan: true,
+    },
+    provider: 'iconify',
     customCollections: [
       {
         prefix: 'allergens-icons',
