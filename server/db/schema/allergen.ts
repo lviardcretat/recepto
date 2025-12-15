@@ -1,7 +1,7 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
 import { timestamps } from '../columns.helper';
-import { recipe } from './recipe';
+import { allergenToRecipe } from './allergenToRecipe';
 import { user } from './user';
 
 export const allergen = sqliteTable('allergen', {
@@ -19,5 +19,5 @@ export const allergenRelations = relations(allergen, ({ one, many }) => ({
     fields: [allergen.createdById],
     references: [user.id],
   }),
-  recipes: many(recipe),
+  allergenToRecipe: many(allergenToRecipe),
 }));

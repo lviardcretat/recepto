@@ -45,7 +45,10 @@ export default defineNuxtConfig({
   },
   hub: {
     blob: true,
-    db: 'sqlite',
+    db: {
+      dialect: 'sqlite',
+      driver: 'libsql',
+    },
   },
   vite: {
     ssr: {
