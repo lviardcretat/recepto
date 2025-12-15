@@ -2,6 +2,7 @@
 import { getIngredientsTableConfig } from '~/config/dashboard/IngredientsTableConfig';
 import type { IngredientsDashboard } from '~/types/ingredientsDashboard';
 import { LazyDashboardDeletionDeleteModalComponent, LazyEditionIngredientEditModalComponent } from '#components';
+import type { FoodType } from '~~/server/utils/drizzleUtils';
 
 const { d, t, locale } = useI18n();
 const UButton = resolveComponent('UButton');
@@ -13,35 +14,17 @@ const nuxtApp = useNuxtApp();
 const editModal = overlay.create(LazyEditionIngredientEditModalComponent);
 const deleteModal = overlay.create(LazyDashboardDeletionDeleteModalComponent);
 
-const { data: ingredients, execute: executeIngredientsFetch } = await useFetch<IngredientsDashboard[]>(
-  '/api/ingredients/dashboard',
-  {
-    method: 'GET',
-    immediate: false,
-    watch: false,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  },
-);
+const { data: ingredients, execute: executeIngredientsFetch } = await useIngredientsRequest().getDashboard<IngredientsDashboard[], IngredientsDashboard[]>({
+  immediate: false,
+  watch: false,
+  default: () => [],
+});
 
-const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFetch<FoodType[]>(
-  '/api/foodTypes/all',
-  {
-    method: 'GET',
-    immediate: false,
-    watch: false,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  },
-);
+const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFoodTypesRequest().getAll<FoodType[], FoodType[]>({
+  immediate: false,
+  watch: false,
+  default: () => [],
+});
 
 await executeFoodTypesFetch();
 await executeIngredientsFetch();
@@ -62,27 +45,17 @@ async function handleDeleteButtonOpen(ingredient: IngredientsDashboard) {
   });
   const result = await instance.result;
   if (result) {
-    // Perform delete operation
-    await $fetch(`/api/ingredients/${ingredient.id}`, {
-      method: 'DELETE',
-      async onResponse() {
-        await nuxtApp.callHook('ingredient:deleted', { id: ingredient.id });
-        await executeIngredientsFetch();
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response.statusText,
-        });
-      },
-    });
+    await useIngredientsRequest().delete(ingredient.id, { onResponse: async () => {
+      await nuxtApp.callHook('ingredient:deleted', { id: ingredient.id });
+      await executeIngredientsFetch();
+    } });
   }
 }
 
 const recipeTableConfig = getIngredientsTableConfig(d, t, {
   buttonComponent: UButton,
   dropdownMenuComponent: UDropdownMenu,
-  foodTypes: foodTypesFetch.value ?? [],
+  foodTypes: foodTypesFetch.value,
   onEditButtonOpen: handleEditButtonOpen,
   onDeleteButtonOpen: handleDeleteButtonOpen,
 });

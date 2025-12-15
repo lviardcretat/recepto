@@ -34,11 +34,13 @@ export function useSeasonsRequest() {
     /**
      * Get all seasons with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Season[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<Season[]>) {
-      return useFetchy<Season[]>(
+    getAll<DataTransformT = Season[], DefaultT = undefined>(options?: UseFetchOptions<Season[], DataTransformT, never, DefaultT>) {
+      return useFetchy<Season[], DataTransformT, never, DefaultT>(
         `/${ApiResource.SEASONS}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );

@@ -34,11 +34,13 @@ export function useAllergensRequest() {
     /**
      * Get all allergens with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Allergen[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<Allergen[]>) {
-      return useFetchy<Allergen[]>(
+    getAll<DataTransformT = Allergen[], DefaultT = undefined>(options?: UseFetchOptions<Allergen[], DataTransformT, never, DefaultT>) {
+      return useFetchy<Allergen[], DataTransformT, never, DefaultT>(
         `/${ApiResource.ALLERGENS}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );

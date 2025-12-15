@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
+import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
 import {
   recipeCreation,
 
 } from '~/schemas/creation/recipe';
 import type { RecipeCreation } from '~/schemas/creation/recipe';
+import type { Allergen, Ingredient, RecipesCategory, Season, Unit, Ustensil } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   modalTitle: string;
@@ -54,131 +55,53 @@ const state = ref<{
   recipesCategoryId: undefined,
 });
 
-const { data: seasons } = await useFetch('/api/seasons/all', {
-  method: 'GET',
+const { data: seasons } = await useSeasonsRequest().getAll<SelectMenuItem[], null>({
   watch: false,
   default: () => null,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (seasons) => {
-    return mapSelectMenuItemsUtils(seasons);
-  },
+  transform: (seasons: Season[]) => mapSelectMenuItemsUtils(seasons),
 });
 
-const {
-  data: recipesCategories,
-  refresh: refreshRecipesCategoriesFetch,
-} = await useFetch(
-  '/api/recipesCategories/all',
-  {
-    method: 'GET',
-    watch: false,
-    default: () => null,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-    transform: (recipesCategories) => {
-      return mapSelectMenuItemsUtils(recipesCategories);
-    },
-  },
-);
-
-const {
-  data: ingredients,
-  refresh: refreshIngredientsFetch,
-} = await useFetch('/api/ingredients/all', {
-  method: 'GET',
+const { data: recipesCategories, refresh: refreshRecipesCategoriesFetch } = await useRecipesCategoriesRequest().getAll<SelectMenuItem[], null>({
   watch: false,
   default: () => null,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (ingredients) => {
-    return mapSelectMenuItemsUtils(ingredients);
-  },
+  transform: (recipesCategories: RecipesCategory[]) => mapSelectMenuItemsUtils(recipesCategories),
 });
 
-const { data: allergens } = await useFetch('/api/allergens/all', {
-  method: 'GET',
+const { data: ingredients, refresh: refreshIngredientsFetch } = await useIngredientsRequest().getAll<SelectMenuItem[], null>({
   watch: false,
   default: () => null,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (allergens) => {
-    return mapSelectMenuItemsUtils(allergens);
-  },
+  transform: (ingredients: Ingredient[]) => mapSelectMenuItemsUtils(ingredients),
 });
 
-const {
-  data: ustensils,
-  refresh: refreshUstensilsFetch,
-} = await useFetch('/api/ustensils/all', {
-  method: 'GET',
+const { data: allergens } = await useAllergensRequest().getAll<SelectMenuItem[], null>({
   watch: false,
   default: () => null,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (ustensils) => {
-    return mapSelectMenuItemsUtils(ustensils);
-  },
+  transform: (allergens: Allergen[]) => mapSelectMenuItemsUtils(allergens),
 });
 
-const { data: units } = await useFetch('/api/units/all', {
-  method: 'GET',
+const { data: ustensils, refresh: refreshUstensilsFetch } = await useUstensilsRequest().getAll<SelectMenuItem[], null>({
   watch: false,
   default: () => null,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (units) => {
-    return mapSelectMenuItemsUtils(units);
-  },
+  transform: (ustensils: Ustensil[]) => mapSelectMenuItemsUtils(ustensils),
+});
+
+const { data: units } = await useUnitsRequest().getAll<SelectMenuItem[], null>({
+  watch: false,
+  default: () => null,
+  transform: (units: Unit[]) => mapSelectMenuItemsUtils(units),
 });
 
 async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch('/api/recipesCategories/recipes', {
-      method: 'POST',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse() {
-        await nuxtApp.callHook('recipe:created', {});
-        emit('closeModal');
-        toast.add({
-          title: t('formCreation.recipe.createdToast', { recipeName: event.data.name }),
-        });
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useRecipesRequest().create(event.data, { onResponse: async () => {
+      await nuxtApp.callHook('recipe:created', {});
+      emit('closeModal');
+      toast.add({
+        title: t('formCreation.recipe.createdToast', { recipeName: event.data.name }),
+      });
+    } });
   }
   finally {
     disabledSubmit.value = false;
@@ -190,7 +113,7 @@ nuxtApp.hook('ingredient:created', async (payload) => {
   await refreshIngredientsFetch();
   ingredientNameToCreate.value = undefined;
   if (state.value.ingredients[selectMenuIngredientIdConcerned.value]) {
-    // @ts-expect-error : I checked if this isn't null or undefined...
+    // @ts-expect-error : I check if this isn't null or undefined...
     state.value.ingredients[selectMenuIngredientIdConcerned.value].ingredientId = payload.id;
   }
 });

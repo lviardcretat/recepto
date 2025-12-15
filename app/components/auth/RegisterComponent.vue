@@ -27,34 +27,23 @@ const fields = computed(() => [
 async function onSubmit(event: FormSubmitEvent<RegisterSchema>) {
   start();
   try {
-    await $fetch('/api/auth/register', {
-      method: 'POST',
-      body: event.data,
-      watch: false,
-      async onResponse({ response }) {
-        if (response._data.success) {
-          await refreshSession();
-          await nuxtApp.runWithContext(() =>
-            navigateTo('/recipes/all'),
-          );
-          toast.add({
-            title: t('auth.register.toast', { username: event.data.username }),
-          });
-        }
-        else {
-          toast.add({
-            title: t(response._data.error),
-            color: 'error',
-          });
-        }
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
+    await useAuthRequest().register(event.data, { onResponse: async ({ response }) => {
+      if (response._data.success) {
+        await refreshSession();
+        await nuxtApp.runWithContext(() =>
+          navigateTo('/recipes/all'),
+        );
+        toast.add({
+          title: t('auth.register.toast', { username: event.data.username }),
         });
-      },
-    });
+      }
+      else {
+        toast.add({
+          title: t(response._data.error),
+          color: 'error',
+        });
+      }
+    } });
   }
   finally {
     finish();

@@ -6,6 +6,7 @@ import {
   FilterSelectMenuStatesType,
 } from '~/enums/filter';
 import type { CustomAccordionItem } from '~/types/filter';
+import type { Allergen, DishType, Ingredient, MealType, Ustensil } from '~~/server/utils/drizzleUtils';
 
 defineProps<{
   collapsed?: boolean;
@@ -19,51 +20,11 @@ const iconsGridStates = useFilterIconsGridStates();
 const panelConfig = getPanelConfig(t, {});
 
 await callOnce(async () => {
-  const ustensilsFetch = await $fetch('/api/ustensils/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const ingredientsFetch = await $fetch('/api/ingredients/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const mealTypesFetch = await $fetch('/api/mealTypes/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const dishTypesFetch = await $fetch('/api/dishTypes/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const allergensFetch = await $fetch('/api/allergens/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
+  const ingredientsFetch: Ingredient[] = await useIngredientsRequest().fetchAll();
+  const mealTypesFetch: MealType[] = await useMealTypesRequest().fetchAll();
+  const dishTypesFetch: DishType[] = await useDishTypesRequest().fetchAll();
+  const allergensFetch: Allergen[] = await useAllergensRequest().fetchAll();
+  const ustensilsFetch: Ustensil[] = await useUstensilsRequest().fetchAll();
 
   selectMenuStates.value.ustensils = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ustensilsFetch,
@@ -93,9 +54,7 @@ await callOnce(async () => {
 });
 
 nuxtApp.hook('ustensil:created', async () => {
-  const ustensilsFetch = await $fetch('/api/ustensils/all', {
-    method: 'GET',
-  });
+  const ustensilsFetch: Ustensil[] = await useUstensilsRequest().fetchAll();
   selectMenuStates.value.ustensils = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ustensilsFetch,
     selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
@@ -104,9 +63,7 @@ nuxtApp.hook('ustensil:created', async () => {
 });
 
 nuxtApp.hook('ingredient:created', async () => {
-  const ingredientsFetch = await $fetch('/api/ingredients/all', {
-    method: 'GET',
-  });
+  const ingredientsFetch: Ingredient[] = await useIngredientsRequest().fetchAll();
   selectMenuStates.value.ingredients = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ingredientsFetch,
     selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],

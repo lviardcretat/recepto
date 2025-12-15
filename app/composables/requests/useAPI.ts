@@ -1,6 +1,8 @@
 import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
 import type { NitroFetchRequest, NitroFetchOptions } from 'nitropack';
 
+type KeysOf<T> = Array<T extends T ? keyof T extends string ? keyof T : never : never>;
+
 /**
  * Get the $api instance for imperative fetching
  * Use in event handlers, callOnce, or any non-SSR context
@@ -13,10 +15,18 @@ export function useApiClient(): typeof $fetch {
 /**
  * Wrapper for useFetch that uses the $api plugin with proper error handling
  * Use for SSR data loading in components
+ * @template ResT - The type of data returned by the API
+ * @template DataTransformT - The type of data after transform (defaults to ResT)
+ * @template DefaultT - The type of the default value
  */
-export function useFetchy<T>(
+export function useFetchy<
+  ResT,
+  DataTransformT = ResT,
+  PickKeys extends KeysOf<DataTransformT> = KeysOf<DataTransformT>,
+  DefaultT = undefined,
+>(
   url: NitroFetchRequest | Ref<NitroFetchRequest> | (() => NitroFetchRequest),
-  options?: Omit<UseFetchOptions<T>, 'onResponseError'>,
+  options?: Omit<UseFetchOptions<ResT, DataTransformT, PickKeys, DefaultT>, 'onResponseError'>,
 ) {
   return useFetch(url, {
     ...options,
@@ -27,7 +37,7 @@ export function useFetchy<T>(
         statusMessage: response.statusText,
       });
     },
-  } as UseFetchOptions<T>);
+  } as UseFetchOptions<ResT, DataTransformT, PickKeys, DefaultT>);
 }
 
 /**

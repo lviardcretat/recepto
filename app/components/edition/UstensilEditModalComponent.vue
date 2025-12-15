@@ -20,16 +20,7 @@ const schema = ustensilCreationSchema;
 const disabledSubmit = ref(false);
 
 // Fetch ustensil data
-const { data: ustensil, error } = await useFetch(`/api/ustensils/${props.ustensilId}`, {
-  method: 'GET',
-  watch: false,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-});
+const { data: ustensil, error } = await useUstensilsRequest().getById(props.ustensilId, { watch: false });
 
 if (error.value || !ustensil.value) {
   emit('close', false);
@@ -46,27 +37,15 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch(`/api/ustensils/${props.ustensilId}`, {
-      method: 'PUT',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse(response) {
-        await nuxtApp.callHook('ustensil:updated', {
-          id: props.ustensilId,
-        });
-        toast.add({
-          title: t('formEdition.ustensil.updatedToast', { ustensilName: event.data.name }),
-        });
-        emit('close', true);
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useUstensilsRequest().update(props.ustensilId, event.data, { onResponse: async () => {
+      await nuxtApp.callHook('ustensil:updated', {
+        id: props.ustensilId,
+      });
+      toast.add({
+        title: t('formEdition.ustensil.updatedToast', { ustensilName: event.data.name }),
+      });
+      emit('close', true);
+    } });
   }
   finally {
     finish();

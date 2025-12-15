@@ -63,11 +63,13 @@ export function useUstensilsRequest() {
     /**
      * Get all ustensils with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Ustensil[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<Ustensil[]>) {
-      return useFetchy<Ustensil[]>(
+    getAll<DataTransformT = Ustensil[], DefaultT = undefined>(options?: UseFetchOptions<Ustensil[], DataTransformT, never, DefaultT>) {
+      return useFetchy<Ustensil[], DataTransformT, never, DefaultT>(
         `/${ApiResource.USTENSILS}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -76,12 +78,14 @@ export function useUstensilsRequest() {
     /**
      * Get ustensil by ID with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Ustensil)
+     * @template DefaultT - The type of the default value
      * @param id - Ustensil ID (can be reactive)
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getById(id: MaybeRef<number>, options?: UseFetchOptions<Ustensil>) {
-      return useFetchy<Ustensil>(
+    getById<DataTransformT = Ustensil, DefaultT = undefined>(id: MaybeRef<number>, options?: UseFetchOptions<Ustensil, DataTransformT, never, DefaultT>) {
+      return useFetchy<Ustensil, DataTransformT, never, DefaultT>(
         () => `/${ApiResource.USTENSILS}/${unref(id)}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -90,11 +94,13 @@ export function useUstensilsRequest() {
     /**
      * Get ustensils dashboard data with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to UstensilsDashboard[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getDashboard(options?: UseFetchOptions<UstensilsDashboard[]>) {
-      return useFetchy<UstensilsDashboard[]>(
+    getDashboard<DataTransformT = UstensilsDashboard[], DefaultT = undefined>(options?: UseFetchOptions<UstensilsDashboard[], DataTransformT, never, DefaultT>) {
+      return useFetchy<UstensilsDashboard[], DataTransformT, never, DefaultT>(
         `/${ApiResource.USTENSILS}/${ApiEndpoint.DASHBOARD}`,
         { method: HttpMethod.GET, ...options },
       );

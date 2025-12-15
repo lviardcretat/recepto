@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
+import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
 import {
   recipesCategoryCreation,
 
 } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import type { DishType } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   modalTitle: string;
@@ -26,46 +27,25 @@ const state = ref<{
   dishTypeId: undefined,
 });
 
-const { data: dishTypes } = await useFetch('/api/dishTypes/all', {
-  method: 'GET',
+const { data: dishTypes } = await useDishTypesRequest().getAll<SelectMenuItem[], null>({
   watch: false,
   default: () => null,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (dishTypes) => {
-    return mapSelectMenuItemsUtils(dishTypes);
-  },
+  transform: (dishTypes: DishType[]) => mapSelectMenuItemsUtils(dishTypes),
 });
 
 async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch('/api/recipesCategories', {
-      method: 'POST',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse(response) {
-        await nuxtApp.callHook('recipesCategory:created', {
-          id: response.response._data.id,
-        });
-        emit('closeModal');
-        toast.add({
-          title: t('formCreation.category.createdToast', { categoryName: event.data.name }),
-        });
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useRecipesCategoriesRequest().create(event.data, { onResponse: async (response) => {
+      await nuxtApp.callHook('recipesCategory:created', {
+        id: response.response._data.id,
+      });
+      emit('closeModal');
+      toast.add({
+        title: t('formCreation.category.createdToast', { categoryName: event.data.name }),
+      });
+    } });
   }
   finally {
     disabledSubmit.value = false;

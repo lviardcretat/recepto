@@ -2,6 +2,7 @@
 import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
 import type { IngredientCreation } from '~/schemas/creation/ingredient';
+import type { FoodType } from '~~/server/utils/drizzleUtils';
 
 const nuxtApp = useNuxtApp();
 const props = defineProps<{
@@ -26,46 +27,25 @@ const state = ref<{
   seasonalMonths: undefined,
 });
 
-const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
-  method: 'GET',
+const { data: foodTypes } = await useFoodTypesRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
   watch: false,
-  default: () => [] satisfies SelectMenuItem[],
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (foodTypes) => {
-    return mapSelectMenuItemsUtils(foodTypes);
-  },
+  default: () => [],
+  transform: (foodTypes: FoodType[]) => mapSelectMenuItemsUtils(foodTypes),
 });
 
 async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch('/api/ingredients', {
-      method: 'POST',
-      watch: false,
-      body: event.data,
-      default: () => null,
-      async onResponse(response) {
-        await nuxtApp.callHook('ingredient:created', {
-          id: response.response._data.id,
-        });
-        emit('closeModal');
-        toast.add({
-          title: t('formCreation.ingredient.createdToast', { ingredientName: event.data.name }),
-        });
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response.statusText,
-        });
-      },
-    });
+    await useIngredientsRequest().create(event.data, { onResponse: async (response) => {
+      await nuxtApp.callHook('ingredient:created', {
+        id: response.response._data.id,
+      });
+      emit('closeModal');
+      toast.add({
+        title: t('formCreation.ingredient.createdToast', { ingredientName: event.data.name }),
+      });
+    } });
   }
   finally {
     disabledSubmit.value = false;

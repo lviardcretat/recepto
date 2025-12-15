@@ -31,21 +31,7 @@ const fetchFilteredRecipes = async (
     recipeCategoryId: recipeCategoryId,
     seasonalRecipes: switchStates.seasonalRecipes,
   };
-  const response: RecipeWithLessData[] = await $fetch(
-    '/api/recipesCategories/recipes/filtered',
-    {
-      method: 'GET',
-      watch: false,
-      default: () => [],
-      query: query,
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    },
-  );
+  const response: RecipeWithLessData[] = await useRecipesRequest().fetchFiltered(query);
   return response;
 };
 
@@ -75,21 +61,7 @@ const fetchFilteredRecipesCategories = async (
     ),
     seasonalRecipes: switchStates.seasonalRecipes,
   };
-  const response: RecipesCategoriesWithLessData[] = await $fetch(
-    '/api/recipesCategories/filtered',
-    {
-      method: 'GET',
-      watch: false,
-      default: () => [],
-      query: query,
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    },
-  );
+  const response: RecipesCategoriesWithLessData[] = await useRecipesCategoriesRequest().fetchFiltered(query);
   return response;
 };
 
