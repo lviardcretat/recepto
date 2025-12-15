@@ -28,27 +28,15 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch('/api/ustensils', {
-      method: 'POST',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse(response) {
-        await nuxtApp.callHook('ustensil:created', {
-          id: response.response._data.id,
-        });
-        emit('closeModal');
-        toast.add({
-          title: t('formCreation.ustensil.createdToast', { ustensilName: event.data.name }),
-        });
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useUstensilsRequest().create(event.data, { onResponse: async (response) => {
+      await nuxtApp.callHook('ustensil:created', {
+        id: response.response._data.id,
+      });
+      emit('closeModal');
+      toast.add({
+        title: t('formCreation.ustensil.createdToast', { ustensilName: event.data.name }),
+      });
+    } });
   }
   finally {
     finish();

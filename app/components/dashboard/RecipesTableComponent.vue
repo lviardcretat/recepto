@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getGroupedRowModel } from '@tanstack/vue-table';
-import type { GroupingOptions, Row } from '@tanstack/vue-table';
+import type { GroupingOptions } from '@tanstack/vue-table';
 import { getRecipesTableConfig } from '~/config/dashboard/RecipesTableConfig';
 import type { RecipesDashboard } from '~/types/recipesDashboard';
 import { LazyDashboardDeletionDeleteModalComponent, LazyEditionRecipeEditModalComponent, LazyEditionRecipeCategoryEditModalComponent } from '#components';
@@ -16,20 +16,11 @@ const editRecipeModal = overlay.create(LazyEditionRecipeEditModalComponent);
 const deleteModal = overlay.create(LazyDashboardDeletionDeleteModalComponent);
 const editCategoryModal = overlay.create(LazyEditionRecipeCategoryEditModalComponent);
 
-const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = await useFetch<RecipesDashboard[]>(
-  '/api/recipesCategories/recipes/dashboard',
-  {
-    method: 'GET',
-    immediate: false,
-    watch: false,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  },
-);
+const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = await useRecipesRequest().getDashboard<RecipesDashboard[], RecipesDashboard[]>({
+  immediate: false,
+  watch: false,
+  default: () => [],
+});
 
 await executeRecipesCategoriesFetch();
 
@@ -49,20 +40,10 @@ async function handleDeleteButtonOpen(recipe: RecipesDashboard) {
   });
   const result = await instance.result;
   if (result) {
-    // Perform delete operation
-    await $fetch(`/api/recipesCategories/recipes/${recipe.id}`, {
-      method: 'DELETE',
-      async onResponse() {
-        await nuxtApp.callHook('recipe:deleted', { id: recipe.id });
-        await executeRecipesCategoriesFetch();
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response.statusText,
-        });
-      },
-    });
+    await useRecipesRequest().delete(recipe.id, { onResponse: async () => {
+      await nuxtApp.callHook('recipe:deleted', { id: recipe.id });
+      await executeRecipesCategoriesFetch();
+    } });
   }
 }
 
@@ -81,20 +62,10 @@ async function handleDeleteCategoryButtonOpen(recipe: RecipesDashboard) {
   });
   const result = await instance.result;
   if (result) {
-    // Perform delete operation
-    await $fetch(`/api/recipesCategories/${recipe.recipesCategory.id}`, {
-      method: 'DELETE',
-      async onResponse() {
-        await nuxtApp.callHook('recipesCategory:deleted', { id: recipe.recipesCategory.id });
-        await executeRecipesCategoriesFetch();
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response.statusText,
-        });
-      },
-    });
+    await useRecipesCategoriesRequest().delete(recipe.recipesCategory.id, { onResponse: async () => {
+      await nuxtApp.callHook('recipesCategory:deleted', { id: recipe.recipesCategory.id });
+      await executeRecipesCategoriesFetch();
+    } });
   }
 }
 

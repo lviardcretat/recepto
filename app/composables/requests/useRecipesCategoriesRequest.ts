@@ -1,7 +1,7 @@
 import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { RecipesCategory } from '~~/server/utils/drizzleUtils';
-import type { RecipesCategoriesWithLessData } from '~/types/filter';
+import type { FethRecipesCategoriesQuery, RecipesCategoriesWithLessData } from '~/types/filter';
 import type { RecipeSearched } from '~/types/search';
 import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
 import { ApiResource, ApiEndpoint, HttpMethod } from '~/enums/api';
@@ -17,29 +17,6 @@ export interface RecipesCategoriesFilterParams {
   dishTypes?: { wanted: number[]; notWanted: number[] };
   allergens: number[];
   seasonalRecipes: boolean;
-}
-
-/**
- * Build query object for filtered requests
- * @param params - Filter parameters
- * @returns Query object for fetch request
- */
-function buildFilteredQuery(params: RecipesCategoriesFilterParams): Record<string, string | number[]> {
-  const query: Record<string, string | number[]> = {
-    ingredients: JSON.stringify(params.ingredients),
-    ustensils: JSON.stringify(params.ustensils),
-    allergens: params.allergens,
-    seasonalRecipes: params.seasonalRecipes.toString(),
-  };
-
-  if (params.mealTypes) {
-    query.mealTypes = JSON.stringify(params.mealTypes);
-  }
-  if (params.dishTypes) {
-    query.dishTypes = JSON.stringify(params.dishTypes);
-  }
-
-  return query;
 }
 
 /**
@@ -86,12 +63,12 @@ export function useRecipesCategoriesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to array of filtered recipes categories
      */
-    fetchFiltered(params: RecipesCategoriesFilterParams, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipesCategoriesWithLessData[]> {
+    fetchFiltered(query: FethRecipesCategoriesQuery, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipesCategoriesWithLessData[]> {
       return fetchy<RecipesCategoriesWithLessData[]>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.FILTERED}`,
         {
           method: HttpMethod.GET,
-          query: buildFilteredQuery(params),
+          query: query,
           ...options,
         },
       );
@@ -117,11 +94,13 @@ export function useRecipesCategoriesRequest() {
     /**
      * Get all recipes categories with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipesCategory[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<RecipesCategory[]>) {
-      return useFetchy<RecipesCategory[]>(
+    getAll<DataTransformT = RecipesCategory[], DefaultT = undefined>(options?: UseFetchOptions<RecipesCategory[], DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipesCategory[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -130,12 +109,14 @@ export function useRecipesCategoriesRequest() {
     /**
      * Get recipes category by ID with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipesCategory)
+     * @template DefaultT - The type of the default value
      * @param id - Recipes category ID (can be reactive)
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getById(id: MaybeRef<number>, options?: UseFetchOptions<RecipesCategory>) {
-      return useFetchy<RecipesCategory>(
+    getById<DataTransformT = RecipesCategory, DefaultT = undefined>(id: MaybeRef<number>, options?: UseFetchOptions<RecipesCategory, DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipesCategory, DataTransformT, never, DefaultT>(
         () => `/${ApiResource.RECIPES_CATEGORIES}/${unref(id)}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -144,16 +125,18 @@ export function useRecipesCategoriesRequest() {
     /**
      * Get filtered recipes categories with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipesCategoriesWithLessData[])
+     * @template DefaultT - The type of the default value
      * @param params - Filter parameters
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getFiltered(params: RecipesCategoriesFilterParams, options?: UseFetchOptions<RecipesCategoriesWithLessData[]>) {
-      return useFetchy<RecipesCategoriesWithLessData[]>(
+    getFiltered<DataTransformT = RecipesCategoriesWithLessData[], DefaultT = undefined>(query: FethRecipesCategoriesQuery, options?: UseFetchOptions<RecipesCategoriesWithLessData[], DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipesCategoriesWithLessData[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.FILTERED}`,
         {
           method: HttpMethod.GET,
-          query: buildFilteredQuery(params),
+          query: query,
           ...options,
         },
       );
@@ -162,13 +145,15 @@ export function useRecipesCategoriesRequest() {
     /**
      * Get search results with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipeSearched[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getSearch(options?: UseFetchOptions<RecipeSearched[]>) {
-      return useFetchy<RecipeSearched[]>(
+    getSearch<DataTransformT = RecipeSearched[], DefaultT = undefined>(query: any, options?: UseFetchOptions<RecipeSearched[], DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipeSearched[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.SEARCH}`,
-        { method: HttpMethod.GET, ...options },
+        { method: HttpMethod.GET, query: query, ...options },
       );
     },
 

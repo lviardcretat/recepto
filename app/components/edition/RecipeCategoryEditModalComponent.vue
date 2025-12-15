@@ -2,6 +2,7 @@
 import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
 import { recipesCategoryCreation } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import type { DishType } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   recipeCategoryId: number;
@@ -20,15 +21,8 @@ const schema = recipesCategoryCreation;
 const disabledSubmit = ref(false);
 
 // Fetch recipe category data
-const { data: recipeCategory, error } = await useFetch<RecipesCategory>(`/api/recipesCategories/${props.recipeCategoryId}`, {
-  method: 'GET',
+const { data: recipeCategory, error } = await useRecipesCategoriesRequest().getById(props.recipeCategoryId, {
   watch: false,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
 });
 
 if (error.value || !recipeCategory.value) {
@@ -36,19 +30,10 @@ if (error.value || !recipeCategory.value) {
 }
 
 // Fetch dish types
-const { data: dishTypes } = await useFetch('/api/dishTypes/all', {
-  method: 'GET',
+const { data: dishTypes } = await useDishTypesRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
   watch: false,
-  default: () => [] satisfies SelectMenuItem[],
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (dishTypes) => {
-    return mapSelectMenuItemsUtils(dishTypes);
-  },
+  default: () => [],
+  transform: (dishTypes: DishType[]) => mapSelectMenuItemsUtils(dishTypes),
 });
 
 // Initialize form state with fetched data
@@ -64,27 +49,15 @@ async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch(`/api/recipesCategories/${props.recipeCategoryId}`, {
-      method: 'PUT',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse(response) {
-        await nuxtApp.callHook('recipesCategory:updated', {
-          id: props.recipeCategoryId,
-        });
-        toast.add({
-          title: t('formEdition.category.updatedToast', { categoryName: event.data.name }),
-        });
-        emit('close', true);
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useRecipesCategoriesRequest().update(props.recipeCategoryId, event.data, { onResponse: async () => {
+      await nuxtApp.callHook('recipesCategory:updated', {
+        id: props.recipeCategoryId,
+      });
+      toast.add({
+        title: t('formEdition.category.updatedToast', { categoryName: event.data.name }),
+      });
+      emit('close', true);
+    } });
   }
   finally {
     finish();

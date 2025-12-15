@@ -13,20 +13,11 @@ const nuxtApp = useNuxtApp();
 const editModal = overlay.create(LazyEditionUstensilEditModalComponent);
 const deleteModal = overlay.create(LazyDashboardDeletionDeleteModalComponent);
 
-const { data: ustensils, execute: executeUstensilsFetch } = await useFetch<UstensilsDashboard[]>(
-  '/api/ustensils/dashboard',
-  {
-    method: 'GET',
-    immediate: false,
-    watch: false,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  },
-);
+const { data: ustensils, execute: executeUstensilsFetch } = await useUstensilsRequest().getDashboard<UstensilsDashboard[], UstensilsDashboard[]>({
+  immediate: false,
+  watch: false,
+  default: () => [],
+});
 
 await executeUstensilsFetch();
 
@@ -46,20 +37,10 @@ async function handleDeleteButtonOpen(ustensil: UstensilsDashboard) {
   });
   const result = await instance.result;
   if (result) {
-    // Perform delete operation
-    await $fetch(`/api/ustensils/${ustensil.id}`, {
-      method: 'DELETE',
-      async onResponse() {
-        await nuxtApp.callHook('ustensil:deleted', { id: ustensil.id });
-        await executeUstensilsFetch();
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response.statusText,
-        });
-      },
-    });
+    await useUstensilsRequest().delete(ustensil.id, { onResponse: async () => {
+      await nuxtApp.callHook('ustensil:deleted', { id: ustensil.id });
+      await executeUstensilsFetch();
+    } });
   }
 }
 

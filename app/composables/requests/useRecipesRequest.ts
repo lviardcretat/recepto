@@ -3,7 +3,7 @@ import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Recipe } from '~~/server/utils/drizzleUtils';
 import type { RecipeDetail } from '~/types/recipeCard';
 import type { RecipesDashboard } from '~/types/recipesDashboard';
-import type { RecipeWithLessData } from '~/types/filter';
+import type { FethRecipesQuery, RecipeWithLessData } from '~/types/filter';
 import type { RecipeCreation } from '~/schemas/creation/recipe';
 import { ApiResource, ApiEndpoint, HttpMethod } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
@@ -100,18 +100,12 @@ export function useRecipesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to array of filtered recipes
      */
-    fetchFiltered(params: RecipesFilterParams, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipeWithLessData[]> {
+    fetchFiltered(query: FethRecipesQuery, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipeWithLessData[]> {
       return fetchy<RecipeWithLessData[]>(
         `/${ApiResource.RECIPES}/${ApiEndpoint.FILTERED}`,
         {
           method: HttpMethod.GET,
-          query: {
-            ingredients: JSON.stringify(params.ingredients),
-            ustensils: JSON.stringify(params.ustensils),
-            allergens: params.allergens,
-            seasonalRecipes: params.seasonalRecipes.toString(),
-            recipeCategoryId: params.recipeCategoryId.toString(),
-          },
+          query: query,
           ...options,
         },
       );
@@ -124,11 +118,13 @@ export function useRecipesRequest() {
     /**
      * Get all recipes with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Recipe[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<Recipe[]>) {
-      return useFetchy<Recipe[]>(
+    getAll<DataTransformT = Recipe[], DefaultT = undefined>(options?: UseFetchOptions<Recipe[], DataTransformT, never, DefaultT>) {
+      return useFetchy<Recipe[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -137,12 +133,14 @@ export function useRecipesRequest() {
     /**
      * Get recipe by ID with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipeDetail)
+     * @template DefaultT - The type of the default value
      * @param id - Recipe ID (can be reactive)
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getById(id: MaybeRef<number>, options?: UseFetchOptions<RecipeDetail>) {
-      return useFetchy<RecipeDetail>(
+    getById<DataTransformT = RecipeDetail, DefaultT = undefined>(id: MaybeRef<number>, options?: UseFetchOptions<RecipeDetail, DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipeDetail, DataTransformT, never, DefaultT>(
         () => `/${ApiResource.RECIPES}/${unref(id)}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -151,12 +149,14 @@ export function useRecipesRequest() {
     /**
      * Get recipe by ID for editing with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipeWithAllData)
+     * @template DefaultT - The type of the default value
      * @param id - Recipe ID (can be reactive)
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getByIdForEdit(id: MaybeRef<number>, options?: UseFetchOptions<RecipeWithAllData>) {
-      return useFetchy<RecipeWithAllData>(
+    getByIdForEdit<DataTransformT = RecipeWithAllData, DefaultT = undefined>(id: MaybeRef<number>, options?: UseFetchOptions<RecipeWithAllData, DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipeWithAllData, DataTransformT, never, DefaultT>(
         () => `/${ApiResource.RECIPES}/${unref(id)}?edit=true`,
         { method: HttpMethod.GET, ...options },
       );
@@ -165,11 +165,13 @@ export function useRecipesRequest() {
     /**
      * Get recipes dashboard data with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipesDashboard[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getDashboard(options?: UseFetchOptions<RecipesDashboard[]>) {
-      return useFetchy<RecipesDashboard[]>(
+    getDashboard<DataTransformT = RecipesDashboard[], DefaultT = undefined>(options?: UseFetchOptions<RecipesDashboard[], DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipesDashboard[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES}/${ApiEndpoint.DASHBOARD}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -178,22 +180,18 @@ export function useRecipesRequest() {
     /**
      * Get filtered recipes with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to RecipeWithLessData[])
+     * @template DefaultT - The type of the default value
      * @param params - Filter parameters
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getFiltered(params: RecipesFilterParams, options?: UseFetchOptions<RecipeWithLessData[]>) {
-      return useFetchy<RecipeWithLessData[]>(
+    getFiltered<DataTransformT = RecipeWithLessData[], DefaultT = undefined>(query: FethRecipesQuery, options?: UseFetchOptions<RecipeWithLessData[], DataTransformT, never, DefaultT>) {
+      return useFetchy<RecipeWithLessData[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES}/${ApiEndpoint.FILTERED}`,
         {
           method: HttpMethod.GET,
-          query: {
-            ingredients: JSON.stringify(params.ingredients),
-            ustensils: JSON.stringify(params.ustensils),
-            allergens: params.allergens,
-            seasonalRecipes: params.seasonalRecipes.toString(),
-            recipeCategoryId: params.recipeCategoryId.toString(),
-          },
+          query: query,
           ...options,
         },
       );

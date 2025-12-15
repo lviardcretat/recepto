@@ -1,8 +1,7 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
-import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { FoodType } from '~~/server/utils/drizzleUtils';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
-import { fetchy, useFetchy, useCachedData } from './useAPI';
+import { fetchy, useFetchy } from './useAPI';
 
 /**
  * Composable for food types API operations
@@ -17,13 +16,12 @@ export function useFoodTypesRequest() {
     /**
      * Fetch all food types imperatively
      * Use in event handlers, callOnce, or any non-SSR context
-     * @param options - Optional fetch options
      * @returns Promise resolving to array of food types
      */
-    fetchAll(options?: NitroFetchOptions<NitroFetchRequest>): Promise<FoodType[]> {
+    fetchAll(): Promise<FoodType[]> {
       return fetchy<FoodType[]>(
         `/${ApiResource.FOOD_TYPES}/${ApiEndpoint.ALL}`,
-        { method: HttpMethod.GET, ...options },
+        { method: HttpMethod.GET },
       );
     },
 
@@ -34,32 +32,15 @@ export function useFoodTypesRequest() {
     /**
      * Get all food types with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to FoodType[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<FoodType[]>) {
-      return useFetchy<FoodType[]>(
+    getAll<DataTransformT = FoodType[], DefaultT = undefined>(options?: UseFetchOptions<FoodType[], DataTransformT, never, DefaultT>) {
+      return useFetchy<FoodType[], DataTransformT, never, DefaultT>(
         `/${ApiResource.FOOD_TYPES}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
-      );
-    },
-
-    // ============================================
-    // GET - Cached (useCachedData)
-    // ============================================
-
-    /**
-     * Get all food types with persistent cache
-     * Use for data that needs to be cached and reused across components
-     * @param key - Optional cache key (defaults to 'foodTypes-all')
-     * @param options - Optional async data options
-     * @returns Nuxt useAsyncData composable result
-     */
-    getAllCached(key?: string, options?: AsyncDataOptions<FoodType[]>) {
-      return useCachedData<FoodType[]>(
-        key ?? 'foodTypes-all',
-        `/${ApiResource.FOOD_TYPES}/${ApiEndpoint.ALL}`,
-        { fetchOptions: { method: HttpMethod.GET }, ...options },
       );
     },
   };

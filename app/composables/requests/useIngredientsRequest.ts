@@ -87,11 +87,13 @@ export function useIngredientsRequest() {
     /**
      * Get all ingredients with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Ingredient[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<Ingredient[]>) {
-      return useFetchy<Ingredient[]>(
+    getAll<DataTransformT = Ingredient[], DefaultT = undefined>(options?: UseFetchOptions<Ingredient[], DataTransformT, never, DefaultT>) {
+      return useFetchy<Ingredient[], DataTransformT, never, DefaultT>(
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -100,12 +102,14 @@ export function useIngredientsRequest() {
     /**
      * Get ingredient by ID with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Ingredient)
+     * @template DefaultT - The type of the default value
      * @param id - Ingredient ID (can be reactive)
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getById(id: MaybeRef<number>, options?: UseFetchOptions<Ingredient>) {
-      return useFetchy<Ingredient>(
+    getById<DataTransformT = Ingredient, DefaultT = undefined>(id: MaybeRef<number>, options?: UseFetchOptions<Ingredient, DataTransformT, never, DefaultT>) {
+      return useFetchy<Ingredient, DataTransformT, never, DefaultT>(
         () => `/${ApiResource.INGREDIENTS}/${unref(id)}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -114,11 +118,13 @@ export function useIngredientsRequest() {
     /**
      * Get ingredients dashboard data with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to IngredientsDashboard[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getDashboard(options?: UseFetchOptions<IngredientsDashboard[]>) {
-      return useFetchy<IngredientsDashboard[]>(
+    getDashboard<DataTransformT = IngredientsDashboard[], DefaultT = undefined>(options?: UseFetchOptions<IngredientsDashboard[], DataTransformT, never, DefaultT>) {
+      return useFetchy<IngredientsDashboard[], DataTransformT, never, DefaultT>(
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.DASHBOARD}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -127,11 +133,13 @@ export function useIngredientsRequest() {
     /**
      * Get seasonal ingredients data with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to SeasonalDataRecord[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getSeasonals(options?: UseFetchOptions<SeasonalDataRecord[]>) {
-      return useFetchy<SeasonalDataRecord[]>(
+    getSeasonals<DataTransformT = SeasonalDataRecord[], DefaultT = undefined>(options?: UseFetchOptions<SeasonalDataRecord[], DataTransformT, never, DefaultT>) {
+      return useFetchy<SeasonalDataRecord[], DataTransformT, never, DefaultT>(
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.SEASONALS}`,
         { method: HttpMethod.GET, ...options },
       );

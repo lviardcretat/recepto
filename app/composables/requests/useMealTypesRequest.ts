@@ -34,11 +34,13 @@ export function useMealTypesRequest() {
     /**
      * Get all meal types with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to MealType[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<MealType[]>) {
-      return useFetchy<MealType[]>(
+    getAll<DataTransformT = MealType[], DefaultT = undefined>(options?: UseFetchOptions<MealType[], DataTransformT, never, DefaultT>) {
+      return useFetchy<MealType[], DataTransformT, never, DefaultT>(
         `/${ApiResource.MEAL_TYPES}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );

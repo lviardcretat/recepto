@@ -4,35 +4,27 @@ import type { RecipeSearched } from '~/types/search';
 
 const nuxtApp = useNuxtApp();
 const searchValue = ref({});
-const { data, execute, refresh } = useFetch('/api/recipesCategories/search', {
-  method: 'GET',
-  query: {
-    name: searchValue,
-  },
-  immediate: false,
-  default: () => [],
-  watch: false,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (recipesCategoriesRecipes: RecipeSearched[]) => {
-    return recipesCategoriesRecipes.map((recipesCategory) => {
-      return {
-        id: recipesCategory.name.toLowerCase(),
-        label: recipesCategory.name,
-        slot: 'recipesCategory' as const,
-        items: recipesCategory.recipes.map(recipe => ({
-          label: recipe.name,
-          slot: 'recipe',
-          to: `/recipes/${recipesCategory.id}`,
-        })),
-      };
-    });
-  },
-});
+const { data, execute, refresh } = await useRecipesCategoriesRequest().getSearch(
+  { name: searchValue },
+  {
+    watch: false,
+    immediate: false,
+    default: () => [],
+    transform: (recipesCategoriesRecipes: RecipeSearched[]) => {
+      return recipesCategoriesRecipes.map((recipesCategory) => {
+        return {
+          id: recipesCategory.name.toLowerCase(),
+          label: recipesCategory.name,
+          slot: 'recipesCategory' as const,
+          items: recipesCategory.recipes.map(recipe => ({
+            label: recipe.name,
+            slot: 'recipe',
+            to: `/recipes/${recipesCategory.id}`,
+          })),
+        };
+      });
+    },
+  });
 
 await execute();
 

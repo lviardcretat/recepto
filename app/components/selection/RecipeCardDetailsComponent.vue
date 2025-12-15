@@ -1,23 +1,9 @@
 <script lang="ts" setup>
-import type { RecipeDetail } from '~/types/recipeCard';
-
 const props = defineProps<{
   recipeId: number;
 }>();
 
-const { data: recipeFetch } = await useFetch<RecipeDetail>(
-  `/api/recipesCategories/recipes/${props.recipeId}`,
-  {
-    method: 'GET',
-    watch: false,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  },
-);
+const { data: recipeFetch } = await useRecipesRequest().getById(props.recipeId, { watch: false });
 
 const recipe = recipeFetch.value;
 const ingredients = ref(

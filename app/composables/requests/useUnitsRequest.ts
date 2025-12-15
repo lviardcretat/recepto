@@ -34,11 +34,13 @@ export function useUnitsRequest() {
     /**
      * Get all units with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to Unit[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<Unit[]>) {
-      return useFetchy<Unit[]>(
+    getAll<DataTransformT = Unit[], DefaultT = undefined>(options?: UseFetchOptions<Unit[], DataTransformT, never, DefaultT>) {
+      return useFetchy<Unit[], DataTransformT, never, DefaultT>(
         `/${ApiResource.UNITS}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );

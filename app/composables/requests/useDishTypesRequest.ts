@@ -34,11 +34,13 @@ export function useDishTypesRequest() {
     /**
      * Get all dish types with SSR support
      * Use for SSR data loading in components
+     * @template DataTransformT - The type of data after transform (defaults to DishType[])
+     * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getAll(options?: UseFetchOptions<DishType[]>) {
-      return useFetchy<DishType[]>(
+    getAll<DataTransformT = DishType[], DefaultT = undefined>(options?: UseFetchOptions<DishType[], DataTransformT, never, DefaultT>) {
+      return useFetchy<DishType[], DataTransformT, never, DefaultT>(
         `/${ApiResource.DISH_TYPES}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
       );

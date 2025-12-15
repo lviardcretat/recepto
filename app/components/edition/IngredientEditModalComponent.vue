@@ -2,6 +2,7 @@
 import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
 import type { IngredientCreation } from '~/schemas/creation/ingredient';
+import type { FoodType } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   ingredientId: number;
@@ -20,35 +21,17 @@ const schema = ingredientCreationSchema;
 const disabledSubmit = ref(false);
 
 // Fetch ingredient data
-const { data: ingredient, error } = await useFetch(`/api/ingredients/${props.ingredientId}`, {
-  method: 'GET',
-  watch: false,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-});
+const { data: ingredient, error } = await useIngredientsRequest().getById(props.ingredientId, { watch: false });
 
 if (error.value || !ingredient.value) {
   emit('close', false);
 }
 
 // Fetch food types
-const { data: foodTypes } = await useFetch('/api/foodTypes/all', {
-  method: 'GET',
+const { data: foodTypes } = await useFoodTypesRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
   watch: false,
-  default: () => [] satisfies SelectMenuItem[],
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (foodTypes) => {
-    return mapSelectMenuItemsUtils(foodTypes);
-  },
+  default: () => [],
+  transform: (foodTypes: FoodType[]) => mapSelectMenuItemsUtils(foodTypes),
 });
 
 // Initialize form state with fetched data
@@ -66,27 +49,15 @@ async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch(`/api/ingredients/${props.ingredientId}`, {
-      method: 'PUT',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse(response) {
-        await nuxtApp.callHook('ingredient:updated', {
-          id: props.ingredientId,
-        });
-        toast.add({
-          title: t('formEdition.ingredient.updatedToast', { ingredientName: event.data.name }),
-        });
-        emit('close', true);
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response.statusText,
-        });
-      },
-    });
+    await useIngredientsRequest().update(props.ingredientId, event.data, { onResponse: async () => {
+      await nuxtApp.callHook('ingredient:updated', {
+        id: props.ingredientId,
+      });
+      toast.add({
+        title: t('formEdition.ingredient.updatedToast', { ingredientName: event.data.name }),
+      });
+      emit('close', true);
+    } });
   }
   finally {
     finish();
