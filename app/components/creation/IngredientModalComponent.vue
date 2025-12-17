@@ -103,6 +103,6 @@ async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
   </UForm>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 </style>

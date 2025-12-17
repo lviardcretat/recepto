@@ -31,7 +31,7 @@
   </UDashboardGroup>
 </template>
 
-<style>
+<style scoped>
   button:not(*:disabled) > .inherit {
     width: inherit;
   }
