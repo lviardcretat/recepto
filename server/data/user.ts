@@ -1,10 +1,10 @@
 import type { User } from '../utils/drizzleUtils';
 
 export async function findUserByUsername(username: string): Promise<User | undefined> {
-  const user = await useDrizzle()
+  const user = await db
     .select()
-    .from(tables.user)
-    .where(eq(tables.user.username, username))
+    .from(schema.user)
+    .where(eq(schema.user.username, username))
     .get();
   return user;
 }
@@ -16,8 +16,8 @@ export async function createUser(username: string, password: string): Promise<Us
     password: hashedPassword,
     isAnonymous: false,
   };
-  const userCreated: User = await useDrizzle()
-    .insert(tables.user)
+  const userCreated: User = await db
+    .insert(schema.user)
     .values(userInsert)
     .returning()
     .get();

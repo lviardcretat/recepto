@@ -28,27 +28,15 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch('/api/ustensils', {
-      method: 'POST',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse(response) {
-        await nuxtApp.callHook('ustensil:created', {
-          id: response.response._data.id,
-        });
-        emit('closeModal');
-        toast.add({
-          title: t('formCreation.ustensil.createdToast', { ustensilName: event.data.name }),
-        });
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useUstensilsRequest().create(event.data, { onResponse: async (response) => {
+      await nuxtApp.callHook('ustensil:created', {
+        id: response.response._data.id,
+      });
+      emit('closeModal');
+      toast.add({
+        title: t('formCreation.ustensil.createdToast', { ustensilName: event.data.name }),
+      });
+    } });
   }
   finally {
     finish();
@@ -80,19 +68,10 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
           />
         </div>
       </template>
-      <div class="flex flex-col gap-4">
-        <UFormField
-          :label="$t('formCreation.name')"
-          name="name"
-        >
-          <UInput
-            v-model="state.name"
-            type="text"
-            :placeholder="$t('formCreation.ustensil.nameExample')"
-            class="w-full"
-          />
-        </UFormField>
-      </div>
+      <FormUstensilFields
+        v-model="state"
+        :disabled="disabledSubmit"
+      />
       <template #footer>
         <div class="flex justify-between">
           <UButton

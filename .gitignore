@@ -24,7 +24,7 @@ logs
 .env.*
 !.env.example
 
-# BDD
+# DB
 *.db
 
 # Docker / Devcontainer

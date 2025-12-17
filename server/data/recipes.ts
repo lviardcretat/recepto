@@ -14,11 +14,9 @@ import {
   recipeSelectType,
 } from '../utils/filterUtils';
 import { intersect } from 'drizzle-orm/sqlite-core';
-import type {
-  RecipeWithLessData,
-  RecipesCategoriesWithLessData,
-} from '~/types/filter';
-import type { RecipeDetail } from '~/types/recipeCard';
+import type { IIRecipeWithLessData, IIRecipeDetail } from '~/types/recipe/detail';
+import type { IIRecipesDashboard } from '~/types/recipe/dashboard';
+import type { IIRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
 export async function postRecipe(
   name: string,
@@ -46,8 +44,8 @@ export async function postRecipe(
     recipesCategoryId: recipesCategoryId,
     createdById: createdById,
   };
-  const recipe = await useDrizzle()
-    .insert(tables.recipe)
+  const recipe = await db
+    .insert(schema.recipe)
     .values(recipeInsert)
     .returning()
     .get();
@@ -57,8 +55,8 @@ export async function postRecipe(
       recipeId: recipe.id,
       ustensilId: ustensilId,
     };
-    await useDrizzle()
-      .insert(tables.recipeToUstensil)
+    await db
+      .insert(schema.recipeToUstensil)
       .values(recipeToUstensil);
   }
   if (allergensIds) {
@@ -67,8 +65,8 @@ export async function postRecipe(
         recipeId: recipe.id,
         allergenId: allergensId,
       };
-      await useDrizzle()
-        .insert(tables.allergenToRecipe)
+      await db
+        .insert(schema.allergenToRecipe)
         .values(allergenToRecipe);
     }
   }
@@ -76,15 +74,40 @@ export async function postRecipe(
 }
 
 export async function getRecipes(): Promise<Recipe[]> {
-  const recipes: Recipe[] = await useDrizzle()
+  const recipes: Recipe[] = await db
     .select()
-    .from(tables.recipe)
+    .from(schema.recipe)
     .all();
   return recipes;
 }
 
-export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
-  const recipe: RecipeDetail | undefined = await useDrizzle().query.recipe.findFirst({
+export async function getRecipesWithRecipesCategoriesDashboard(userId: number): Promise<IRecipesDashboard[]> {
+  const recipes: IRecipesDashboard[] = await db.query.recipe.findMany({
+    columns: {
+      id: true,
+      name: true,
+      recipesCategoryId: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    with: {
+      recipesCategory: {
+        columns: {
+          id: true,
+          dishTypeId: true,
+          name: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+    where: (recipes, { eq }) => eq(recipes.createdById, userId),
+  });
+  return recipes;
+}
+
+export async function getRecipe(id: number): Promise<IRecipeDetail | undefined> {
+  const recipe: IRecipeDetail | undefined = await db.query.recipe.findFirst({
     columns: {
       id: true,
       name: true,
@@ -159,23 +182,23 @@ export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
 
 export async function getRecipesWithoutFilter(
   recipeCategoryId: number,
-): Promise<RecipeWithLessData[]> {
-  const recipes = await useDrizzle()
-    .select({ ...recipeSelectType, ...{ createdBy: tables.user.username } })
-    .from(tables.recipe)
+): Promise<IRecipeWithLessData[]> {
+  const recipes = await db
+    .select({ ...recipeSelectType, ...{ createdBy: schema.user.username } })
+    .from(schema.recipe)
     .leftJoin(
-      tables.recipesCategory,
-      eq(tables.recipesCategory.id, tables.recipe.recipesCategoryId),
+      schema.recipesCategory,
+      eq(schema.recipesCategory.id, schema.recipe.recipesCategoryId),
     )
-    .leftJoin(tables.user, eq(tables.user.id, tables.recipe.createdById))
-    .where(eq(tables.recipesCategory.id, recipeCategoryId))
+    .leftJoin(schema.user, eq(schema.user.id, schema.recipe.createdById))
+    .where(eq(schema.recipesCategory.id, recipeCategoryId))
     .all();
   return recipes;
 }
 
 export async function getRecipesFiltered(
   query: RecipesFilter,
-): Promise<RecipeWithLessData[]> {
+): Promise<IRecipeWithLessData[]> {
   const ingredientsIds = query.ingredients;
   const ustensilsIds = query.ustensils;
   const seasonalRecipes = query.seasonalRecipes === true;
@@ -214,7 +237,7 @@ export async function getRecipesFiltered(
     await createAllergenSubQuery(allergensIds, recipeCategoryId),
     await createSeasonalRecipeSubQuery(seasonalRecipes, recipeCategoryId),
   ];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const filters: any[] = [];
 
   for (const subQuery of subQueries) {
@@ -227,20 +250,127 @@ export async function getRecipesFiltered(
       filters[0],
       filters[1],
       ...filters.slice(2),
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 2) {
     recipes = (await intersect(
       filters[0],
       filters[1],
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 1) {
     recipes = await filters[0]
     // Dynamic query building to instantiate several where in a single query
       .$dynamic()
-      .groupBy(tables.recipe.id)
+      .groupBy(schema.recipe.id)
       .all();
   }
   return recipes;
+}
+
+export async function updateRecipe(
+  id: number,
+  data: Partial<RecipeInsert>,
+): Promise<Recipe> {
+  const updatedRecipe: Recipe = await db
+    .update(schema.recipe)
+    .set(data)
+    .where(eq(schema.recipe.id, id))
+    .returning()
+    .get();
+  return updatedRecipe;
+}
+
+export async function deleteRecipe(id: number): Promise<void> {
+  // Delete related data first
+  await db
+    .delete(schema.recipeIngredient)
+    .where(eq(schema.recipeIngredient.recipeId, id));
+
+  await db
+    .delete(schema.recipeToUstensil)
+    .where(eq(schema.recipeToUstensil.recipeId, id));
+
+  await db
+    .delete(schema.allergenToRecipe)
+    .where(eq(schema.allergenToRecipe.recipeId, id));
+
+  await db
+    .delete(schema.sequence)
+    .where(eq(schema.sequence.recipeId, id));
+
+  // Finally delete the recipe
+  await db
+    .delete(schema.recipe)
+    .where(eq(schema.recipe.id, id));
+}
+
+export async function getRecipeBasic(id: number): Promise<Recipe | undefined> {
+  const recipe: Recipe | undefined = await db
+    .select()
+    .from(schema.recipe)
+    .where(eq(schema.recipe.id, id))
+    .get();
+  return recipe;
+}
+
+export async function getRecipeWithAllData(id: number): Promise<any> {
+  const recipe = await db.query.recipe.findFirst({
+    columns: {
+      id: true,
+      name: true,
+      description: true,
+      tips: true,
+      peopleNumber: true,
+      preparationTime: true,
+      cookingTime: true,
+      restTime: true,
+      seasonId: true,
+      recipesCategoryId: true,
+      createdById: true,
+    },
+    with: {
+      ingredients: {
+        columns: {
+          ingredientId: true,
+          quantity: true,
+          unitId: true,
+        },
+      },
+      sequences: {
+        columns: {
+          id: true,
+          name: true,
+          extra: true,
+        },
+        orderBy: sequence => sequence.id,
+      },
+      allergens: {
+        columns: {
+          allergenId: true,
+        },
+      },
+      ustensils: {
+        columns: {
+          ustensilId: true,
+        },
+      },
+    },
+    where: (recipe, { eq }) => eq(recipe.id, id),
+  });
+
+  if (!recipe) {
+    return undefined;
+  }
+
+  // Transform the data to match the expected format
+  return {
+    ...recipe,
+    allergens: recipe.allergens.map(a => a.allergenId),
+    ustensils: recipe.ustensils.map(u => u.ustensilId),
+    sequences: recipe.sequences.map(s => ({
+      name: s.name,
+      extra: s.extra,
+    })),
+  };
 }

@@ -1,53 +1,8 @@
-import * as userSchema from '../database/schema/user';
-import * as foodTypeSchema from '../database/schema/foodType';
-import * as ingredientSchema from '../database/schema/ingredient';
-import * as recipesCategorySchema from '../database/schema/recipesCategory';
-import * as recipeSchema from '../database/schema/recipe';
-import * as recipeIngredientSchema from '../database/schema/recipeIngredient';
-import * as sequenceSchema from '../database/schema/sequence';
-import * as ustensilSchema from '../database/schema/ustensil';
-import * as seasonSchema from '../database/schema/season';
-import * as unitSchema from '../database/schema/unit';
-import * as mealTypeSchema from '../database/schema/mealType';
-import * as dishTypeSchema from '../database/schema/dishType';
-import * as allergenSchema from '../database/schema/allergen';
-import * as allergenToRecipeSchema from '../database/schema/allergenToRecipe';
-import * as mealTypeToRecipeCategorySchema from '../database/schema/mealTypeToRecipeCategory';
-import * as recipeToUstensilSchema from '../database/schema/recipeToUstensil';
+/* eslint-disable @typescript-eslint/consistent-type-imports */
+import * as schema from 'hub:db:schema';
 import 'dotenv/config';
-/* Uncomment this for local bdd
-import { drizzle } from 'drizzle-orm/libsql'; */
-import { drizzle } from 'drizzle-orm/d1';
 
-export { sql, eq, and, or } from 'drizzle-orm'; // Comment this for local bdd
-
-export const schema = {
-  ...userSchema,
-  ...foodTypeSchema,
-  ...ingredientSchema,
-  ...recipesCategorySchema,
-  ...recipeSchema,
-  ...recipeIngredientSchema,
-  ...sequenceSchema,
-  ...ustensilSchema,
-  ...seasonSchema,
-  ...unitSchema,
-  ...mealTypeSchema,
-  ...dishTypeSchema,
-  ...allergenSchema,
-  ...allergenToRecipeSchema,
-  ...mealTypeToRecipeCategorySchema,
-  ...recipeToUstensilSchema,
-};
-
-export const tables = schema;
-
-export function useDrizzle() {
-  // Comment this for local bdd
-  return drizzle(hubDatabase(), { schema, casing: 'snake_case' });
-  /* Uncomment this for local bdd
-  return drizzle(process.env.DB_FILE_NAME!, { schema, casing: 'snake_case' }); */
-}
+export { sql, eq, and, or } from 'drizzle-orm';
 
 export type User = typeof schema.user.$inferSelect;
 export type UserInsert = typeof schema.user.$inferInsert;

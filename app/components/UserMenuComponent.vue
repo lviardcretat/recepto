@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem } from '@nuxt/ui';
+import { createUserMenuConfig } from '~/config/UserMenuConfig';
 
 defineProps<{
   collapsed?: boolean;
@@ -7,49 +8,11 @@ defineProps<{
 
 const { t } = useI18n();
 const { user, clear } = useUserSession();
-const items = computed(() => {
-  return [
-    [
-      {
-        label: t('mainSlideOver.settings'),
-        icon: 'i-lucide-settings',
-        disabled: true,
-      },
-      {
-        label: t('mainSlideOver.dashboard'),
-        icon: 'i-lucide-layout-dashboard',
-        to: '/user/dashboard',
-        disabled: true,
-      },
-    ],
-    [
-      {
-        label: t('mainSlideOver.github'),
-        icon: 'i-lucide-github',
-        to: 'https://github.com/lviardcretat/recepto',
-        target: '_blank',
-      },
-      {
-        label: t('mainSlideOver.discord'),
-        icon: 'ic:baseline-discord',
-        to: 'https://discord.gg/vF7FbDpDwt',
-        target: '_blank',
-      },
-    ],
-    [
-      user.value?.isAnonymous
-        ? {
-            label: t('auth.login.title'),
-            icon: 'i-lucide-log-in',
-            onSelect: (_event: Event) => redirectToLoginPage(),
-          }
-        : {
-            label: t('mainSlideOver.logout'),
-            icon: 'i-lucide-log-out',
-            onSelect: (_event: Event) => signout(),
-          },
-    ],
-  ] satisfies DropdownMenuItem[][];
+
+const items = createUserMenuConfig(t, {
+  isAnonymous: user.value?.isAnonymous ?? false,
+  redirectToLoginPage,
+  signout,
 });
 
 async function signout() {

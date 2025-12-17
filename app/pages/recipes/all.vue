@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RecipesCategoriesWithLessData } from '~/types/filter';
+import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
 const nuxtApp = useNuxtApp();
 const selectMenuStates = useFilterSelectMenuStates();
@@ -12,7 +12,7 @@ await callOnce(async () => {
     selectMenuStates.value,
     iconsGridStates.value,
     switchStates.value,
-  )) as RecipesCategoriesWithLessData[];
+  )) as IRecipesCategoriesWithLessData[];
 });
 
 function isData() {
@@ -28,7 +28,7 @@ nuxtApp.hook('recipesCategory:created', async () => {
     selectMenuStates.value,
     iconsGridStates.value,
     switchStates.value,
-  )) as RecipesCategoriesWithLessData[];
+  )) as IRecipesCategoriesWithLessData[];
 });
 
 nuxtApp.hook('recipe:created', async () => {
@@ -36,7 +36,7 @@ nuxtApp.hook('recipe:created', async () => {
     selectMenuStates.value,
     iconsGridStates.value,
     switchStates.value,
-  )) as RecipesCategoriesWithLessData[];
+  )) as IRecipesCategoriesWithLessData[];
 });
 </script>
 

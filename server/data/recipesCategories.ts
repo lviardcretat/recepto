@@ -13,11 +13,8 @@ import {
   recipeCategorySelectType,
 } from '../utils/filterUtils';
 import { count } from 'drizzle-orm';
-import type {
-  ItemsIdsWantedOrNot,
-  RecipesCategoriesWithLessData,
-} from '~/types/filter';
-import type { RecipeSearched } from '~/types/search';
+import type { IIItemsIdsWantedOrNot } from '~/types/filter/items';
+import type { IIRecipesCategoriesWithLessData, IIRecipeSearched } from '~/types/recipesCategory/detail';
 
 export async function postRecipesCategory(
   name: string,
@@ -29,8 +26,8 @@ export async function postRecipesCategory(
     dishTypeId: dishTypeId,
     createdById: createdById,
   };
-  const recipeCategoryCreated: RecipesCategory = await useDrizzle()
-    .insert(tables.recipesCategory)
+  const recipeCategoryCreated: RecipesCategory = await db
+    .insert(schema.recipesCategory)
     .values(recipesCategoryInsert)
     .returning()
     .get();
@@ -38,33 +35,33 @@ export async function postRecipesCategory(
 }
 
 export async function getRecipesCategories(): Promise<RecipesCategory[]> {
-  const recipesCategories: RecipesCategory[] = await useDrizzle()
+  const recipesCategories: RecipesCategory[] = await db
     .select()
-    .from(tables.recipesCategory)
-    .orderBy(tables.recipesCategory.name)
+    .from(schema.recipesCategory)
+    .orderBy(schema.recipesCategory.name)
     .all();
   return recipesCategories;
 }
 
-export async function getRecipesCategoriesWithRecipeCount(): Promise<RecipesCategoriesWithLessData[]> {
-  const recipesCategories: RecipesCategoriesWithLessData[] = await useDrizzle()
+export async function getRecipesCategoriesWithRecipeCount(): Promise<IRecipesCategoriesWithLessData[]> {
+  const recipesCategories: IRecipesCategoriesWithLessData[] = await db
     .select({
-      id: tables.recipesCategory.id,
-      name: tables.recipesCategory.name,
-      count: count(tables.recipe.id),
+      id: schema.recipesCategory.id,
+      name: schema.recipesCategory.name,
+      count: count(schema.recipe.id),
     })
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
-    .groupBy(tables.recipesCategory.id)
+    .groupBy(schema.recipesCategory.id)
     .all();
   return recipesCategories;
 }
 
-export async function getRecipesCategoriesAndRecipesNames(): Promise<RecipeSearched[]> {
-  const recipesCategoriesRecipes: RecipeSearched[] = await useDrizzle().query.recipesCategory.findMany({
+export async function getRecipesCategoriesAndRecipesNames(): Promise<IRecipeSearched[]> {
+  const recipesCategoriesRecipes: IRecipeSearched[] = await db.query.recipesCategory.findMany({
     columns: {
       id: true,
       name: true,
@@ -84,12 +81,12 @@ export async function getRecipesCategoriesAndRecipesNames(): Promise<RecipeSearc
 export async function getRecipesCategoryName(
   id: number,
 ): Promise<{ name: string } | undefined> {
-  const recipesCategory: { name: string } | undefined = await useDrizzle()
+  const recipesCategory: { name: string } | undefined = await db
     .select({
-      name: tables.recipesCategory.name,
+      name: schema.recipesCategory.name,
     })
-    .from(tables.recipesCategory)
-    .where(eq(tables.ingredient.id, id))
+    .from(schema.recipesCategory)
+    .where(eq(schema.recipesCategory.id, id))
     .get();
   return recipesCategory;
 }
@@ -97,24 +94,43 @@ export async function getRecipesCategoryName(
 export async function getRecipesCategory(
   id: number,
 ): Promise<RecipesCategory | undefined> {
-  const recipesCategory: RecipesCategory | undefined = await useDrizzle()
+  const recipesCategory: RecipesCategory | undefined = await db
     .select()
-    .from(tables.recipesCategory)
-    .where(eq(tables.ingredient.id, id))
+    .from(schema.recipesCategory)
+    .where(eq(schema.recipesCategory.id, id))
     .get();
   return recipesCategory;
 }
 
+export async function updateRecipesCategory(
+  id: number,
+  data: Partial<RecipesCategoryInsert>,
+): Promise<RecipesCategory> {
+  const updatedRecipesCategory: RecipesCategory = await db
+    .update(schema.recipesCategory)
+    .set(data)
+    .where(eq(schema.recipesCategory.id, id))
+    .returning()
+    .get();
+  return updatedRecipesCategory;
+}
+
+export async function deleteRecipesCategory(id: number): Promise<void> {
+  await db
+    .delete(schema.recipesCategory)
+    .where(eq(schema.recipesCategory.id, id));
+}
+
 export async function getRecipesCategoriesFiltered(
   query: RecipesCategoriesFilter,
-): Promise<RecipesCategoriesWithLessData[]> {
-  const ingredientsIds: ItemsIdsWantedOrNot = query.ingredients;
-  const ustensilsIds: ItemsIdsWantedOrNot = query.ustensils;
-  const mealTypesIds: ItemsIdsWantedOrNot = query.mealTypes ?? {
+): Promise<IRecipesCategoriesWithLessData[]> {
+  const ingredientsIds: IItemsIdsWantedOrNot = query.ingredients;
+  const ustensilsIds: IItemsIdsWantedOrNot = query.ustensils;
+  const mealTypesIds: IItemsIdsWantedOrNot = query.mealTypes ?? {
     wanted: [],
     notWanted: [],
   };
-  const dishTypesIds: ItemsIdsWantedOrNot = query.dishTypes ?? {
+  const dishTypesIds: IItemsIdsWantedOrNot = query.dishTypes ?? {
     wanted: [],
     notWanted: [],
   };
@@ -130,7 +146,7 @@ export async function getRecipesCategoriesFiltered(
     return await getRecipesCategoriesWithRecipeCount();
   }
 
-  let recipesCategories: RecipesCategoriesWithLessData[] = [];
+  let recipesCategories: IRecipesCategoriesWithLessData[] = [];
   const subQueries = [
     createMealTypeSubQuery(mealTypesIds),
     createDishTypeSubQuery(dishTypesIds),
@@ -151,71 +167,71 @@ export async function getRecipesCategoriesFiltered(
       filters[0],
       filters[1],
       ...filters.slice(2),
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 2) {
     recipesCategories = (await intersect(
       filters[0],
       filters[1],
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 1) {
     recipesCategories = await filters[0]
     // Dynamic query building to instantiate several where in a single query
       .$dynamic()
-      .groupBy(tables.recipesCategory.id)
+      .groupBy(schema.recipesCategory.id)
       .all();
   }
   return recipesCategories;
 }
 
-function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
+function createMealTypeSubQuery(mealTypesIds: IItemsIdsWantedOrNot) {
   const conditions = createSubQueryConditions(
     mealTypesIds,
-    tables.mealTypeToRecipeCategory.mealTypeId,
+    schema.mealTypeToRecipeCategory.mealTypeId,
   );
   if (!conditions) return null;
-  return useDrizzle()
+  return db
     .select(recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.mealTypeToRecipeCategory,
+      schema.mealTypeToRecipeCategory,
       eq(
-        tables.mealTypeToRecipeCategory.recipeCategoryId,
-        tables.recipesCategory.id,
+        schema.mealTypeToRecipeCategory.recipeCategoryId,
+        schema.recipesCategory.id,
       ),
     )
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
     .innerJoin(
-      tables.mealType,
-      eq(tables.mealType.id, tables.mealTypeToRecipeCategory.mealTypeId),
+      schema.mealType,
+      eq(schema.mealType.id, schema.mealTypeToRecipeCategory.mealTypeId),
     )
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id, tables.mealType.id)
+    .groupBy(schema.recipesCategory.id, schema.mealType.id)
     .having(
       mealTypesIds.wanted.length > 0
-        ? sql`count(distinct ${tables.mealTypeToRecipeCategory.mealTypeId}) > ${mealTypesIds.wanted.length - 1}`
+        ? sql`count(distinct ${schema.mealTypeToRecipeCategory.mealTypeId}) > ${mealTypesIds.wanted.length - 1}`
         : undefined,
     );
 }
 
-function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
-  const conditions = createSubQueryConditions(dishTypesIds, tables.dishType.id);
+function createDishTypeSubQuery(dishTypesIds: IItemsIdsWantedOrNot) {
+  const conditions = createSubQueryConditions(dishTypesIds, schema.dishType.id);
   if (!conditions) return null;
-  return useDrizzle()
+  return db
     .select(recipeCategorySelectType)
-    .from(tables.recipesCategory)
+    .from(schema.recipesCategory)
     .innerJoin(
-      tables.recipe,
-      eq(tables.recipe.recipesCategoryId, tables.recipesCategory.id),
+      schema.recipe,
+      eq(schema.recipe.recipesCategoryId, schema.recipesCategory.id),
     )
     .innerJoin(
-      tables.dishType,
-      eq(tables.dishType.id, tables.recipesCategory.dishTypeId),
+      schema.dishType,
+      eq(schema.dishType.id, schema.recipesCategory.dishTypeId),
     )
     .where(and(...conditions))
-    .groupBy(tables.recipesCategory.id);
+    .groupBy(schema.recipesCategory.id);
 }

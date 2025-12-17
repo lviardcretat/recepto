@@ -1,5 +1,5 @@
 import type { FilterIconsGridStatesType } from '~/enums/filter';
-import type { GeneralIconsGridData, IconsGridItem } from '~/types/filter';
+import type { IGeneralIconsGridData, IIconsGridItem } from '~/types/filter/iconsGrid';
 
 const FilterIconsGridUtils = {
 /**
@@ -7,7 +7,7 @@ const FilterIconsGridUtils = {
  * @param item The modified filter.
  * @returns The modified filter updated.
  */
-  onItemSelected: (item: IconsGridItem): IconsGridItem => {
+  onItemSelected: (item: IIconsGridItem): IIconsGridItem => {
     item.active = true;
     return item;
   },
@@ -17,7 +17,7 @@ const FilterIconsGridUtils = {
  * @param item The modified filter.
  * @returns The modified filter updated.
  */
-  onItemUnselected: (item: IconsGridItem): IconsGridItem => {
+  onItemUnselected: (item: IIconsGridItem): IIconsGridItem => {
     item.active = false;
     return item;
   },
@@ -27,10 +27,10 @@ const FilterIconsGridUtils = {
  * @param items The list of one of the filters.
  * @returns A table of active elements of the list of one of the filters.
  */
-  getActiveIconsGridItemsIds: (items: IconsGridItem[]): number[] => {
-    const truc = items.filter((item: IconsGridItem) => {
+  getActiveIconsGridItemsIds: (items: IIconsGridItem[]): number[] => {
+    const truc = items.filter((item: IIconsGridItem) => {
       return item.active;
-    }).map((item: IconsGridItem) => {
+    }).map((item: IIconsGridItem) => {
       return item.id;
     });
     return truc;
@@ -43,15 +43,15 @@ const FilterIconsGridUtils = {
  * @param dataType The type of the filter list modified.
  * @returns The mapped filter list.
  */
-  mapIconsGridItems: <T extends GeneralIconsGridData>(
+  mapIconsGridItems: <T extends IGeneralIconsGridData>(
     newItems: T[] | null,
-    oldItems: IconsGridItem[],
+    oldItems: IIconsGridItem[],
     dataType: FilterIconsGridStatesType,
-  ): IconsGridItem[] => {
+  ): IIconsGridItem[] => {
     if (newItems == null || newItems.length === 0) {
       return [];
     }
-    const items: IconsGridItem[] = newItems.map((item: T) => {
+    const items: IIconsGridItem[] = newItems.map((item: T) => {
       const existingItem = oldItems.find(oldItem => oldItem.id === item.id);
       return {
         id: item.id,

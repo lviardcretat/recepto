@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { ButtonProps } from '@nuxt/ui';
-import type { PageFeatureProps } from '@nuxt/ui-pro';
+import type { ButtonProps, PageFeatureProps } from '@nuxt/ui';
 
 definePageMeta({
   layout: 'auth',

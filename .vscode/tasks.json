@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "command": "pnpm run dev",
+      "label": "pnpm: run - dev",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": true,
+        "group": "launch"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+  ]
+}

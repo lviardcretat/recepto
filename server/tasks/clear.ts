@@ -5,23 +5,23 @@ export default defineTask({
   },
   async run() {
     console.log('Running DB clear task...');
-    await useDrizzle().delete(tables.mealTypeToRecipeCategory);
-    await useDrizzle().delete(tables.recipeToUstensil);
-    await useDrizzle().delete(tables.recipeIngredient);
-    await useDrizzle().delete(tables.allergenToRecipe);
-    await useDrizzle().delete(tables.allergen);
-    await useDrizzle().delete(tables.mealType);
-    await useDrizzle().delete(tables.dishType);
-    await useDrizzle().delete(tables.allergen);
-    await useDrizzle().delete(tables.season);
-    await useDrizzle().delete(tables.foodType);
-    await useDrizzle().delete(tables.ustensil);
-    await useDrizzle().delete(tables.unit);
-    await useDrizzle().delete(tables.sequence);
-    await useDrizzle().delete(tables.ingredient);
-    await useDrizzle().delete(tables.recipe);
-    await useDrizzle().delete(tables.recipesCategory);
-    await useDrizzle().delete(tables.user);
+    await db.delete(schema.mealTypeToRecipeCategory);
+    await db.delete(schema.recipeToUstensil);
+    await db.delete(schema.recipeIngredient);
+    await db.delete(schema.allergenToRecipe);
+    await db.delete(schema.allergen);
+    await db.delete(schema.mealType);
+    await db.delete(schema.dishType);
+    await db.delete(schema.allergen);
+    await db.delete(schema.season);
+    await db.delete(schema.foodType);
+    await db.delete(schema.ustensil);
+    await db.delete(schema.unit);
+    await db.delete(schema.sequence);
+    await db.delete(schema.ingredient);
+    await db.delete(schema.recipe);
+    await db.delete(schema.recipesCategory);
+    await db.delete(schema.user);
     return { result: 'success' };
   },
 });
