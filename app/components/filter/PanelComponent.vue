@@ -5,7 +5,7 @@ import {
   FilterIconsGridStatesType,
   FilterSelectMenuStatesType,
 } from '~/enums/filter';
-import type { CustomAccordionItem } from '~/types/filter';
+import type { ICustomAccordionItem } from '~/types/filter/accordion';
 import type { Allergen, DishType, Ingredient, MealType, Ustensil } from '~~/server/utils/drizzleUtils';
 
 defineProps<{
@@ -84,7 +84,7 @@ function resetAllFilters() {
     popover
     :ui="{ linkLabel: 'px-2.5', label: 'px-0' }"
   >
-    <template #filter-trailing="{ item }: { item: NavigationMenuItem & CustomAccordionItem }">
+    <template #filter-trailing="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
       <UButton
         class="px-2.5"
         :icon="item.trailingIcon"
@@ -92,7 +92,7 @@ function resetAllFilters() {
         @click="resetAllFilters()"
       />
     </template>
-    <template #select="{ item }: { item: NavigationMenuItem & CustomAccordionItem }">
+    <template #select="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
       <FilterCustomSelectComponent
         v-if="item.label && item.dataType"
         class="w-full"
@@ -100,7 +100,7 @@ function resetAllFilters() {
         :data-type="item.dataType as FilterSelectMenuStatesType"
       />
     </template>
-    <template #grid="{ item }: { item: NavigationMenuItem & CustomAccordionItem }">
+    <template #grid="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
       <FilterIconsGridComponent
         v-if="item.dataType"
         :data-type="item.dataType as FilterIconsGridStatesType"

@@ -1,21 +1,11 @@
 import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Ingredient } from '~~/server/utils/drizzleUtils';
-import type { IngredientsDashboard } from '~/types/ingredientsDashboard';
+import type { IIngredientsDashboard } from '~/types/ingredient/dashboard';
+import type { ISeasonalDataRecord } from '~/types/ingredient/seasonal';
 import type { IngredientCreation } from '~/schemas/creation/ingredient';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
-
-/**
- * Seasonal data record type for ingredient seasonality
- */
-export interface SeasonalDataRecord {
-  name: string;
-  startMonth: number;
-  endMonth: number;
-  typeId: number;
-  inactive: boolean;
-}
 
 /**
  * Composable for ingredients API operations
@@ -60,8 +50,8 @@ export function useIngredientsRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to array of dashboard ingredients
      */
-    fetchDashboard(options?: NitroFetchOptions<NitroFetchRequest>): Promise<IngredientsDashboard[]> {
-      return fetchy<IngredientsDashboard[]>(
+    fetchDashboard(options?: NitroFetchOptions<NitroFetchRequest>): Promise<IIngredientsDashboard[]> {
+      return fetchy<IIngredientsDashboard[]>(
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.DASHBOARD}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -73,8 +63,8 @@ export function useIngredientsRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to array of seasonal data records
      */
-    fetchSeasonals(options?: NitroFetchOptions<NitroFetchRequest>): Promise<SeasonalDataRecord[]> {
-      return fetchy<SeasonalDataRecord[]>(
+    fetchSeasonals(options?: NitroFetchOptions<NitroFetchRequest>): Promise<ISeasonalDataRecord[]> {
+      return fetchy<ISeasonalDataRecord[]>(
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.SEASONALS}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -118,13 +108,13 @@ export function useIngredientsRequest() {
     /**
      * Get ingredients dashboard data with SSR support
      * Use for SSR data loading in components
-     * @template DataTransformT - The type of data after transform (defaults to IngredientsDashboard[])
+     * @template DataTransformT - The type of data after transform (defaults to IIngredientsDashboard[])
      * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getDashboard<DataTransformT = IngredientsDashboard[], DefaultT = undefined>(options?: UseFetchOptions<IngredientsDashboard[], DataTransformT, never, DefaultT>) {
-      return useFetchy<IngredientsDashboard[], DataTransformT, never, DefaultT>(
+    getDashboard<DataTransformT = IIngredientsDashboard[], DefaultT = undefined>(options?: UseFetchOptions<IIngredientsDashboard[], DataTransformT, never, DefaultT>) {
+      return useFetchy<IIngredientsDashboard[], DataTransformT, never, DefaultT>(
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.DASHBOARD}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -133,13 +123,13 @@ export function useIngredientsRequest() {
     /**
      * Get seasonal ingredients data with SSR support
      * Use for SSR data loading in components
-     * @template DataTransformT - The type of data after transform (defaults to SeasonalDataRecord[])
+     * @template DataTransformT - The type of data after transform (defaults to ISeasonalDataRecord[])
      * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getSeasonals<DataTransformT = SeasonalDataRecord[], DefaultT = undefined>(options?: UseFetchOptions<SeasonalDataRecord[], DataTransformT, never, DefaultT>) {
-      return useFetchy<SeasonalDataRecord[], DataTransformT, never, DefaultT>(
+    getSeasonals<DataTransformT = ISeasonalDataRecord[], DefaultT = undefined>(options?: UseFetchOptions<ISeasonalDataRecord[], DataTransformT, never, DefaultT>) {
+      return useFetchy<ISeasonalDataRecord[], DataTransformT, never, DefaultT>(
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.SEASONALS}`,
         { method: HttpMethod.GET, ...options },
       );

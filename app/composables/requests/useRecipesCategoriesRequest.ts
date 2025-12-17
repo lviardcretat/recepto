@@ -1,23 +1,11 @@
 import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { RecipesCategory } from '~~/server/utils/drizzleUtils';
-import type { FethRecipesCategoriesQuery, RecipesCategoriesWithLessData } from '~/types/filter';
-import type { RecipeSearched } from '~/types/search';
+import type { IFetchRecipesCategoriesQuery } from '~/types/recipesCategory/filter';
+import type { IRecipesCategoriesWithLessData, IRecipeSearched } from '~/types/recipesCategory/detail';
 import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
 import { ApiResource, ApiEndpoint, HttpMethod } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
-
-/**
- * Filter params for recipes categories
- */
-export interface RecipesCategoriesFilterParams {
-  ingredients: { wanted: number[]; notWanted: number[] };
-  ustensils: { wanted: number[]; notWanted: number[] };
-  mealTypes?: { wanted: number[]; notWanted: number[] };
-  dishTypes?: { wanted: number[]; notWanted: number[] };
-  allergens: number[];
-  seasonalRecipes: boolean;
-}
 
 /**
  * Composable for recipes categories API operations
@@ -63,8 +51,8 @@ export function useRecipesCategoriesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to array of filtered recipes categories
      */
-    fetchFiltered(query: FethRecipesCategoriesQuery, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipesCategoriesWithLessData[]> {
-      return fetchy<RecipesCategoriesWithLessData[]>(
+    fetchFiltered(query: IFetchRecipesCategoriesQuery, options?: NitroFetchOptions<NitroFetchRequest>): Promise<IRecipesCategoriesWithLessData[]> {
+      return fetchy<IRecipesCategoriesWithLessData[]>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.FILTERED}`,
         {
           method: HttpMethod.GET,
@@ -80,8 +68,8 @@ export function useRecipesCategoriesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to array of searched recipes
      */
-    fetchSearch(options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipeSearched[]> {
-      return fetchy<RecipeSearched[]>(
+    fetchSearch(options?: NitroFetchOptions<NitroFetchRequest>): Promise<IRecipeSearched[]> {
+      return fetchy<IRecipeSearched[]>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.SEARCH}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -125,14 +113,14 @@ export function useRecipesCategoriesRequest() {
     /**
      * Get filtered recipes categories with SSR support
      * Use for SSR data loading in components
-     * @template DataTransformT - The type of data after transform (defaults to RecipesCategoriesWithLessData[])
+     * @template DataTransformT - The type of data after transform (defaults to IRecipesCategoriesWithLessData[])
      * @template DefaultT - The type of the default value
      * @param params - Filter parameters
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getFiltered<DataTransformT = RecipesCategoriesWithLessData[], DefaultT = undefined>(query: FethRecipesCategoriesQuery, options?: UseFetchOptions<RecipesCategoriesWithLessData[], DataTransformT, never, DefaultT>) {
-      return useFetchy<RecipesCategoriesWithLessData[], DataTransformT, never, DefaultT>(
+    getFiltered<DataTransformT = IRecipesCategoriesWithLessData[], DefaultT = undefined>(query: IFetchRecipesCategoriesQuery, options?: UseFetchOptions<IRecipesCategoriesWithLessData[], DataTransformT, never, DefaultT>) {
+      return useFetchy<IRecipesCategoriesWithLessData[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.FILTERED}`,
         {
           method: HttpMethod.GET,
@@ -145,13 +133,13 @@ export function useRecipesCategoriesRequest() {
     /**
      * Get search results with SSR support
      * Use for SSR data loading in components
-     * @template DataTransformT - The type of data after transform (defaults to RecipeSearched[])
+     * @template DataTransformT - The type of data after transform (defaults to IRecipeSearched[])
      * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getSearch<DataTransformT = RecipeSearched[], DefaultT = undefined>(query: any, options?: UseFetchOptions<RecipeSearched[], DataTransformT, never, DefaultT>) {
-      return useFetchy<RecipeSearched[], DataTransformT, never, DefaultT>(
+    getSearch<DataTransformT = IRecipeSearched[], DefaultT = undefined>(query: any, options?: UseFetchOptions<IRecipeSearched[], DataTransformT, never, DefaultT>) {
+      return useFetchy<IRecipeSearched[], DataTransformT, never, DefaultT>(
         `/${ApiResource.RECIPES_CATEGORIES}/${ApiEndpoint.SEARCH}`,
         { method: HttpMethod.GET, query: query, ...options },
       );

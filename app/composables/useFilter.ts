@@ -1,11 +1,11 @@
-import type { FilterResults } from '~/types/filter';
+import type { IFilterResults } from '~/types/filter/results';
 
 /**
  * Allows you to recover states from the composable.
  * @returns The list of recipes and recipeacategories filtered under the states form.
  */
 export const useFilterResults = () =>
-  useState<FilterResults>('filterResults', () => ({
+  useState<IFilterResults>('filterResults', () => ({
     recipesCategories: [],
     recipes: [],
   }));

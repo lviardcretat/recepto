@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { CommandPaletteGroup, CommandPaletteItem } from '@nuxt/ui';
-import type { RecipeSearched } from '~/types/search';
+import type { IRecipeSearched } from '~/types/recipesCategory/detail';
 
 const nuxtApp = useNuxtApp();
 const searchValue = ref({});
@@ -10,7 +10,7 @@ const { data, execute, refresh } = await useRecipesCategoriesRequest().getSearch
     watch: false,
     immediate: false,
     default: () => [],
-    transform: (recipesCategoriesRecipes: RecipeSearched[]) => {
+    transform: (recipesCategoriesRecipes: IRecipeSearched[]) => {
       return recipesCategoriesRecipes.map((recipesCategory) => {
         return {
           id: recipesCategory.name.toLowerCase(),

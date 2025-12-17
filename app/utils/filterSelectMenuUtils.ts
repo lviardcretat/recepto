@@ -1,10 +1,7 @@
 import type { SelectMenuItem } from '@nuxt/ui';
 import type { FilterSelectMenuStatesType } from '~/enums/filter';
-import type {
-  CustomSelectMenuItem,
-  GeneralSelectMenuData,
-  ItemsIdsWantedOrNot,
-} from '~/types/filter';
+import type { ICustomSelectMenuItem, IGeneralSelectMenuData } from '~/types/filter/selectMenu';
+import type { IItemsIdsWantedOrNot } from '~/types/filter/items';
 
 const FilterSelectMenuUtils = {
 /**
@@ -13,8 +10,8 @@ const FilterSelectMenuUtils = {
  * @returns The modified filter updated.
  */
   onItemWanted: (
-    item: SelectMenuItem & CustomSelectMenuItem,
-  ): SelectMenuItem & CustomSelectMenuItem => {
+    item: SelectMenuItem & ICustomSelectMenuItem,
+  ): SelectMenuItem & ICustomSelectMenuItem => {
     item.wanted = true;
     item.notWanted = false;
     return item;
@@ -26,8 +23,8 @@ const FilterSelectMenuUtils = {
  * @returns The modified filter updated.
  */
   onItemNotWanted: (
-    item: SelectMenuItem & CustomSelectMenuItem,
-  ): SelectMenuItem & CustomSelectMenuItem => {
+    item: SelectMenuItem & ICustomSelectMenuItem,
+  ): SelectMenuItem & ICustomSelectMenuItem => {
     item.wanted = false;
     item.notWanted = true;
     return item;
@@ -39,8 +36,8 @@ const FilterSelectMenuUtils = {
  * @returns The modified filter updated.
  */
   onItemUnselected: (
-    item: SelectMenuItem & CustomSelectMenuItem,
-  ): SelectMenuItem & CustomSelectMenuItem => {
+    item: SelectMenuItem & ICustomSelectMenuItem,
+  ): SelectMenuItem & ICustomSelectMenuItem => {
     item.wanted = false;
     item.notWanted = false;
     return item;
@@ -55,7 +52,7 @@ const FilterSelectMenuUtils = {
  */
   getUpdatedItemOnFilterButtonClick: (
     wanted: boolean | null,
-    selectMenuItem: SelectMenuItem & CustomSelectMenuItem,
+    selectMenuItem: SelectMenuItem & ICustomSelectMenuItem,
   ) => {
     if (
       (wanted && wanted === selectMenuItem.wanted)
@@ -75,12 +72,12 @@ const FilterSelectMenuUtils = {
  * @returns A table ['wanted', 'notWanted'] of the list of one of the filters.
  */
   getWantedOrNotSelectMenuItemsIds: (
-    items: (SelectMenuItem & CustomSelectMenuItem)[],
-  ): ItemsIdsWantedOrNot => {
+    items: (SelectMenuItem & ICustomSelectMenuItem)[],
+  ): IItemsIdsWantedOrNot => {
     return items.reduce(
       (
-        acc: ItemsIdsWantedOrNot,
-        item: SelectMenuItem & CustomSelectMenuItem,
+        acc: IItemsIdsWantedOrNot,
+        item: SelectMenuItem & ICustomSelectMenuItem,
       ) => {
         if (item.wanted) acc.wanted.push(item.id);
         if (item.notWanted) acc.notWanted.push(item.id);
@@ -96,15 +93,15 @@ const FilterSelectMenuUtils = {
  * @param dataType The type of the filter list modified.
  * @returns The mapped filter list.
  */
-  mapFilterSelectMenuItems: <T extends GeneralSelectMenuData>(
+  mapFilterSelectMenuItems: <T extends IGeneralSelectMenuData>(
     newItems: T[] | null,
-    oldItems: (SelectMenuItem & CustomSelectMenuItem)[],
+    oldItems: (SelectMenuItem & ICustomSelectMenuItem)[],
     dataType: FilterSelectMenuStatesType,
-  ): (SelectMenuItem & CustomSelectMenuItem)[] => {
+  ): (SelectMenuItem & ICustomSelectMenuItem)[] => {
     if (newItems == null || newItems.length === 0) {
       return [];
     }
-    const items: (SelectMenuItem & CustomSelectMenuItem)[] = newItems.map(
+    const items: (SelectMenuItem & ICustomSelectMenuItem)[] = newItems.map(
       (item: T) => {
         const existingItem = oldItems.find(oldItem => oldItem.id === item.id);
         return {

@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { SelectMenuItem } from '@nuxt/ui';
 import { Months } from '~/enums/data';
-import type { IngredientFormData } from '~/types/form/IIngredientFields';
+import type { IIIngredientFormData } from '~/types/ingredient/form';
 
 const props = defineProps<{
-  modelValue: IngredientFormData;
+  modelValue: IIngredientFormData;
   foodTypes: SelectMenuItem[];
   flatSeasonalMonths: number[];
 }>();
 
 const emit = defineEmits<{
-  'update:modelValue': [value: IngredientFormData];
+  'update:modelValue': [value: IIngredientFormData];
   'update:flatSeasonalMonths': [value: number[]];
 }>();
 
@@ -22,7 +22,7 @@ const localValue = computed({
 });
 const flatSeasonalMonths = ref<number[]>(props.flatSeasonalMonths);
 
-function updateField<K extends keyof IngredientFormData>(field: K, value: IngredientFormData[K]) {
+function updateField<K extends keyof IIngredientFormData>(field: K, value: IIngredientFormData[K]) {
   emit('update:modelValue', {
     ...props.modelValue,
     [field]: value,

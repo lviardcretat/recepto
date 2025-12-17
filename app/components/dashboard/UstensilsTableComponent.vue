@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getUstensilsTableConfig } from '~/config/dashboard/UstensilsTableConfig';
-import type { UstensilsDashboard } from '~/types/ustensilsDashboard';
+import type { IUstensilsDashboard } from '~/types/ustensil/dashboard';
 import { LazyDashboardDeletionDeleteModalComponent, LazyEditionUstensilEditModalComponent } from '#components';
 
 const { d, t, locale } = useI18n();
@@ -13,7 +13,7 @@ const nuxtApp = useNuxtApp();
 const editModal = overlay.create(LazyEditionUstensilEditModalComponent);
 const deleteModal = overlay.create(LazyDashboardDeletionDeleteModalComponent);
 
-const { data: ustensils, execute: executeUstensilsFetch } = await useUstensilsRequest().getDashboard<UstensilsDashboard[], UstensilsDashboard[]>({
+const { data: ustensils, execute: executeUstensilsFetch } = await useUstensilsRequest().getDashboard<IUstensilsDashboard[], IUstensilsDashboard[]>({
   immediate: false,
   watch: false,
   default: () => [],

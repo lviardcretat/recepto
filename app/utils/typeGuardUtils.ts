@@ -1,27 +1,25 @@
-import type {
-  RecipesCategoriesWithLessData,
-  RecipeWithLessData,
-} from '~/types/filter';
+import type { IRecipeWithLessData } from '~/types/recipe/detail';
+import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
 const TypeGuardUtils = {
 /**
  * @param recipe The recipe
- * @returns RecipeWithLessData as a type predicate
+ * @returns IRecipeWithLessData as a type predicate
  */
-  isRecipeWithLessData: (
-    recipe: RecipesCategoriesWithLessData | RecipeWithLessData,
-  ): recipe is RecipeWithLessData => {
-    return (recipe as RecipeWithLessData).restTime !== undefined;
+  isIRecipeWithLessData: (
+    recipe: IRecipesCategoriesWithLessData | IRecipeWithLessData,
+  ): recipe is IRecipeWithLessData => {
+    return (recipe as IRecipeWithLessData).restTime !== undefined;
   },
 
   /**
  * @param recipe The recipe
- * @returns RecipesCategoriesWithLessData as a type predicate
+ * @returns IRecipesCategoriesWithLessData as a type predicate
  */
-  isRecipesCategoriesWithLessData: (
-    recipe: RecipesCategoriesWithLessData | RecipeWithLessData,
-  ): recipe is RecipesCategoriesWithLessData => {
-    return (recipe as RecipeWithLessData).restTime === undefined;
+  isIRecipesCategoriesWithLessData: (
+    recipe: IRecipesCategoriesWithLessData | IRecipeWithLessData,
+  ): recipe is IRecipesCategoriesWithLessData => {
+    return (recipe as IRecipeWithLessData).restTime === undefined;
   },
 };
 

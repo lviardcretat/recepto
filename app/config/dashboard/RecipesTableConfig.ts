@@ -2,19 +2,19 @@ import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
 import type { Row } from '@tanstack/vue-table';
 import type { Composer } from 'vue-i18n';
 import type { ConcreteComponent, ComputedOptions, MethodOptions } from 'vue';
-import type { CustomAccordionItem } from '~/types/filter';
-import type { RecipesDashboard } from '~/types/recipesDashboard';
+import type { IICustomAccordionItem } from '~/types/filter/accordion';
+import type { IIRecipesDashboard } from '~/types/recipe/dashboard';
 
 interface RecipesTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
   dropdownMenuComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
-  onEditButtonOpen: (recipe: RecipesDashboard) => void;
-  onDeleteButtonOpen: (recipe: RecipesDashboard) => void;
-  onEditCategoryButtonOpen: (category: RecipesDashboard) => void;
-  onDeleteCategoryButtonOpen: (category: RecipesDashboard) => void;
+  onEditButtonOpen: (recipe: IRecipesDashboard) => void;
+  onDeleteButtonOpen: (recipe: IRecipesDashboard) => void;
+  onEditCategoryButtonOpen: (category: IRecipesDashboard) => void;
+  onDeleteCategoryButtonOpen: (category: IRecipesDashboard) => void;
 };
 
-function getRowItems(row: Row<RecipesDashboard>, props: RecipesTableConfigProps) {
+function getRowItems(row: Row<IRecipesDashboard>, props: RecipesTableConfigProps) {
   const isCategory = row.getIsGrouped();
 
   if (isCategory) {
@@ -57,7 +57,7 @@ export function getRecipesTableConfig(
   d: Composer['d'],
   t: Composer['t'],
   props: RecipesTableConfigProps,
-): Ref<(NavigationMenuItem & CustomAccordionItem)[]> {
+): Ref<(NavigationMenuItem & ICustomAccordionItem)[]> {
   return computed(() =>
     [
       {
@@ -71,7 +71,7 @@ export function getRecipesTableConfig(
       {
         accessorKey: 'count',
         header: '',
-        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+        cell: ({ row }: { row: Row<IRecipesDashboard> }) => {
           return row.getIsGrouped() ? `${row.subRows.length} ${t('dashboard.recipesTableComponent.recipes', row.subRows.length)}` : ``;
         },
         aggregationFn: 'count',
@@ -79,7 +79,7 @@ export function getRecipesTableConfig(
       {
         accessorKey: 'createdAt',
         header: t('dashboard.createdAt'),
-        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+        cell: ({ row }: { row: Row<IRecipesDashboard> }) => {
           return d(row.getValue<string>('createdAt'), 'short');
         },
         aggregationFn: 'max',
@@ -87,14 +87,14 @@ export function getRecipesTableConfig(
       {
         accessorKey: 'updatedAt',
         header: t('dashboard.updatedAt'),
-        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+        cell: ({ row }: { row: Row<IRecipesDashboard> }) => {
           return d(row.getValue<string>('updatedAt'), 'short');
         },
         aggregationFn: 'max',
       },
       {
         id: 'actions',
-        cell: ({ row }: { row: Row<RecipesDashboard> }) => {
+        cell: ({ row }: { row: Row<IRecipesDashboard> }) => {
           return h(
             'div',
             { class: 'text-right' },

@@ -1,14 +1,14 @@
 import type { NavigationMenuItem } from '@nuxt/ui';
 import type { Composer } from 'vue-i18n';
 import { FilterIconsGridStatesType, FilterSelectMenuStatesType } from '~/enums/filter';
-import type { CustomAccordionItem } from '~/types/filter';
+import type { ICustomAccordionItem } from '~/types/filter/accordion';
 
 interface PanelConfigProps {};
 
 export function getPanelConfig(
   t: Composer['t'],
   _props: PanelConfigProps,
-): ComputedRef<(NavigationMenuItem & CustomAccordionItem)[]> {
+): ComputedRef<(NavigationMenuItem & ICustomAccordionItem)[]> {
   return computed(() =>
     [
       {

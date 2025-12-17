@@ -14,12 +14,9 @@ import {
   recipeSelectType,
 } from '../utils/filterUtils';
 import { intersect } from 'drizzle-orm/sqlite-core';
-import type {
-  RecipeWithLessData,
-  RecipesCategoriesWithLessData,
-} from '~/types/filter';
-import type { RecipeDetail } from '~/types/recipeCard';
-import type { RecipesDashboard } from '~/types/recipesDashboard';
+import type { IIRecipeWithLessData, IIRecipeDetail } from '~/types/recipe/detail';
+import type { IIRecipesDashboard } from '~/types/recipe/dashboard';
+import type { IIRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
 export async function postRecipe(
   name: string,
@@ -84,8 +81,8 @@ export async function getRecipes(): Promise<Recipe[]> {
   return recipes;
 }
 
-export async function getRecipesWithRecipesCategoriesDashboard(userId: number): Promise<RecipesDashboard[]> {
-  const recipes: RecipesDashboard[] = await db.query.recipe.findMany({
+export async function getRecipesWithRecipesCategoriesDashboard(userId: number): Promise<IRecipesDashboard[]> {
+  const recipes: IRecipesDashboard[] = await db.query.recipe.findMany({
     columns: {
       id: true,
       name: true,
@@ -109,8 +106,8 @@ export async function getRecipesWithRecipesCategoriesDashboard(userId: number): 
   return recipes;
 }
 
-export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
-  const recipe: RecipeDetail | undefined = await db.query.recipe.findFirst({
+export async function getRecipe(id: number): Promise<IRecipeDetail | undefined> {
+  const recipe: IRecipeDetail | undefined = await db.query.recipe.findFirst({
     columns: {
       id: true,
       name: true,
@@ -185,7 +182,7 @@ export async function getRecipe(id: number): Promise<RecipeDetail | undefined> {
 
 export async function getRecipesWithoutFilter(
   recipeCategoryId: number,
-): Promise<RecipeWithLessData[]> {
+): Promise<IRecipeWithLessData[]> {
   const recipes = await db
     .select({ ...recipeSelectType, ...{ createdBy: schema.user.username } })
     .from(schema.recipe)
@@ -201,7 +198,7 @@ export async function getRecipesWithoutFilter(
 
 export async function getRecipesFiltered(
   query: RecipesFilter,
-): Promise<RecipeWithLessData[]> {
+): Promise<IRecipeWithLessData[]> {
   const ingredientsIds = query.ingredients;
   const ustensilsIds = query.ustensils;
   const seasonalRecipes = query.seasonalRecipes === true;
@@ -253,13 +250,13 @@ export async function getRecipesFiltered(
       filters[0],
       filters[1],
       ...filters.slice(2),
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 2) {
     recipes = (await intersect(
       filters[0],
       filters[1],
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 1) {
     recipes = await filters[0]

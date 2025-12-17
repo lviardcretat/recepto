@@ -1,7 +1,7 @@
 import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Ustensil } from '~~/server/utils/drizzleUtils';
-import type { UstensilsDashboard } from '~/types/ustensilsDashboard';
+import type { IUstensilsDashboard } from '~/types/ustensil/dashboard';
 import type { UstensilCreation } from '~/schemas/creation/ustensil';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
@@ -49,8 +49,8 @@ export function useUstensilsRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to array of dashboard ustensils
      */
-    fetchDashboard(options?: NitroFetchOptions<NitroFetchRequest>): Promise<UstensilsDashboard[]> {
-      return fetchy<UstensilsDashboard[]>(
+    fetchDashboard(options?: NitroFetchOptions<NitroFetchRequest>): Promise<IUstensilsDashboard[]> {
+      return fetchy<IUstensilsDashboard[]>(
         `/${ApiResource.USTENSILS}/${ApiEndpoint.DASHBOARD}`,
         { method: HttpMethod.GET, ...options },
       );
@@ -94,13 +94,13 @@ export function useUstensilsRequest() {
     /**
      * Get ustensils dashboard data with SSR support
      * Use for SSR data loading in components
-     * @template DataTransformT - The type of data after transform (defaults to UstensilsDashboard[])
+     * @template DataTransformT - The type of data after transform (defaults to IUstensilsDashboard[])
      * @template DefaultT - The type of the default value
      * @param options - Optional useFetch options
      * @returns Nuxt useFetch composable result
      */
-    getDashboard<DataTransformT = UstensilsDashboard[], DefaultT = undefined>(options?: UseFetchOptions<UstensilsDashboard[], DataTransformT, never, DefaultT>) {
-      return useFetchy<UstensilsDashboard[], DataTransformT, never, DefaultT>(
+    getDashboard<DataTransformT = IUstensilsDashboard[], DefaultT = undefined>(options?: UseFetchOptions<IUstensilsDashboard[], DataTransformT, never, DefaultT>) {
+      return useFetchy<IUstensilsDashboard[], DataTransformT, never, DefaultT>(
         `/${ApiResource.USTENSILS}/${ApiEndpoint.DASHBOARD}`,
         { method: HttpMethod.GET, ...options },
       );

@@ -1,6 +1,6 @@
 import { getRecipe, getRecipeWithAllData } from '~~/server/data/recipes';
 import { idSchema } from '~/schemas/businessObjects';
-import type { RecipeDetail } from '~/types/recipeCard';
+import type { IRecipeDetail } from '~/types/recipe/detail';
 
 export default defineEventHandler(async (event) => {
   const { id } = await getValidatedRouterParams(event, idSchema.parse);
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Default behavior: return recipe for display
-  const recipe: RecipeDetail | undefined = await getRecipe(id);
+  const recipe: IRecipeDetail | undefined = await getRecipe(id);
   if (!recipe) {
     throw createError({
       statusCode: 404,

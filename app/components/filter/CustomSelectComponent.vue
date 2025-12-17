@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import type { SelectMenuItem } from '@nuxt/ui';
 import type { FilterSelectMenuStatesType } from '~/enums/filter';
-import type {
-  CustomSelectMenuItem,
-  RecipesCategoriesWithLessData,
-  RecipeWithLessData,
-} from '~/types/filter';
+import type { ICustomSelectMenuItem } from '~/types/filter/selectMenu';
+import type { IRecipeWithLessData } from '~/types/recipe/detail';
+import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
 const props = defineProps<{
   placeholder: string;
@@ -19,7 +17,7 @@ const selectedItemsStates = useFilterSelectedItemsStates();
 const route = useRoute();
 
 function getButtonsColor(
-  selectMenuItem: SelectMenuItem & CustomSelectMenuItem,
+  selectMenuItem: SelectMenuItem & ICustomSelectMenuItem,
   isWanted: boolean,
 ): string {
   if (selectMenuItem.notWanted) {
@@ -39,10 +37,10 @@ async function fetchFilteredItems() {
     route.params.id ?? null,
   );
   if (route.params.id) {
-    resultsStates.value.recipes = result as RecipeWithLessData[];
+    resultsStates.value.recipes = result as IRecipeWithLessData[];
   }
-  resultsStates.value.recipesCategories = result.filter<RecipesCategoriesWithLessData>(
-    TypeGuardUtils.isRecipesCategoriesWithLessData,
+  resultsStates.value.recipesCategories = result.filter<IRecipesCategoriesWithLessData>(
+    TypeGuardUtils.isIRecipesCategoriesWithLessData,
   );
 }
 </script>

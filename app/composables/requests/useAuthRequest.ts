@@ -1,30 +1,7 @@
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
+import type { IAuthResponse, ILoginCredentials, IRegisterCredentials } from '~/types/auth/credentials';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy } from './useAPI';
-
-/**
- * Auth response type
- */
-export interface AuthResponse {
-  success: boolean;
-  error?: string;
-}
-
-/**
- * Login credentials
- */
-export interface LoginCredentials {
-  username: string;
-  password: string;
-}
-
-/**
- * Register credentials
- */
-export interface RegisterCredentials {
-  username: string;
-  password: string;
-}
 
 /**
  * Composable for auth API operations
@@ -42,8 +19,8 @@ export function useAuthRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to auth response
      */
-    login(credentials: LoginCredentials, options?: NitroFetchOptions<NitroFetchRequest>): Promise<AuthResponse> {
-      return fetchy<AuthResponse>(
+    login(credentials: ILoginCredentials, options?: NitroFetchOptions<NitroFetchRequest>): Promise<IAuthResponse> {
+      return fetchy<IAuthResponse>(
         `/${ApiResource.AUTH}/${ApiEndpoint.LOGIN}`,
         { method: HttpMethod.POST, body: credentials, ...options },
       );
@@ -55,8 +32,8 @@ export function useAuthRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to auth response
      */
-    register(credentials: RegisterCredentials, options?: NitroFetchOptions<NitroFetchRequest>): Promise<AuthResponse> {
-      return fetchy<AuthResponse>(
+    register(credentials: IRegisterCredentials, options?: NitroFetchOptions<NitroFetchRequest>): Promise<IAuthResponse> {
+      return fetchy<IAuthResponse>(
         `/${ApiResource.AUTH}/${ApiEndpoint.REGISTER}`,
         { method: HttpMethod.POST, body: credentials, ...options },
       );
@@ -67,8 +44,8 @@ export function useAuthRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to auth response
      */
-    loginAsGuest(options?: NitroFetchOptions<NitroFetchRequest>): Promise<AuthResponse> {
-      return fetchy<AuthResponse>(
+    loginAsGuest(options?: NitroFetchOptions<NitroFetchRequest>): Promise<IAuthResponse> {
+      return fetchy<IAuthResponse>(
         `/${ApiResource.AUTH}/${ApiEndpoint.GUEST}`,
         { method: HttpMethod.POST, ...options },
       );

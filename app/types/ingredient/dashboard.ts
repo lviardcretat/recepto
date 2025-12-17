@@ -1,4 +1,7 @@
-export type IngredientsDashboard = {
+/**
+ * Ingredient dashboard model
+ */
+export interface IIngredientsDashboard {
   id: number;
   name: string;
   createdAt: string;
@@ -12,12 +15,15 @@ export type IngredientsDashboard = {
     quantity: number;
     unitId: number | null;
   }[];
-};
+}
 
-export type IngredientsRecipesDashboard = {
+/**
+ * Ingredient-recipe relation for dashboard
+ */
+export interface IIngredientsRecipesDashboard {
   id: number;
   recipeId: number;
   ingredientId: number;
   quantity: number;
   unitId: number | null;
-};
+}
