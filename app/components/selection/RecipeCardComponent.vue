@@ -68,7 +68,7 @@ const props = defineProps<{
   </UCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .recipeCard {
     .ellipsis {
       display: -webkit-box;
