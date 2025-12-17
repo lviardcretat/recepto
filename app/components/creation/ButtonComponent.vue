@@ -99,6 +99,6 @@ const items = computed(
   </UModal>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 </style>

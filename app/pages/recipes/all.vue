@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
+const { t } = useI18n();
 const nuxtApp = useNuxtApp();
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
@@ -38,6 +39,13 @@ nuxtApp.hook('recipe:created', async () => {
     switchStates.value,
   )) as IRecipesCategoriesWithLessData[];
 });
+
+/**
+ * Formats the recipe count text for a category
+ */
+function formatRecipeCount(count: number): string {
+  return `${count} ${t('recipe', 2)}`;
+}
 </script>
 
 <template>
@@ -55,7 +63,7 @@ nuxtApp.hook('recipe:created', async () => {
       <div class="flex justify-between gap-8 items-center">
         <div class="flex justify-between grow items-center">
           <div>{{ recipeCategory.name }}</div>
-          <div>{{ `${recipeCategory.count} ${$t('recipe', 2)}` }}</div>
+          <div>{{ formatRecipeCount(recipeCategory.count) }}</div>
         </div>
         <UIcon
           name="material-symbols:arrow-forward-ios"

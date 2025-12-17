@@ -33,6 +33,13 @@ function renderIngredient(): void {
     }
   }
 }
+
+/**
+ * Formats an ingredient's quantity and unit into a display string
+ */
+function formatIngredientQuantity(ingredient: { quantity: number; unit?: string }): string {
+  return `${ingredient.quantity}${ingredient.unit ?? ''} `;
+}
 </script>
 
 <template>
@@ -116,7 +123,7 @@ function renderIngredient(): void {
             v-for="(ingredient, index) in ingredients"
             :key="index"
           >
-            <span class="font-bold">{{ `${ingredient.quantity}${ingredient.unit ?? ''} ` }}</span>
+            <span class="font-bold">{{ formatIngredientQuantity(ingredient) }}</span>
             <span>{{ ingredient.name }}</span>
           </div>
         </div>

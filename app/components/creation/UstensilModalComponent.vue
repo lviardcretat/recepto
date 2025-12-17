@@ -92,6 +92,6 @@ async function onSubmit(event: FormSubmitEvent<UstensilCreationSchema>) {
   </UForm>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 </style>
