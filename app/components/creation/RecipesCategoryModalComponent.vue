@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
+import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
 import {
   recipesCategoryCreation,
 
 } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import type { DishType } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   modalTitle: string;
@@ -26,46 +27,25 @@ const state = ref<{
   dishTypeId: undefined,
 });
 
-const { data: dishTypes } = await useFetch('/api/dishTypes/all', {
-  method: 'GET',
+const { data: dishTypes } = await useDishTypesRequest().getAll<SelectMenuItem[], null>({
   watch: false,
   default: () => null,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
-  transform: (dishTypes) => {
-    return mapSelectMenuItemsUtils(dishTypes);
-  },
+  transform: (dishTypes: DishType[]) => mapSelectMenuItemsUtils(dishTypes),
 });
 
 async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
   disabledSubmit.value = true;
   start();
   try {
-    await $fetch('/api/recipesCategories', {
-      method: 'POST',
-      body: event.data,
-      immediate: false,
-      watch: false,
-      async onResponse(response) {
-        await nuxtApp.callHook('recipesCategory:created', {
-          id: response.response._data.id,
-        });
-        emit('closeModal');
-        toast.add({
-          title: t('formCreation.category.createdToast', { categoryName: event.data.name }),
-        });
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useRecipesCategoriesRequest().create(event.data, { onResponse: async (response) => {
+      await nuxtApp.callHook('recipesCategory:created', {
+        id: response.response._data.id,
+      });
+      emit('closeModal');
+      toast.add({
+        title: t('formCreation.category.createdToast', { categoryName: event.data.name }),
+      });
+    } });
   }
   finally {
     disabledSubmit.value = false;
@@ -97,34 +77,11 @@ async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
           />
         </div>
       </template>
-      <div class="flex flex-col gap-4">
-        <UFormField
-          :label="$t('formCreation.name')"
-          name="name"
-        >
-          <UInput
-            v-model="state.name"
-            type="text"
-            :placeholder="$t('formCreation.category.nameExample')"
-            class="w-full"
-          />
-        </UFormField>
-        <UFormField
-          :label="$t('formCreation.category.dishType')"
-          name="dishTypeId"
-        >
-          <USelectMenu
-            v-model="state.dishTypeId"
-            value-key="id"
-            :items="dishTypes ?? []"
-            :placeholder="$t('formCreation.category.selectByDishType')"
-            class="w-full"
-            option-attribute="name"
-            value-attribute="id"
-            @update:model-value="state.dishTypeId = Number($event)"
-          />
-        </UFormField>
-      </div>
+      <FormRecipeCategoryFields
+        v-model="state"
+        :dish-types="dishTypes ?? []"
+        :disabled="disabledSubmit"
+      />
       <template #footer>
         <div class="flex justify-between">
           <UButton

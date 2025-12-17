@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { getPanelConfig } from '~/config/filter/PanelConfig';
 import {
   FilterIconsGridStatesType,
   FilterSelectMenuStatesType,
 } from '~/enums/filter';
-import type { CustomAccordionItem } from '~/types/filter';
+import type { ICustomAccordionItem } from '~/types/filter/accordion';
+import type { Allergen, DishType, Ingredient, MealType, Ustensil } from '~~/server/utils/drizzleUtils';
 
 defineProps<{
   collapsed?: boolean;
@@ -15,53 +17,14 @@ const nuxtApp = useNuxtApp();
 // const swicthStates = useFilterSwitchStates();
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
+const panelConfig = getPanelConfig(t, {});
 
 await callOnce(async () => {
-  const ustensilsFetch = await $fetch('/api/ustensils/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const ingredientsFetch = await $fetch('/api/ingredients/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const mealTypesFetch = await $fetch('/api/mealTypes/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const dishTypesFetch = await $fetch('/api/dishTypes/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
-  const allergensFetch = await $fetch('/api/allergens/all', {
-    method: 'GET',
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  });
+  const ingredientsFetch: Ingredient[] = await useIngredientsRequest().fetchAll();
+  const mealTypesFetch: MealType[] = await useMealTypesRequest().fetchAll();
+  const dishTypesFetch: DishType[] = await useDishTypesRequest().fetchAll();
+  const allergensFetch: Allergen[] = await useAllergensRequest().fetchAll();
+  const ustensilsFetch: Ustensil[] = await useUstensilsRequest().fetchAll();
 
   selectMenuStates.value.ustensils = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ustensilsFetch,
@@ -91,9 +54,7 @@ await callOnce(async () => {
 });
 
 nuxtApp.hook('ustensil:created', async () => {
-  const ustensilsFetch = await $fetch('/api/ustensils/all', {
-    method: 'GET',
-  });
+  const ustensilsFetch: Ustensil[] = await useUstensilsRequest().fetchAll();
   selectMenuStates.value.ustensils = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ustensilsFetch,
     selectMenuStates.value[FilterSelectMenuStatesType.USTENSIL],
@@ -102,88 +63,13 @@ nuxtApp.hook('ustensil:created', async () => {
 });
 
 nuxtApp.hook('ingredient:created', async () => {
-  const ingredientsFetch = await $fetch('/api/ingredients/all', {
-    method: 'GET',
-  });
+  const ingredientsFetch: Ingredient[] = await useIngredientsRequest().fetchAll();
   selectMenuStates.value.ingredients = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ingredientsFetch,
     selectMenuStates.value[FilterSelectMenuStatesType.INGREDIENT],
     FilterSelectMenuStatesType.INGREDIENT,
   );
 });
-
-const items = computed<(NavigationMenuItem & CustomAccordionItem)[]>(
-  () =>
-    [
-      {
-        label: t('filter'),
-        type: 'label',
-        trailingIcon: 'i-lucide-filter-x',
-        slot: 'filter',
-      },
-      /* {
-        label: t('seasonalRecipes'),
-        icon: 'i-lucide-sun-snow',
-        slot: 'switch',
-        disabled: false,
-      }, */
-      {
-        label: t('ingredient'),
-        icon: 'i-lucide-carrot',
-        children: [
-          {
-            label: t('ingredient'),
-            dataType: FilterSelectMenuStatesType.INGREDIENT,
-            slot: 'select',
-          },
-        ],
-      },
-      {
-        label: t('ustensil'),
-        icon: 'i-lucide-lab-whisk',
-        children: [
-          {
-            label: t('ustensil'),
-            dataType: FilterSelectMenuStatesType.USTENSIL,
-            slot: 'select',
-          },
-        ],
-      },
-      {
-        label: t('allergens'),
-        icon: 'i-lucide-wheat',
-        children: [
-          {
-            label: t('allergens'),
-            dataType: FilterIconsGridStatesType.ALLERGEN,
-            slot: 'grid',
-          },
-        ],
-      },
-      {
-        label: t('mealTypes'),
-        icon: 'i-lucide-clock-fading',
-        children: [
-          {
-            label: t('mealTypes'),
-            dataType: FilterSelectMenuStatesType.MEAL_TYPE,
-            slot: 'select',
-          },
-        ],
-      },
-      {
-        label: t('dishTypes'),
-        icon: 'i-lucide-cooking-pot',
-        children: [
-          {
-            label: t('dishTypes'),
-            dataType: FilterSelectMenuStatesType.DISH_TYPE,
-            slot: 'select',
-          },
-        ],
-      },
-    ],
-);
 
 function resetAllFilters() {
   useResetAllFilters();
@@ -192,13 +78,13 @@ function resetAllFilters() {
 
 <template>
   <UNavigationMenu
-    :items="items"
+    :items="panelConfig"
     orientation="vertical"
     :collapsed="collapsed"
     popover
     :ui="{ linkLabel: 'px-2.5', label: 'px-0' }"
   >
-    <template #filter-trailing="{ item }">
+    <template #filter-trailing="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
       <UButton
         class="px-2.5"
         :icon="item.trailingIcon"
@@ -206,20 +92,22 @@ function resetAllFilters() {
         @click="resetAllFilters()"
       />
     </template>
-    <template #select="{ item }">
+    <template #select="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
       <FilterCustomSelectComponent
+        v-if="item.label && item.dataType"
         class="w-full"
-        :placeholder="item['label']"
-        :data-type="item['dataType']"
+        :placeholder="item.label"
+        :data-type="item.dataType as FilterSelectMenuStatesType"
       />
     </template>
-    <template #grid="{ item }">
+    <template #grid="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
       <FilterIconsGridComponent
-        :data-type="item['dataType']"
+        v-if="item.dataType"
+        :data-type="item.dataType as FilterIconsGridStatesType"
       />
     </template>
     <!-- <template #switch="{ item }">
-       <div class="w-full flex justify-between items-center">
+      <div class="w-full flex justify-between items-center">
         <div class="flex items-center gap-1.5">
           <UIcon
             :name="item['icon']"

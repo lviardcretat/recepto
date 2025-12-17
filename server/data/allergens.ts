@@ -1,18 +1,18 @@
 import type { Allergen } from '../utils/drizzleUtils';
 
 export async function getAllergens(): Promise<Allergen[]> {
-  const allergens: Allergen[] = await useDrizzle()
+  const allergens: Allergen[] = await db
     .select()
-    .from(tables.allergen)
+    .from(schema.allergen)
     .all();
   return allergens;
 }
 
 export async function getAllergen(id: number): Promise<Allergen | undefined> {
-  const allergen: Allergen | undefined = await useDrizzle()
+  const allergen: Allergen | undefined = await db
     .select()
-    .from(tables.allergen)
-    .where(eq(tables.allergen.id, id))
+    .from(schema.allergen)
+    .where(eq(schema.allergen.id, id))
     .get();
   return allergen;
 }

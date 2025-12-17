@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { FoodType } from '~~/server/utils/drizzleUtils';
 import {
   VisXYContainer,
   VisAxis,
@@ -11,6 +10,7 @@ import { colors, Timeline } from '@unovis/ts';
 import type { BulletLegendItemInterface } from '@unovis/ts';
 import { Months } from '~/enums/data';
 import type { DataRecord } from '~~/server/api/ingredients/seasonals.get';
+import type { FoodType } from '~~/server/utils/drizzleUtils';
 
 const nuxtApp = useNuxtApp();
 const { t } = useI18n();
@@ -23,33 +23,21 @@ const {
   data: datasetsFetch,
   refresh: refreshDatasetsFetch,
   execute: executeDatasetsFetch,
-} = await useFetch<DataRecord[]>('/api/ingredients/seasonals', {
-  method: 'GET',
-  immediate: false,
+} = await useIngredientsRequest().getSeasonals<SeasonalDataRecord[], SeasonalDataRecord[]>({
   watch: false,
-  onResponseError({ response }) {
-    throw showError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-    });
-  },
+  immediate: false,
+  default: () => [],
 });
-const datasetsFetchFiltered = ref<DataRecord[]>([...datasetsFetch.value ?? []]);
+const datasetsFetchFiltered = ref<DataRecord[]>(datasetsFetch.value);
 
-const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFetch<FoodType[]>(
-  '/api/foodTypes/all',
-  {
-    method: 'GET',
-    immediate: false,
-    watch: false,
-    onResponseError({ response }) {
-      throw showError({
-        statusCode: response.status,
-        statusMessage: response.statusText,
-      });
-    },
-  },
-);
+const {
+  data: foodTypesFetch,
+  execute: executeFoodTypesFetch,
+} = await useFoodTypesRequest().getAll<FoodType[], FoodType[]>({
+  watch: false,
+  immediate: false,
+  default: () => [],
+});
 
 await executeDatasetsFetch();
 await executeFoodTypesFetch();
@@ -60,7 +48,7 @@ const length = (d: DataRecord) => {
 };
 const type = (d: DataRecord) => d.name;
 const color = (d: DataRecord) => colors[d.typeId];
-const legendItems = ref<BulletLegendItemInterface[]>(foodTypesFetch.value?.slice(0, 2).map(foodType => ({
+const legendItems = ref<BulletLegendItemInterface[]>(foodTypesFetch.value.slice(0, 2).map(foodType => ({
   name: foodType.name,
   inactive: false,
   color: colors[foodType.id],
@@ -88,7 +76,7 @@ function filterItems(item: BulletLegendItemInterface, i: number): void {
   if (legendItems.value[i]) {
     inactive = !legendItems.value[i].inactive;
   }
-  if (foodTypesFetch.value && foodTypesFetch.value[i]) {
+  if (foodTypesFetch.value.length > 0 && foodTypesFetch.value[i]) {
     foodTypesId = foodTypesFetch.value[i].id;
   }
   if (legendItems.value[i] && datasetsFetch.value) {

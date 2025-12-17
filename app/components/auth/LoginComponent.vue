@@ -41,34 +41,23 @@ const providers = computed<ButtonProps[]>(() => [{
 async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
   start();
   try {
-    await $fetch('/api/auth/login', {
-      method: 'POST',
-      body: event.data,
-      watch: false,
-      async onResponse({ response }) {
-        if (response._data.success) {
-          await refreshSession();
-          await nuxtApp.runWithContext(() =>
-            navigateTo('/recipes/all'),
-          );
-          toast.add({
-            title: t('auth.login.toast', { username: event.data.username }),
-          });
-        }
-        else {
-          toast.add({
-            title: t(response._data.error),
-            color: 'error',
-          });
-        }
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
+    await useAuthRequest().login(event.data, { onResponse: async ({ response }) => {
+      if (response._data.success) {
+        await refreshSession();
+        await nuxtApp.runWithContext(() =>
+          navigateTo('/recipes/all'),
+        );
+        toast.add({
+          title: t('auth.login.toast', { username: event.data.username }),
         });
-      },
-    });
+      }
+      else {
+        toast.add({
+          title: t(response._data.error),
+          color: 'error',
+        });
+      }
+    } });
   }
   finally {
     finish();
@@ -78,25 +67,15 @@ async function onSubmit(event: FormSubmitEvent<LoginSchema>) {
 async function onAnonymousConnect() {
   start();
   try {
-    await $fetch('/api/auth/guest', {
-      method: 'POST',
-      watch: false,
-      async onResponse() {
-        await refreshSession();
-        await nuxtApp.runWithContext(() =>
-          navigateTo('/recipes/all'),
-        );
-        toast.add({
-          title: t('auth.anonymous.toast'),
-        });
-      },
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    });
+    await useAuthRequest().loginAsGuest({ onResponse: async () => {
+      await refreshSession();
+      await nuxtApp.runWithContext(() =>
+        navigateTo('/recipes/all'),
+      );
+      toast.add({
+        title: t('auth.anonymous.toast'),
+      });
+    } });
   }
   finally {
     finish();

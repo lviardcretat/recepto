@@ -1,12 +1,10 @@
-import type {
-  FilterSelectMenuStates,
-  FilterIconsGridStates,
-  FilterSwitchStates,
-  RecipeWithLessData,
-  RecipesCategoriesWithLessData,
-  FethRecipesQuery,
-  FethRecipesCategoriesQuery,
-} from '~/types/filter';
+import type { FilterSelectMenuStates } from '~/types/filter/selectMenu';
+import type { FilterIconsGridStates } from '~/types/filter/iconsGrid';
+import type { FilterSwitchStates } from '~/types/filter/switch';
+import type { IRecipeWithLessData } from '~/types/recipe/detail';
+import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
+import type { IFetchRecipesQuery } from '~/types/recipe/filter';
+import type { IFetchRecipesCategoriesQuery } from '~/types/recipesCategory/filter';
 
 /**
  * Fetch the filtered recipes and assign the result to the recipes state.
@@ -17,8 +15,8 @@ const fetchFilteredRecipes = async (
   selectMenuStates: FilterSelectMenuStates,
   iconsGridStates: FilterIconsGridStates,
   switchStates: FilterSwitchStates,
-): Promise<RecipeWithLessData[]> => {
-  const query: FethRecipesQuery = {
+): Promise<IRecipeWithLessData[]> => {
+  const query: IFetchRecipesQuery = {
     ingredients: FilterSelectMenuUtils.getWantedOrNotSelectMenuItemsIds(
       selectMenuStates.ingredients,
     ),
@@ -31,21 +29,7 @@ const fetchFilteredRecipes = async (
     recipeCategoryId: recipeCategoryId,
     seasonalRecipes: switchStates.seasonalRecipes,
   };
-  const response: RecipeWithLessData[] = await $fetch(
-    '/api/recipesCategories/recipes/filtered',
-    {
-      method: 'GET',
-      watch: false,
-      default: () => [],
-      query: query,
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    },
-  );
+  const response: IRecipeWithLessData[] = await useRecipesRequest().fetchFiltered(query);
   return response;
 };
 
@@ -56,8 +40,8 @@ const fetchFilteredRecipesCategories = async (
   selectMenuStates: FilterSelectMenuStates,
   iconsGridStates: FilterIconsGridStates,
   switchStates: FilterSwitchStates,
-): Promise<RecipesCategoriesWithLessData[]> => {
-  const query: FethRecipesCategoriesQuery = {
+): Promise<IRecipesCategoriesWithLessData[]> => {
+  const query: IFetchRecipesCategoriesQuery = {
     ingredients: FilterSelectMenuUtils.getWantedOrNotSelectMenuItemsIds(
       selectMenuStates.ingredients,
     ),
@@ -75,21 +59,7 @@ const fetchFilteredRecipesCategories = async (
     ),
     seasonalRecipes: switchStates.seasonalRecipes,
   };
-  const response: RecipesCategoriesWithLessData[] = await $fetch(
-    '/api/recipesCategories/filtered',
-    {
-      method: 'GET',
-      watch: false,
-      default: () => [],
-      query: query,
-      onResponseError({ response }) {
-        throw showError({
-          statusCode: response.status,
-          statusMessage: response._data.message,
-        });
-      },
-    },
-  );
+  const response: IRecipesCategoriesWithLessData[] = await useRecipesCategoriesRequest().fetchFiltered(query);
   return response;
 };
 
@@ -102,7 +72,7 @@ const FilterUtils = {
     iconsGridStates: FilterIconsGridStates,
     switchStates: FilterSwitchStates,
     recipeCategoryId: string | string[] | null = null,
-  ): Promise<RecipeWithLessData[] | RecipesCategoriesWithLessData[]> => {
+  ): Promise<IRecipeWithLessData[] | IRecipesCategoriesWithLessData[]> => {
     if (recipeCategoryId) {
       return await fetchFilteredRecipes(
         recipeCategoryId,

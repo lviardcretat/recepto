@@ -1,9 +1,6 @@
 import type { SelectMenuItem } from '@nuxt/ui';
 import type { FilterSelectMenuStatesType } from '~/enums/filter';
-import type {
-  FilterSelectMenuStates,
-  CustomSelectMenuItem,
-} from '~/types/filter';
+import type { FilterSelectMenuStates, ICustomSelectMenuItem } from '~/types/filter/selectMenu';
 
 /**
  * Allows you to recover states from the composable.
@@ -36,7 +33,7 @@ export const useFilterSelectedItemsStates = () =>
  * @param dataType The type of the filter list modified.
  */
 export const useUpdateFilterSelectMenu = async (
-  item: SelectMenuItem & CustomSelectMenuItem,
+  item: SelectMenuItem & ICustomSelectMenuItem,
   wanted: boolean | null,
   dataType: FilterSelectMenuStatesType,
 ): Promise<void> => {

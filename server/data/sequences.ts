@@ -1,9 +1,9 @@
 import type { Sequence, SequenceInsert } from '../utils/drizzleUtils';
 
 export async function getSequences(): Promise<Sequence[]> {
-  const sequences: Sequence[] = await useDrizzle()
+  const sequences: Sequence[] = await db
     .select()
-    .from(tables.sequence)
+    .from(schema.sequence)
     .all();
   return sequences;
 }
@@ -20,16 +20,16 @@ export async function postSequence(
     recipeId: recipeId,
     createdById: createdById,
   };
-  await useDrizzle()
-    .insert(tables.sequence)
+  await db
+    .insert(schema.sequence)
     .values(sequenceInsert);
 }
 
 export async function getSequence(id: number): Promise<Sequence | undefined> {
-  const sequence: Sequence | undefined = await useDrizzle()
+  const sequence: Sequence | undefined = await db
     .select()
-    .from(tables.sequence)
-    .where(eq(tables.sequence.id, id))
+    .from(schema.sequence)
+    .where(eq(schema.sequence.id, id))
     .get();
   return sequence;
 }

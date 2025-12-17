@@ -4,9 +4,9 @@ import type {
 } from '../utils/drizzleUtils';
 
 export async function getRecipeIngredients(): Promise<RecipeIngredient[]> {
-  const recipeIngredients: RecipeIngredient[] = await useDrizzle()
+  const recipeIngredients: RecipeIngredient[] = await db
     .select()
-    .from(tables.recipeIngredient)
+    .from(schema.recipeIngredient)
     .all();
   return recipeIngredients;
 }
@@ -23,18 +23,18 @@ export async function postRecipeIngredient(
     unitId: unitId,
     recipeId: recipeId,
   };
-  await useDrizzle()
-    .insert(tables.recipeIngredient)
+  await db
+    .insert(schema.recipeIngredient)
     .values(recipeIngredientInsert);
 }
 
 export async function getRecipeIngredient(
   id: number,
 ): Promise<RecipeIngredient | undefined> {
-  const recipeIngredient: RecipeIngredient | undefined = await useDrizzle()
+  const recipeIngredient: RecipeIngredient | undefined = await db
     .select()
-    .from(tables.recipeIngredient)
-    .where(eq(tables.recipeIngredient.id, id))
+    .from(schema.recipeIngredient)
+    .where(eq(schema.recipeIngredient.id, id))
     .get();
   return recipeIngredient;
 }
