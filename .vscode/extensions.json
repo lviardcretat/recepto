@@ -10,6 +10,7 @@
     "nuxtr.nuxtr-vscode",
     "rphlmr.vscode-drizzle-orm",
     "vue.volar",
-    "dbaeumer.vscode-eslint"
+    "dbaeumer.vscode-eslint",
+    "joshbolduc.commitlint"
   ]
 }
