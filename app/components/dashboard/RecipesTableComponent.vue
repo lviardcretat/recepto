@@ -2,7 +2,7 @@
 import { getGroupedRowModel } from '@tanstack/vue-table';
 import type { GroupingOptions } from '@tanstack/vue-table';
 import { getRecipesTableConfig } from '~/config/dashboard/RecipesTableConfig';
-import type { RecipesDashboard } from '~/types/recipesDashboard';
+import type { IRecipesDashboard } from '~/types/recipe/dashboard';
 import { LazyDashboardDeletionDeleteModalComponent, LazyEditionRecipeEditModalComponent, LazyEditionRecipeCategoryEditModalComponent } from '#components';
 
 const { d, t, locale } = useI18n();
@@ -16,7 +16,7 @@ const editRecipeModal = overlay.create(LazyEditionRecipeEditModalComponent);
 const deleteModal = overlay.create(LazyDashboardDeletionDeleteModalComponent);
 const editCategoryModal = overlay.create(LazyEditionRecipeCategoryEditModalComponent);
 
-const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = await useRecipesRequest().getDashboard<RecipesDashboard[], RecipesDashboard[]>({
+const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = await useRecipesRequest().getDashboard<IRecipesDashboard[], IRecipesDashboard[]>({
   immediate: false,
   watch: false,
   default: () => [],

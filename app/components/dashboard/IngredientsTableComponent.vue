@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getIngredientsTableConfig } from '~/config/dashboard/IngredientsTableConfig';
-import type { IngredientsDashboard } from '~/types/ingredientsDashboard';
+import type { IIngredientsDashboard } from '~/types/ingredient/dashboard';
 import { LazyDashboardDeletionDeleteModalComponent, LazyEditionIngredientEditModalComponent } from '#components';
 import type { FoodType } from '~~/server/utils/drizzleUtils';
 
@@ -14,7 +14,7 @@ const nuxtApp = useNuxtApp();
 const editModal = overlay.create(LazyEditionIngredientEditModalComponent);
 const deleteModal = overlay.create(LazyDashboardDeletionDeleteModalComponent);
 
-const { data: ingredients, execute: executeIngredientsFetch } = await useIngredientsRequest().getDashboard<IngredientsDashboard[], IngredientsDashboard[]>({
+const { data: ingredients, execute: executeIngredientsFetch } = await useIngredientsRequest().getDashboard<IIngredientsDashboard[], IIngredientsDashboard[]>({
   immediate: false,
   watch: false,
   default: () => [],

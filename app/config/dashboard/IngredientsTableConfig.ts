@@ -2,18 +2,18 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 import type { Composer } from 'vue-i18n';
 import type { Row } from '@tanstack/vue-table';
 import type { ConcreteComponent, ComputedOptions, MethodOptions } from 'vue';
-import type { CustomAccordionItem } from '~/types/filter';
-import type { IngredientsDashboard, IngredientsRecipesDashboard } from '~/types/ingredientsDashboard';
+import type { ICustomAccordionItem } from '~/types/filter/accordion';
+import type { IIngredientsDashboard, IIngredientsRecipesDashboard } from '~/types/ingredient/dashboard';
 
 interface IngredientsTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
   dropdownMenuComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
   foodTypes: FoodType[];
-  onEditButtonOpen: (ingredient: IngredientsDashboard) => void;
-  onDeleteButtonOpen: (ingredient: IngredientsDashboard) => void;
+  onEditButtonOpen: (ingredient: IIngredientsDashboard) => void;
+  onDeleteButtonOpen: (ingredient: IIngredientsDashboard) => void;
 };
 
-function getRowItems(row: Row<IngredientsDashboard>, props: IngredientsTableConfigProps) {
+function getRowItems(row: Row<IIngredientsDashboard>, props: IngredientsTableConfigProps) {
   return [
     {
       label: 'Editer',
@@ -25,7 +25,7 @@ function getRowItems(row: Row<IngredientsDashboard>, props: IngredientsTableConf
       label: 'Supprimer',
       icon: 'i-lucide-trash',
       color: 'error',
-      disabled: row.getValue<IngredientsRecipesDashboard[]>('recipes').length > 0,
+      disabled: row.getValue<IIngredientsRecipesDashboard[]>('recipes').length > 0,
       onClick: () => props.onDeleteButtonOpen(row.original),
     },
   ];
@@ -35,7 +35,7 @@ export function getIngredientsTableConfig(
   d: Composer['d'],
   t: Composer['t'],
   props: IngredientsTableConfigProps,
-): Ref<(NavigationMenuItem & CustomAccordionItem)[]> {
+): Ref<(NavigationMenuItem & ICustomAccordionItem)[]> {
   return computed(() =>
     [
       {
@@ -45,14 +45,14 @@ export function getIngredientsTableConfig(
       {
         accessorKey: 'recipes',
         header: t('dashboard.ingredientsTableComponent.recipesCount'),
-        cell: ({ row }: { row: Row<IngredientsDashboard> }) => {
-          return `${row.getValue<IngredientsRecipesDashboard[]>('recipes').length} ${t('dashboard.ingredientsTableComponent.recipes', row.getValue<IngredientsRecipesDashboard[]>('recipes').length)}`;
+        cell: ({ row }: { row: Row<IIngredientsDashboard> }) => {
+          return `${row.getValue<IIngredientsRecipesDashboard[]>('recipes').length} ${t('dashboard.ingredientsTableComponent.recipes', row.getValue<IIngredientsRecipesDashboard[]>('recipes').length)}`;
         },
       },
       {
         accessorKey: 'foodTypeId',
         header: t('dashboard.ingredientsTableComponent.foodType'),
-        cell: ({ row }: { row: Row<IngredientsDashboard> }) => {
+        cell: ({ row }: { row: Row<IIngredientsDashboard> }) => {
           return props.foodTypes.find(foodType => foodType.id === row.getValue<number>('foodTypeId'))?.name ?? '/';
         },
       },
@@ -63,7 +63,7 @@ export function getIngredientsTableConfig(
       {
         accessorKey: 'createdAt',
         header: t('dashboard.createdAt'),
-        cell: ({ row }: { row: Row<IngredientsDashboard> }) => {
+        cell: ({ row }: { row: Row<IIngredientsDashboard> }) => {
           return d(row.getValue<string>('createdAt'), 'short');
         },
         aggregationFn: 'max',
@@ -71,14 +71,14 @@ export function getIngredientsTableConfig(
       {
         accessorKey: 'updatedAt',
         header: t('dashboard.updatedAt'),
-        cell: ({ row }: { row: Row<IngredientsDashboard> }) => {
+        cell: ({ row }: { row: Row<IIngredientsDashboard> }) => {
           return d(row.getValue<string>('updatedAt'), 'short');
         },
         aggregationFn: 'max',
       },
       {
         id: 'actions',
-        cell: ({ row }: { row: Row<IngredientsDashboard> }) => {
+        cell: ({ row }: { row: Row<IIngredientsDashboard> }) => {
           return h(
             'div',
             { class: 'text-right' },

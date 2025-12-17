@@ -8,7 +8,7 @@ import {
 } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
-import type { ItemsIdsWantedOrNot } from '~/types/filter';
+import type { IItemsIdsWantedOrNot } from '~/types/filter/items';
 import type { FilterSelectItem } from '~/schemas/filter';
 
 export const recipeCategorySelectType = {
@@ -44,7 +44,7 @@ export function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
 }
 
 export function createIngredientSubQuery(
-  ingredientsIds: ItemsIdsWantedOrNot,
+  ingredientsIds: IItemsIdsWantedOrNot,
   recipeCategoryId: number | null = null,
 ) {
   const conditions = createSubQueryConditions(
@@ -75,7 +75,7 @@ export function createIngredientSubQuery(
 }
 
 export function createUstensilSubQuery(
-  ustensilsIds: ItemsIdsWantedOrNot,
+  ustensilsIds: IItemsIdsWantedOrNot,
   recipeCategoryId: number | null = null,
 ) {
   const conditions = createSubQueryConditions(
@@ -159,7 +159,7 @@ export function createSeasonalRecipeSubQuery(
 }
 
 export function createSubQueryConditions<T extends SQLiteColumn>(
-  ids: ItemsIdsWantedOrNot | number[],
+  ids: IItemsIdsWantedOrNot | number[],
   sqliteColumn: T,
 ): SQL[] | null {
   const conditions: SQL[] = [];

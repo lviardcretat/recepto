@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RecipeWithLessData } from '~/types/filter';
+import type { IRecipeWithLessData } from '~/types/recipe/detail';
 
 const selectMenuStates = useFilterSelectMenuStates();
 const iconsGridStates = useFilterIconsGridStates();
@@ -9,7 +9,7 @@ const route = useRoute();
 
 const nuxtApp = useNuxtApp();
 const isModalOpen: Ref<boolean> = ref(false);
-const recipeActive: Ref<RecipeWithLessData | undefined> = ref();
+const recipeActive: Ref<IRecipeWithLessData | undefined> = ref();
 
 await callOnce(
   async () => {

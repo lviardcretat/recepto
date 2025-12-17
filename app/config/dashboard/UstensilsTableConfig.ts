@@ -2,17 +2,17 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 import type { Row } from '@tanstack/vue-table';
 import type { Composer } from 'vue-i18n';
 import type { ComputedOptions, ConcreteComponent, MethodOptions } from 'vue';
-import type { CustomAccordionItem } from '~/types/filter';
-import type { UstensilsDashboard } from '~/types/ustensilsDashboard';
+import type { IICustomAccordionItem } from '~/types/filter/accordion';
+import type { IIUstensilsDashboard } from '~/types/ustensil/dashboard';
 
 interface UstensilsTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
   dropdownMenuComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
-  onEditButtonOpen: (ustensil: UstensilsDashboard) => void;
-  onDeleteButtonOpen: (ustensil: UstensilsDashboard) => void;
+  onEditButtonOpen: (ustensil: IUstensilsDashboard) => void;
+  onDeleteButtonOpen: (ustensil: IUstensilsDashboard) => void;
 };
 
-function getRowItems(row: Row<UstensilsDashboard>, props: UstensilsTableConfigProps) {
+function getRowItems(row: Row<IUstensilsDashboard>, props: UstensilsTableConfigProps) {
   return [
     {
       label: 'Editer',
@@ -34,7 +34,7 @@ export function getUstensilsTableConfig(
   d: Composer['d'],
   t: Composer['t'],
   props: UstensilsTableConfigProps,
-): Ref<(NavigationMenuItem & CustomAccordionItem)[]> {
+): Ref<(NavigationMenuItem & ICustomAccordionItem)[]> {
   return computed(() =>
     [
       {
@@ -44,14 +44,14 @@ export function getUstensilsTableConfig(
       {
         accessorKey: 'recipesCount',
         header: t('dashboard.ustensilsTableComponent.recipesCount'),
-        cell: ({ row }: { row: Row<UstensilsDashboard> }) => {
+        cell: ({ row }: { row: Row<IUstensilsDashboard> }) => {
           return `${row.getValue<number>('recipesCount')} ${t('dashboard.ustensilsTableComponent.recipes', row.getValue('recipesCount'))}`;
         },
       },
       {
         accessorKey: 'createdAt',
         header: t('dashboard.createdAt'),
-        cell: ({ row }: { row: Row<UstensilsDashboard> }) => {
+        cell: ({ row }: { row: Row<IUstensilsDashboard> }) => {
           return d(row.getValue<string>('createdAt'), 'short');
         },
         aggregationFn: 'max',
@@ -59,14 +59,14 @@ export function getUstensilsTableConfig(
       {
         accessorKey: 'updatedAt',
         header: t('dashboard.updatedAt'),
-        cell: ({ row }: { row: Row<UstensilsDashboard> }) => {
+        cell: ({ row }: { row: Row<IUstensilsDashboard> }) => {
           return d(row.getValue<string>('updatedAt'), 'short');
         },
         aggregationFn: 'max',
       },
       {
         id: 'actions',
-        cell: ({ row }: { row: Row<UstensilsDashboard> }) => {
+        cell: ({ row }: { row: Row<IUstensilsDashboard> }) => {
           return h(
             'div',
             { class: 'text-right' },

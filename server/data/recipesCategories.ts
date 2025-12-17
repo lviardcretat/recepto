@@ -13,11 +13,8 @@ import {
   recipeCategorySelectType,
 } from '../utils/filterUtils';
 import { count } from 'drizzle-orm';
-import type {
-  ItemsIdsWantedOrNot,
-  RecipesCategoriesWithLessData,
-} from '~/types/filter';
-import type { RecipeSearched } from '~/types/search';
+import type { IIItemsIdsWantedOrNot } from '~/types/filter/items';
+import type { IIRecipesCategoriesWithLessData, IIRecipeSearched } from '~/types/recipesCategory/detail';
 
 export async function postRecipesCategory(
   name: string,
@@ -46,8 +43,8 @@ export async function getRecipesCategories(): Promise<RecipesCategory[]> {
   return recipesCategories;
 }
 
-export async function getRecipesCategoriesWithRecipeCount(): Promise<RecipesCategoriesWithLessData[]> {
-  const recipesCategories: RecipesCategoriesWithLessData[] = await db
+export async function getRecipesCategoriesWithRecipeCount(): Promise<IRecipesCategoriesWithLessData[]> {
+  const recipesCategories: IRecipesCategoriesWithLessData[] = await db
     .select({
       id: schema.recipesCategory.id,
       name: schema.recipesCategory.name,
@@ -63,8 +60,8 @@ export async function getRecipesCategoriesWithRecipeCount(): Promise<RecipesCate
   return recipesCategories;
 }
 
-export async function getRecipesCategoriesAndRecipesNames(): Promise<RecipeSearched[]> {
-  const recipesCategoriesRecipes: RecipeSearched[] = await db.query.recipesCategory.findMany({
+export async function getRecipesCategoriesAndRecipesNames(): Promise<IRecipeSearched[]> {
+  const recipesCategoriesRecipes: IRecipeSearched[] = await db.query.recipesCategory.findMany({
     columns: {
       id: true,
       name: true,
@@ -126,14 +123,14 @@ export async function deleteRecipesCategory(id: number): Promise<void> {
 
 export async function getRecipesCategoriesFiltered(
   query: RecipesCategoriesFilter,
-): Promise<RecipesCategoriesWithLessData[]> {
-  const ingredientsIds: ItemsIdsWantedOrNot = query.ingredients;
-  const ustensilsIds: ItemsIdsWantedOrNot = query.ustensils;
-  const mealTypesIds: ItemsIdsWantedOrNot = query.mealTypes ?? {
+): Promise<IRecipesCategoriesWithLessData[]> {
+  const ingredientsIds: IItemsIdsWantedOrNot = query.ingredients;
+  const ustensilsIds: IItemsIdsWantedOrNot = query.ustensils;
+  const mealTypesIds: IItemsIdsWantedOrNot = query.mealTypes ?? {
     wanted: [],
     notWanted: [],
   };
-  const dishTypesIds: ItemsIdsWantedOrNot = query.dishTypes ?? {
+  const dishTypesIds: IItemsIdsWantedOrNot = query.dishTypes ?? {
     wanted: [],
     notWanted: [],
   };
@@ -149,7 +146,7 @@ export async function getRecipesCategoriesFiltered(
     return await getRecipesCategoriesWithRecipeCount();
   }
 
-  let recipesCategories: RecipesCategoriesWithLessData[] = [];
+  let recipesCategories: IRecipesCategoriesWithLessData[] = [];
   const subQueries = [
     createMealTypeSubQuery(mealTypesIds),
     createDishTypeSubQuery(dishTypesIds),
@@ -170,13 +167,13 @@ export async function getRecipesCategoriesFiltered(
       filters[0],
       filters[1],
       ...filters.slice(2),
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 2) {
     recipesCategories = (await intersect(
       filters[0],
       filters[1],
-    ).all()) as unknown as RecipesCategoriesWithLessData[];
+    ).all()) as unknown as IRecipesCategoriesWithLessData[];
   }
   else if (filters.length === 1) {
     recipesCategories = await filters[0]
@@ -188,7 +185,7 @@ export async function getRecipesCategoriesFiltered(
   return recipesCategories;
 }
 
-function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
+function createMealTypeSubQuery(mealTypesIds: IItemsIdsWantedOrNot) {
   const conditions = createSubQueryConditions(
     mealTypesIds,
     schema.mealTypeToRecipeCategory.mealTypeId,
@@ -221,7 +218,7 @@ function createMealTypeSubQuery(mealTypesIds: ItemsIdsWantedOrNot) {
     );
 }
 
-function createDishTypeSubQuery(dishTypesIds: ItemsIdsWantedOrNot) {
+function createDishTypeSubQuery(dishTypesIds: IItemsIdsWantedOrNot) {
   const conditions = createSubQueryConditions(dishTypesIds, schema.dishType.id);
   if (!conditions) return null;
   return db

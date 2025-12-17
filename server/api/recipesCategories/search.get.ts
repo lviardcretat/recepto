@@ -1,8 +1,8 @@
 import { getRecipesCategoriesAndRecipesNames } from '~~/server/data/recipesCategories';
-import type { RecipeSearched } from '~/types/search';
+import type { IRecipeSearched } from '~/types/recipesCategory/detail';
 
 export default defineEventHandler(async (_event) => {
-  const recipesCategoriesSearched: RecipeSearched[] = await getRecipesCategoriesAndRecipesNames();
+  const recipesCategoriesSearched: IRecipeSearched[] = await getRecipesCategoriesAndRecipesNames();
   if (!recipesCategoriesSearched) {
     throw createError({
       statusCode: 404,

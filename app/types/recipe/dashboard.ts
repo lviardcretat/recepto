@@ -1,4 +1,7 @@
-export type RecipesDashboard = {
+/**
+ * Recipe dashboard model
+ */
+export interface IRecipesDashboard {
   id: number;
   name: string;
   createdAt: string;
@@ -12,4 +15,4 @@ export type RecipesDashboard = {
     createdAt: string;
     updatedAt: string;
   };
-};
+}
