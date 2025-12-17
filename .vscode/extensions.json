@@ -11,6 +11,7 @@
     "rphlmr.vscode-drizzle-orm",
     "vue.volar",
     "dbaeumer.vscode-eslint",
-    "joshbolduc.commitlint"
+    "joshbolduc.commitlint",
+    "webmania.vue-mess-detector"
   ]
 }

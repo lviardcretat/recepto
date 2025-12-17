@@ -45,19 +45,22 @@ const now = ref(new Date());
 const isCountdownFinished = computed(() => now.value >= targetDate);
 const success = ref(false);
 
+/**
+ * Pads a number with leading zeros to ensure 2 digits
+ */
+function padNumber(n: number): string {
+  return n.toString().padStart(2, '0');
+}
+
+const timeDiff = computed(() => targetDate.getTime() - now.value.getTime());
+const countdownDays = computed(() => Math.floor(timeDiff.value / (1000 * 60 * 60 * 24)));
+const countdownHours = computed(() => Math.floor((timeDiff.value % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+const countdownMinutes = computed(() => Math.floor((timeDiff.value % (1000 * 60 * 60)) / (1000 * 60)));
+const countdownSeconds = computed(() => Math.floor((timeDiff.value % (1000 * 60)) / 1000));
+
 const countdown = computed(() => {
-  const diff = targetDate.getTime() - now.value.getTime();
-
-  if (diff <= 0) return '00:00:00:00';
-
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  const pad = (n: number) => n.toString().padStart(2, '0');
-
-  return `${pad(days)}j ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+  if (timeDiff.value <= 0) return '00:00:00:00';
+  return `${padNumber(countdownDays.value)}j ${padNumber(countdownHours.value)}h ${padNumber(countdownMinutes.value)}m ${padNumber(countdownSeconds.value)}s`;
 });
 
 let interval: ReturnType<typeof setInterval>;

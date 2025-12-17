@@ -1,0 +1,22 @@
+{
+  "apply": "vue-essential,vue-strong,vue-recommended,vue-caution,security",
+  "level": "error",
+  "fileIgnoreRules": {
+    "app/error.vue": "singleNameComponent,componentFilenameCasing",
+    "app/layouts/auth.vue": "fullWordComponentName",
+    "app/pages/recipes/all.vue": "fullWordComponentName",
+    "app/components/CustomNuxtLoadingIndicator.vue": "globalStyle",
+    "app/components/SeasonalChartComponent.vue": "globalStyle",
+    "package.json": "rateLimiter",
+    "app/components/auth/AnonymousRestrictionModalComponent.vue": "templateSimpleExpression",
+    "app/components/filter/CustomSelectComponent.vue": "templateSimpleExpression",
+    "app/components/dashboard/deletion/DeleteModalComponent.vue": "templateSimpleExpression",
+    "app/components/creation/IngredientModalComponent.vue": "templateSimpleExpression",
+    "app/components/selection/RecipeCardComponent.vue": "templateSimpleExpression",
+    "app/components/selection/RecipeCardDetailsComponent.vue": "templateSimpleExpression",
+    "app/components/edition/RecipeEditModalComponent.vue": "templateSimpleExpression",
+    "app/components/creation/RecipeModalComponent.vue": "templateSimpleExpression",
+    "app/components/creation/RecipesCategoryModalComponent.vue": "templateSimpleExpression",
+    "app/components/creation/UstensilModalComponent.vue": "templateSimpleExpression"
+  }
+}
