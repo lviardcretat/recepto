@@ -10,7 +10,12 @@ export default defineNuxtConfig({
       '~/composables/**',
     ],
   },
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+    timeline: {
+      enabled: true,
+    },
+  },
   app: {
     head: {
       htmlAttrs: {
