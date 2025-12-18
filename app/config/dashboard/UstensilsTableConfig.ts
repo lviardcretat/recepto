@@ -2,8 +2,8 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 import type { Row } from '@tanstack/vue-table';
 import type { Composer } from 'vue-i18n';
 import type { ComputedOptions, ConcreteComponent, MethodOptions } from 'vue';
-import type { IICustomAccordionItem } from '~/types/filter/accordion';
-import type { IIUstensilsDashboard } from '~/types/ustensil/dashboard';
+import type { ICustomAccordionItem } from '~/types/filter/accordion';
+import type { IUstensilsDashboard } from '~/types/ustensil/dashboard';
 
 interface UstensilsTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;
