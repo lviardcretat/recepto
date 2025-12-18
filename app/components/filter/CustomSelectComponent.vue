@@ -65,6 +65,7 @@ async function fetchFilteredItems() {
       multiple
       :placeholder="$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })"
       searchable
+      virtualize
       :searchable-placeholder="$t('filterBy', { filterName: props.placeholder.toLocaleLowerCase() })"
       :ui="{ itemTrailing: 'hidden' }"
     >

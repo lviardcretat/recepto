@@ -14,9 +14,9 @@ import {
   recipeSelectType,
 } from '../utils/filterUtils';
 import { intersect } from 'drizzle-orm/sqlite-core';
-import type { IIRecipeWithLessData, IIRecipeDetail } from '~/types/recipe/detail';
-import type { IIRecipesDashboard } from '~/types/recipe/dashboard';
-import type { IIRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
+import type { IRecipeWithLessData, IRecipeDetail } from '~/types/recipe/detail';
+import type { IRecipesDashboard } from '~/types/recipe/dashboard';
+import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
 export async function postRecipe(
   name: string,

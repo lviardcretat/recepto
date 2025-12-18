@@ -2,8 +2,8 @@ import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
 import type { Row } from '@tanstack/vue-table';
 import type { Composer } from 'vue-i18n';
 import type { ConcreteComponent, ComputedOptions, MethodOptions } from 'vue';
-import type { IICustomAccordionItem } from '~/types/filter/accordion';
-import type { IIRecipesDashboard } from '~/types/recipe/dashboard';
+import type { ICustomAccordionItem } from '~/types/filter/accordion';
+import type { IRecipesDashboard } from '~/types/recipe/dashboard';
 
 interface RecipesTableConfigProps {
   buttonComponent: string | ConcreteComponent<{}, any, any, ComputedOptions, MethodOptions, {}, any>;

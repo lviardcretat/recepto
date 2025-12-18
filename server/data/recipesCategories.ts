@@ -13,8 +13,8 @@ import {
   recipeCategorySelectType,
 } from '../utils/filterUtils';
 import { count } from 'drizzle-orm';
-import type { IIItemsIdsWantedOrNot } from '~/types/filter/items';
-import type { IIRecipesCategoriesWithLessData, IIRecipeSearched } from '~/types/recipesCategory/detail';
+import type { IItemsIdsWantedOrNot } from '~/types/filter/items';
+import type { IRecipesCategoriesWithLessData, IRecipeSearched } from '~/types/recipesCategory/detail';
 
 export async function postRecipesCategory(
   name: string,

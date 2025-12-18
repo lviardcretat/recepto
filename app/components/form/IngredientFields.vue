@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { SelectMenuItem } from '@nuxt/ui';
 import { Months } from '~/enums/data';
-import type { IIIngredientFormData } from '~/types/ingredient/form';
+import type { IIngredientFormData } from '~/types/ingredient/form';
 
 const props = defineProps<{
   modelValue: IIngredientFormData;
