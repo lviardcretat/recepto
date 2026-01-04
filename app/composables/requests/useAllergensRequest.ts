@@ -1,8 +1,9 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Allergen } from '~~/server/utils/drizzleUtils';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
+import type { ICachedDataOptions } from '~/types/cache/requests';
 
 /**
  * Composable for allergens API operations
@@ -51,17 +52,17 @@ export function useAllergensRequest() {
     // ============================================
 
     /**
-     * Get all allergens with persistent cache
+     * Get all allergens with persistent cache and TTL (1 hour)
      * Use for data that needs to be cached and reused across components
-     * @param key - Optional cache key (defaults to 'allergens-all')
-     * @param options - Optional async data options
+     * Note: Use computed() in components to transform data (e.g., to SelectMenuItem[])
+     * @param options - Optional cached data options
      * @returns Nuxt useAsyncData composable result
      */
-    getAllCached(key?: string, options?: AsyncDataOptions<Allergen[]>) {
+    getAllCached(options?: Omit<ICachedDataOptions<Allergen[]>, 'fetchOptions' | 'ttl'>) {
       return useCachedData<Allergen[]>(
-        key ?? 'allergens-all',
+        'allergens-all',
         `/${ApiResource.ALLERGENS}/${ApiEndpoint.ALL}`,
-        { fetchOptions: { method: HttpMethod.GET }, ...options },
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 3600000, ...options }, // TTL: 1 hour
       );
     },
   };

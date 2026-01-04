@@ -1,15 +1,21 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { NitroFetchRequest, NitroFetchOptions } from 'nitropack';
+import type { ICachedDataOptions } from '~/types/cache/requests';
 
 type KeysOf<T> = Array<T extends T ? keyof T extends string ? keyof T : never : never>;
 
 /**
  * Get the $api instance for imperative fetching
  * Use in event handlers, callOnce, or any non-SSR context
+ * Uses tryUseNuxtApp() to handle async contexts where Nuxt instance may not be available
  */
 export function useApiClient(): typeof $fetch {
-  const { $api } = useNuxtApp();
-  return $api;
+  const nuxtApp = tryUseNuxtApp();
+  if (nuxtApp) {
+    return nuxtApp.$api;
+  }
+  // Fallback: create a $fetch with baseURL when Nuxt context is not available
+  return $fetch.create({ baseURL: '/api' });
 }
 
 /**
@@ -53,28 +59,65 @@ export async function fetchy<T>(
 }
 
 /**
- * Options for useCachedData composable
- */
-interface UseCachedDataOptions<T> extends AsyncDataOptions<T> {
-  /** Fetch options passed to $api */
-  fetchOptions?: NitroFetchOptions<NitroFetchRequest>;
-}
-
-/**
- * Wrapper for useAsyncData that caches server data with proper typing
+ * Wrapper for useAsyncData that caches server data with proper typing and optional TTL
  * Use for data that needs to be cached and reused across components
+ * @param key - Unique cache key
+ * @param url - API endpoint URL
+ * @param options - Options including fetchOptions, optional TTL, and transform
  */
-export function useCachedData<T>(
+export function useCachedData<ResT>(
   key: string,
   url: NitroFetchRequest,
-  options?: UseCachedDataOptions<T>,
+  options?: ICachedDataOptions<ResT>,
 ) {
-  const { fetchOptions, ...asyncDataOptions } = options ?? {};
+  const { fetchOptions, ttl, default: defaultFn, watch } = options ?? {};
   const $api = useApiClient();
+  const nuxtApp = tryUseNuxtApp();
+  if (!nuxtApp) {
+    throw new Error('useCachedData requires Nuxt context - call it within a Vue setup function');
+  }
 
-  return useAsyncData<T>(
+  // Store timestamps separately using useState (persists across components, not in payload)
+  const cacheTimestamps = useState<Record<string, number>>('cache-timestamps', () => ({}));
+
+  // Build getCachedData function based on TTL
+  const getCachedData = ttl
+    ? (cacheKey: string) => {
+        const cached = nuxtApp.payload.data[cacheKey];
+
+        // No cached data
+        if (cached === undefined) return undefined;
+
+        // Check TTL expiration
+        const timestamp = cacheTimestamps.value[cacheKey];
+        if (!timestamp || Date.now() - timestamp > ttl) {
+          return undefined;
+        }
+
+        // Return raw cached data - transforms should be applied in components via computed
+        return cached;
+      }
+    : undefined;
+
+  const asyncDataOptions: Record<string, unknown> = {
+    getCachedData,
+  };
+
+  if (defaultFn) asyncDataOptions.default = defaultFn;
+  if (watch !== undefined) asyncDataOptions.watch = watch;
+  // Don't pass transform to useAsyncData - cache must always store raw data
+  // Transforms should be applied in components via computed() to avoid cache conflicts
+
+  return useAsyncData(
     key,
-    () => $api<T>(url, fetchOptions),
+    async () => {
+      const data = await $api<ResT>(url, fetchOptions);
+      // Update timestamp when data is fetched
+      if (ttl) {
+        cacheTimestamps.value[key] = Date.now();
+      }
+      return data;
+    },
     asyncDataOptions,
-  );
+  ) as ReturnType<typeof useAsyncData<ResT>>;
 }

@@ -1,8 +1,9 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Season } from '~~/server/utils/drizzleUtils';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
+import type { ICachedDataOptions } from '~/types/cache/requests';
 
 /**
  * Composable for seasons API operations
@@ -51,17 +52,17 @@ export function useSeasonsRequest() {
     // ============================================
 
     /**
-     * Get all seasons with persistent cache
+     * Get all seasons with persistent cache and TTL (24 hours - static data)
      * Use for data that needs to be cached and reused across components
-     * @param key - Optional cache key (defaults to 'seasons-all')
-     * @param options - Optional async data options
+     * Note: Use computed() in components to transform data (e.g., to SelectMenuItem[])
+     * @param options - Optional cached data options
      * @returns Nuxt useAsyncData composable result
      */
-    getAllCached(key?: string, options?: AsyncDataOptions<Season[]>) {
+    getAllCached(options?: Omit<ICachedDataOptions<Season[]>, 'fetchOptions' | 'ttl'>) {
       return useCachedData<Season[]>(
-        key ?? 'seasons-all',
+        'seasons-all',
         `/${ApiResource.SEASONS}/${ApiEndpoint.ALL}`,
-        { fetchOptions: { method: HttpMethod.GET }, ...options },
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 86400000, ...options }, // TTL: 24 hours (static data)
       );
     },
   };

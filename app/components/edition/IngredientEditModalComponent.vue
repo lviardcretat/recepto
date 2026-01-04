@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
+import type { FormSubmitEvent } from '#ui/types';
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
 import type { IngredientCreation } from '~/schemas/creation/ingredient';
-import type { FoodType } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   ingredientId: number;
@@ -28,11 +27,11 @@ if (error.value || !ingredient.value) {
 }
 
 // Fetch food types
-const { data: foodTypes } = await useFoodTypesRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: foodTypesRaw } = await useFoodTypesRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (foodTypes: FoodType[]) => mapSelectMenuItemsUtils(foodTypes),
 });
+const foodTypes = computed(() => mapSelectMenuItemsUtils(foodTypesRaw.value));
 
 // Initialize form state with fetched data
 const state = ref<{

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { DropdownMenuItem } from '@nuxt/ui';
 import { createUserMenuConfig } from '~/config/UserMenuConfig';
 
 defineProps<{
@@ -8,6 +7,7 @@ defineProps<{
 
 const { t } = useI18n();
 const { user, clear } = useUserSession();
+const nuxtApp = useNuxtApp();
 
 const items = createUserMenuConfig(t, {
   isAnonymous: user.value?.isAnonymous ?? false,
@@ -17,12 +17,12 @@ const items = createUserMenuConfig(t, {
 
 async function signout() {
   await clear();
-  await navigateTo('/');
+  await nuxtApp.runWithContext(() => navigateTo('/'));
 }
 
 async function redirectToLoginPage() {
   await clear();
-  await navigateTo('/login');
+  await nuxtApp.runWithContext(() => navigateTo('/login'));
 }
 </script>
 

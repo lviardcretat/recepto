@@ -28,6 +28,10 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/main.css'],
+  // Route rules for static pages prerendering
+  routeRules: {
+    '/': { prerender: true },
+  },
   future: {
     compatibilityVersion: 4,
   },

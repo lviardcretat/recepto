@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
+import type { FormSubmitEvent } from '#ui/types';
 import {
   recipesCategoryCreation,
 
 } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
-import type { DishType } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   modalTitle: string;
@@ -27,11 +26,11 @@ const state = ref<{
   dishTypeId: undefined,
 });
 
-const { data: dishTypes } = await useDishTypesRequest().getAll<SelectMenuItem[], null>({
+const { data: dishTypesRaw } = await useDishTypesRequest().getAllCached({
   watch: false,
-  default: () => null,
-  transform: (dishTypes: DishType[]) => mapSelectMenuItemsUtils(dishTypes),
+  default: () => [],
 });
+const dishTypes = computed(() => mapSelectMenuItemsUtils(dishTypesRaw.value));
 
 async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
   disabledSubmit.value = true;

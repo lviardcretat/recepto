@@ -1,10 +1,11 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Ustensil } from '~~/server/utils/drizzleUtils';
 import type { IUstensilsDashboard } from '~/types/ustensil/dashboard';
-import type { UstensilCreation } from '~/schemas/creation/ustensil';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
+import type { ICachedDataOptions } from '~/types/cache/requests';
+import type { UstensilCreationSchema } from '~/schemas/creation/ustensil';
 
 /**
  * Composable for ustensils API operations
@@ -111,17 +112,17 @@ export function useUstensilsRequest() {
     // ============================================
 
     /**
-     * Get all ustensils with persistent cache
+     * Get all ustensils with persistent cache and TTL (10 minutes)
      * Use for data that needs to be cached and reused across components
-     * @param key - Optional cache key (defaults to 'ustensils-all')
-     * @param options - Optional async data options
+     * Note: Use computed() in components to transform data (e.g., to SelectMenuItem[])
+     * @param options - Optional cached data options
      * @returns Nuxt useAsyncData composable result
      */
-    getAllCached(key?: string, options?: AsyncDataOptions<Ustensil[]>) {
+    getAllCached(options?: Omit<ICachedDataOptions<Ustensil[]>, 'fetchOptions' | 'ttl'>) {
       return useCachedData<Ustensil[]>(
-        key ?? 'ustensils-all',
+        'ustensils-all',
         `/${ApiResource.USTENSILS}/${ApiEndpoint.ALL}`,
-        { fetchOptions: { method: HttpMethod.GET }, ...options },
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 600000, ...options }, // TTL: 10 minutes
       );
     },
 
@@ -135,7 +136,7 @@ export function useUstensilsRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to created ustensil
      */
-    create(input: UstensilCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ustensil> {
+    create(input: UstensilCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ustensil> {
       return fetchy<Ustensil>(
         `/${ApiResource.USTENSILS}`,
         { method: HttpMethod.POST, body: input, ...options },
@@ -153,7 +154,7 @@ export function useUstensilsRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to updated ustensil
      */
-    update(id: number, input: UstensilCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ustensil> {
+    update(id: number, input: UstensilCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ustensil> {
       return fetchy<Ustensil>(
         `/${ApiResource.USTENSILS}/${id}`,
         { method: 'PUT', body: input, ...options },

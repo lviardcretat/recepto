@@ -1,4 +1,4 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Ingredient } from '~~/server/utils/drizzleUtils';
 import type { IIngredientsDashboard } from '~/types/ingredient/dashboard';
@@ -6,6 +6,7 @@ import type { ISeasonalDataRecord } from '~/types/ingredient/seasonal';
 import type { IngredientCreation } from '~/schemas/creation/ingredient';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
+import type { ICachedDataOptions } from '~/types/cache/requests';
 
 /**
  * Composable for ingredients API operations
@@ -140,17 +141,32 @@ export function useIngredientsRequest() {
     // ============================================
 
     /**
-     * Get all ingredients with persistent cache
+     * Get all ingredients with persistent cache and TTL (10 minutes)
      * Use for data that needs to be cached and reused across components
-     * @param key - Optional cache key (defaults to 'ingredients-all')
-     * @param options - Optional async data options
+     * Note: Use computed() in components to transform data (e.g., to SelectMenuItem[])
+     * @param options - Optional cached data options
      * @returns Nuxt useAsyncData composable result
      */
-    getAllCached(key?: string, options?: AsyncDataOptions<Ingredient[]>) {
+    getAllCached(options?: Omit<ICachedDataOptions<Ingredient[]>, 'fetchOptions' | 'ttl'>) {
       return useCachedData<Ingredient[]>(
-        key ?? 'ingredients-all',
+        'ingredients-all',
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.ALL}`,
-        { fetchOptions: { method: HttpMethod.GET }, ...options },
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 600000, ...options }, // TTL: 10 minutes
+      );
+    },
+
+    /**
+     * Get seasonal ingredients data with persistent cache and TTL (24 hours)
+     * Use for data that needs to be cached and reused across components
+     * @template DataTransformT - The type of data after transform (defaults to ISeasonalDataRecord[])
+     * @param options - Optional cached data options including transform
+     * @returns Nuxt useAsyncData composable result
+     */
+    getSeasonalsCached<DataTransformT = ISeasonalDataRecord[]>(options?: Omit<ICachedDataOptions<ISeasonalDataRecord[], DataTransformT>, 'fetchOptions' | 'ttl'>) {
+      return useCachedData<ISeasonalDataRecord[], DataTransformT>(
+        'ingredients-seasonals',
+        `/${ApiResource.INGREDIENTS}/${ApiEndpoint.SEASONALS}`,
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 86400000, ...options }, // TTL: 24 hours
       );
     },
 

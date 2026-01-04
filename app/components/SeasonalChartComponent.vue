@@ -10,37 +10,38 @@ import { colors, Timeline } from '@unovis/ts';
 import type { BulletLegendItemInterface } from '@unovis/ts';
 import { Months } from '~/enums/data';
 import type { DataRecord } from '~~/server/api/ingredients/seasonals.get';
-import type { FoodType } from '~~/server/utils/drizzleUtils';
+import type { ISeasonalDataRecord } from '~/types/ingredient/seasonal';
 
 const nuxtApp = useNuxtApp();
 const { t } = useI18n();
 
 nuxtApp.hook('ingredient:created', async () => {
+  clearNuxtData('ingredients-seasonals');
   await refreshDatasetsFetch();
 });
 
 const {
   data: datasetsFetch,
   refresh: refreshDatasetsFetch,
-  execute: executeDatasetsFetch,
-} = await useIngredientsRequest().getSeasonals<SeasonalDataRecord[], SeasonalDataRecord[]>({
+} = await useIngredientsRequest().getSeasonalsCached<ISeasonalDataRecord[]>({
   watch: false,
-  immediate: false,
   default: () => [],
 });
-const datasetsFetchFiltered = ref<DataRecord[]>(datasetsFetch.value);
+
+// Track inactive food type IDs separately to avoid mutating fetched data
+const inactiveFoodTypeIds = ref<Set<number>>(new Set());
+
+// Computed that filters data reactively when datasetsFetch or inactiveFoodTypeIds change
+const datasetsFetchFiltered = computed(() =>
+  datasetsFetch.value.filter(item => !inactiveFoodTypeIds.value.has(item.typeId)),
+);
 
 const {
   data: foodTypesFetch,
-  execute: executeFoodTypesFetch,
-} = await useFoodTypesRequest().getAll<FoodType[], FoodType[]>({
+} = await useFoodTypesRequest().getAllCached({
   watch: false,
-  immediate: false,
   default: () => [],
 });
-
-await executeDatasetsFetch();
-await executeFoodTypesFetch();
 
 const x = (d: DataRecord) => d.startMonth;
 const length = (d: DataRecord) => {
@@ -70,27 +71,21 @@ const tickFormat = (tick: number) => {
   return t(`months.${Object.values(Months)[tick]}`);
 };
 
-function filterItems(item: BulletLegendItemInterface, i: number): void {
-  let inactive = false;
-  let foodTypesId = undefined;
-  if (legendItems.value[i]) {
-    inactive = !legendItems.value[i].inactive;
+function filterItems(_item: BulletLegendItemInterface, i: number): void {
+  const legendItem = legendItems.value[i];
+  const foodType = foodTypesFetch.value[i];
+
+  if (!legendItem || !foodType) return;
+
+  // Toggle inactive state in legend
+  legendItem.inactive = !legendItem.inactive;
+
+  // Update inactive food type IDs set
+  if (legendItem.inactive) {
+    inactiveFoodTypeIds.value.add(foodType.id);
   }
-  if (foodTypesFetch.value.length > 0 && foodTypesFetch.value[i]) {
-    foodTypesId = foodTypesFetch.value[i].id;
-  }
-  if (legendItems.value[i] && datasetsFetch.value) {
-    legendItems.value[i].inactive = inactive;
-    datasetsFetch.value = datasetsFetch.value.map((data) => {
-      if (data && data.typeId === foodTypesId) {
-        return {
-          ...data,
-          inactive: inactive,
-        };
-      }
-      return data;
-    });
-    datasetsFetchFiltered.value = datasetsFetch.value.filter(item => !item.inactive);
+  else {
+    inactiveFoodTypeIds.value.delete(foodType.id);
   }
 }
 </script>

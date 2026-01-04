@@ -1,11 +1,11 @@
 import type { SelectMenuItem } from '@nuxt/ui';
-import type { GeneralSelectMenuData } from '../types/filter';
+import type { IGeneralSelectMenuData } from '~/types/filter/selectMenu';
 
 /**
  * Transforms the data received by the bdd to match the type required by the component SelectMenu.
  * @param items The items list to map.
  */
-export default function<T extends GeneralSelectMenuData>(items: T[] | null): SelectMenuItem[] {
+export default function<T extends IGeneralSelectMenuData>(items: T[] | null): SelectMenuItem[] {
   if (items == null || items.length === 0) {
     return [];
   }

@@ -10,7 +10,10 @@ export type DataRecord = {
   inactive: boolean;
 };
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  // Cache Edge 24h, stale-while-revalidate 7 jours (données saisonnières quasi-statiques)
+  setHeader(event, 'Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
+
   const foodTypesValid: number[] = [1, 2];
   const foodTypes: FoodType[] = await getSpecificsFoodTypes(foodTypesValid);
   let datasets: DataRecord[] = [];
