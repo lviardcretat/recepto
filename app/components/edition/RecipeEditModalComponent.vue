@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
+import type { FormSubmitEvent } from '#ui/types';
 import { recipeCreation } from '~/schemas/creation/recipe';
 import type { RecipeCreation } from '~/schemas/creation/recipe';
-import type { Allergen, Ingredient, RecipesCategory, Season, Unit, Ustensil } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   recipeId: number;
@@ -35,41 +34,41 @@ if (error.value || !recipe.value) {
   emit('close', false);
 }
 
-const { data: seasons } = await useSeasonsRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: seasonsRaw } = await useSeasonsRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (seasons: Season[]) => mapSelectMenuItemsUtils(seasons),
 });
+const seasons = computed(() => mapSelectMenuItemsUtils(seasonsRaw.value));
 
-const { data: recipesCategories, refresh: refreshRecipesCategoriesFetch } = await useRecipesCategoriesRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: recipesCategoriesRaw, refresh: refreshRecipesCategoriesFetch } = await useRecipesCategoriesRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (recipesCategories: RecipesCategory[]) => mapSelectMenuItemsUtils(recipesCategories),
 });
+const recipesCategories = computed(() => mapSelectMenuItemsUtils(recipesCategoriesRaw.value));
 
-const { data: ingredients, refresh: refreshIngredientsFetch } = await useIngredientsRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: ingredientsRaw, refresh: refreshIngredientsFetch } = await useIngredientsRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (ingredients: Ingredient[]) => mapSelectMenuItemsUtils(ingredients),
 });
+const ingredients = computed(() => mapSelectMenuItemsUtils(ingredientsRaw.value));
 
-const { data: allergens } = await useAllergensRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: allergensRaw } = await useAllergensRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (allergens: Allergen[]) => mapSelectMenuItemsUtils(allergens),
 });
+const allergens = computed(() => mapSelectMenuItemsUtils(allergensRaw.value));
 
-const { data: ustensils, refresh: refreshUstensilsFetch } = await useUstensilsRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: ustensilsRaw, refresh: refreshUstensilsFetch } = await useUstensilsRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (ustensils: Ustensil[]) => mapSelectMenuItemsUtils(ustensils),
 });
+const ustensils = computed(() => mapSelectMenuItemsUtils(ustensilsRaw.value));
 
-const { data: units } = await useUnitsRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: unitsRaw } = await useUnitsRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (units: Unit[]) => mapSelectMenuItemsUtils(units),
 });
+const units = computed(() => mapSelectMenuItemsUtils(unitsRaw.value));
 
 // Initialize form state with fetched data
 const state = ref<RecipeCreation>({

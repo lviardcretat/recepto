@@ -1,8 +1,9 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { MealType } from '~~/server/utils/drizzleUtils';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
+import type { ICachedDataOptions } from '~/types/cache/requests';
 
 /**
  * Composable for meal types API operations
@@ -51,17 +52,17 @@ export function useMealTypesRequest() {
     // ============================================
 
     /**
-     * Get all meal types with persistent cache
+     * Get all meal types with persistent cache and TTL (1 hour)
      * Use for data that needs to be cached and reused across components
-     * @param key - Optional cache key (defaults to 'mealTypes-all')
-     * @param options - Optional async data options
+     * Note: Use computed() in components to transform data (e.g., to SelectMenuItem[])
+     * @param options - Optional cached data options
      * @returns Nuxt useAsyncData composable result
      */
-    getAllCached(key?: string, options?: AsyncDataOptions<MealType[]>) {
+    getAllCached(options?: Omit<ICachedDataOptions<MealType[]>, 'fetchOptions' | 'ttl'>) {
       return useCachedData<MealType[]>(
-        key ?? 'mealTypes-all',
+        'mealTypes-all',
         `/${ApiResource.MEAL_TYPES}/${ApiEndpoint.ALL}`,
-        { fetchOptions: { method: HttpMethod.GET }, ...options },
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 3600000, ...options }, // TTL: 1 hour
       );
     },
   };

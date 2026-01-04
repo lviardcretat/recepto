@@ -54,6 +54,8 @@ await callOnce(async () => {
 });
 
 nuxtApp.hook('ustensil:created', async () => {
+  // Invalidate cache so other components get fresh data
+  clearNuxtData('ustensils-all');
   const ustensilsFetch: Ustensil[] = await useUstensilsRequest().fetchAll();
   selectMenuStates.value.ustensils = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ustensilsFetch,
@@ -63,6 +65,8 @@ nuxtApp.hook('ustensil:created', async () => {
 });
 
 nuxtApp.hook('ingredient:created', async () => {
+  // Invalidate cache so other components get fresh data
+  clearNuxtData('ingredients-all');
   const ingredientsFetch: Ingredient[] = await useIngredientsRequest().fetchAll();
   selectMenuStates.value.ingredients = FilterSelectMenuUtils.mapFilterSelectMenuItems(
     ingredientsFetch,

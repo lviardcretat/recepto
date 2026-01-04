@@ -25,7 +25,7 @@ const { data: recipesCategories, execute: executeRecipesCategoriesFetch } = awai
 await executeRecipesCategoriesFetch();
 
 // Handlers for edit and delete
-async function handleEditButtonOpen(recipe: RecipesDashboard) {
+async function handleEditButtonOpen(recipe: IRecipesDashboard) {
   const instance = editRecipeModal.open({ recipeId: recipe.id });
   const result = await instance.result;
   if (result) {
@@ -33,7 +33,7 @@ async function handleEditButtonOpen(recipe: RecipesDashboard) {
   }
 }
 
-async function handleDeleteButtonOpen(recipe: RecipesDashboard) {
+async function handleDeleteButtonOpen(recipe: IRecipesDashboard) {
   const instance = deleteModal.open({
     itemName: recipe.name,
     itemType: t('recipe'),
@@ -47,7 +47,7 @@ async function handleDeleteButtonOpen(recipe: RecipesDashboard) {
   }
 }
 
-async function handleEditCategoryButtonOpen(recipe: RecipesDashboard) {
+async function handleEditCategoryButtonOpen(recipe: IRecipesDashboard) {
   const instance = editCategoryModal.open({ recipeCategoryId: recipe.recipesCategory.id });
   const result = await instance.result;
   if (result) {
@@ -55,7 +55,7 @@ async function handleEditCategoryButtonOpen(recipe: RecipesDashboard) {
   }
 }
 
-async function handleDeleteCategoryButtonOpen(recipe: RecipesDashboard) {
+async function handleDeleteCategoryButtonOpen(recipe: IRecipesDashboard) {
   const instance = deleteModal.open({
     itemName: recipe.recipesCategory.name,
     itemType: t('category'),
