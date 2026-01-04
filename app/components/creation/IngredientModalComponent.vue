@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
+import type { FormSubmitEvent } from '#ui/types';
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
 import type { IngredientCreation } from '~/schemas/creation/ingredient';
-import type { FoodType } from '~~/server/utils/drizzleUtils';
 
 const nuxtApp = useNuxtApp();
 const props = defineProps<{
@@ -27,11 +26,11 @@ const state = ref<{
   seasonalMonths: undefined,
 });
 
-const { data: foodTypes } = await useFoodTypesRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: foodTypesRaw } = await useFoodTypesRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (foodTypes: FoodType[]) => mapSelectMenuItemsUtils(foodTypes),
 });
+const foodTypes = computed(() => mapSelectMenuItemsUtils(foodTypesRaw.value));
 
 async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
   disabledSubmit.value = true;

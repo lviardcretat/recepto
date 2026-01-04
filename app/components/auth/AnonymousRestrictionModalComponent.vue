@@ -4,10 +4,11 @@ defineEmits<{
 }>();
 
 const { clear } = useUserSession();
+const nuxtApp = useNuxtApp();
 
 async function redirectToLoginPage() {
   await clear();
-  await navigateTo('/login');
+  await nuxtApp.runWithContext(() => navigateTo('/login'));
 }
 </script>
 

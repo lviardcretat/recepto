@@ -22,7 +22,7 @@ const { data: ustensils, execute: executeUstensilsFetch } = await useUstensilsRe
 await executeUstensilsFetch();
 
 // Handlers for edit and delete
-async function handleEditButtonOpen(ustensil: UstensilsDashboard) {
+async function handleEditButtonOpen(ustensil: IUstensilsDashboard) {
   const instance = editModal.open({ ustensilId: ustensil.id });
   const result = await instance.result;
   if (result) {
@@ -30,7 +30,7 @@ async function handleEditButtonOpen(ustensil: UstensilsDashboard) {
   }
 }
 
-async function handleDeleteButtonOpen(ustensil: UstensilsDashboard) {
+async function handleDeleteButtonOpen(ustensil: IUstensilsDashboard) {
   const instance = deleteModal.open({
     itemName: ustensil.name,
     itemType: t('ustensil'),

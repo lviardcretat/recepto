@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent, SelectMenuItem } from '#ui/types';
+import type { FormSubmitEvent } from '#ui/types';
 import { recipesCategoryCreation } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
-import type { DishType } from '~~/server/utils/drizzleUtils';
 
 const props = defineProps<{
   recipeCategoryId: number;
@@ -30,11 +29,11 @@ if (error.value || !recipeCategory.value) {
 }
 
 // Fetch dish types
-const { data: dishTypes } = await useDishTypesRequest().getAll<SelectMenuItem[], SelectMenuItem[]>({
+const { data: dishTypesRaw } = await useDishTypesRequest().getAllCached({
   watch: false,
   default: () => [],
-  transform: (dishTypes: DishType[]) => mapSelectMenuItemsUtils(dishTypes),
 });
+const dishTypes = computed(() => mapSelectMenuItemsUtils(dishTypesRaw.value));
 
 // Initialize form state with fetched data
 const state = ref<{

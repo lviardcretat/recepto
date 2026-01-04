@@ -1,7 +1,8 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import type { FoodType } from '~~/server/utils/drizzleUtils';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
-import { fetchy, useFetchy } from './useAPI';
+import { fetchy, useFetchy, useCachedData } from './useAPI';
+import type { ICachedDataOptions } from '~/types/cache/requests';
 
 /**
  * Composable for food types API operations
@@ -41,6 +42,25 @@ export function useFoodTypesRequest() {
       return useFetchy<FoodType[], DataTransformT, never, DefaultT>(
         `/${ApiResource.FOOD_TYPES}/${ApiEndpoint.ALL}`,
         { method: HttpMethod.GET, ...options },
+      );
+    },
+
+    // ============================================
+    // GET - Cached (useCachedData)
+    // ============================================
+
+    /**
+     * Get all food types with persistent cache and TTL (1 hour)
+     * Use for data that needs to be cached and reused across components
+     * Note: Use computed() in components to transform data (e.g., to SelectMenuItem[])
+     * @param options - Optional cached data options
+     * @returns Nuxt useAsyncData composable result
+     */
+    getAllCached(options?: Omit<ICachedDataOptions<FoodType[]>, 'fetchOptions' | 'ttl'>) {
+      return useCachedData<FoodType[]>(
+        'foodTypes-all',
+        `/${ApiResource.FOOD_TYPES}/${ApiEndpoint.ALL}`,
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 3600000, ...options }, // TTL: 1 hour
       );
     },
   };

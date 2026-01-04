@@ -1,4 +1,4 @@
-import type { UseFetchOptions, AsyncDataOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Recipe } from '~~/server/utils/drizzleUtils';
 import type { IRecipeDetail, IRecipeWithAllData, IRecipeWithLessData } from '~/types/recipe/detail';
@@ -7,6 +7,7 @@ import type { IFetchRecipesQuery } from '~/types/recipe/filter';
 import type { RecipeCreation } from '~/schemas/creation/recipe';
 import { ApiResource, ApiEndpoint, HttpMethod } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
+import type { ICachedDataOptions } from '~/types/cache/requests';
 
 /**
  * Composable for recipes API operations
@@ -181,17 +182,17 @@ export function useRecipesRequest() {
     // ============================================
 
     /**
-     * Get all recipes with persistent cache
+     * Get all recipes with persistent cache and TTL (5 minutes)
      * Use for data that needs to be cached and reused across components
-     * @param key - Optional cache key (defaults to 'recipes-all')
-     * @param options - Optional async data options
+     * Note: Use computed() in components to transform data (e.g., to SelectMenuItem[])
+     * @param options - Optional cached data options
      * @returns Nuxt useAsyncData composable result
      */
-    getAllCached(key?: string, options?: AsyncDataOptions<Recipe[]>) {
+    getAllCached(options?: Omit<ICachedDataOptions<Recipe[]>, 'fetchOptions' | 'ttl'>) {
       return useCachedData<Recipe[]>(
-        key ?? 'recipes-all',
+        'recipes-all',
         `/${ApiResource.RECIPES}/${ApiEndpoint.ALL}`,
-        { fetchOptions: { method: HttpMethod.GET }, ...options },
+        { fetchOptions: { method: HttpMethod.GET }, ttl: 300000, ...options }, // TTL: 5 minutes
       );
     },
 

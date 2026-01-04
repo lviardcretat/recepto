@@ -2,7 +2,6 @@
 import { getIngredientsTableConfig } from '~/config/dashboard/IngredientsTableConfig';
 import type { IIngredientsDashboard } from '~/types/ingredient/dashboard';
 import { LazyDashboardDeletionDeleteModalComponent, LazyEditionIngredientEditModalComponent } from '#components';
-import type { FoodType } from '~~/server/utils/drizzleUtils';
 
 const { d, t, locale } = useI18n();
 const UButton = resolveComponent('UButton');
@@ -20,17 +19,15 @@ const { data: ingredients, execute: executeIngredientsFetch } = await useIngredi
   default: () => [],
 });
 
-const { data: foodTypesFetch, execute: executeFoodTypesFetch } = await useFoodTypesRequest().getAll<FoodType[], FoodType[]>({
-  immediate: false,
+const { data: foodTypesFetch } = await useFoodTypesRequest().getAllCached({
   watch: false,
   default: () => [],
 });
 
-await executeFoodTypesFetch();
 await executeIngredientsFetch();
 
 // Handlers for edit and delete
-async function handleEditButtonOpen(ingredient: IngredientsDashboard) {
+async function handleEditButtonOpen(ingredient: IIngredientsDashboard) {
   const instance = editModal.open({ ingredientId: ingredient.id });
   const result = await instance.result;
   if (result) {
@@ -38,7 +35,7 @@ async function handleEditButtonOpen(ingredient: IngredientsDashboard) {
   }
 }
 
-async function handleDeleteButtonOpen(ingredient: IngredientsDashboard) {
+async function handleDeleteButtonOpen(ingredient: IIngredientsDashboard) {
   const instance = deleteModal.open({
     itemName: ingredient.name,
     itemType: t('ingredient'),
