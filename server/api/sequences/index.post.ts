@@ -1,10 +1,10 @@
-import { sequenceCreation } from '~/schemas/creation/sequence';
+import { sequenceCreationSchema } from '~/schemas/creation/sequence';
 import { postSequence } from '~~/server/data/sequences';
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event);
   if (session && !session.user.isAnonymous) {
-    const body = await readValidatedBody(event, sequenceCreation.parse);
+    const body = await readValidatedBody(event, sequenceCreationSchema.parse);
     await postSequence(
       body.name,
       body.extra,

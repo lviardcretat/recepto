@@ -63,6 +63,9 @@ export const useUpdateFilterSelectMenu = async (
   );
 };
 
+/**
+ * Resets all select menu filter states to their default empty values.
+ */
 export const useResetFilterSelectMenuStates = (): void => {
   const selectMenuStates: Ref<FilterSelectMenuStates> = useFilterSelectMenuStates();
   selectMenuStates.value.dishTypes = [];
@@ -71,6 +74,9 @@ export const useResetFilterSelectMenuStates = (): void => {
   selectMenuStates.value.ustensils = [];
 };
 
+/**
+ * Resets all selected items filter states to their default empty values.
+ */
 export const useResetFilterSelectedMenuStates = (): void => {
   const selectedMenuStates: Ref<FilterSelectMenuStates> = useFilterSelectedItemsStates();
   selectedMenuStates.value.dishTypes = [];

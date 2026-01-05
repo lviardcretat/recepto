@@ -35,7 +35,6 @@ function getRowItems(row: Row<IRecipesDashboard>, props: RecipesTableConfigProps
     ] satisfies DropdownMenuItem[];
   }
   else {
-    const parentRow = row.getParentRow();
     return [
       {
         label: 'Editer',

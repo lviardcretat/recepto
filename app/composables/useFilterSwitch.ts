@@ -9,6 +9,9 @@ export const useFilterSwitchStates = () =>
     seasonalRecipes: false,
   }));
 
+/**
+ * Resets all switch filter states to their default values.
+ */
 export const useResetFilterSwitchStates = (): void => {
   const switchStates: Ref<FilterSwitchStates> = useFilterSwitchStates();
   switchStates.value.seasonalRecipes = false;

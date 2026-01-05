@@ -1,12 +1,12 @@
 import { updateRecipe, getRecipeBasic } from '~~/server/data/recipes';
 import { idSchema } from '~/schemas/businessObjects';
-import { recipeCreation } from '~/schemas/creation/recipe';
+import { recipeCreationSchema } from '~/schemas/creation/recipe';
 import type { Recipe, RecipeIngredient, Sequence, AllergenToRecipe, RecipeToUstensil } from '~~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event);
   const { id } = await getValidatedRouterParams(event, idSchema.parse);
-  const body = await readValidatedBody(event, recipeCreation.parse);
+  const body = await readValidatedBody(event, recipeCreationSchema.parse);
 
   // Check if recipe exists and belongs to user
   const existingRecipe: Recipe | undefined = await getRecipeBasic(id);

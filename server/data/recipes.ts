@@ -1,4 +1,4 @@
-import type { RecipesFilter } from '~/schemas/filter';
+import type { RecipesFilterSchema } from '~/schemas/filter';
 import type {
   AllergenToRecipe,
   Recipe,
@@ -18,6 +18,23 @@ import type { IRecipeWithLessData, IRecipeDetail } from '~/types/recipe/detail';
 import type { IRecipesDashboard } from '~/types/recipe/dashboard';
 import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
+/**
+ * Creates a new recipe with all its associations (utensils, allergens).
+ *
+ * @param name - The name of the recipe
+ * @param description - The recipe description/instructions
+ * @param tips - Optional tips for the recipe
+ * @param peopleNumber - Number of servings
+ * @param preparationTime - Preparation time in minutes
+ * @param cookingTime - Cooking time in minutes
+ * @param restTime - Rest time in minutes
+ * @param seasonId - The ID of the associated season
+ * @param recipesCategoryId - The ID of the recipe category
+ * @param allergensIds - Optional array of allergen IDs
+ * @param ustensilIds - Array of utensil IDs required
+ * @param createdById - The ID of the user creating the recipe
+ * @returns The ID of the newly created recipe
+ */
 export async function postRecipe(
   name: string,
   description: string,
@@ -73,6 +90,10 @@ export async function postRecipe(
   return recipe.id;
 }
 
+/**
+ * Retrieves all recipes from the database.
+ * @returns Array of all recipes
+ */
 export async function getRecipes(): Promise<Recipe[]> {
   const recipes: Recipe[] = await db
     .select()
@@ -81,6 +102,11 @@ export async function getRecipes(): Promise<Recipe[]> {
   return recipes;
 }
 
+/**
+ * Retrieves recipes with their categories for the dashboard view.
+ * @param userId - The ID of the user who created the recipes
+ * @returns Array of recipes with their associated category data
+ */
 export async function getRecipesWithRecipesCategoriesDashboard(userId: number): Promise<IRecipesDashboard[]> {
   const recipes: IRecipesDashboard[] = await db.query.recipe.findMany({
     columns: {
@@ -106,6 +132,13 @@ export async function getRecipesWithRecipesCategoriesDashboard(userId: number): 
   return recipes;
 }
 
+/**
+ * Retrieves a complete recipe with all related data for the detail view.
+ * Includes allergens, ingredients, sequences, utensils, and creator info.
+ *
+ * @param id - The unique identifier of the recipe
+ * @returns The complete recipe detail if found, undefined otherwise
+ */
 export async function getRecipe(id: number): Promise<IRecipeDetail | undefined> {
   const recipe: IRecipeDetail | undefined = await db.query.recipe.findFirst({
     columns: {
@@ -180,6 +213,11 @@ export async function getRecipe(id: number): Promise<IRecipeDetail | undefined> 
   return recipe;
 }
 
+/**
+ * Retrieves recipes for a specific category without any additional filters.
+ * @param recipeCategoryId - The ID of the recipe category
+ * @returns Array of recipes with basic data and creator username
+ */
 export async function getRecipesWithoutFilter(
   recipeCategoryId: number,
 ): Promise<IRecipeWithLessData[]> {
@@ -196,8 +234,17 @@ export async function getRecipesWithoutFilter(
   return recipes;
 }
 
+/**
+ * Retrieves recipes filtered by multiple criteria.
+ * Applies filters for ingredients, utensils, allergens, and seasonal recipes.
+ * Returns all recipes for the category if no filters are applied.
+ *
+ * @param query - Object containing all filter criteria including recipeCategoryId
+ * @returns Array of filtered recipes with basic data
+ * @throws {Error} When required filter parameters are missing
+ */
 export async function getRecipesFiltered(
-  query: RecipesFilter,
+  query: RecipesFilterSchema,
 ): Promise<IRecipeWithLessData[]> {
   const ingredientsIds = query.ingredients;
   const ustensilsIds = query.ustensils;
@@ -268,6 +315,12 @@ export async function getRecipesFiltered(
   return recipes;
 }
 
+/**
+ * Updates a recipe with new data.
+ * @param id - The unique identifier of the recipe to update
+ * @param data - The partial recipe data to update
+ * @returns The updated recipe
+ */
 export async function updateRecipe(
   id: number,
   data: Partial<RecipeInsert>,
@@ -281,6 +334,12 @@ export async function updateRecipe(
   return updatedRecipe;
 }
 
+/**
+ * Deletes a recipe and all its related data.
+ * Removes ingredients, utensils, allergens, and sequences associations first.
+ *
+ * @param id - The unique identifier of the recipe to delete
+ */
 export async function deleteRecipe(id: number): Promise<void> {
   // Delete related data first
   await db
@@ -305,6 +364,11 @@ export async function deleteRecipe(id: number): Promise<void> {
     .where(eq(schema.recipe.id, id));
 }
 
+/**
+ * Retrieves a recipe with basic data only (no relations).
+ * @param id - The unique identifier of the recipe
+ * @returns The basic recipe if found, undefined otherwise
+ */
 export async function getRecipeBasic(id: number): Promise<Recipe | undefined> {
   const recipe: Recipe | undefined = await db
     .select()
@@ -314,6 +378,13 @@ export async function getRecipeBasic(id: number): Promise<Recipe | undefined> {
   return recipe;
 }
 
+/**
+ * Retrieves a recipe with all related data for editing purposes.
+ * Transforms the data to match the expected format with flat ID arrays.
+ *
+ * @param id - The unique identifier of the recipe
+ * @returns The recipe with transformed relations, or undefined if not found
+ */
 export async function getRecipeWithAllData(id: number): Promise<any> {
   const recipe = await db.query.recipe.findFirst({
     columns: {

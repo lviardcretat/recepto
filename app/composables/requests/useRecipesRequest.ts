@@ -4,7 +4,7 @@ import type { Recipe } from '~~/server/utils/drizzleUtils';
 import type { IRecipeDetail, IRecipeWithAllData, IRecipeWithLessData } from '~/types/recipe/detail';
 import type { IRecipesDashboard } from '~/types/recipe/dashboard';
 import type { IFetchRecipesQuery } from '~/types/recipe/filter';
-import type { RecipeCreation } from '~/schemas/creation/recipe';
+import type { RecipeCreationSchema } from '~/schemas/creation/recipe';
 import { ApiResource, ApiEndpoint, HttpMethod } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
 import type { ICachedDataOptions } from '~/types/cache/requests';
@@ -206,7 +206,7 @@ export function useRecipesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to void
      */
-    create(input: RecipeCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<void> {
+    create(input: RecipeCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<void> {
       return fetchy<void>(
         `/${ApiResource.RECIPES}`,
         { method: HttpMethod.POST, body: input, ...options },
@@ -224,7 +224,7 @@ export function useRecipesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to updated recipe
      */
-    update(id: number, input: RecipeCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Recipe> {
+    update(id: number, input: RecipeCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Recipe> {
       return fetchy<Recipe>(
         `/${ApiResource.RECIPES}/${id}`,
         { method: 'PUT', body: input, ...options },

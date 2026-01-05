@@ -3,7 +3,7 @@ import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { Ingredient } from '~~/server/utils/drizzleUtils';
 import type { IIngredientsDashboard } from '~/types/ingredient/dashboard';
 import type { ISeasonalDataRecord } from '~/types/ingredient/seasonal';
-import type { IngredientCreation } from '~/schemas/creation/ingredient';
+import type { IngredientCreationSchema } from '~/schemas/creation/ingredient';
 import { HttpMethod, ApiResource, ApiEndpoint } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
 import type { ICachedDataOptions } from '~/types/cache/requests';
@@ -162,8 +162,8 @@ export function useIngredientsRequest() {
      * @param options - Optional cached data options including transform
      * @returns Nuxt useAsyncData composable result
      */
-    getSeasonalsCached<DataTransformT = ISeasonalDataRecord[]>(options?: Omit<ICachedDataOptions<ISeasonalDataRecord[], DataTransformT>, 'fetchOptions' | 'ttl'>) {
-      return useCachedData<ISeasonalDataRecord[], DataTransformT>(
+    getSeasonalsCached(options?: Omit<ICachedDataOptions<ISeasonalDataRecord[]>, 'fetchOptions' | 'ttl'>) {
+      return useCachedData<ISeasonalDataRecord[]>(
         'ingredients-seasonals',
         `/${ApiResource.INGREDIENTS}/${ApiEndpoint.SEASONALS}`,
         { fetchOptions: { method: HttpMethod.GET }, ttl: 86400000, ...options }, // TTL: 24 hours
@@ -180,7 +180,7 @@ export function useIngredientsRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to created ingredient
      */
-    create(input: IngredientCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ingredient> {
+    create(input: IngredientCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ingredient> {
       return fetchy<Ingredient>(
         `/${ApiResource.INGREDIENTS}`,
         { method: HttpMethod.POST, body: input, ...options },
@@ -198,7 +198,7 @@ export function useIngredientsRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to updated ingredient
      */
-    update(id: number, input: IngredientCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ingredient> {
+    update(id: number, input: IngredientCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<Ingredient> {
       return fetchy<Ingredient>(
         `/${ApiResource.INGREDIENTS}/${id}`,
         { method: 'PUT', body: input, ...options },

@@ -1,6 +1,9 @@
-import { count } from 'drizzle-orm';
 import type { Ustensil, UstensilInsert } from '../utils/drizzleUtils';
 
+/**
+ * Retrieves all utensils from the database ordered by name.
+ * @returns Array of all utensils
+ */
 export async function getUstensils(): Promise<Ustensil[]> {
   const ustensils: Ustensil[] = await db
     .select()
@@ -10,6 +13,11 @@ export async function getUstensils(): Promise<Ustensil[]> {
   return ustensils;
 }
 
+/**
+ * Retrieves utensils for the dashboard view with recipe count.
+ * @param userId - The ID of the user who created the utensils
+ * @returns Array of utensils with partial data and recipe count
+ */
 export async function getUstensilsDashboard(userId: number): Promise<Partial<Ustensil>[]> {
   const ustensils = await db.query.ustensil.findMany({
     columns: {
@@ -29,6 +37,12 @@ export async function getUstensilsDashboard(userId: number): Promise<Partial<Ust
   return ustensils;
 }
 
+/**
+ * Creates a new utensil in the database.
+ * @param name - The name of the utensil
+ * @param createdById - The ID of the user creating the utensil
+ * @returns The newly created utensil
+ */
 export async function postUstensil(
   name: string,
   createdById: number,
@@ -43,6 +57,11 @@ export async function postUstensil(
   return ustensilCreated;
 }
 
+/**
+ * Retrieves a utensil by its ID.
+ * @param id - The unique identifier of the utensil
+ * @returns The utensil if found, undefined otherwise
+ */
 export async function getUstensil(id: number): Promise<Ustensil | undefined> {
   const ustensil: Ustensil | undefined = await db
     .select()
@@ -52,6 +71,12 @@ export async function getUstensil(id: number): Promise<Ustensil | undefined> {
   return ustensil;
 }
 
+/**
+ * Updates a utensil with new data.
+ * @param id - The unique identifier of the utensil to update
+ * @param data - The partial utensil data to update
+ * @returns The updated utensil
+ */
 export async function updateUstensil(
   id: number,
   data: Partial<UstensilInsert>,
@@ -65,6 +90,10 @@ export async function updateUstensil(
   return updatedUstensil;
 }
 
+/**
+ * Deletes a utensil by its ID.
+ * @param id - The unique identifier of the utensil to delete
+ */
 export async function deleteUstensil(id: number): Promise<void> {
   await db
     .delete(schema.ustensil)

@@ -4,7 +4,7 @@ import {
   recipeCreation,
 
 } from '~/schemas/creation/recipe';
-import type { RecipeCreation } from '~/schemas/creation/recipe';
+import type { RecipeCreationSchema } from '~/schemas/creation/recipe';
 
 const props = defineProps<{
   modalTitle: string;
@@ -90,7 +90,7 @@ const { data: unitsRaw } = await useUnitsRequest().getAllCached({
 });
 const units = computed(() => mapSelectMenuItemsUtils(unitsRaw.value));
 
-async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
+async function onSubmit(event: FormSubmitEvent<RecipeCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {

@@ -1,4 +1,4 @@
-import type { RecipesCategoriesFilter } from '~/schemas/filter';
+import type { RecipesCategoriesFilterSchema } from '~/schemas/filter';
 import type {
   RecipesCategory,
   RecipesCategoryInsert,
@@ -16,6 +16,13 @@ import { count } from 'drizzle-orm';
 import type { IItemsIdsWantedOrNot } from '~/types/filter/items';
 import type { IRecipesCategoriesWithLessData, IRecipeSearched } from '~/types/recipesCategory/detail';
 
+/**
+ * Creates a new recipe category in the database.
+ * @param name - The name of the recipe category
+ * @param dishTypeId - The ID of the associated dish type
+ * @param createdById - The ID of the user creating the category
+ * @returns The newly created recipe category
+ */
 export async function postRecipesCategory(
   name: string,
   dishTypeId: number,
@@ -34,6 +41,10 @@ export async function postRecipesCategory(
   return recipeCategoryCreated;
 }
 
+/**
+ * Retrieves all recipe categories from the database ordered by name.
+ * @returns Array of all recipe categories
+ */
 export async function getRecipesCategories(): Promise<RecipesCategory[]> {
   const recipesCategories: RecipesCategory[] = await db
     .select()
@@ -43,6 +54,10 @@ export async function getRecipesCategories(): Promise<RecipesCategory[]> {
   return recipesCategories;
 }
 
+/**
+ * Retrieves all recipe categories with their associated recipe count.
+ * @returns Array of recipe categories with id, name, and recipe count
+ */
 export async function getRecipesCategoriesWithRecipeCount(): Promise<IRecipesCategoriesWithLessData[]> {
   const recipesCategories: IRecipesCategoriesWithLessData[] = await db
     .select({
@@ -60,6 +75,10 @@ export async function getRecipesCategoriesWithRecipeCount(): Promise<IRecipesCat
   return recipesCategories;
 }
 
+/**
+ * Retrieves all recipe categories with their associated recipe names for search functionality.
+ * @returns Array of recipe categories with nested recipe names
+ */
 export async function getRecipesCategoriesAndRecipesNames(): Promise<IRecipeSearched[]> {
   const recipesCategoriesRecipes: IRecipeSearched[] = await db.query.recipesCategory.findMany({
     columns: {
@@ -78,6 +97,11 @@ export async function getRecipesCategoriesAndRecipesNames(): Promise<IRecipeSear
   return recipesCategoriesRecipes;
 }
 
+/**
+ * Retrieves only the name of a recipe category by its ID.
+ * @param id - The unique identifier of the recipe category
+ * @returns Object containing the name if found, undefined otherwise
+ */
 export async function getRecipesCategoryName(
   id: number,
 ): Promise<{ name: string } | undefined> {
@@ -91,6 +115,11 @@ export async function getRecipesCategoryName(
   return recipesCategory;
 }
 
+/**
+ * Retrieves a recipe category by its ID.
+ * @param id - The unique identifier of the recipe category
+ * @returns The recipe category if found, undefined otherwise
+ */
 export async function getRecipesCategory(
   id: number,
 ): Promise<RecipesCategory | undefined> {
@@ -102,6 +131,12 @@ export async function getRecipesCategory(
   return recipesCategory;
 }
 
+/**
+ * Updates a recipe category with new data.
+ * @param id - The unique identifier of the recipe category to update
+ * @param data - The partial recipe category data to update
+ * @returns The updated recipe category
+ */
 export async function updateRecipesCategory(
   id: number,
   data: Partial<RecipesCategoryInsert>,
@@ -115,14 +150,26 @@ export async function updateRecipesCategory(
   return updatedRecipesCategory;
 }
 
+/**
+ * Deletes a recipe category by its ID.
+ * @param id - The unique identifier of the recipe category to delete
+ */
 export async function deleteRecipesCategory(id: number): Promise<void> {
   await db
     .delete(schema.recipesCategory)
     .where(eq(schema.recipesCategory.id, id));
 }
 
+/**
+ * Retrieves recipe categories filtered by multiple criteria.
+ * Applies filters for ingredients, utensils, meal types, dish types, allergens, and seasonal recipes.
+ * Returns all categories with recipe count if no filters are applied.
+ *
+ * @param query - Object containing all filter criteria
+ * @returns Array of filtered recipe categories with id, name, and recipe count
+ */
 export async function getRecipesCategoriesFiltered(
-  query: RecipesCategoriesFilter,
+  query: RecipesCategoriesFilterSchema,
 ): Promise<IRecipesCategoriesWithLessData[]> {
   const ingredientsIds: IItemsIdsWantedOrNot = query.ingredients;
   const ustensilsIds: IItemsIdsWantedOrNot = query.ustensils;
@@ -185,6 +232,11 @@ export async function getRecipesCategoriesFiltered(
   return recipesCategories;
 }
 
+/**
+ * Creates a subquery for filtering by meal types.
+ * @param mealTypesIds - Object containing wanted and not wanted meal type IDs
+ * @returns Database query builder or null if no conditions apply
+ */
 function createMealTypeSubQuery(mealTypesIds: IItemsIdsWantedOrNot) {
   const conditions = createSubQueryConditions(
     mealTypesIds,
@@ -218,6 +270,11 @@ function createMealTypeSubQuery(mealTypesIds: IItemsIdsWantedOrNot) {
     );
 }
 
+/**
+ * Creates a subquery for filtering by dish types.
+ * @param dishTypesIds - Object containing wanted and not wanted dish type IDs
+ * @returns Database query builder or null if no conditions apply
+ */
 function createDishTypeSubQuery(dishTypesIds: IItemsIdsWantedOrNot) {
   const conditions = createSubQueryConditions(dishTypesIds, schema.dishType.id);
   if (!conditions) return null;

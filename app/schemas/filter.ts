@@ -1,8 +1,8 @@
 import z from 'zod';
 
-export type RecipesCategoriesFilter = z.infer<typeof recipesCategoriesFilterSchema>;
-export type FilterSelectItem = z.infer<typeof wantedList>;
-export type RecipesFilter = z.infer<typeof recipesFilterSchema>;
+export type RecipesCategoriesFilterSchema = z.infer<typeof recipesCategoriesFilterSchema>;
+export type FilterSelectItemSchema = z.infer<typeof wantedList>;
+export type RecipesFilterSchema = z.infer<typeof recipesFilterSchema>;
 
 const wantedList = z
   .string()

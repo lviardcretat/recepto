@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
+// @ts-expect-error only available app execution
 import * as schema from 'hub:db:schema';
 import 'dotenv/config';
 

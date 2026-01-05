@@ -4,7 +4,7 @@ import {
   recipesCategoryCreation,
 
 } from '~/schemas/creation/recipesCategory';
-import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import type { RecipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 
 const props = defineProps<{
   modalTitle: string;
@@ -32,7 +32,7 @@ const { data: dishTypesRaw } = await useDishTypesRequest().getAllCached({
 });
 const dishTypes = computed(() => mapSelectMenuItemsUtils(dishTypesRaw.value));
 
-async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
+async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {

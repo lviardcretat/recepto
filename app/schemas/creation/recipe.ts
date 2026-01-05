@@ -1,10 +1,10 @@
 import z from 'zod';
 
-export type RecipeCreation = z.infer<typeof recipeCreation>;
-export type RecipeSequenceCreation = z.infer<typeof recipeSequenceCreation>;
-export type RecipeIngredientsCreation = z.infer<typeof recipeIngredientsCreation>;
+export type RecipeCreationSchema = z.infer<typeof recipeCreationSchema>;
+export type RecipeSequenceCreationSchema = z.infer<typeof recipeSequenceCreationSchema>;
+export type RecipeIngredientsCreationSchema = z.infer<typeof recipeIngredientsCreationSchema>;
 
-const recipeSequenceCreation = z
+const recipeSequenceCreationSchema = z
   .array(
     z.object({
       name: z.string().min(3).max(100),
@@ -13,7 +13,7 @@ const recipeSequenceCreation = z
   )
   .nonempty();
 
-const recipeIngredientsCreation = z
+const recipeIngredientsCreationSchema = z
   .array(
     z.object({
       ingredientId: z.number().int().positive(),
@@ -23,7 +23,7 @@ const recipeIngredientsCreation = z
   )
   .nonempty();
 
-export const recipeCreation = z.object({
+export const recipeCreationSchema = z.object({
   name: z.string().min(3).max(50),
   description: z.string().min(3).max(1000),
   tips: z.preprocess((value) => { return value || undefined; }, z.string().min(3).max(200).optional()),
@@ -32,8 +32,8 @@ export const recipeCreation = z.object({
   cookingTime: z.number().nonnegative(),
   restTime: z.number().nonnegative(),
   seasonId: z.number().int().positive(),
-  sequences: recipeSequenceCreation,
-  ingredients: recipeIngredientsCreation.refine(
+  sequences: recipeSequenceCreationSchema,
+  ingredients: recipeIngredientsCreationSchema.refine(
     (val) => {
       const ingredientsIds = val.map(
         ingredientIds => ingredientIds.ingredientId,

@@ -42,6 +42,9 @@ export const useUpdateFilterIconsGrid = async (
   }
 };
 
+/**
+ * Resets all icons grid filter states to their default empty values.
+ */
 export const useResetFilterIconsGridStates = (): void => {
   const iconsGridStates: Ref<FilterIconsGridStates> = useFilterIconsGridStates();
   iconsGridStates.value.allergens = [];

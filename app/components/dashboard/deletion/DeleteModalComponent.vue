@@ -8,8 +8,6 @@ const emit = defineEmits<{
   cancel: [];
   confirm: [];
 }>();
-
-const { t } = useI18n();
 </script>
 
 <template>

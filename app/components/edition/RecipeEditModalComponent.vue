@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import { recipeCreation } from '~/schemas/creation/recipe';
-import type { RecipeCreation } from '~/schemas/creation/recipe';
+import type { RecipeCreationSchema } from '~/schemas/creation/recipe';
 
 const props = defineProps<{
   recipeId: number;
@@ -71,7 +71,7 @@ const { data: unitsRaw } = await useUnitsRequest().getAllCached({
 const units = computed(() => mapSelectMenuItemsUtils(unitsRaw.value));
 
 // Initialize form state with fetched data
-const state = ref<RecipeCreation>({
+const state = ref<RecipeCreationSchema>({
   name: recipe.value?.name || '',
   description: recipe.value?.description || '',
   tips: recipe.value?.tips,
@@ -95,7 +95,7 @@ const state = ref<RecipeCreation>({
   recipesCategoryId: recipe.value?.recipesCategoryId || 1,
 });
 
-async function onSubmit(event: FormSubmitEvent<RecipeCreation>) {
+async function onSubmit(event: FormSubmitEvent<RecipeCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {

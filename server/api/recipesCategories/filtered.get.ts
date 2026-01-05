@@ -3,11 +3,11 @@ import {
   recipesCategoriesFilterSchema,
 
 } from '~/schemas/filter';
-import type { RecipesCategoriesFilter } from '~/schemas/filter';
+import type { RecipesCategoriesFilterSchema } from '~/schemas/filter';
 import type { IRecipesCategoriesWithLessData } from '~/types/recipesCategory/detail';
 
 export default defineEventHandler(async (event) => {
-  const query: RecipesCategoriesFilter = await getValidatedQuery(
+  const query: RecipesCategoriesFilterSchema = await getValidatedQuery(
     event,
     recipesCategoriesFilterSchema.parse,
   );

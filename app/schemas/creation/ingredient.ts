@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export type IngredientCreation = z.infer<typeof ingredientCreationSchema>;
+export type IngredientCreationSchema = z.infer<typeof ingredientCreationSchema>;
 
 export const ingredientCreationSchema = z.object({
   name: z.string().min(3).max(50),

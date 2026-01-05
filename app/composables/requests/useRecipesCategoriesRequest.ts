@@ -3,7 +3,7 @@ import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack';
 import type { RecipesCategory } from '~~/server/utils/drizzleUtils';
 import type { IFetchRecipesCategoriesQuery } from '~/types/recipesCategory/filter';
 import type { IRecipesCategoriesWithLessData, IRecipeSearched } from '~/types/recipesCategory/detail';
-import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import type { RecipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 import { ApiResource, ApiEndpoint, HttpMethod } from '~/enums/api';
 import { fetchy, useFetchy, useCachedData } from './useAPI';
 import type { ICachedDataOptions } from '~/types/cache/requests';
@@ -175,7 +175,7 @@ export function useRecipesCategoriesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to created recipes category
      */
-    create(input: RecipesCategoryCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipesCategory> {
+    create(input: RecipesCategoryCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipesCategory> {
       return fetchy<RecipesCategory>(
         `/${ApiResource.RECIPES_CATEGORIES}`,
         { method: HttpMethod.POST, body: input, ...options },
@@ -193,7 +193,7 @@ export function useRecipesCategoriesRequest() {
      * @param options - Optional fetch options
      * @returns Promise resolving to updated recipes category
      */
-    update(id: number, input: RecipesCategoryCreation, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipesCategory> {
+    update(id: number, input: RecipesCategoryCreationSchema, options?: NitroFetchOptions<NitroFetchRequest>): Promise<RecipesCategory> {
       return fetchy<RecipesCategory>(
         `/${ApiResource.RECIPES_CATEGORIES}/${id}`,
         { method: 'PUT', body: input, ...options },

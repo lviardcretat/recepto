@@ -1,10 +1,10 @@
 import { getRecipesFiltered } from '~~/server/data/recipes';
 import { recipesFilterSchema } from '~/schemas/filter';
-import type { RecipesFilter } from '~/schemas/filter';
+import type { RecipesFilterSchema } from '~/schemas/filter';
 import type { IRecipeWithLessData } from '~/types/recipe/detail';
 
 export default defineEventHandler(async (event) => {
-  const query: RecipesFilter = await getValidatedQuery(
+  const query: RecipesFilterSchema = await getValidatedQuery(
     event,
     recipesFilterSchema.parse,
   );

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import { recipesCategoryCreation } from '~/schemas/creation/recipesCategory';
-import type { RecipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import type { RecipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 
 const props = defineProps<{
   recipeCategoryId: number;
@@ -44,7 +44,7 @@ const state = ref<{
   dishTypeId: recipeCategory.value?.dishTypeId,
 });
 
-async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreation>) {
+async function onSubmit(event: FormSubmitEvent<RecipesCategoryCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {

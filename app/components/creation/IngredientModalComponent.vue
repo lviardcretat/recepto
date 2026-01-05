@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import { ingredientCreationSchema } from '~/schemas/creation/ingredient';
-import type { IngredientCreation } from '~/schemas/creation/ingredient';
+import type { IngredientCreationSchema } from '~/schemas/creation/ingredient';
 
 const nuxtApp = useNuxtApp();
 const props = defineProps<{
@@ -32,7 +32,7 @@ const { data: foodTypesRaw } = await useFoodTypesRequest().getAllCached({
 });
 const foodTypes = computed(() => mapSelectMenuItemsUtils(foodTypesRaw.value));
 
-async function onSubmit(event: FormSubmitEvent<IngredientCreation>) {
+async function onSubmit(event: FormSubmitEvent<IngredientCreationSchema>) {
   disabledSubmit.value = true;
   start();
   try {

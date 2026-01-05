@@ -1,12 +1,12 @@
 import { updateRecipesCategory, getRecipesCategory } from '~~/server/data/recipesCategories';
 import { idSchema } from '~/schemas/businessObjects';
-import { recipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import { recipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategory } from '~~/server/utils/drizzleUtils';
 
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event);
   const { id } = await getValidatedRouterParams(event, idSchema.parse);
-  const body = await readValidatedBody(event, recipesCategoryCreation.parse);
+  const body = await readValidatedBody(event, recipesCategoryCreationSchema.parse);
 
   // Check if category exists and belongs to user
   const existingCategory: RecipesCategory | undefined = await getRecipesCategory(id);

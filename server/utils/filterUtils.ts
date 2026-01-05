@@ -9,13 +9,15 @@ import {
 import type { SQL } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
 import type { IItemsIdsWantedOrNot } from '~/types/filter/items';
-import type { FilterSelectItem } from '~/schemas/filter';
+import type { FilterSelectItemSchema } from '~/schemas/filter';
 
+/** Select type for recipe category queries with id, name, and recipe count */
 export const recipeCategorySelectType = {
   id: schema.recipesCategory.id,
   name: schema.recipesCategory.name,
   count: count(schema.recipe.id),
 };
+/** Select type for recipe queries with essential recipe fields */
 export const recipeSelectType = {
   id: schema.recipe.id,
   name: schema.recipe.name,
@@ -35,7 +37,7 @@ export const recipeSelectType = {
  *
  * @returns True if all the filters lists are empty
  */
-export function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
+export function areAllEmpty(...filtersListsIds: FilterSelectItemSchema[]): boolean {
   return filtersListsIds.every(
     list =>
       (list.wanted === undefined || list.wanted.length === 0)
@@ -43,6 +45,14 @@ export function areAllEmpty(...filtersListsIds: FilterSelectItem[]): boolean {
   );
 }
 
+/**
+ * Creates a subquery for filtering by ingredients.
+ * Filters recipes that contain wanted ingredients and exclude not wanted ones.
+ *
+ * @param ingredientsIds - Object containing wanted and not wanted ingredient IDs
+ * @param recipeCategoryId - Optional recipe category ID to filter within
+ * @returns Database query builder or null if no conditions apply
+ */
 export function createIngredientSubQuery(
   ingredientsIds: IItemsIdsWantedOrNot,
   recipeCategoryId: number | null = null,
@@ -74,6 +84,14 @@ export function createIngredientSubQuery(
     );
 }
 
+/**
+ * Creates a subquery for filtering by utensils.
+ * Filters recipes that require wanted utensils and exclude not wanted ones.
+ *
+ * @param ustensilsIds - Object containing wanted and not wanted utensil IDs
+ * @param recipeCategoryId - Optional recipe category ID to filter within
+ * @returns Database query builder or null if no conditions apply
+ */
 export function createUstensilSubQuery(
   ustensilsIds: IItemsIdsWantedOrNot,
   recipeCategoryId: number | null = null,
@@ -105,6 +123,14 @@ export function createUstensilSubQuery(
     );
 }
 
+/**
+ * Creates a subquery for filtering by allergens.
+ * Filters recipes that contain the specified allergens.
+ *
+ * @param allergensIds - Array of allergen IDs to filter by
+ * @param recipeCategoryId - Optional recipe category ID to filter within
+ * @returns Database query builder or null if no conditions apply
+ */
 export function createAllergenSubQuery(
   allergensIds: number[],
   recipeCategoryId: number | null = null,
@@ -136,6 +162,14 @@ export function createAllergenSubQuery(
     );
 }
 
+/**
+ * Creates a subquery for filtering seasonal recipes.
+ * Filters recipes based on current date matching the recipe's season range.
+ *
+ * @param seasonalRecipes - Whether to apply seasonal filtering
+ * @param recipeCategoryId - Optional recipe category ID to filter within
+ * @returns Database query builder or null if seasonal filtering is disabled
+ */
 export function createSeasonalRecipeSubQuery(
   seasonalRecipes: boolean,
   recipeCategoryId: number | null = null,
@@ -158,6 +192,15 @@ export function createSeasonalRecipeSubQuery(
     .groupBy(schema.recipesCategory.id, schema.recipe.id);
 }
 
+/**
+ * Creates SQL conditions for subquery filtering.
+ * Handles both simple ID arrays and wanted/notWanted filter objects.
+ *
+ * @template T - The SQLite column type
+ * @param ids - Either an array of IDs or an object with wanted/notWanted arrays
+ * @param sqliteColumn - The database column to filter on
+ * @returns Array of SQL conditions or null if no conditions apply
+ */
 export function createSubQueryConditions<T extends SQLiteColumn>(
   ids: IItemsIdsWantedOrNot | number[],
   sqliteColumn: T,

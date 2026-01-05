@@ -1,4 +1,4 @@
-import { recipeCreation } from '~/schemas/creation/recipe';
+import { recipeCreationSchema } from '~/schemas/creation/recipe';
 import { postRecipeIngredient } from '~~/server/data/recipeIngredients';
 import { postRecipe } from '~~/server/data/recipes';
 import { postSequence } from '~~/server/data/sequences';
@@ -6,7 +6,7 @@ import { postSequence } from '~~/server/data/sequences';
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event);
   if (session && !session.user.isAnonymous) {
-    const body = await readValidatedBody(event, recipeCreation.parse);
+    const body = await readValidatedBody(event, recipeCreationSchema.parse);
     const recipeId: number = await postRecipe(
       body.name,
       body.description,

@@ -7,8 +7,12 @@ import type { IFetchRecipesQuery } from '~/types/recipe/filter';
 import type { IFetchRecipesCategoriesQuery } from '~/types/recipesCategory/filter';
 
 /**
- * Fetch the filtered recipes and assign the result to the recipes state.
- * @param recipeCategoryId The id of the recipecategory associated with filtered recipes.
+ * Fetches filtered recipes based on current filter states.
+ * @param recipeCategoryId - The ID of the recipe category to filter within
+ * @param selectMenuStates - Current state of select menu filters (ingredients, utensils)
+ * @param iconsGridStates - Current state of icons grid filters (allergens)
+ * @param switchStates - Current state of switch filters (seasonal recipes)
+ * @returns Array of filtered recipes with basic data
  */
 const fetchFilteredRecipes = async (
   recipeCategoryId: string | string[],
@@ -34,7 +38,11 @@ const fetchFilteredRecipes = async (
 };
 
 /**
- * Fetch the filtered recipes and assign the result to the recipesCategories state.
+ * Fetches filtered recipe categories based on current filter states.
+ * @param selectMenuStates - Current state of select menu filters
+ * @param iconsGridStates - Current state of icons grid filters
+ * @param switchStates - Current state of switch filters
+ * @returns Array of filtered recipe categories with basic data
  */
 const fetchFilteredRecipesCategories = async (
   selectMenuStates: FilterSelectMenuStates,
@@ -64,9 +72,16 @@ const fetchFilteredRecipesCategories = async (
 };
 
 const FilterUtils = {
-/**
- * Calls up the corresponding request according to whether we want to retrieve recipes or recipesCategories
- */
+  /**
+   * Fetches filtered items based on context.
+   * Returns recipes if recipeCategoryId is provided, otherwise returns recipe categories.
+   *
+   * @param selectMenuStates - Current state of select menu filters
+   * @param iconsGridStates - Current state of icons grid filters
+   * @param switchStates - Current state of switch filters
+   * @param recipeCategoryId - Optional category ID to fetch recipes for
+   * @returns Array of filtered recipes or recipe categories
+   */
   fetchFilteredItems: async (
     selectMenuStates: FilterSelectMenuStates,
     iconsGridStates: FilterIconsGridStates,
