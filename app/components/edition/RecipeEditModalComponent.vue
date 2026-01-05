@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
-import { recipeCreation } from '~/schemas/creation/recipe';
+import { recipeCreationSchema } from '~/schemas/creation/recipe';
 import type { RecipeCreationSchema } from '~/schemas/creation/recipe';
 
 const props = defineProps<{
@@ -16,7 +16,7 @@ const form = ref();
 const nuxtApp = useNuxtApp();
 const toast = useToast();
 const { start, finish } = useLoadingIndicator();
-const schema = recipeCreation;
+const schema = recipeCreationSchema;
 const disabledSubmit = ref(false);
 
 // States for creation modals

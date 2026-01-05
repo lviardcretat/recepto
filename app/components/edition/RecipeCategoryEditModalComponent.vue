@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
-import { recipesCategoryCreation } from '~/schemas/creation/recipesCategory';
+import { recipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 
 const props = defineProps<{
@@ -16,7 +16,7 @@ const form = ref();
 const nuxtApp = useNuxtApp();
 const toast = useToast();
 const { start, finish } = useLoadingIndicator();
-const schema = recipesCategoryCreation;
+const schema = recipesCategoryCreationSchema;
 const disabledSubmit = ref(false);
 
 // Fetch recipe category data

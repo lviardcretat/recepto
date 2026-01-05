@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
-import {
-  ustensilCreationSchema,
-
-} from '~/schemas/creation/ustensil';
+import { ustensilCreationSchema } from '~/schemas/creation/ustensil';
 import type { UstensilCreationSchema } from '~/schemas/creation/ustensil';
 
 const props = defineProps<{

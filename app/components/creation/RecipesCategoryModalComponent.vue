@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
-import {
-  recipesCategoryCreation,
-
-} from '~/schemas/creation/recipesCategory';
+import { recipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 import type { RecipesCategoryCreationSchema } from '~/schemas/creation/recipesCategory';
 
 const props = defineProps<{
@@ -15,7 +12,7 @@ const nuxtApp = useNuxtApp();
 const emit = defineEmits(['closeModal']);
 const toast = useToast();
 const { start, finish } = useLoadingIndicator();
-const schema = recipesCategoryCreation;
+const schema = recipesCategoryCreationSchema;
 const form = ref();
 const disabledSubmit = ref(false);
 const state = ref<{

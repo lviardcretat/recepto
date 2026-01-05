@@ -19,7 +19,7 @@ onUnmounted(() => {
     to="body"
   >
     <div
-      class="absolute h-screen w-screen inset-0 z-[999999] pointer-events-none flex items-center
+      class="absolute h-screen w-screen inset-0 z-999999 pointer-events-none flex items-center
       justify-center bg-gray-900/20 dark:bg-gray-900/40 backdrop-blur-sm"
     >
       <div

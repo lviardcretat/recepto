@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
-import {
-  recipeCreation,
-
-} from '~/schemas/creation/recipe';
+import { recipeCreationSchema } from '~/schemas/creation/recipe';
 import type { RecipeCreationSchema } from '~/schemas/creation/recipe';
 
 const props = defineProps<{
@@ -153,7 +150,7 @@ function handleCreateUstensil(name: string) {
 <template>
   <UForm
     ref="form"
-    :schema="recipeCreation"
+    :schema="recipeCreationSchema"
     :state="state"
     class="max-h-full"
     @submit="onSubmit"

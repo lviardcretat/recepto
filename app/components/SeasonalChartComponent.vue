@@ -10,7 +10,6 @@ import { colors, Timeline } from '@unovis/ts';
 import type { BulletLegendItemInterface } from '@unovis/ts';
 import { Months } from '~/enums/data';
 import type { DataRecord } from '~~/server/api/ingredients/seasonals.get';
-import type { ISeasonalDataRecord } from '~/types/ingredient/seasonal';
 
 const nuxtApp = useNuxtApp();
 const { t } = useI18n();
@@ -23,7 +22,7 @@ nuxtApp.hook('ingredient:created', async () => {
 const {
   data: datasetsFetch,
   refresh: refreshDatasetsFetch,
-} = await useIngredientsRequest().getSeasonalsCached<ISeasonalDataRecord[]>({
+} = await useIngredientsRequest().getSeasonalsCached({
   watch: false,
   default: () => [],
 });

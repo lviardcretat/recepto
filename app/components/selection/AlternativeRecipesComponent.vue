@@ -18,7 +18,7 @@ await callOnce(
       iconsGridStates.value,
       switchStates.value,
       route.params.id,
-    )) as RecipeWithLessData[];
+    )) as IRecipeWithLessData[];
   },
   { mode: 'navigation' },
 );
@@ -29,7 +29,7 @@ nuxtApp.hook('recipe:created', async () => {
     iconsGridStates.value,
     switchStates.value,
     route.params.id,
-  )) as RecipeWithLessData[];
+  )) as IRecipeWithLessData[];
 });
 </script>
 
