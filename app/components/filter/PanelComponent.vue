@@ -81,51 +81,53 @@ function resetAllFilters() {
 </script>
 
 <template>
-  <UNavigationMenu
-    :items="panelConfig"
-    orientation="vertical"
-    :collapsed="collapsed"
-    popover
-    :ui="{ linkLabel: 'px-2.5', label: 'px-0' }"
-  >
-    <template #filter-trailing="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
-      <UButton
-        class="px-2.5"
-        :icon="item.trailingIcon"
-        variant="ghost"
-        @click="resetAllFilters()"
-      />
-    </template>
-    <template #select="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
-      <FilterCustomSelectComponent
-        v-if="item.label && item.dataType"
-        class="w-full"
-        :placeholder="item.label"
-        :data-type="item.dataType as FilterSelectMenuStatesType"
-      />
-    </template>
-    <template #grid="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
-      <FilterIconsGridComponent
-        v-if="item.dataType"
-        :data-type="item.dataType as FilterIconsGridStatesType"
-      />
-    </template>
-    <!-- <template #switch="{ item }">
-      <div class="w-full flex justify-between items-center">
-        <div class="flex items-center gap-1.5">
-          <UIcon
-            :name="item['icon']"
-            class="size-5"
-          />
-          {{ item['label'] }}
-        </div>
-        <USwitch
-          unchecked-icon="i-lucide-x"
-          checked-icon="i-lucide-check"
+  <ClientOnly>
+    <UNavigationMenu
+      :items="panelConfig"
+      orientation="vertical"
+      :collapsed="collapsed"
+      popover
+      :ui="{ linkLabel: 'px-2.5', label: 'px-0' }"
+    >
+      <template #filter-trailing="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
+        <UButton
+          class="px-2.5"
+          :icon="item.trailingIcon"
+          variant="ghost"
+          @click="resetAllFilters()"
         />
-      </div>
-    </template> -->
-  </UNavigationMenu>
+      </template>
+      <template #select="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
+        <FilterCustomSelectComponent
+          v-if="item.label && item.dataType"
+          class="w-full"
+          :placeholder="item.label"
+          :data-type="item.dataType as FilterSelectMenuStatesType"
+        />
+      </template>
+      <template #grid="{ item }: { item: NavigationMenuItem & ICustomAccordionItem }">
+        <FilterIconsGridComponent
+          v-if="item.dataType"
+          :data-type="item.dataType as FilterIconsGridStatesType"
+        />
+      </template>
+      <!-- <template #switch="{ item }">
+        <div class="w-full flex justify-between items-center">
+          <div class="flex items-center gap-1.5">
+            <UIcon
+              :name="item['icon']"
+              class="size-5"
+            />
+            {{ item['label'] }}
+          </div>
+          <USwitch
+            unchecked-icon="i-lucide-x"
+            checked-icon="i-lucide-check"
+          />
+        </div>
+      </template> -->
+    </UNavigationMenu>
+  </ClientOnly>
 </template>
 
 <style lang="scss">
